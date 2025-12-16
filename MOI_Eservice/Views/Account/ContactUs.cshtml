@@ -1,0 +1,82 @@
+﻿@model ContactUsPageViewModel
+@{
+    ViewBag.Title = "منصة التراخيص الالكترونية";
+    Layout = "~/Views/Shared/_LoginLayout.cshtml";
+    var mapEmbedCode = Model.SystemOptionVM.FirstOrDefault(x => x.Code == "Map")?.Value;
+    var address = Model.SystemOptionVM.FirstOrDefault(x => x.Code == "Address")?.Value;
+    var phone = Model.SystemOptionVM.FirstOrDefault(x => x.Code == "PhoneNumber")?.Value;
+    var email = Model.SystemOptionVM.FirstOrDefault(x => x.Code == "Email")?.Value;
+}
+<div class="contact-area ptb-100">
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-4 col-md-12">
+                <div class="contact-address">
+                    <ul class="address-info">
+                        <li>
+                            <i class="ri-map-pin-line"></i>
+                            @address
+                        </li>
+                        <li>
+                            <i class="ri-phone-line"></i>
+                            <a href="tel:@phone" style="direction: ltr !important">@phone</a>
+                        </li>
+                        <li>
+                            <i class="ri-mail-line"></i>
+                            <a href="mailto:@email">@email</a>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+
+            <div class="col-lg-8 col-md-12">
+                <div class="contact-form">
+                    @using (Html.BeginForm("ContactUs", "Account", FormMethod.Post))
+                    {
+                        @Html.AntiForgeryToken()
+                        @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+                        <div class="row">
+                            <div class="form-group col-md-6">
+                                <div class="col-md-12">
+                                    @Html.EditorFor(m => m.contactUsVM.FullNameAr, new { htmlAttributes = new { @class = "form-control", placeholder = "الإسم", @id = "FullNameAr", required = "required" } })
+                                    @Html.ValidationMessageFor(m => m.contactUsVM.FullNameAr, "", new { @class = "text-danger" })
+                                </div>
+                            </div>
+
+                            <div class="form-group col-md-6">
+                                <div class="col-md-12">
+                                    @Html.EditorFor(m => m.contactUsVM.Email, new { htmlAttributes = new { @class = "form-control", placeholder = "البريد الإلكتروني", @id = "Email", required = "required" } })
+                                    @Html.ValidationMessageFor(m => m.contactUsVM.Email, "", new { @class = "text-danger" })
+                                </div>
+                            </div>
+
+                            <div class="form-group col-md-6">
+                                <div class="col-md-12">
+                                    @Html.EditorFor(m => m.contactUsVM.Mobile, new { htmlAttributes = new { @class = "form-control", placeholder = "رقم الهاتف", @id = "Mobile", required = "required" } })
+                                    @Html.ValidationMessageFor(m => m.contactUsVM.Mobile, "", new { @class = "text-danger" })
+                                </div>
+                            </div>
+
+                            <div class="form-group col-md-12">
+                                <div class="col-md-12">
+                                    @Html.TextAreaFor(m => m.contactUsVM.Message, new { @class = "form-control", rows = "3", @id = "Message", placeholder = "قم بكتابة رسالتك" })
+                                    @Html.ValidationMessageFor(m => m.contactUsVM.Message, "", new { @class = "text-danger" })
+                                </div>
+                            </div>
+
+                            <div class="col-lg-12 col-md-12">
+                                <button type="submit" class="default-btn">إرسال <i class="flaticon-send"></i></button>
+                                <div id="msgSubmit" class="h3 text-center hidden"></div>
+                                <div class="clearfix"></div>
+                            </div>
+                        </div>
+                    }
+                </div>
+            </div>
+        </div>
+
+        <div id="map">
+            <iframe src="@mapEmbedCode" width="95%" height="570" frameborder="0" style="border: 0"></iframe>
+        </div>
+    </div>
+</div>

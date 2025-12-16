@@ -1,0 +1,350 @@
+﻿
+@{
+    Layout = null;
+    //string root = System.Configuration.ConfigurationManager.AppSettings["root"].ToString();
+}
+
+<!doctype html>
+<html lang="ar" dir="rtl">
+<head>
+    <!-- Required meta tags -->
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+
+    <!-- Links of CSS files -->
+    <link rel="stylesheet" href="~/assets/css/bootstrap.rtl.min.css">
+    <link rel="stylesheet" href="~/assets/css/aos.css">
+    <link rel="stylesheet" href="~/assets/css/animate.min.css">
+    <link rel="stylesheet" href="~/assets/css/meanmenu.css">
+    <link rel="stylesheet" href="~/assets/css/flaticon.css">
+    <link rel="stylesheet" href="~/assets/css/remixicon.css">
+    <link rel="stylesheet" href="~/assets/css/odometer.min.css">
+    <link rel="stylesheet" href="~/assets/css/owl.carousel.min.css">
+    <link rel="stylesheet" href="~/assets/css/owl.theme.default.min.css">
+    <link rel="stylesheet" href="~/assets/css/magnific-popup.min.css">
+    <link rel="stylesheet" href="~/assets/css/fancybox.min.css">
+    <link rel="stylesheet" href="~/assets/css/selectize.min.css">
+    <link rel="stylesheet" href="~/assets/css/metismenu.min.css">
+    <link rel="stylesheet" href="~/assets/css/simplebar.min.css">
+    <link rel="stylesheet" href="~/assets/css/dropzone.min.css">
+    <link rel="stylesheet" href="~/assets/css/style.css">
+    <link rel="stylesheet" href="~/assets/css/navbar.css">
+    <link rel="stylesheet" href="~/assets/css/footer.css">
+    <link rel="stylesheet" href="~/assets/css/dashboard.css">
+    <link rel="stylesheet" href="~/assets/css/responsive.css">
+    <link rel="stylesheet" href="~/assets/css/rtl.css">
+    <title>Ministry Of Information Kuwait - EService | وزارة الاعلام - الخدمـات الإلكترونية</title>
+    <link rel="icon" type="image/png" href="~/assets/images/favicon.png">
+    <link rel="apple-touch-icon-precomposed" href="images/favicon-apple.png" />
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/sweetalert2@11.7.1/dist/sweetalert2.min.css" />
+    <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/v/bs5/dt-1.13.2/r-2.4.0/datatables.min.css" />
+    <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/responsive/2.4.0/css/responsive.bootstrap5.min.css" />
+    @if (IsSectionDefined("Styles"))
+    {@RenderSection("Styles", required: false)}
+
+    <script src="~/assets/js/jquery.min.js"></script>
+    <script src="~/assets/js/bootstrap.bundle.min.js"></script>
+    <style>
+        .datepicker-panel > ul > li[data-view="month current"], .datepicker-panel > ul > li[data-view="month prev"], .datepicker-panel > ul > li[data-view="month next"], .datepicker-panel > ul {
+            font-weight: bold !important;
+        }
+
+            .datepicker-panel > ul > li[data-view="month current"], .datepicker-panel > ul > li[data-view="month prev"], .datepicker-panel > ul > li[data-view="month next"] {
+                font-size: 13px !important;
+                background-color: #1657cb !important;
+                color: white !important;
+            }
+
+                .datepicker-panel > ul > li[data-view="month current"]:hover, .datepicker-panel > ul > li[data-view="month prev"]:hover, .datepicker-panel > ul > li[data-view="month next"]:hover {
+                    background-color: #00ccfe !important;
+                    color: black !important;
+                    -webkit-transition: all 500ms ease;
+                    -moz-transition: all 500ms ease;
+                    -o-transition: all 500ms ease;
+                    transition: all 500ms ease;
+                }
+
+        .datepicker-top-left:after, .datepicker-top-right:after {
+            border-bottom-color: #1657cb !important;
+            color: white !important;
+        }
+
+        .datepicker-panel > ul > li.highlighted {
+            background-color: #1657cb !important;
+            color: white !important;
+        }
+
+            .datepicker-panel > ul > li.highlighted:hover {
+                background-color: #00ccfe !important;
+                color: black !important;
+                -webkit-transition: all 500ms ease;
+                -moz-transition: all 500ms ease;
+                -o-transition: all 500ms ease;
+                transition: all 500ms ease;
+            }
+
+        .datepicker-panel > ul > li:hover {
+            background-color: #1657cb !important;
+            color: white !important;
+            -webkit-transition: all 500ms ease;
+            -moz-transition: all 500ms ease;
+            -o-transition: all 500ms ease;
+            transition: all 500ms ease;
+        }
+        /*table thead tr th, table tbody tr td {
+            padding: 17px !important;
+        }*/
+        .my-profile-box form .form-group .form-control {
+            height: auto !important;
+        }
+
+        input {
+            border: 1px solid #1657cb !important;
+        }
+
+            input:not(:placeholder-shown) {
+                background-color: #f5f5f5 !important;
+                border: none !important;
+            }
+
+            input:placeholder-shown {
+                background-color: white !important;
+            }
+
+        .custom-file-input {
+            color: transparent;
+        }
+
+            .custom-file-input::-webkit-file-upload-button {
+                visibility: hidden;
+            }
+
+            .custom-file-input::before {
+                content: 'PDF إضافة ملف';
+                color: white;
+                display: inline-block;
+                background-color: #00ccfe;
+                /* border: 1px solid #1657cb; */
+                border-radius: 3px;
+                padding: 10px 17px;
+                outline: none;
+                -webkit-user-select: none;
+                cursor: pointer;
+                position: absolute;
+                bottom: 1px;
+                right: 0px;
+            }
+
+            .custom-file-input::after {
+                content: '_';
+                margin-left: 39px;
+                float: right;
+            }
+
+            .custom-file-input:hover::before {
+                border-color: black;
+            }
+
+            .custom-file-input:active {
+                outline: 0;
+            }
+
+                .custom-file-input:active::before {
+                    background: -webkit-linear-gradient(top, #e3e3e3, #f9f9f9);
+                }
+
+        label.Required::before {
+            content: "*";
+            color: red;
+            font-size: 20px;
+        }
+
+        .dataTables_wrapper .row {
+            padding-bottom: 15px !important;
+            direction: ltr !important;
+        }
+
+        input[type=search] {
+            padding: 10px 20px 10px 19px;
+            text-align: right;
+            direction: rtl;
+        }
+
+        .ThemeCol {
+            background: var(--main-color) !important;
+        }
+
+        .myTable {
+            direction: rtl !important;
+        }
+
+        .ThemeCol tr th {
+            color: white !important;
+            font-weight: bold !important;
+            text-align: right !important;
+        }
+        label{
+            margin-bottom: 8px;
+        }
+        .profile-authentication-tabs .eeza-authentication-form form .form-group .form-control{
+            padding: 10px 20px !important;
+            height: auto !important;
+        }
+
+        .profile-authentication-tabs .authentication-tabs-list .nav .nav-item .nav-link.active {
+            padding: 20px 75px !important;
+        }
+        .profile-authentication-tabs .authentication-tabs-list .nav{
+            background: none !important;
+        }
+
+    </style>
+</head>
+
+<body>
+
+    <!-- Start Preloader Area -->
+    <div class="preloader-area">
+        <div class="spinner">
+            <div class="inner">
+                <div class="disc"></div>
+                <div class="disc"></div>
+                <div class="disc"></div>
+            </div>
+        </div>
+    </div>
+    <!-- End Preloader Area -->
+    <!-- Start Header Area -->
+    @await Component.InvokeAsync("Header")
+    <!-- End Header Area -->
+    <!-- Start Page Banner Area -->
+    <div class="page-banner-area item-bg-four2">
+        <div class="page-banner-area item-bg-four">
+            <div class="d-table">
+                <div class="d-table-cell">
+                    <div class="container">
+                        <div class="page-banner-content">
+                            <h2>@ViewBag.Title</h2>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- End Page Banner Area -->
+    <!-- Start Profile Authentication Area -->
+    @RenderBody()
+    <!-- Start Profile Authentication Area -->
+    <!-- Start Footer Area -->
+    @await Component.InvokeAsync("Footer")
+  
+    <!-- End Footer Area -->
+    <!-- Start Go Top Area -->
+    <div class="go-top">
+        <i class="ri-arrow-up-line"></i>
+    </div>
+    <!-- End Go Top Area -->
+    <!-- Links of JS files -->
+    <script src="~/assets/js/jquery.meanmenu.js"></script>
+    <script src="~/assets/js/owl.carousel.min.js"></script>
+    <script src="~/assets/js/jquery.appear.js"></script>
+    <script src="~/assets/js/odometer.min.js"></script>
+    <script src="~/assets/js/jquery.magnific-popup.min.js"></script>
+    <script src="~/assets/js/fancybox.min.js"></script>
+    <script src="~/assets/js/selectize.min.js"></script>
+    <script src="~/assets/js/TweenMax.min.js"></script>
+    <script src="~/assets/js/aos.js"></script>
+    <script src="~/assets/js/metismenu.min.js"></script>
+    <script src="~/assets/js/simplebar.min.js"></script>
+    <script src="~/assets/js/dropzone.min.js"></script>
+    <script src="~/assets/js/sticky-sidebar.min.js"></script>
+    <script src="~/assets/js/jquery.ajaxchimp.min.js"></script>
+    <script src="~/assets/js/form-validator.min.js"></script>
+    <script src="~/assets/js/contact-form-script.js"></script>
+    <script src="~/assets/js/wow.min.js"></script>
+    <script src="~/assets/js/main.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11.7.1/dist/sweetalert2.all.min.js"></script>
+    <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/v/bs5/dt-1.13.2/r-2.4.0/datatables.min.css" />
+    <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/responsive/2.4.0/css/responsive.bootstrap5.min.css" />
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11.7.1/dist/sweetalert2.all.min.js"></script>
+    <script type="text/javascript">
+        jQuery(document).ready(function () {
+            $(function loadImage() {
+
+                var alertTitle = '@TempData["AlertTitle"]';
+                var msg = '@TempData["Message"]';
+                var alertType = '@TempData["AlertType"]';
+                var url = '@TempData["RedirectUrl"]';
+
+                if (alertType != null && msg != null && alertTitle != null) {
+                    if (url != null && url != '#') {
+
+
+                    if (alertType == 'Success') {
+                        Swal.fire({
+                            icon: 'success',
+                            title: alertTitle,
+                            text: msg,
+                            confirmButtonColor: '#1657CB',
+                            confirmButtonText: 'OK'
+                        }).then(function () {
+                            @TempData.Remove("AlertTitle");
+                            @TempData.Remove("Message");
+                            @TempData.Remove("AlertType");
+                            @TempData.Remove("RedirectUrl");
+                           // window.location = 'root' + url;
+                        });
+
+                    }
+                    else if (alertType == 'error') {
+                        Swal.fire({
+                            icon: 'error',
+                            title: alertTitle,
+                            text: msg,
+                            confirmButtonColor: '#1657CB',
+                            confirmButtonText: 'OK'
+                        }).then(function () {
+                            @TempData.Remove("AlertTitle");
+                            @TempData.Remove("Message");
+                            @TempData.Remove("AlertType");
+                            @TempData.Remove("RedirectUrl");
+                            // window.location = 'root' + url;
+                        });
+                    };
+                } else {
+                    if (alertType == 'Success') {
+                        Swal.fire({
+                            icon: 'success',
+                            title: alertTitle,
+                            text: msg,
+                            confirmButtonColor: '#1657CB',
+                            confirmButtonText: 'OK'
+                        }).then(function () {
+                            @TempData.Remove("AlertTitle");
+                            @TempData.Remove("Message");
+                            @TempData.Remove("AlertType");
+                        });
+
+                    }
+                    else if (alertType == 'error') {
+                        Swal.fire({
+                            icon: 'error',
+                            title: alertTitle,
+                            text: msg,
+                            confirmButtonColor: '#1657CB',
+                            confirmButtonText: 'OK'
+                        }).then(function () {
+                            @TempData.Remove("AlertTitle");
+                            @TempData.Remove("Message");
+                            @TempData.Remove("AlertType");
+                        });
+                    };
+                }
+                }
+            });
+        });
+    </script>
+    @if (IsSectionDefined("Scripts"))
+    {@RenderSection("Scripts", required: false)}
+</body>
+</html>

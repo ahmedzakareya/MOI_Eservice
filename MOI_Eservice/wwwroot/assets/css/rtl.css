@@ -1,0 +1,2353 @@
+.topbar-social-list li {
+    margin-left: 20px;
+    margin-right: 0
+}
+
+    .topbar-social-list li:last-child {
+        margin-left: 0
+    }
+
+.topbar-action li {
+    margin-left: 25px;
+    margin-right: 0
+}
+
+    .topbar-action li:last-child {
+        margin-left: 0
+    }
+
+    .topbar-action li::before {
+        left: -15px;
+        right: auto
+    }
+
+.language-option button {
+    padding-left: 22px;
+    padding-right: 0
+}
+
+    .language-option button::before {
+        left: 0;
+        right: auto
+    }
+
+    .language-option button i {
+        float: right;
+        margin-left: 5px;
+        margin-right: 0;
+        top: 4px
+    }
+
+.language-option .dropdown-menu[style] {
+    left: 0 !important;
+    right: auto !important
+}
+
+    .language-option .dropdown-menu[style] .dropdown-item img {
+        margin-left: 10px;
+        margin-right: 0
+    }
+
+.navbar-brand {
+    margin-right: 0
+}
+
+.main-navbar .navbar ul {
+    padding-right: 0
+}
+
+.main-navbar .navbar .navbar-nav .nav-item a::after {
+    left: 0;
+    right: auto
+}
+
+.main-navbar .navbar .navbar-nav .nav-item a:hover::after, .main-navbar .navbar .navbar-nav .nav-item a:focus::after, .main-navbar .navbar .navbar-nav .nav-item a.active::after {
+    left: auto;
+    right: 0
+}
+
+.main-navbar .navbar .navbar-nav .nav-item:first-child {
+    margin-right: 0;
+    margin-left: 15px
+}
+
+.main-navbar .navbar .navbar-nav .nav-item:last-child {
+    margin-left: 0;
+    margin-right: 15px
+}
+
+.main-navbar .navbar .navbar-nav .nav-item .dropdown-menu {
+    right: 0;
+    left: auto;
+    text-align: right
+}
+
+    .main-navbar .navbar .navbar-nav .nav-item .dropdown-menu li a i {
+        left: 15px;
+        right: auto
+    }
+
+    .main-navbar .navbar .navbar-nav .nav-item .dropdown-menu li a::before {
+        right: 20px;
+        left: auto
+    }
+
+    .main-navbar .navbar .navbar-nav .nav-item .dropdown-menu li .dropdown-menu {
+        left: -250px;
+        right: auto
+    }
+
+.main-navbar .navbar .others-options {
+    margin-right: 30px;
+    margin-left: 0
+}
+
+.main-banner-area::before {
+    right: 0;
+    left: auto
+}
+
+.play-video-area .container-fluid {
+    padding-right: 0
+}
+
+.play-video-content {
+    padding-right: 170px;
+    padding-left: 0;
+    margin-right: -70px;
+    margin-left: 0
+}
+
+    .play-video-content .play-btn {
+        right: 0;
+        left: auto
+    }
+
+    .play-video-content .layer-shape {
+        left: 50% !important;
+        -webkit-transform: translateX(-50%) !important;
+        transform: translateX(-50%) !important
+    }
+
+.featured-candidates-item {
+    padding-right: 50px;
+    padding-left: 0
+}
+
+    .featured-candidates-item .featured-candidates-btn {
+        text-align: left
+    }
+
+.featured-candidates-box .candidates-box-content {
+    padding-right: 0px;
+    padding-left: 0
+}
+
+    .featured-candidates-box .candidates-box-content .image {
+        right: 0;
+        left: auto
+    }
+
+    .featured-candidates-box .candidates-box-content .content .job-info li {
+        margin-left: 20px;
+        margin-right: 0;
+        padding-right: 20px;
+        padding-left: 0
+    }
+
+        .featured-candidates-box .candidates-box-content .content .job-info li:last-child {
+            margin-left: 0
+        }
+
+        .featured-candidates-box .candidates-box-content .content .job-info li i {
+            right: 0;
+            left: auto
+        }
+
+.featured-candidates-box .featured-candidates-hire .job-other-info li {
+    margin-left: 5px;
+    margin-right: 0
+}
+
+    .featured-candidates-box .featured-candidates-hire .job-other-info li:last-child {
+        margin-left: 0
+    }
+
+.featured-candidates-shape {
+    left: 10px;
+    right: auto
+}
+
+.review-title .layer-shape {
+    right: 0;
+    left: auto
+}
+
+.review-single-card .review-info {
+    padding-right: 125px;
+    padding-left: 0
+}
+
+    .review-single-card .review-info .image {
+        right: 0;
+        left: auto
+    }
+
+.mobile-app-content {
+    margin: 0 auto 0 0
+}
+
+    .mobile-app-content .layer-shape {
+        left: 18%;
+        right: auto;
+        -webkit-transform: translateX(18%);
+        transform: translateX(18%)
+    }
+
+    .mobile-app-content .mobile-app-btn-list li {
+        margin-left: 15px;
+        margin-right: 0
+    }
+
+        .mobile-app-content .mobile-app-btn-list li:last-child {
+            margin-left: 0
+        }
+
+        .mobile-app-content .mobile-app-btn-list li .playstote-btn i {
+            margin-right: 10px;
+            margin-left: 0
+        }
+
+        .mobile-app-content .mobile-app-btn-list li .applestore-btn i {
+            margin-right: 10px;
+            margin-left: 0
+        }
+
+.section-title .section-layer-shape {
+    left: 20%;
+    -webkit-transform: translateX(20%);
+    transform: translateX(20%)
+}
+
+.single-pricing-table .price span {
+    right: -8px;
+    left: auto
+}
+
+.blog-item-box .content {
+    margin-right: 30px;
+    margin-left: 0
+}
+
+    .blog-item-box .content .layer-shape {
+        right: 25%;
+        left: auto;
+        -webkit-transform: translateX(25%);
+        transform: translateX(25%)
+    }
+
+.blog-slides {
+    margin-right: -150px;
+    margin-left: 0
+}
+
+.blog-single-card .blog-content .blog-btn {
+    float: left
+}
+
+.single-footer-widget .widget-social-links li {
+    margin-left: 15px;
+    margin-right: 0
+}
+
+    .single-footer-widget .widget-social-links li:last-child {
+        margin-left: 0
+    }
+
+.single-footer-widget .widget-info li {
+    padding-right: 32px;
+    padding-left: 0
+}
+
+    .single-footer-widget .widget-info li i {
+        right: 0;
+        left: auto
+    }
+
+.go-top {
+    left: 20px;
+    right: auto
+}
+
+.main-banner-content-with-search .banner-search-form .form-group label {
+    right: 20px;
+    left: auto
+}
+
+.main-banner-content-with-search .banner-search-form .form-group .form-control {
+    padding: 12px 50px 15px 15px
+}
+
+.main-banner-content-with-search .banner-search-form .form-group .selectize-input {
+    padding: 22px 50px 22px 20px
+}
+
+    .main-banner-content-with-search .banner-search-form .form-group .selectize-input:after {
+        left: 16px !important;
+        right: auto !important
+    }
+
+.main-banner-content-with-search .banner-search-form .search-btn i {
+    margin-right: 20px;
+    margin-left: 0
+}
+
+.about-content {
+    padding-right: 35px;
+    padding-left: 0
+}
+
+.seeker-arrow-icon {
+    left: -60px;
+    right: auto
+}
+
+.play-video-inner-box-image .video-content {
+    left: 0;
+    right: auto;
+    padding-right: 120px;
+    padding-left: 50px
+}
+
+    .play-video-inner-box-image .video-content .play-btn {
+        right: -35px;
+        left: auto
+    }
+
+    .play-video-inner-box-image .video-content .layer-shape {
+        left: 75px;
+        right: auto
+    }
+
+.single-job-list-card .job-information {
+    padding-right: 5px;
+    padding-left: 35px
+}
+
+    .single-job-list-card .job-information .company-logo {
+        right: 0;
+        left: auto
+    }
+
+    .single-job-list-card .job-information .bookmark-btn {
+        left: 0;
+        right: auto
+    }
+
+    .single-job-list-card .job-information .hover-bookmark-btn {
+        left: 0;
+        right: auto
+    }
+
+.single-job-list-card .job-tag-list li {
+    margin-left: 5px;
+    margin-right: 0
+}
+
+    .single-job-list-card .job-tag-list li:last-child {
+        margin-left: 0
+    }
+
+.single-job-list-card .location-information li {
+    padding-right: 20px;
+    padding-left: 0
+}
+
+    .single-job-list-card .location-information li i {
+        right: 0;
+        left: auto
+    }
+
+.overview-image {
+    border-radius: 0 100px 100px 0
+}
+
+.overview-content {
+    margin: 0 auto 0 0
+}
+
+.mobile-app-shape {
+    right: 5%;
+    left: auto;
+    -webkit-transform: translateX(5%);
+    transform: translateX(5%)
+}
+
+.mobile-app-shape-2 {
+    right: 55%;
+    left: auto;
+    -webkit-transform: translateX(55%);
+    transform: translateX(55%)
+}
+
+.blog-item-box.left-box .content {
+    margin-left: 30px;
+    margin-right: 0
+}
+
+    .blog-item-box.left-box .content .layer-shape {
+        right: 60%;
+        left: auto;
+        -webkit-transform: translateX(-60%);
+        transform: translateX(-60%)
+    }
+
+.blog-item-box.left-box .blog-slides {
+    margin-right: 150px;
+    margin-left: 0
+}
+
+.main-banner-content-wrap .banner-search-form {
+    padding: 5px 15px 5px 92px
+}
+
+    .main-banner-content-wrap .banner-search-form .form-group label {
+        right: 20px;
+        left: auto
+    }
+
+    .main-banner-content-wrap .banner-search-form .form-group .form-control {
+        padding: 12px 50px 15px 15px
+    }
+
+    .main-banner-content-wrap .banner-search-form .form-group .selectize-input {
+        padding: 22px 50px 22px 20px
+    }
+
+        .main-banner-content-wrap .banner-search-form .form-group .selectize-input:after {
+            left: 16px !important;
+            right: auto !important
+        }
+
+    .main-banner-content-wrap .banner-search-form .search-btn {
+        left: -5px;
+        right: auto
+    }
+
+.job-list-inner-box .job-list-box .job-information {
+    padding-right: 190px;
+    padding-left: 0
+}
+
+    .job-list-inner-box .job-list-box .job-information .title-box {
+        right: 0;
+        left: auto
+    }
+
+    .job-list-inner-box .job-list-box .job-information .job-tag-list li {
+        margin-left: 5px;
+        margin-right: 0
+    }
+
+        .job-list-inner-box .job-list-box .job-information .job-tag-list li:last-child {
+            margin-left: 0
+        }
+
+.job-list-inner-box .job-list-box .location-information li {
+    margin-left: 20px;
+    margin-right: 0;
+    padding-right: 20px;
+    padding-left: 0
+}
+
+    .job-list-inner-box .job-list-box .location-information li:last-child {
+        margin-left: 0
+    }
+
+    .job-list-inner-box .job-list-box .location-information li i {
+        right: 0;
+        left: auto
+    }
+
+.job-list-inner-box .job-list-optional .save-text {
+    margin-right: 70px;
+    margin-left: 0
+}
+
+.single-candidates-card .candidates-information-box {
+    padding-right: 150px;
+    padding-left: 0
+}
+
+    .single-candidates-card .candidates-information-box .image {
+        right: 0;
+        left: auto
+    }
+
+    .single-candidates-card .candidates-information-box .content .job-info li {
+        margin-left: 20px;
+        margin-right: 0;
+        padding-right: 20px;
+        padding-left: 0
+    }
+
+        .single-candidates-card .candidates-information-box .content .job-info li i {
+            right: 0;
+            left: auto
+        }
+
+        .single-candidates-card .candidates-information-box .content .job-info li:last-child {
+            margin-left: 0
+        }
+
+.job-list-search-box .job-list-search-form {
+    padding: 5px 15px 5px 92px
+}
+
+    .job-list-search-box .job-list-search-form .form-group label {
+        right: 20px;
+        left: auto
+    }
+
+    .job-list-search-box .job-list-search-form .form-group .form-control {
+        padding: 12px 50px 15px 15px
+    }
+
+    .job-list-search-box .job-list-search-form .form-group .selectize-input {
+        padding: 22px 50px 22px 20px
+    }
+
+        .job-list-search-box .job-list-search-form .form-group .selectize-input:after {
+            left: 16px !important;
+            right: auto !important
+        }
+
+    .job-list-search-box .job-list-search-form .search-btn {
+        left: -5px;
+        right: auto
+    }
+
+.single-job-list-box .job-information {
+    padding-right: 72px;
+    padding-left: 30px
+}
+
+    .single-job-list-box .job-information .company-logo {
+        right: 0;
+        left: auto
+    }
+
+    .single-job-list-box .job-information .bookmark-btn {
+        left: 0;
+        right: auto
+    }
+
+    .single-job-list-box .job-information .hover-bookmark-btn {
+        left: 0;
+        right: auto
+    }
+
+.single-job-list-box .job-tag-list li {
+    margin-left: 5px;
+    margin-right: 0
+}
+
+    .single-job-list-box .job-tag-list li:last-child {
+        margin-left: 0
+    }
+
+.single-job-list-box .location-information li {
+    padding-right: 20px;
+    padding-left: 0
+}
+
+    .single-job-list-box .location-information li i {
+        right: 0;
+        left: auto
+    }
+
+.profile-authentication-tabs .authentication-tabs-list .nav {
+    padding: 0
+}
+
+.profile-authentication-tabs .eeza-authentication-form form .lost-your-password-wrap {
+    text-align: left
+}
+
+.profile-authentication-tabs .eeza-authentication-form .remember-me-wrap [type=checkbox]:checked + label, .profile-authentication-tabs .eeza-authentication-form .remember-me-wrap [type=checkbox]:not(:checked) + label {
+    padding-right: 35px;
+    padding-left: 0
+}
+
+    .profile-authentication-tabs .eeza-authentication-form .remember-me-wrap [type=checkbox]:checked + label:before, .profile-authentication-tabs .eeza-authentication-form .remember-me-wrap [type=checkbox]:not(:checked) + label:before {
+        right: 0;
+        left: auto
+    }
+
+    .profile-authentication-tabs .eeza-authentication-form .remember-me-wrap [type=checkbox]:checked + label:after, .profile-authentication-tabs .eeza-authentication-form .remember-me-wrap [type=checkbox]:not(:checked) + label:after {
+        right: 8px;
+        left: auto
+    }
+
+.job-details-information .information-box {
+    padding-right: 100px;
+    padding-left: 0
+}
+
+    .job-details-information .information-box .company-logo {
+        right: 0;
+        left: auto
+    }
+
+.job-details-desc .job-details-content .list li {
+    padding-right: 32px;
+    padding-left: 0
+}
+
+    .job-details-desc .job-details-content .list li::before {
+        right: 0;
+        left: auto
+    }
+
+.job-details-desc .job-article-footer .article-tags span {
+    margin-left: 5px;
+    margin-right: 0
+}
+
+.job-details-desc .job-article-footer .article-share .social {
+    padding-right: 0;
+    text-align: left
+}
+
+.featured-candidates-search-box .candidates-search-form {
+    padding: 5px 15px 5px 92px
+}
+
+    .featured-candidates-search-box .candidates-search-form .form-group label {
+        right: 20px;
+        left: auto
+    }
+
+    .featured-candidates-search-box .candidates-search-form .form-group .form-control {
+        padding: 12px 50px 15px 15px
+    }
+
+    .featured-candidates-search-box .candidates-search-form .form-group .selectize-input {
+        padding: 22px 50px 22px 20px
+    }
+
+        .featured-candidates-search-box .candidates-search-form .form-group .selectize-input:after {
+            left: 16px !important;
+            right: auto !important
+        }
+
+    .featured-candidates-search-box .candidates-search-form .search-btn {
+        left: -5px;
+        right: auto
+    }
+
+.candidates-details-desc .candidates-desc-content h3 i {
+    float: left
+}
+
+.candidates-details-desc .candidates-desc-content .candidates-desc-list::before {
+    right: 0;
+    left: auto
+}
+
+.candidates-details-desc .candidates-desc-content .candidates-desc-list .list-box {
+    padding-right: 30px;
+    padding-left: 0
+}
+
+    .candidates-details-desc .candidates-desc-content .candidates-desc-list .list-box::before {
+        right: -10px;
+        left: auto
+    }
+
+.candidates-details-desc .candidates-desc-content .candidates-comments-list {
+    padding-right: 105px;
+    padding-left: 0
+}
+
+    .candidates-details-desc .candidates-desc-content .candidates-comments-list img {
+        right: 0;
+        left: auto
+    }
+
+    .candidates-details-desc .candidates-desc-content .candidates-comments-list.children {
+        margin-right: 50px;
+        margin-left: 0
+    }
+
+    .candidates-details-desc .candidates-desc-content .candidates-comments-list h5 span {
+        margin-right: 5px;
+        margin-left: 0
+    }
+
+    .candidates-details-desc .candidates-desc-content .candidates-comments-list .rating {
+        left: 0;
+        right: auto
+    }
+
+.candidates-details-desc .candidates-desc-content .candidates-leave-comment .rating {
+    left: 0;
+    right: auto
+}
+
+.candidates-details-desc .candidates-desc-content .candidates-leave-comment .form-cookies-consent [type=checkbox]:checked + label, .candidates-details-desc .candidates-desc-content .candidates-leave-comment .form-cookies-consent [type=checkbox]:not(:checked) + label {
+    padding-right: 35px;
+    padding-left: 0
+}
+
+    .candidates-details-desc .candidates-desc-content .candidates-leave-comment .form-cookies-consent [type=checkbox]:checked + label:before, .candidates-details-desc .candidates-desc-content .candidates-leave-comment .form-cookies-consent [type=checkbox]:not(:checked) + label:before {
+        right: 0;
+        left: auto
+    }
+
+    .candidates-details-desc .candidates-desc-content .candidates-leave-comment .form-cookies-consent [type=checkbox]:checked + label:after, .candidates-details-desc .candidates-desc-content .candidates-leave-comment .form-cookies-consent [type=checkbox]:not(:checked) + label:after {
+        right: 8px;
+        left: auto
+    }
+
+.candidates-details-information {
+    margin-left: 20px;
+    margin-right: 0
+}
+
+    .candidates-details-information .information-box {
+        padding-right: 115px;
+        padding-left: 0
+    }
+
+        .candidates-details-information .information-box img {
+            right: 0;
+            left: auto
+        }
+
+        .candidates-details-information .information-box .social-links li {
+            margin-left: 20px;
+            margin-right: 0
+        }
+
+            .candidates-details-information .information-box .social-links li:last-child {
+                margin-left: 0
+            }
+
+.single-employer-item .bookmark-btn {
+    left: 30px;
+    right: auto
+}
+
+.single-employer-item .hover-bookmark-btn {
+    left: 30px;
+    right: auto
+}
+
+.single-employer-item span {
+    padding-right: 20px;
+    padding-left: 0
+}
+
+    .single-employer-item span i {
+        right: 0;
+        left: auto
+    }
+
+.single-employer-item .employer-tag-list li {
+    margin-left: 5px;
+    margin-right: 0
+}
+
+    .single-employer-item .employer-tag-list li:last-child {
+        margin-left: 0
+    }
+
+.employers-details-information {
+    margin-right: 20px;
+    margin-left: 0
+}
+
+    .employers-details-information .information-box {
+        padding-right: 100px;
+        padding-left: 0
+    }
+
+        .employers-details-information .information-box .company-logo {
+            right: 0;
+            left: auto
+        }
+
+.employers-details-desc .employers-desc-content .responsibilities-list li {
+    padding-right: 25px;
+    padding-left: 0
+}
+
+    .employers-details-desc .employers-desc-content .responsibilities-list li i {
+        right: 0;
+        left: auto
+    }
+
+.employers-details-desc .employers-desc-comments-content .employers-comments-list {
+    padding-right: 105px;
+    padding-left: 0
+}
+
+    .employers-details-desc .employers-desc-comments-content .employers-comments-list img {
+        right: 0;
+        left: auto
+    }
+
+    .employers-details-desc .employers-desc-comments-content .employers-comments-list.children {
+        margin-right: 50px;
+        margin-left: 0
+    }
+
+    .employers-details-desc .employers-desc-comments-content .employers-comments-list .rating {
+        left: 0;
+        right: auto
+    }
+
+    .employers-details-desc .employers-desc-comments-content .employers-comments-list h5 span {
+        margin-right: 5px;
+        margin-left: 0
+    }
+
+.employers-details-desc .employers-leave-comment .form-cookies-consent [type=checkbox]:checked + label, .employers-details-desc .employers-leave-comment .form-cookies-consent [type=checkbox]:not(:checked) + label {
+    padding-right: 35px;
+    padding-left: 0
+}
+
+    .employers-details-desc .employers-leave-comment .form-cookies-consent [type=checkbox]:checked + label:before, .employers-details-desc .employers-leave-comment .form-cookies-consent [type=checkbox]:not(:checked) + label:before {
+        right: 0;
+        left: auto
+    }
+
+    .employers-details-desc .employers-leave-comment .form-cookies-consent [type=checkbox]:checked + label:after, .employers-details-desc .employers-leave-comment .form-cookies-consent [type=checkbox]:not(:checked) + label:after {
+        right: 8px;
+        left: auto
+    }
+
+.eeza-grid-sorting .ordering .selectize-input:after {
+    left: 20px !important;
+    right: auto !important
+}
+
+.single-products-box .products-image .sale-tag {
+    right: 20px;
+    left: auto
+}
+
+.single-products-box .products-image .new-tag {
+    right: 20px;
+    left: auto
+}
+
+.single-products-box .products-content .add-to-cart {
+    left: 0;
+    right: auto
+}
+
+.products-details-desc {
+    padding-right: 30px;
+    padding-left: 0
+}
+
+    .products-details-desc .products-add-to-cart .input-counter {
+        margin-left: 10px;
+        margin-right: 0
+    }
+
+    .products-details-desc .products-share .social {
+        padding-right: 0
+    }
+
+        .products-details-desc .products-share .social li span {
+            margin-left: 3px;
+            margin-right: 0
+        }
+
+.products-details-tabs .nav .nav-item {
+    margin-left: 20px;
+    margin-right: 0
+}
+
+    .products-details-tabs .nav .nav-item:last-child {
+        margin-left: 0
+    }
+
+    .products-details-tabs .nav .nav-item .nav-link::before {
+        right: 0;
+        left: auto
+    }
+
+.products-details-tabs .tab-content .tab-pane ul {
+    padding-right: 0
+}
+
+    .products-details-tabs .tab-content .tab-pane ul li {
+        padding-right: 18px;
+        padding-left: 0
+    }
+
+        .products-details-tabs .tab-content .tab-pane ul li::before {
+            right: 0;
+            left: auto
+        }
+
+.products-details-tabs .tab-content .tab-pane .products-reviews .right {
+    text-align: left
+}
+
+.products-details-tabs .tab-content .tab-pane .products-reviews .side {
+    padding-right: 0
+}
+
+.products-details-tabs .tab-content .tab-pane .products-review-comments .user-review {
+    padding: 20px 110px 20px 0
+}
+
+    .products-details-tabs .tab-content .tab-pane .products-review-comments .user-review img {
+        right: 0;
+        left: auto
+    }
+
+    .products-details-tabs .tab-content .tab-pane .products-review-comments .user-review .review-rating span {
+        margin-right: 5px;
+        margin-left: 0
+    }
+
+.products-details-tabs .tab-content .tab-pane .review-form-wrapper form .comment-form-cookies-consent {
+    text-align: right
+}
+
+    .products-details-tabs .tab-content .tab-pane .review-form-wrapper form .comment-form-cookies-consent [type=checkbox]:checked + label, .products-details-tabs .tab-content .tab-pane .review-form-wrapper form .comment-form-cookies-consent [type=checkbox]:not(:checked) + label {
+        padding-right: 35px;
+        padding-left: 0
+    }
+
+        .products-details-tabs .tab-content .tab-pane .review-form-wrapper form .comment-form-cookies-consent [type=checkbox]:checked + label:before, .products-details-tabs .tab-content .tab-pane .review-form-wrapper form .comment-form-cookies-consent [type=checkbox]:not(:checked) + label:before {
+            right: 0;
+            left: auto
+        }
+
+        .products-details-tabs .tab-content .tab-pane .review-form-wrapper form .comment-form-cookies-consent [type=checkbox]:checked + label:after, .products-details-tabs .tab-content .tab-pane .review-form-wrapper form .comment-form-cookies-consent [type=checkbox]:not(:checked) + label:after {
+            right: 5px;
+            left: auto
+        }
+
+.cart-table table tbody tr td.product-subtotal .remove {
+    float: left
+}
+
+.cart-buttons {
+    text-align: left
+}
+
+    .cart-buttons .shopping-coupon-code button {
+        left: 0;
+        right: auto
+    }
+
+.cart-totals ul {
+    padding-right: 0
+}
+
+    .cart-totals ul li span {
+        float: left
+    }
+
+.user-actions i {
+    margin-left: 2px;
+    margin-right: 0
+}
+
+.order-details .title::before {
+    right: 0;
+    left: auto
+}
+
+.order-details .payment-box {
+    background-color: var(--white-color);
+    -webkit-box-shadow: 0 2px 28px 0 rgba(0,0,0,.06);
+    box-shadow: 0 2px 28px 0 rgba(0,0,0,.06);
+    margin-top: 30px;
+    padding: 30px;
+    border-radius: 5px
+}
+
+    .order-details .payment-box .payment-method p [type=radio]:checked + label, .order-details .payment-box .payment-method p [type=radio]:not(:checked) + label {
+        padding-right: 27px;
+        padding-left: 0
+    }
+
+        .order-details .payment-box .payment-method p [type=radio]:checked + label::before, .order-details .payment-box .payment-method p [type=radio]:not(:checked) + label::before {
+            right: 0;
+            left: auto
+        }
+
+        .order-details .payment-box .payment-method p [type=radio]:checked + label::after, .order-details .payment-box .payment-method p [type=radio]:not(:checked) + label::after {
+            right: 3px;
+            left: auto
+        }
+
+.billing-details .title::before {
+    right: 0;
+    left: auto
+}
+
+.billing-details .form-cookies-consent [type=checkbox]:checked + label, .billing-details .form-cookies-consent [type=checkbox]:not(:checked) + label {
+    padding-right: 35px;
+    padding-left: 0
+}
+
+    .billing-details .form-cookies-consent [type=checkbox]:checked + label:before, .billing-details .form-cookies-consent [type=checkbox]:not(:checked) + label:before {
+        right: 0;
+        left: auto
+    }
+
+    .billing-details .form-cookies-consent [type=checkbox]:checked + label:after, .billing-details .form-cookies-consent [type=checkbox]:not(:checked) + label:after {
+        right: 8px;
+        left: auto
+    }
+
+.pricing-list-tabs .nav {
+    padding: 0
+}
+
+.faq-box-content .faq-search-form {
+    padding: 5px 5px 5px 80px
+}
+
+    .faq-box-content .faq-search-form .form-group label {
+        right: 20px;
+        left: auto
+    }
+
+    .faq-box-content .faq-search-form .form-group .form-control {
+        padding: 12px 50px 15px 15px
+    }
+
+    .faq-box-content .faq-search-form .search-btn {
+        left: 5px;
+        right: auto;
+        text-align: left
+    }
+
+.faq-accordion .accordion-item .accordion-button {
+    padding: 30px 30px 30px 55px
+}
+
+    .faq-accordion .accordion-item .accordion-button::before {
+        left: 30px;
+        right: auto
+    }
+
+.widget-area {
+    padding-right: 20px;
+    padding-left: 0
+}
+
+    .widget-area .widget_search form {
+        padding: 5px 5px 5px 80px
+    }
+
+        .widget-area .widget_search form .form-group label {
+            right: 20px;
+            left: auto
+        }
+
+        .widget-area .widget_search form .form-group .form-control {
+            padding: 12px 50px 15px 15px
+        }
+
+        .widget-area .widget_search form .search-btn {
+            left: 5px;
+            right: auto;
+            text-align: left
+        }
+
+    .widget-area .widget_eeza_posts_thumb .item .info h4 {
+        padding-right: 42px;
+        padding-left: 0
+    }
+
+        .widget-area .widget_eeza_posts_thumb .item .info h4::before {
+            right: 0;
+            left: auto
+        }
+
+    .widget-area .widget_eeza_posts_thumb .item .info .arrow-icon {
+        left: 0;
+        right: auto
+    }
+
+    .widget-area .widget_categories ul {
+        padding-right: 0
+    }
+
+        .widget-area .widget_categories ul li span {
+            float: left
+        }
+
+    .widget-area .widget_author .author-box .author-social-links li {
+        margin-left: 20px;
+        margin-right: 0
+    }
+
+        .widget-area .widget_author .author-box .author-social-links li:last-child {
+            margin-left: 0
+        }
+
+    .widget-area .tagcloud a {
+        margin-left: 5px;
+        margin-right: 0
+    }
+
+.blog-details-area .widget-area {
+    padding-right: 0;
+    padding-left: 20px
+}
+
+.blog-details-desc .article-content .entry-meta {
+    padding-right: 0
+}
+
+    .blog-details-desc .article-content .entry-meta li {
+        margin-left: 20px;
+        margin-right: 0;
+        padding-right: 25px;
+        padding-left: 0
+    }
+
+        .blog-details-desc .article-content .entry-meta li:last-child {
+            margin-left: 0
+        }
+
+        .blog-details-desc .article-content .entry-meta li i {
+            right: 0;
+            left: auto
+        }
+
+.blog-details-desc .article-content .article-list li {
+    padding-right: 42px;
+    padding-left: 0
+}
+
+    .blog-details-desc .article-content .article-list li::before {
+        right: 0;
+        left: auto
+    }
+
+.blog-details-desc .article-content .article-footer .article-tags span {
+    margin-left: 5px;
+    margin-right: 0
+}
+
+.blog-details-desc .article-content .article-footer .article-share .social {
+    padding-right: 0;
+    text-align: left
+}
+
+    .blog-details-desc .article-content .article-footer .article-share .social li {
+        margin-left: 5px;
+        margin-right: 0
+    }
+
+        .blog-details-desc .article-content .article-footer .article-share .social li:last-child {
+            margin-left: 0
+        }
+
+.blog-details-desc .article-content .article-post-navigation .nav-next .info h4 {
+    padding-right: 42px;
+    padding-left: 0
+}
+
+    .blog-details-desc .article-content .article-post-navigation .nav-next .info h4::before {
+        right: 0;
+        left: auto
+    }
+
+.blog-details-desc .article-content .article-post-navigation .nav-next .info .arrow-icon {
+    left: 25px;
+    right: auto
+}
+
+.blog-details-desc .article-content .article-post-navigation .nav-next .info span {
+    padding-left: 0
+}
+
+    .blog-details-desc .article-content .article-post-navigation .nav-next .info span i {
+        position: relative;
+        margin-right: 5px
+    }
+
+.blog-details-desc .article-content .article-post-navigation .nav-previous .info h4 {
+    padding-right: 42px;
+    padding-left: 0
+}
+
+    .blog-details-desc .article-content .article-post-navigation .nav-previous .info h4::before {
+        right: 0;
+        left: auto
+    }
+
+.blog-details-desc .article-content .article-post-navigation .nav-previous .info .arrow-icon {
+    left: 25px;
+    right: auto
+}
+
+.blog-details-desc .article-content .article-post-navigation .nav-previous .info span {
+    padding-left: 0
+}
+
+    .blog-details-desc .article-content .article-post-navigation .nav-previous .info span i {
+        position: relative;
+        margin-right: 5px
+    }
+
+.blog-details-desc .article-comments .comments-list {
+    padding-right: 105px;
+    padding-left: 0
+}
+
+    .blog-details-desc .article-comments .comments-list img {
+        right: 0;
+        left: auto
+    }
+
+    .blog-details-desc .article-comments .comments-list.children {
+        margin-right: 50px;
+        margin-left: 0
+    }
+
+    .blog-details-desc .article-comments .comments-list .reply-btn {
+        left: 0;
+        right: auto
+    }
+
+    .blog-details-desc .article-comments .comments-list h5 span {
+        margin-right: 5px;
+        margin-left: 0
+    }
+
+.blog-details-desc .article-leave-comment form .form-cookies-consent [type=checkbox]:checked + label, .blog-details-desc .article-leave-comment form .form-cookies-consent [type=checkbox]:not(:checked) + label {
+    padding-right: 35px;
+    padding-left: 0
+}
+
+    .blog-details-desc .article-leave-comment form .form-cookies-consent [type=checkbox]:checked + label:before, .blog-details-desc .article-leave-comment form .form-cookies-consent [type=checkbox]:not(:checked) + label:before {
+        right: 0;
+        left: auto
+    }
+
+    .blog-details-desc .article-leave-comment form .form-cookies-consent [type=checkbox]:checked + label:after, .blog-details-desc .article-leave-comment form .form-cookies-consent [type=checkbox]:not(:checked) + label:after {
+        right: 8px;
+        left: auto
+    }
+
+.contact-address .address-info {
+    margin-left: 30px;
+    margin-right: 0
+}
+
+    .contact-address .address-info li {
+        padding: 30px 65px 30px 30px
+    }
+
+        .contact-address .address-info li i {
+            right: 30px;
+            left: auto
+        }
+
+.contact-form form .form-cookies-consent [type=checkbox]:checked + label, .contact-form form .form-cookies-consent [type=checkbox]:not(:checked) + label {
+    padding-right: 35px;
+    padding-left: 0
+}
+
+    .contact-form form .form-cookies-consent [type=checkbox]:checked + label:before, .contact-form form .form-cookies-consent [type=checkbox]:not(:checked) + label:before {
+        right: 0;
+        left: auto
+    }
+
+    .contact-form form .form-cookies-consent [type=checkbox]:checked + label:after, .contact-form form .form-cookies-consent [type=checkbox]:not(:checked) + label:after {
+        right: 8px;
+        left: auto
+    }
+
+.sidemenu-area {
+    right: 0;
+    left: auto
+}
+
+    .sidemenu-area .sidemenu-body .sidemenu-nav .nav-item .nav-link .icon {
+        margin-left: 5px;
+        margin-right: 0
+    }
+
+.main-dashboard-content {
+    padding-left: 30px;
+    padding-right: 310px
+}
+
+    .main-dashboard-content .navbar-area {
+        right: 280px;
+        left: auto;
+        width: calc(100% - 280px)
+    }
+
+        .main-dashboard-content .navbar-area .main-navbar .navbar .navbar-nav.me-auto {
+            margin-left: auto !important;
+            margin-right: unset !important
+        }
+
+        .main-dashboard-content .navbar-area .main-navbar .navbar .others-options {
+            margin-right: auto;
+            margin-left: unset
+        }
+
+            .main-dashboard-content .navbar-area .main-navbar .navbar .others-options .profile-nav-item .menu-profile img {
+                margin-left: 8px;
+                margin-right: 0
+            }
+
+            .main-dashboard-content .navbar-area .main-navbar .navbar .others-options .profile-nav-item .dropdown-bs-toggle {
+                padding-left: 25px;
+                margin-right: 0
+            }
+
+                .main-dashboard-content .navbar-area .main-navbar .navbar .others-options .profile-nav-item .dropdown-bs-toggle::before {
+                    left: 0;
+                    right: auto
+                }
+
+            .main-dashboard-content .navbar-area .main-navbar .navbar .others-options .profile-nav-item.dropdown .dropdown-menu {
+                left: 0;
+                right: auto
+            }
+
+                .main-dashboard-content .navbar-area .main-navbar .navbar .others-options .profile-nav-item.dropdown .dropdown-menu .dropdown-body ul .nav-item {
+                    text-align: right
+                }
+
+                    .main-dashboard-content .navbar-area .main-navbar .navbar .others-options .profile-nav-item.dropdown .dropdown-menu .dropdown-body ul .nav-item .nav-link {
+                        padding: 5px 38px 5px 15px
+                    }
+
+                        .main-dashboard-content .navbar-area .main-navbar .navbar .others-options .profile-nav-item.dropdown .dropdown-menu .dropdown-body ul .nav-item .nav-link i {
+                            right: 15px;
+                            left: auto
+                        }
+
+                .main-dashboard-content .navbar-area .main-navbar .navbar .others-options .profile-nav-item.dropdown .dropdown-menu .dropdown-footer ul .nav-item {
+                    text-align: right
+                }
+
+                    .main-dashboard-content .navbar-area .main-navbar .navbar .others-options .profile-nav-item.dropdown .dropdown-menu .dropdown-footer ul .nav-item .nav-link {
+                        padding: 5px 38px 5px 15px
+                    }
+
+                        .main-dashboard-content .navbar-area .main-navbar .navbar .others-options .profile-nav-item.dropdown .dropdown-menu .dropdown-footer ul .nav-item .nav-link i {
+                            right: 15px;
+                            left: auto
+                        }
+
+.breadcrumb-area h1 {
+    padding-left: 15px;
+    padding-right: 0
+}
+
+    .breadcrumb-area h1::before {
+        left: 0;
+        right: auto
+    }
+
+.breadcrumb-area .breadcrumb {
+    padding-right: 15px;
+    padding-left: 0
+}
+
+    .breadcrumb-area .breadcrumb .item {
+        margin-left: 25px;
+        margin-right: 0
+    }
+
+        .breadcrumb-area .breadcrumb .item:last-child {
+            margin-left: 0
+        }
+
+        .breadcrumb-area .breadcrumb .item::before {
+            left: -22px;
+            right: auto
+        }
+
+.notification-alert .close {
+    left: 20px;
+    right: auto
+}
+
+.stats-fun-fact-box {
+    padding: 35px 115px 34px 25px
+}
+
+    .stats-fun-fact-box .icon-box {
+        right: 25px;
+        left: auto
+    }
+
+.invoices-box ul {
+    padding-right: 0
+}
+
+    .invoices-box ul li {
+        padding-right: 80px;
+        padding-left: 170px
+    }
+
+        .invoices-box ul li .icon {
+            right: 25px;
+            left: auto
+        }
+
+        .invoices-box ul li .default-btn {
+            left: 25px;
+            right: auto
+        }
+
+        .invoices-box ul li ul li {
+            margin-left: 12px;
+            margin-right: 0
+        }
+
+            .invoices-box ul li ul li:last-child {
+                margin-left: 0
+            }
+
+            .invoices-box ul li ul li::before {
+                left: -10px;
+                right: auto
+            }
+
+.recent-notifications-box ul {
+    padding-right: 0
+}
+
+    .recent-notifications-box ul li {
+        padding-right: 75px;
+        padding-left: 45px
+    }
+
+        .recent-notifications-box ul li .icon {
+            right: 25px;
+            left: auto
+        }
+
+        .recent-notifications-box ul li .close {
+            left: 20px;
+            right: auto
+        }
+
+.single-applicants-card .image {
+    right: 20px;
+    left: auto
+}
+
+.single-applicants-card .content {
+    padding: 0 110px 0 180px
+}
+
+    .single-applicants-card .content .applicants-footer {
+        left: 0;
+        right: auto
+    }
+
+        .single-applicants-card .content .applicants-footer .option-list li {
+            margin-left: 5px;
+            margin-right: 0
+        }
+
+            .single-applicants-card .content .applicants-footer .option-list li:last-child {
+                margin-left: 0
+            }
+
+    .single-applicants-card .content .job-info li {
+        margin-left: 10px;
+        margin-right: 0;
+        padding-right: 18px;
+        padding-left: 0
+    }
+
+        .single-applicants-card .content .job-info li:last-child {
+            margin-left: 0
+        }
+
+        .single-applicants-card .content .job-info li i {
+            right: 0;
+            left: auto
+        }
+
+.text-end {
+    text-align: left !important
+}
+
+.my-profile-box .profile-box .text {
+    margin-right: 30px;
+    margin-left: 0
+}
+
+.my-profile-box .profile-box .file-upload {
+    right: 15px;
+    left: auto
+}
+
+.my-profile-box form .form-group .selectize-input:after {
+    left: 16px !important;
+    right: auto !important
+}
+
+.post-a-new-job-box form .form-group .selectize-input:after {
+    left: 16px !important;
+    right: auto !important
+}
+
+.manage-jobs-box .manage-jobs-table table tbody tr td span {
+    padding-left: 0
+}
+
+    .manage-jobs-box .manage-jobs-table table tbody tr td span i {
+        position: relative;
+        float: right;
+        top: 9px;
+        margin-left: 5px
+    }
+
+.manage-jobs-box .manage-jobs-table table tbody tr td .option-list li {
+    margin-left: 5px;
+    margin-right: 0
+}
+
+    .manage-jobs-box .manage-jobs-table table tbody tr td .option-list li:last-child {
+        margin-left: 0
+    }
+
+.me-3 {
+    margin-left: 1rem !important;
+    margin-right: 0 !important
+}
+
+.chat-content-area .sidebar-left .sidebar .chat-sidebar-header form label {
+    right: 15px;
+    left: auto
+}
+
+.chat-content-area .sidebar-left .sidebar .chat-sidebar-header form .form-control {
+    padding: 0 40px 0 15px
+}
+
+.chat-content-area .sidebar-left .sidebar .sidebar-content .chat-menu .list-group-label::before {
+    right: 0;
+    left: auto
+}
+
+.chat-content-area .sidebar-left .sidebar .sidebar-content .chat-menu .list-group-user li .avatar [class*=status-] {
+    right: 1px;
+    left: auto
+}
+
+.chat-content-area .content-right .chat-list-wrapper .chat-list .chat-list-header .header-left .avatar [class*=status-] {
+    right: -1px;
+    left: auto
+}
+
+.chat-content-area .content-right .chat-list-wrapper .chat-list .chat-list-header .header-right ul li {
+    margin-right: 5px;
+    margin-left: 0
+}
+
+    .chat-content-area .content-right .chat-list-wrapper .chat-list .chat-list-header .header-right ul li:first-child {
+        margin-right: 0
+    }
+
+.list-group {
+    padding-right: 0
+}
+
+.me-2 {
+    margin-left: .5rem !important;
+    margin-right: 0 !important
+}
+
+.resume-alerts-table table tbody tr td .option-list li {
+    margin-left: 5px;
+    margin-right: 0
+}
+
+    .resume-alerts-table table tbody tr td .option-list li:last-child {
+        margin-left: 0
+    }
+
+.dashboard-jobs-box .dashboard-job-card .job-content {
+    padding-right: 75px;
+    padding-left: 35px
+}
+
+    .dashboard-jobs-box .dashboard-job-card .job-content .company-logo {
+        right: 0;
+        left: auto
+    }
+
+    .dashboard-jobs-box .dashboard-job-card .job-content .bookmark-btn {
+        left: 0;
+        right: auto
+    }
+
+    .dashboard-jobs-box .dashboard-job-card .job-content .hover-bookmark-btn {
+        left: 0;
+        right: auto
+    }
+
+    .dashboard-jobs-box .dashboard-job-card .job-content .location-information li {
+        margin-left: 15px;
+        margin-right: 0;
+        padding-right: 20px;
+        padding-left: 0
+    }
+
+        .dashboard-jobs-box .dashboard-job-card .job-content .location-information li:last-child {
+            margin-left: 0
+        }
+
+        .dashboard-jobs-box .dashboard-job-card .job-content .location-information li i {
+            right: 0;
+            left: auto
+        }
+
+    .dashboard-jobs-box .dashboard-job-card .job-content .job-tag-list li {
+        margin-left: 5px;
+        margin-right: 0
+    }
+
+        .dashboard-jobs-box .dashboard-job-card .job-content .job-tag-list li:last-child {
+            margin-left: 0
+        }
+
+    .dashboard-jobs-box .dashboard-job-card .job-content .option-list li {
+        margin-left: 5px;
+        margin-right: 0
+    }
+
+        .dashboard-jobs-box .dashboard-job-card .job-content .option-list li:last-child {
+            margin-left: 0
+        }
+
+.submit-resumes-box form .form-group .selectize-input:after {
+    left: 16px !important;
+    right: auto !important
+}
+
+.job-alerts-table table tbody tr td .option-list li {
+    margin-left: 5px;
+    margin-right: 0
+}
+
+    .job-alerts-table table tbody tr td .option-list li:last-child {
+        margin-left: 0
+    }
+
+@media only screen and (max-width:767px) {
+    .topbar-action li {
+        margin-left: 15px
+    }
+
+    .mean-container a.meanmenu-reveal {
+        left: 0 !important;
+        right: auto !important
+    }
+
+    .mean-container .mean-nav ul li a {
+        text-align: right
+    }
+
+        .mean-container .mean-nav ul li a.mean-expand {
+            width: 90%;
+            text-align: left;
+            left: 0;
+            right: auto
+        }
+
+    .main-responsive-nav .main-responsive-menu.mean-container .others-options .option-item .default-btn {
+        left: 45px;
+        right: auto
+    }
+
+    .play-video-area .container-fluid {
+        padding-right: var(--bs-gutter-x,0.75rem);
+        padding-left: var(--bs-gutter-x,0.75rem)
+    }
+
+    .play-video-content {
+        padding-right: 0;
+        margin-right: 0
+    }
+
+    .featured-candidates-item {
+        padding-right: 0
+    }
+
+        .featured-candidates-item .featured-candidates-btn {
+            text-align: center
+        }
+
+    .featured-candidates-box .candidates-box-content {
+        padding-right: 0px
+    }
+
+    .review-single-card .review-info {
+        padding-right: 85px
+    }
+
+    .blog-item-box .content {
+        margin-right: 0
+    }
+
+    .blog-slides {
+        margin-right: 0
+    }
+
+    .about-content {
+        padding-right: 0
+    }
+
+    .play-video-inner-box-image .video-content {
+        padding: 20px
+    }
+
+        .play-video-inner-box-image .video-content .play-btn {
+            right: 0
+        }
+
+    .single-job-list-card .job-information {
+        padding-right: 0px
+    }
+
+    .single-job-list-card .job-btn {
+        text-align: right
+    }
+
+    .blog-item-box.left-box .content {
+        margin-left: 0
+    }
+
+    .blog-item-box.left-box .blog-slides {
+        margin-right: 0
+    }
+
+    .main-banner-content-wrap .banner-search-form {
+        padding: 5px 15px
+    }
+
+        .main-banner-content-wrap .banner-search-form .search-btn {
+            left: 0
+        }
+
+    .job-list-inner-box .job-list-box .job-information {
+        padding-right: 0
+    }
+
+    .job-list-inner-box .job-list-optional {
+        text-align: right
+    }
+
+        .job-list-inner-box .job-list-optional .save-text {
+            text-align: right;
+            margin-right: 0
+        }
+
+    .single-candidates-card {
+        padding: 20px
+    }
+
+        .single-candidates-card .candidates-information-box {
+            padding-right: 65px
+        }
+
+    .job-list-search-box .job-list-search-form {
+        padding: 5px 15px
+    }
+
+        .job-list-search-box .job-list-search-form .search-btn {
+            left: 0
+        }
+
+    .job-details-desc .job-article-footer .article-share .social {
+        text-align: center
+    }
+
+    .featured-candidates-search-box .candidates-search-form {
+        padding: 5px 15px
+    }
+
+        .featured-candidates-search-box .candidates-search-form .search-btn {
+            left: 0
+        }
+
+    .candidates-details-information {
+        margin-left: 0
+    }
+
+    .candidates-details-desc .candidates-desc-content .candidates-desc-list {
+        margin-right: 10px;
+        margin-left: 0
+    }
+
+    .candidates-details-desc .candidates-desc-content .candidates-comments-list {
+        padding-right: 60px
+    }
+
+        .candidates-details-desc .candidates-desc-content .candidates-comments-list.children {
+            margin-right: 0
+        }
+
+    .employers-details-information {
+        margin-right: 0
+    }
+
+    .employers-details-desc .employers-desc-comments-content .employers-comments-list {
+        padding-right: 65px
+    }
+
+        .employers-details-desc .employers-desc-comments-content .employers-comments-list.children {
+            margin-right: 0
+        }
+
+    .products-details-desc {
+        padding-right: 0
+    }
+
+    .products-details-tabs .tab-content .tab-pane .products-review-comments .user-review {
+        padding: 20px 70px 20px 0
+    }
+
+    .cart-buttons {
+        text-align: center
+    }
+
+    .profile-authentication-tabs .eeza-authentication-form form .lost-your-password-wrap {
+        text-align: right
+    }
+
+    .widget-area {
+        padding-right: 0
+    }
+
+    .blog-details-area .widget-area {
+        padding-left: 0
+    }
+
+    .blog-details-desc .article-content .entry-meta li {
+        margin-left: 10px
+    }
+
+    .blog-details-desc .article-content .article-footer .article-share .social {
+        text-align: center
+    }
+
+    .blog-details-desc .article-comments .comments-list {
+        padding-right: 0
+    }
+
+        .blog-details-desc .article-comments .comments-list.children {
+            margin-right: 0
+        }
+
+    .contact-address .address-info {
+        margin-left: 0
+    }
+
+    .sidemenu-area {
+        right: -100%;
+        left: auto
+    }
+
+        .sidemenu-area.active-sidemenu-area {
+            right: 0;
+            left: auto
+        }
+
+    .main-dashboard-content {
+        padding-left: 15px;
+        padding-right: 15px
+    }
+
+        .main-dashboard-content .navbar-area {
+            right: 0;
+            left: auto;
+            width: calc(100% - 0px)
+        }
+
+        .main-dashboard-content .others-option-for-responsive .dot-menu {
+            left: 40px;
+            right: auto
+        }
+
+        .main-dashboard-content .others-option-for-responsive .others-options .profile-nav-item .menu-profile img {
+            margin-left: 8px;
+            margin-right: 0
+        }
+
+        .main-dashboard-content .others-option-for-responsive .others-options .profile-nav-item .dropdown-bs-toggle {
+            padding-left: 25px;
+            padding-right: 0
+        }
+
+            .main-dashboard-content .others-option-for-responsive .others-options .profile-nav-item .dropdown-bs-toggle::before {
+                left: 0;
+                right: auto
+            }
+
+    .stats-fun-fact-box {
+        padding: 35px 95px 34px 25px
+    }
+
+    .invoices-box ul li {
+        padding-left: 25px
+    }
+
+        .invoices-box ul li .default-btn {
+            left: 0
+        }
+
+    .single-applicants-card .image {
+        right: 0
+    }
+
+    .single-applicants-card .content {
+        padding: 0
+    }
+
+    .text-end {
+        text-align: center !important
+    }
+
+    .breadcrumb-area .breadcrumb {
+        padding-right: 0
+    }
+
+    .my-profile-box .profile-box .text {
+        margin-right: 0
+    }
+
+    .dashboard-jobs-box .dashboard-job-card .job-content {
+        padding-right: 0;
+        padding-left: 0
+    }
+}
+
+@media only screen and (min-width:576px) and (max-width:767px) {
+    .login-form form .lost-your-password {
+        text-align: start
+    }
+}
+
+@media only screen and (max-width:991px) and (min-width:768px) {
+    .mean-container a.meanmenu-reveal {
+        left: 0 !important;
+        right: auto !important
+    }
+
+    .mean-container .mean-nav ul li a {
+        text-align: right
+    }
+
+        .mean-container .mean-nav ul li a.mean-expand {
+            width: 90%;
+            text-align: left;
+            left: 0;
+            right: auto
+        }
+
+    .main-responsive-nav .main-responsive-menu.mean-container .others-options .option-item .default-btn {
+        left: 45px;
+        right: auto
+    }
+
+    .play-video-area .container-fluid {
+        padding-right: var(--bs-gutter-x,0.75rem);
+        padding-left: var(--bs-gutter-x,0.75rem)
+    }
+
+    .play-video-content {
+        padding-right: 0;
+        margin-right: 0
+    }
+
+    .featured-candidates-item {
+        padding-right: 0
+    }
+
+    .featured-candidates-box .candidates-box-content {
+        padding-right: 80px
+    }
+
+    .featured-candidates-box .featured-candidates-hire {
+        text-align: left
+    }
+
+    .blog-item-box .content {
+        margin-right: 0
+    }
+
+    .blog-slides {
+        margin-right: 0
+    }
+
+    .about-content {
+        padding-right: 0
+    }
+
+    .single-job-list-card .job-btn {
+        text-align: right
+    }
+
+    .blog-item-box.left-box .content {
+        margin-left: 0
+    }
+
+    .blog-item-box.left-box .blog-slides {
+        margin-right: 0
+    }
+
+    .main-banner-content-wrap .banner-search-form {
+        padding: 5px 15px
+    }
+
+        .main-banner-content-wrap .banner-search-form .search-btn {
+            left: 0
+        }
+
+    .job-list-inner-box .job-list-box .job-information {
+        padding-right: 0
+    }
+
+    .job-list-inner-box .job-list-optional {
+        text-align: right
+    }
+
+        .job-list-inner-box .job-list-optional .save-text {
+            text-align: right;
+            margin-right: 0
+        }
+
+    .single-candidates-card {
+        padding: 20px
+    }
+
+        .single-candidates-card .candidates-information-box {
+            padding-right: 75px
+        }
+
+    .job-list-search-box .job-list-search-form {
+        padding: 5px 15px
+    }
+
+        .job-list-search-box .job-list-search-form .search-btn {
+            left: 0
+        }
+
+    .featured-candidates-search-box .candidates-search-form {
+        padding: 5px 15px
+    }
+
+        .featured-candidates-search-box .candidates-search-form .search-btn {
+            left: 0
+        }
+
+    .candidates-details-information {
+        margin-left: 0
+    }
+
+    .candidates-details-desc .candidates-desc-content .candidates-desc-list {
+        margin-right: 10px;
+        margin-left: 0
+    }
+
+    .employers-details-information {
+        margin-right: 0
+    }
+
+    .products-details-desc {
+        padding-right: 0
+    }
+
+    .widget-area {
+        padding-right: 0
+    }
+
+    .blog-details-area .widget-area {
+        padding-left: 0
+    }
+
+    .contact-address .address-info {
+        margin-left: 0
+    }
+
+    .sidemenu-area {
+        right: -100%;
+        left: auto
+    }
+
+        .sidemenu-area.active-sidemenu-area {
+            right: 0;
+            left: auto
+        }
+
+    .main-dashboard-content {
+        padding-left: 15px;
+        padding-right: 15px
+    }
+
+        .main-dashboard-content .navbar-area {
+            right: 0;
+            left: auto;
+            width: calc(100% - 0px)
+        }
+
+        .main-dashboard-content .others-option-for-responsive .dot-menu {
+            left: 40px;
+            right: auto
+        }
+
+        .main-dashboard-content .others-option-for-responsive .others-options .profile-nav-item .menu-profile img {
+            margin-left: 8px;
+            margin-right: 0
+        }
+
+        .main-dashboard-content .others-option-for-responsive .others-options .profile-nav-item .dropdown-bs-toggle {
+            padding-left: 25px;
+            padding-right: 0
+        }
+
+            .main-dashboard-content .others-option-for-responsive .others-options .profile-nav-item .dropdown-bs-toggle::before {
+                left: 0;
+                right: auto
+            }
+}
+
+@media only screen and (max-width:1199px) and (min-width:992px) {
+    .mean-container a.meanmenu-reveal {
+        left: 0 !important;
+        right: auto !important
+    }
+
+    .mean-container .mean-nav ul li a {
+        text-align: right
+    }
+
+        .mean-container .mean-nav ul li a.mean-expand {
+            width: 90%;
+            text-align: left;
+            left: 0;
+            right: auto
+        }
+
+    .main-responsive-nav .main-responsive-menu.mean-container .others-options .option-item .default-btn {
+        left: 45px;
+        right: auto
+    }
+
+    .featured-candidates-item {
+        padding-right: 0
+    }
+
+    .featured-candidates-box .candidates-box-content {
+        padding-right: 60px
+    }
+
+    .blog-slides {
+        margin-right: -80px
+    }
+
+    .blog-item-box.left-box .blog-slides {
+        margin-right: 80px
+    }
+
+    .main-banner-content-wrap .banner-search-form {
+        padding: 5px 15px 5px 55px
+    }
+
+        .main-banner-content-wrap .banner-search-form .form-group .form-control {
+            padding: 12px 40px 15px 15px
+        }
+
+        .main-banner-content-wrap .banner-search-form .form-group .selectize-input {
+            padding: 22px 40px 22px 20px
+        }
+
+            .main-banner-content-wrap .banner-search-form .form-group .selectize-input:after {
+                left: 8px !important
+            }
+
+    .job-list-inner-box .job-list-optional .save-text {
+        margin-right: 0
+    }
+
+    .single-candidates-card .candidates-information-box {
+        padding-right: 60px
+    }
+
+    .single-job-list-box .job-information {
+        padding-right: 60px
+    }
+
+    .candidates-details-information {
+        margin-left: 0
+    }
+
+    .candidates-details-desc .candidates-desc-content .candidates-desc-list {
+        margin-right: 10px;
+        margin-left: 0
+    }
+
+    .employers-details-information {
+        margin-right: 0
+    }
+
+    .widget-area {
+        padding-right: 0
+    }
+
+    .blog-details-area .widget-area {
+        padding-left: 0
+    }
+
+    .contact-address .address-info {
+        margin-left: 0
+    }
+
+    .sidemenu-area {
+        right: -100%;
+        left: auto
+    }
+
+        .sidemenu-area.active-sidemenu-area {
+            right: 0;
+            left: auto
+        }
+
+    .main-dashboard-content {
+        padding-left: 15px;
+        padding-right: 15px
+    }
+
+        .main-dashboard-content .navbar-area {
+            right: 0;
+            left: auto;
+            width: calc(100% - 0px)
+        }
+
+        .main-dashboard-content .others-option-for-responsive .dot-menu {
+            left: 40px;
+            right: auto
+        }
+
+        .main-dashboard-content .others-option-for-responsive .others-options .profile-nav-item .menu-profile img {
+            margin-left: 8px;
+            margin-right: 0
+        }
+
+        .main-dashboard-content .others-option-for-responsive .others-options .profile-nav-item .dropdown-bs-toggle {
+            padding-left: 25px;
+            padding-right: 0
+        }
+
+            .main-dashboard-content .others-option-for-responsive .others-options .profile-nav-item .dropdown-bs-toggle::before {
+                left: 0;
+                right: auto
+            }
+
+    .single-applicants-card .content {
+        padding: 0 70px 0 180px
+    }
+}
+
+@media only screen and (min-width:1200px) and (max-width:1399px) {
+    .main-navbar .navbar .navbar-nav .nav-item .dropdown-menu {
+        width: 240px
+    }
+
+        .main-navbar .navbar .navbar-nav .nav-item .dropdown-menu li .dropdown-menu {
+            left: -240px;
+            right: auto
+        }
+
+    .featured-candidates-item {
+        padding-right: 0
+    }
+
+    .featured-candidates-box .candidates-box-content {
+        padding-right: 60px
+    }
+
+    .featured-candidates-box .featured-candidates-hire {
+        text-align: left
+    }
+
+    .blog-slides {
+        margin-right: -80px
+    }
+
+    .main-banner-content-wrap .banner-search-form {
+        padding: 5px 15px 5px 55px
+    }
+
+        .main-banner-content-wrap .banner-search-form .form-group .form-control {
+            padding: 12px 40px 15px 15px
+        }
+
+        .main-banner-content-wrap .banner-search-form .form-group .selectize-input {
+            padding: 22px 40px 22px 20px
+        }
+
+            .main-banner-content-wrap .banner-search-form .form-group .selectize-input:after {
+                left: 8px !important
+            }
+
+    .single-candidates-card .candidates-information-box {
+        padding-right: 75px
+    }
+
+    .sidemenu-area .sidemenu-body .sidemenu-nav .nav-item .nav-link {
+        padding: 12px 20px
+    }
+
+    .main-dashboard-content {
+        padding-right: 250px
+    }
+
+        .main-dashboard-content .navbar-area {
+            right: 220px;
+            left: auto;
+            width: calc(100% - 220px)
+        }
+
+    .single-applicants-card .content {
+        padding: 0 70px 0 160px
+    }
+
+    .all-applicants-box {
+        padding: 25px 15px
+    }
+
+    .stats-fun-fact-box {
+        padding: 35px 90px 34px 25px
+    }
+}
+
+@media only screen and (min-width:1500px) {
+    .play-video-content .layer-shape {
+        right: 30% !important;
+        -webkit-transform: translateX(30%) !important;
+        transform: translateX(30%) !important;
+        left: auto
+    }
+}

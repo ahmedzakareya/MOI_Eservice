@@ -1,0 +1,162 @@
+﻿@model List<MoiEserviceSysUserVM>
+@{
+    ViewData["Title"] = "User Management";
+    Layout = "~/Areas/Admin/Views/Shared/_LayoutEserviceTourism.cshtml";
+}
+
+<!--begin::Main-->
+<div class="app-main flex-column flex-row-fluid" id="kt_app_main">
+    <!--begin::Content wrapper-->
+    <div class="d-flex flex-column flex-column-fluid">
+        <!--begin::Toolbar-->
+        <div id="kt_app_toolbar" class="app-toolbar pt-6 pb-2">
+            <div id="kt_app_toolbar_container" class="app-container container-fluid d-flex align-items-stretch">
+                <div class="app-toolbar-wrapper d-flex flex-stack flex-wrap gap-4 w-100">
+                    <!--begin::Page title-->
+                    <div class="page-title d-flex flex-column justify-content-center gap-1 me-3">
+                        <h1 class="page-heading text-gray-900 fw-bold fs-3 m-0">Users List</h1>
+                        <ul class="breadcrumb breadcrumb-separatorless fw-semibold fs-7 my-0">
+                            <li class="breadcrumb-item text-muted">
+                                <a href="/" class="text-muted text-hover-primary">Home</a>
+                            </li>
+                            <li class="breadcrumb-item">
+                                <span class="bullet bg-gray-500 w-5px h-2px"></span>
+                            </li>
+                            <li class="breadcrumb-item text-muted">User Management</li>
+                        </ul>
+                    </div>
+                    <!--end::Page title-->
+                    <!--begin::Actions-->
+                    <div class="d-flex align-items-center gap-2 gap-lg-3">
+                        <a asp-area="Admin" asp-controller="User" asp-action="CreateUser" class="btn btn-primary">Add New User</a>
+                    </div>
+                    <!--end::Actions-->
+                </div>
+            </div>
+        </div>
+        <!--end::Toolbar-->
+        <!--begin::Content-->
+        <div id="kt_app_content" class="app-content flex-column-fluid">
+            <div id="kt_app_content_container" class="app-container container-fluid">
+                <!--begin::Card-->
+                <div class="card">
+                    <div class="card-header border-0 pt-6">
+                        <div class="card-title">
+                            <div class="d-flex align-items-center position-relative my-1">
+                                <i class="ki-outline ki-magnifier fs-3 position-absolute ms-5"></i>
+                                <input type="text" id="searchUsers" class="form-control form-control-solid w-250px ps-13" placeholder="Search Users" />
+                            </div>
+                        </div>
+                    </div>
+
+                    <!--begin::Card body-->
+                    <div class="card-body pt-0">
+                        <table class="table align-middle table-row-dashed fs-6 gy-5" id="userTable">
+                            <thead>
+                                <tr class="text-muted fw-bold fs-7 text-uppercase">
+                                    <th>Name</th>
+                                    <th>Civil ID</th>
+                                    <th>Sector</th>
+                                    <th>Department</th>
+                                    <th>Moraqaba</th>
+                                    <th>Qism</th>
+                                    <th>Role</th>
+                                    <th class="text-end">Actions</th>
+                                </tr>
+                            </thead>
+                            <tbody class="fw-semibold text-gray-600" id="userTableBody">
+                                @if (Model != null && Model.Count > 0)
+                                {
+                                    foreach (var user in Model)
+                                    {
+                                        <tr data-user-id="@user.SysUserId" data-sector-id="@user.SectorId" data-department-id="@user.DepId"
+                                            data-moraqaba-id="@user.MuraqabaId" data-qism-id="@user.QismId" data-role-id="@user.UserRole">
+                                            <td>@user.Name</td>
+                                            <td>@user.CivilId</td>
+                                            <td class="sector-name"></td>
+                                            <td class="depart-name"></td>
+                                            <td class="moraqaba-name"></td>
+                                            <td class="qism-name"></td>
+                                            <td class="role-name"></td>
+                                            <td class="text-end">
+                                                <a asp-area="Admin" asp-controller="User" asp-action="ViewUser" asp-route-id="@user.SysUserId" class="btn btn-sm btn-light-primary">
+                                                    <i class="ki-outline ki-eye fs-3"></i>
+                                                </a>
+                                                <a asp-area="Admin" asp-controller="User" asp-action="EditUser" asp-route-id="@user.SysUserId" class="btn btn-sm btn-light-info">
+                                                    <i class="ki-outline ki-pencil fs-3"></i>
+                                                </a>
+                                                <a asp-area="Admin" asp-controller="User" asp-action="DeleteUser" asp-route-id="@user.SysUserId" class="btn btn-sm btn-light-danger">
+                                                    <i class="ki-outline ki-trash fs-3"></i>
+                                                </a>
+                                            </td>
+                                        </tr>
+                                    }
+                                }
+                                else
+                                {
+                                    <tr>
+                                        <td colspan="8" class="text-center text-muted">No users found.</td>
+                                    </tr>
+                                }
+                            </tbody>
+                        </table>
+                    </div>
+                    <!--end::Card body-->
+                </div>
+                <!--end::Card-->
+            </div>
+        </div>
+        <!--end::Content-->
+    </div>
+    <!--end::Content wrapper-->
+</div>
+<!--end::Main-->
+@section Scripts {
+    <script>
+        $(document).ready(function () {
+            const apiBaseUrl = '@ViewBag.ApiBaseUrl';
+
+            // Fetch names for Sector, Department, Moraqaba, Qism, and Role
+            $('tr[data-user-id]').each(function () {
+                const $row = $(this);
+                const sectorId = $row.data('sector-id');
+                const departmentId = $row.data('department-id');
+                const moraqabaId = $row.data('moraqaba-id');
+                const qismId = $row.data('qism-id');
+                const roleId = $row.data('role-id');
+
+                if (sectorId) fetchName('GetSectorNameByIdAsync', { sectorId: sectorId }, $row.find('.sector-name'));
+                if (departmentId) fetchName('GetDepartNameByIdAsync', { departId: departmentId }, $row.find('.depart-name'));
+                if (moraqabaId) fetchName('GetHierarchyNameByIdAsync', { hierarchyName: moraqabaId }, $row.find('.moraqaba-name'));
+                if (qismId) fetchName('GetHierarchyNameByIdAsync', { hierarchyName: qismId }, $row.find('.qism-name'));
+                if (roleId) fetchName(`GetRoleById/${roleId}`, {}, $row.find('.role-name'));
+            });
+
+            function fetchName(endpoint, data, $element) {
+                $.ajax({
+                    url: `${apiBaseUrl}${endpoint}`,
+                    type: 'GET',
+                    data: data,
+                    success: function (response) {
+                        if (response) {
+                            $element.text(response);
+                        } else {
+                            $element.text('N/A');
+                        }
+                    },
+                    error: function () {
+                        $element.text('Error fetching data');
+                    },
+                });
+            }
+
+            // Search functionality
+            $('#searchUsers').on('keyup', function () {
+                const searchValue = $(this).val().toLowerCase();
+                $('#userTableBody tr').filter(function () {
+                    $(this).toggle($(this).text().toLowerCase().indexOf(searchValue) > -1);
+                });
+            });
+        });
+    </script>
+}

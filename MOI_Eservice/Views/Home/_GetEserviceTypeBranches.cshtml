@@ -1,0 +1,7 @@
+﻿@* @model IEnumerable<EserviceTypeBranchModel>
+
+<option value="0" onchange="">أختر نوع التراخيص </option>
+@foreach (var item in Model)
+{
+    <option value="@item.Id">@item.EserviceTypeBranchAr</option>
+} *@

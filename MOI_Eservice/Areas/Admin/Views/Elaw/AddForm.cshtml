@@ -1,0 +1,161 @@
+﻿@model IEnumerable<FormsViewModel>
+
+
+@{
+    ViewData["Title"] = "نماذج قطاع السياحة";
+    Layout = "~/Areas/Admin/Views/Shared/_LayoutEserviceTourism.cshtml";
+
+}
+
+<div class="container mt-5">
+    <h2 class="text-center">قائمة نماذج طلبات قطاع السياحة</h2>
+
+    <div class="card p-4 mt-4">
+        <h4>إضافة</h4>
+        <form method="post" enctype="multipart/form-data" asp-action="AddForm" asp-area="Admin" asp-controller="Tourism">
+            <div class="row mb-3">
+                <div class="col-md-6">
+                    <label for="fileName" class="form-label">اسم النموذج</label>
+                    <input type="text" class="form-control" id="fileName" name="fileName" required>
+                </div>
+                <div class="col-md-6">
+                    <label for="UploadedFile" class="form-label">الملف المرفق</label>
+                    <input type="file" class="form-control" id="UploadedFile" name="UploadedFile" required>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-md-12 text-end">
+                    <button type="submit" class="btn btn-primary">
+                        <i class="fa fa-plus"></i> إضافة
+                    </button>
+                </div>
+            </div>
+        </form>
+    </div>
+
+    <div class="card mt-4">
+        <div class="card-header">
+            <h4>جميع النماذج</h4>
+        </div>
+        <div class="card-body">
+            <table class="table table-bordered text-center">
+                <thead>
+                    <tr>
+                        <th>اسم</th>
+                        <th>النموذج</th>
+                        <th> النموذج</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach (var item in Model)
+                    {
+                        <tr>
+                            <td>@item.FormName</td>
+                            <td>
+                                <a href="@Url.Content($"~/Admin/Files/Request_Documents/Tourism/Forms/{item.FormPath}")" target="_blank" class="btn btn-link">
+                                    اضغط لفتح النموذج
+                                </a>
+                            </td>
+                            <td>
+                                <button class="btn btn-danger open-delete-modal Delete-Form"
+                                        data-id="@item.Id"
+                                        data-name="@item.FormName"
+                                        data-bs-toggle="modal"
+                                        data-bs-target="#kt_modal_delete_form">
+                                    حذف النموذج
+                                </button>
+                            </td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+
+<div class="modal fade" id="#kt_modal_delete_form" tabindex="-1" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered mw-650px">
+        <div class="modal-content">
+            <!-- Modal Header -->
+            <div class="modal-header">
+                <h2 class="fw-bold">Delete Form</h2>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <!-- Modal Body -->
+            <div class="modal-body scroll-y mx-5 my-7">
+                <form id="deleteForm" method="post" asp-action="DeleteForm" asp-area="Admin" asp-controller="Tourism">
+                    <input type="hidden" id="deleteFormId" name="FormId" />
+
+                    <!-- Form Name -->
+                    <div class="mb-7">
+                        <label class="fs-6 fw-semibold form-label mb-2">Form Name</label>
+                        <input type="text"
+                               class="form-control form-control-solid"
+                               id="deleteFormName"
+                               name="FormName"
+                               readonly />
+                    </div>
+
+                    <!-- Confirmation Message -->
+                    <div class="text-danger fw-bold mb-7">
+                        Are you sure you want to delete this form? This action cannot be undone.
+                    </div>
+
+                    <!-- Modal Actions -->
+                    <div class="text-center">
+                        <button type="submit" class="btn btn-danger">Delete</button>
+                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Scripts
+{
+    <script>
+        const apiBaseUrl = '@ViewBag.ApiBaseUrl';
+
+        document.addEventListener('DOMContentLoaded', function () {
+            // Select all delete buttons
+            const deleteButtons = document.querySelectorAll('.Delete-Form');
+
+            deleteButtons.forEach(button => {
+                button.addEventListener('click', async function () {
+                    // Get form id and name from button data attributes
+                    const formId = this.getAttribute('data-id');
+                    const formName = this.getAttribute('data-name');
+
+                    // Confirm deletion
+                   
+
+                    try {
+                        // Make a POST request to delete the form
+                        const response = await fetch(`${apiBaseUrl}/Admin/Tourism/DeleteForm?formId=${formId}`, {
+                            method: 'POST',
+                            headers: {
+                                'Content-Type': 'application/json',
+                                // 'X-Requested-With': 'XMLHttpRequest', // Optional, for distinguishing AJAX requests
+                            }
+                        });
+
+                        if (response.ok) {
+                            alert('Form deleted successfully.');
+
+                            // Optionally remove the deleted row from the table
+                            this.closest('tr').remove();
+                        } else {
+                            const errorMessage = await response.text();
+                            alert(`Failed to delete the form: ${errorMessage}`);
+                        }
+                    } catch (error) {
+                        console.error('Error deleting form:', error);
+                        alert('An error occurred while trying to delete the form. Please try again.');
+                    }
+                });
+            });
+        });
+
+    </script>
+}

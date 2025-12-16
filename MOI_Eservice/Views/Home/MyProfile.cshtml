@@ -1,0 +1,145 @@
+﻿@model AspnetUserVM
+@{
+    ViewData["Title"] = "الملف الشخصي";
+    var token = Context.Session.GetString("UserToken");
+    var userId = Context.Session.GetString("UserId");
+    var userName = Context.Session.GetString("UserUserName");
+    var civilId = Context.Session.GetString("UserCivilId");
+    var fullName = Context.Session.GetString("UserFullName");
+    var accountTypeId = Context.Session.GetString("UserAccouuntTypeId");
+}
+
+<div class="breadcrumb-area">
+    <ol class="breadcrumb">
+        <li class="item"><a asp-action="MyAccount" asp-controller="Home">الرئيسيه</a></li>
+        <li class="item">@ViewData["Title"]</li>
+    </ol>
+</div>
+
+<div class="my-profile-box">
+    <h3>@ViewData["Title"]</h3>
+
+    <form asp-action="MyProfile" asp-controller="Home" method="post" onsubmit="return onSubmit(event)">
+        @Html.AntiForgeryToken()
+        @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+
+        <div class="row">
+            <div class="form-group col-md-4">
+                <label class="control-label">الإسم باللغة العربية</label>
+                <input asp-for="@Model.FullNameAr" class="form-control" readonly />
+            </div>
+
+            <div class="form-group col-md-4">
+                <label class="control-label">الإسم باللغة العربية</label>
+                <input asp-for="@Model.FullNameEn" class="form-control" readonly />
+            </div>
+             <div class="form-group col-md-4">
+                <label class="control-label">الرقم المدني</label>
+                <input value="@Model.CivilId" class="form-control" disabled />
+            </div> 
+
+            <div class="form-group col-md-4">
+                <label class="control-label">البريد الإلكتروني</label>
+                <input asp-for="@Model.Email" class="form-control" required />
+                <span asp-validation-for="@Model.Email" class="text-danger"></span>
+            </div>
+
+            <div class="form-group col-md-4">
+                <label class="control-label">كلمة السر</label>
+                <input asp-for="Password" type="password" class="form-control" required />
+                <span asp-validation-for="Password" class="text-danger"></span>
+            </div>
+
+            <div class="form-group col-md-4">
+                <label class="control-label">رقم الجوال</label>
+                <input asp-for="Mobile" class="form-control" maxlength="8" required />
+                <span asp-validation-for="Mobile" class="text-danger"></span>
+            </div>
+        </div>
+
+        <div class="form-group col-md-12">
+            <button  type="submit" class="default-btn border-0">حفظ <i class="flaticon-plus"></i></button>
+           @*  <a asp-action="MyAccount" asp-controller="Home" class="default-btn border-0 m-2">إلغاء <i class="ri-close-fill"></i></a> *@
+        </div>
+    </form>
+</div>
+
+@section Scripts {
+    @* <partial name="_ValidationScriptsPartial" /> *@
+    <script>
+      
+
+        function ValidateRegex(regex, value) {
+            return new RegExp(regex).test(value);
+        }
+
+        function onSubmit(event) {
+            const fullNameAr = document.getElementById('fullNameAr').value;
+            const email = document.getElementById('email').value;
+            const mobile = document.getElementById('mobile').value;
+
+            if (!fullNameAr) {
+                showAlert('برجاء كتابة الاسم باللغة العربية');
+                event.preventDefault();
+                return false;
+            }
+
+            if (!email) {
+                showAlert('برجاء كتابة البريد الإلكتروني');
+                event.preventDefault();
+                return false;
+            }
+
+            if (!mobile) {
+                showAlert('برجاء كتابة رقم الهاتف');
+                event.preventDefault();
+                return false;
+            }
+
+            return true;
+        }
+
+        function showAlert(message) {
+            Swal.fire({
+                icon: 'error',
+                title: 'خطأ',
+                text: message,
+                confirmButtonColor: '#7FB3D5',
+                confirmButtonText: 'Ok'
+            });
+        }
+
+        $(function () {
+            $('#fullNameAr').change(function () {
+                const arabicRegex = /^[\u0621-\u064A\s]+$/;
+                if (!ValidateRegex(arabicRegex, $(this).val())) {
+                    $(this).val('');
+                    showAlert('برجاء كتابة الاسم باللغة العربية');
+                }
+            });
+
+            $('#fullNameEn').change(function () {
+                const englishRegex = /^[a-zA-Z\s]+$/;
+                if (!ValidateRegex(englishRegex, $(this).val())) {
+                    $(this).val('');
+                    showAlert('برجاء كتابة الاسم باللغة الإنجليزية');
+                }
+            });
+
+            $('#email').change(function () {
+                if (!ValidateRegex(symbolRegex, $(this).val())) {
+                    $(this).val('');
+                    showAlert('أدخل بريد إلكتروني صحيح');
+                }
+            });
+
+            $('#mobile').change(function () {
+                const mobileRegex = /^[4-69]\d{7}$/;
+                if (!ValidateRegex(mobileRegex, $(this).val())) {
+                    $(this).val('');
+                    showAlert('أدخل رقم هاتف كويتي صحيح، الأرقام بالإنجليزية فقط');
+                }
+            });
+        });
+    </script>
+}

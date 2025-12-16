@@ -1,0 +1,759 @@
+﻿@model PreApprovalRequestModel
+
+
+@{
+    ViewBag.Title = "PreApprovRequest";
+    Layout = "~/Views/Shared/_LayoutEservice.cshtml";
+    
+}
+
+
+<div class="my-profile-box">
+    <h3>طلب موافقة على (تحويل / إنشاء ) عقار لمنشأة فندقية</h3>
+
+    <form id="PreApprovalForm" method="post" enctype="multipart/form-data">
+        <div class="row align-items-center">
+            <input type="hidden" asp-for="LicencesInfoVM.Id" />
+            <!-- User Civil ID -->
+            <div class="col-xl-4 col-md-6 col-sm-12">
+                <div class="form-group">
+                    <label for="UserCivilID" class="Required">رقم المدني</label>
+                    <input type="text" class="form-control" id="UserCivilID" name="UserCivilID" asp-for="@Model.AppCivilId" placeholder="رقم المدني" required  />
+                    <span id="Error-UserCivilID" class="text-danger"></span> <!-- Validation message will go here -->
+                </div>
+            </div>
+
+            <!-- User Name -->
+            <div class="col-xl-4 col-md-6 col-sm-12">
+                <div class="form-group">
+                    <label for="UserName" class="Required">اسم المستخدم</label>
+                    <input type="text" class="form-control" id="UserName" name="UserName" asp-for="@Model.UserName" placeholder="اسم المستخدم" required  />
+                    <span class="text-danger"></span> <!-- Validation message will go here -->
+                </div>
+            </div>
+
+            <!-- Company Civil ID -->
+            <div class="col-xl-4 col-md-6 col-sm-12">
+                <div class="form-group">
+                    <label for="CompanyCivilId">الرقم المدني للشركة</label>
+                    <input type="text" class="form-control" id="CompanyCivilId" name="CompanyCivilId" placeholder="الرقم المدني للشركة" maxlength="15" />
+                    <span class="text-danger"></span> <!-- Validation message will go here -->
+                </div>
+            </div>
+            <input type="hidden" asp-for="LicencesInfoVM.ReqTypeId" />
+            <!-- Dir Company Arabic -->
+            <div class="col-xl-4 col-md-6 col-sm-12">
+                <div class="form-group">
+                    <label asp-for="Request.Licname">اسم المنشأة</label>
+                    <input type="text" class="form-control" id="Licname" asp-for="Request.Licname" placeholder="اسم المنشأة" />
+                    <span class="text-danger"></span> <!-- Validation message will go here -->
+                </div>
+            </div>
+             <div class="col-xl-4 col-md-6 col-sm-12">
+                <div class="form-group">
+                    <label asp-for="DirCompanyAr">اسم الشركة المديرة بالعربية</label>
+                    <input type="text" class="form-control" id="DirCompanyAr" asp-for="DirCompanyAr" placeholder="اسم الشركة بالعربية" />
+                    <span class="text-danger"></span> <!-- Validation message will go here -->
+                </div>
+            </div>
+
+            <!-- Owner Company Arabic -->
+            <div class="col-xl-4 col-md-6 col-sm-12">
+                <div class="form-group">
+                    <label asp-for="OwnerCompanyAr">اسم  الشركة المالكة بالعربية</label>
+                    <input type="text" class="form-control" id="OwnerCompanyAr" asp-for="OwnerCompanyAr" placeholder="اسم مالك الشركة بالعربية" />
+                    <span class="text-danger"></span> <!-- Validation message will go here -->
+                </div>
+            </div>
+
+            <!-- Owner Co Commercial No -->
+            <div class="col-xl-4 col-md-6 col-sm-12">
+                <div class="form-group">
+                    <label for="RecordNo">رقم السجل التجاري للشركة</label>
+                    <input type="text" class="form-control" id="RecordNo" name="RecordNo" placeholder="رقم السجل التجاري" maxlength="10" />
+                    <span class="text-danger"></span> <!-- Validation message will go here -->
+                </div>
+            </div>
+
+            <div class="col-xl-4 col-md-6 col-sm-12">
+                <div class="form-group">
+                    <label for="CommercialLicNo">رقم الترخيص التجاري للشركة</label>
+                    <input type="text" class="form-control" id="CommercialLicNo" name="CommercialLicNo" placeholder="رقم الترخيص التجاري" maxlength="10" />
+                    <span class="text-danger"></span> <!-- Validation message will go here -->
+                </div>
+            </div>
+
+            <!-- Aali Number -->
+            <div class="col-xl-4 col-md-6 col-sm-12">
+                <div class="form-group">
+                    <label for="AaliNumber" class="Required">رقم الآلي</label>
+                    <input type="text" class="form-control" id="AaliNumber" name="AaliNumber" placeholder="رقم الآلي"  maxlength="10" />
+                    <span class="text-danger"></span> <!-- Validation message will go here -->
+                </div>
+            </div>
+
+            <!-- Governrate -->
+            <div class="col-xl-4 col-md-6 col-sm-12">
+                <div class="form-group">
+                    <label for="Governrate" class="Required">المحافظة</label>
+                    <input type="text" class="form-control" id="Governrate" name="Governrate" placeholder="المحافظة" readonly />
+                    <span class="text-danger"></span> <!-- Validation message will go here -->
+                </div>
+            </div>
+
+            <!-- Area -->
+            <div class="col-xl-4 col-md-6 col-sm-12">
+                <div class="form-group">
+                    <label for="Area" class="Required">المنطقة</label>
+                    <input type="text" class="form-control" id="Area" name="Area" placeholder="المنطقة" readonly />
+                    <span class="text-danger"></span> <!-- Validation message will go here -->
+                </div>
+            </div>
+
+            <!-- Block No -->
+            <div class="col-xl-4 col-md-6 col-sm-12">
+                <div class="form-group">
+                    <label for="BlockNo" class="Required">رقم البلوك</label>
+                    <input type="text" class="form-control" id="BlockNo" name="BlockNo" placeholder="رقم البلوك" readonly />
+                    <span class="text-danger"></span> <!-- Validation message will go here -->
+                </div>
+            </div>
+
+            <!-- Street -->
+            <div class="col-xl-4 col-md-6 col-sm-12">
+                <div class="form-group">
+                    <label for="Street" class="Required">الشارع</label>
+                    <input type="text" class="form-control" id="Street" name="Street" placeholder="الشارع" readonly />
+                    <span class="text-danger"></span> <!-- Validation message will go here -->
+                </div>
+            </div>
+
+            <!-- Building No -->
+            <div class="col-xl-4 col-md-6 col-sm-12">
+                <div class="form-group">
+                    <label for="BuildingNo" class="Required">رقم المبنى</label>
+                    <input type="text" class="form-control" id="BuildingNo" name="BuildingNo" placeholder="رقم المبنى" readonly />
+                    <span class="text-danger"></span> <!-- Validation message will go here -->
+                </div>
+            </div>
+            <!-- Building Number -->
+            <div class="col-xl-4 col-md-6 col-sm-12">
+                <div class="form-group">
+                    <label for="BuildingName" class="Required">إسم المبني</label>
+                    <input type="text" class="form-control" id="BuildingName" name="BuildingName" placeholder="رقم المبنى" readonly />
+                    <span class="text-danger"></span> <!-- Validation message will go here -->
+                </div>
+            </div>
+            <!--رقم الوحدة -->
+            <div class="col-xl-4 col-md-6 col-sm-12">
+                <div class="form-group">
+                    <label for="UnitNo" class="Required">رقم الوحدة</label>
+                    <input type="text" class="form-control" id="UnitNo" name="UnitNo" placeholder="رقم الوحدة" readonly />
+                    <span class="text-danger"></span> <!-- Validation message will go here -->
+                </div>
+            </div>
+            <!--الدور -->
+
+            <div class="col-xl-4 col-md-6 col-sm-12">
+                <div class="form-group">
+                    <label for="FloorNo" class="Required">الدور</label>
+                    <input type="text" class="form-control" id="FloorNo" name="FloorNo" placeholder="الدور" readonly />
+                    <span class="text-danger"></span> <!-- Validation message will go here -->
+                </div>
+            </div>
+
+           
+
+            <div class="col-xl-4 col-md-6 col-sm-12">
+                <div class="form-group">
+                    <label for="Activity" class="Required">نشاط الشركة</label>
+                    <input type="text" class="form-control" asp-for="ActivityName"  placeholder="الدور" readonly />
+                   @*  <label for="Activities" class="Required">إختار النشاط</label> *@
+                   @*  <select class="form-control" id="ActivitiList" name="Activities" onchange="get_sbu()" required>
+                        @foreach (var item in Model.Activities)
+                        {
+                            <option value="@item.Value">@item.Text</option>
+                        }
+                    </select> *@
+                    <span class="text-danger"></span> <!-- Validation message will go here -->
+                </div>
+            </div>
+
+            @* <div class="col-xl-4 col-md-6 col-sm-12">
+                <div class="form-group">
+                    <label for="CompanyActivity" class="Required">نشاط الشركة</label>
+                    <input type="text" class="form-control" id="ActivitiName" name="CompanyActivity" placeholder="نشاط الشركة" readonly required />
+                    <span class="text-danger"></span> <!-- Validation message will go here -->
+                </div>
+            </div> *@
+
+            <div class="col-xl-4 col-md-6 col-sm-12">
+                <div class="form-group">
+                    <label for="ActivityCode" class="Required">رمز النشاط</label>
+                    <input type="text" class="form-control" asp-for="ActivityCode" placeholder="كود النشاط" readonly required />
+                    <input type="hidden" asp-for="ActivityTypeId" />
+                    <span class="text-danger"></span> <!-- Validation message will go here -->
+                </div>
+            </div>
+
+            <div class="col-xl-4 col-md-6 col-sm-12">
+                <div class="form-group">
+                    <label for="AreaSize" class="Required">مساحة الأرض</label>
+                    <input type="text" class="form-control" id="AreaSize" name="AreaSize" placeholder="حجم المنطقة" required />
+                    <span class="text-danger"></span> <!-- Validation message will go here -->
+                </div>
+            </div>
+
+            <div class="col-xl-4 col-md-6 col-sm-12">
+                <div class="form-group">
+                    <label for="AreaChartNo" class="Required">رقم المخطط المساحي</label>
+                    <input type="text" class="form-control" id="AreaChartNo" name="AreaChartNo" placeholder="رقم خريطة المنطقة" required />
+                    <span class="text-danger"></span> <!-- Validation message will go here -->
+                </div>
+            </div>
+            @* <div class="col-xl-4 col-md-6 col-sm-12">
+                <div class="form-group">
+                    <label asp-for="LicencesInfo.FixedFees" class="form-label">رسوم الطلب</label>
+                    <input asp-for="LicencesInfo.FixedFees" class="form-control" />
+                    <span asp-validation-for="LicencesInfo.FixedFees" class="text-danger"></span>
+                </div>
+            </div> *@
+
+            <!---------------- بيانات المدير ---------------->
+            <div class="col-xl-12 col-lg-12 col-md-12">
+                <div class="form-group">
+                    <h3>بيانات المدير</h3>
+                </div>
+            </div>
+
+            <div class="col-xl-4 col-md-6 col-sm-12">
+                <div class="form-group">
+                    <label for="ManagerName" class="Required">اسم المدير</label>
+                    <input type="text" class="form-control" id="ManagerName" name="ManagerName" placeholder="اسم المدير" required />
+                    <span class="text-danger"></span> <!-- Validation message will go here -->
+                </div>
+            </div>
+
+            <div class="col-xl-4 col-md-6 col-sm-12">
+                <div class="form-group">
+                    <label for="ManagerMobile" class="Required">موبايل المدير</label>
+                    <input type="text" class="form-control" id="ManagerMobile" name="ManagerMobile" placeholder="موبايل المدير" required />
+                    <span class="text-danger"></span> <!-- Validation message will go here -->
+                </div>
+            </div>
+            <div class="col-xl-4 col-md-6 col-sm-12">
+                <div class="form-group">
+                    <label for="ManCivilId" class="Required">الرقم المدني للمدير</label>
+                    <input type="text" class="form-control" id="ManCivilId" name="ManCivilId" placeholder="الرقم المدني المدير" required />
+                    <span class="text-danger"></span> <!-- Validation message will go here -->
+                </div>
+            </div>
+
+            <div class="col-xl-4 col-md-6 col-sm-12">
+                <div class="form-group">
+                    <label for="ManagerEmail" class="Required">البريد الإلكتروني للمدير</label>
+                    <input type="email" class="form-control" id="ManagerEmail" name="ManagerEmail" placeholder="البريد الإلكتروني للمدير" required />
+                    <span class="text-danger"></span> <!-- Validation message will go here -->
+                </div>
+            </div>
+
+            <!---------------- بيانات مدير المبيعات ---------------->
+            <div class="col-xl-12 col-lg-12 col-md-12">
+                <div class="form-group">
+                    <h3>بيانات مدير المبيعات</h3>
+                </div>
+            </div>
+
+            <div class="col-xl-4 col-md-6 col-sm-12">
+                <div class="form-group">
+                    <label asp-for="SalesManagerName" class="Required">اسم مدير المبيعات</label>
+                    <input type="text" class="form-control" id="SalesManagerName" asp-for="SalesManagerName" placeholder="اسم المدير" required />
+                    <span class="text-danger"></span> <!-- Validation message will go here -->
+                </div>
+            </div>
+
+            <div class="col-xl-4 col-md-6 col-sm-12">
+                <div class="form-group">
+                    <label asp-for="SalesManagerMobile" class="Required">موبايل مدير المبيعات</label>
+                    <input type="text" class="form-control" id="SalesManagerMobile" asp-for="SalesManagerMobile" placeholder="موبايل المدير" required />
+                    <span class="text-danger"></span> <!-- Validation message will go here -->
+                </div>
+            </div>
+            <div class="col-xl-4 col-md-6 col-sm-12">
+                <div class="form-group">
+                    <label asp-for="SalesManagerCivilId" class="Required">الرقم المدني لمدير المبيعات</label>
+                    <input type="text" class="form-control" id="SalesManagerCivilId" asp-for="SalesManagerCivilId" placeholder="الرقم المدني المدير" required />
+                    <span class="text-danger"></span> <!-- Validation message will go here -->
+                </div>
+            </div>
+
+            <div class="col-xl-4 col-md-6 col-sm-12">
+                <div class="form-group">
+                    <label asp-for="SalesManagerEmail" class="Required">البريد الإلكتروني لمدير المبيعات</label>
+                    <input type="email" class="form-control" id="SalesManagerEmail" asp-for="SalesManagerEmail" placeholder="البريد الإلكتروني للمدير" required />
+                    <span class="text-danger"></span> <!-- Validation message will go here -->
+                </div>
+            </div>
+
+
+            <!---------------- بيانات مدير التسويق ---------------->
+            <div class="col-xl-12 col-lg-12 col-md-12">
+                <div class="form-group">
+                    <h3>بيانات مدير التسويق</h3>
+                </div>
+            </div>
+
+            <div class="col-xl-4 col-md-6 col-sm-12">
+                <div class="form-group">
+                    <label asp-for="MarketingManagerName" class="Required">اسم مدير التسويق</label>
+                    <input type="text" class="form-control" id="MarketingManagerName" asp-for="MarketingManagerName" placeholder="اسم المدير" required />
+                    <span class="text-danger"></span> <!-- Validation message will go here -->
+                </div>
+            </div>
+
+            <div class="col-xl-4 col-md-6 col-sm-12">
+                <div class="form-group">
+                    <label asp-for="MarketingManagerMobile" class="Required">موبايل مدير التسويق</label>
+                    <input type="text" class="form-control" id="MarketingManagerMobile" asp-for="MarketingManagerMobile" placeholder="موبايل المدير" required />
+                    <span class="text-danger"></span> <!-- Validation message will go here -->
+                </div>
+            </div>
+            <div class="col-xl-4 col-md-6 col-sm-12">
+                <div class="form-group">
+                    <label asp-for="MarketingManagerCivilId" class="Required">الرقم المدني لمدير التسويق</label>
+                    <input type="text" class="form-control" id="MarketingManagerCivilId" asp-for="MarketingManagerCivilId" placeholder="الرقم المدني المدير" required />
+                    <span class="text-danger"></span> <!-- Validation message will go here -->
+                </div>
+            </div>
+
+            <div class="col-xl-4 col-md-6 col-sm-12">
+                <div class="form-group">
+                    <label asp-for="MarketingManagerEmail" class="Required">البريد الإلكتروني لمدير التسويق</label>
+                    <input type="email" class="form-control" id="MarketingManagerEmail" asp-for="MarketingManagerEmail" placeholder="البريد الإلكتروني للمدير" required />
+                    <span class="text-danger"></span> <!-- Validation message will go here -->
+                </div>
+            </div>
+
+            <!---------------- بيانات مدير العمليات ---------------->
+            <div class="col-xl-12 col-lg-12 col-md-12">
+                <div class="form-group">
+                    <h3>بيانات مدير العمليات</h3>
+                </div>
+            </div>
+
+            <div class="col-xl-4 col-md-6 col-sm-12">
+                <div class="form-group">
+                    <label asp-for="OperationManagerName" class="Required">اسم مدير العمليات</label>
+                    <input type="text" class="form-control" id="OperationManagerName" asp-for="OperationManagerName" placeholder="اسم المدير" required />
+                    <span class="text-danger"></span> <!-- Validation message will go here -->
+                </div>
+            </div>
+
+            <div class="col-xl-4 col-md-6 col-sm-12">
+                <div class="form-group">
+                    <label asp-for="OperationManagerMobile" class="Required">موبايل مدير العمليات</label>
+                    <input type="text" class="form-control" id="OperationManagerMobile" asp-for="OperationManagerMobile" placeholder="موبايل المدير" required />
+                    <span class="text-danger"></span> <!-- Validation message will go here -->
+                </div>
+            </div>
+            <div class="col-xl-4 col-md-6 col-sm-12">
+                <div class="form-group">
+                    <label asp-for="OperationManagerCivilId" class="Required">الرقم المدني لمدير العمليات</label>
+                    <input type="text" class="form-control" id="OperationManagerCivilId" asp-for="OperationManagerCivilId" placeholder="الرقم المدني المدير" required />
+                    <span  class="text-danger"></span> <!-- Validation message will go here -->
+                </div>
+            </div>
+
+            <div class="col-xl-4 col-md-6 col-sm-12">
+                <div class="form-group">
+                    <label asp-for="OperationManagerEmail" class="Required">البريد الإلكتروني لمدير العمليات</label>
+                    <input type="email" class="form-control" id="OperationManagerEmail" asp-for="OperationManagerEmail" placeholder="البريد الإلكتروني للمدير" required />
+                    <span class="text-danger"></span> <!-- Validation message will go here -->
+                </div>
+            </div>
+            <div class="col-xl-12 col-lg-12 col-md-12">
+                <div class="form-group">
+                    <h3>المرفقات</h3>
+                </div>
+                <div class="form-group">
+                    <h6 class="text-danger" style="padding-right: 10px;">
+                        ## حجم الملف يجب ان لا يتجاوز 2 ميجا
+                        <br />## (المخطط الإنشائي, دراسة الجدوي الاقتصادية) حجم الملف لايزيد عن 5 ميجا
+                    </h6>
+                </div>
+            </div>
+            @foreach (var config in Model.fileUploadConfigs)
+            {
+                //var fieldName = $"ContractDocuments[{config.FieldName}]";
+
+                <div class="col-xl-4 col-md-6 col-sm-12">
+                    <div class="form-group">
+                        <label for="@config.FieldName" class="@((config.IsMandatory) ? "Required" : "")">
+                            @config.AttachName
+                            @if (config.IsMandatory)
+                            {
+                                <span style="color: red;">*</span> <!-- Only add one red star if required -->
+                            }
+                        </label>
+
+                        <!-- ✅ هنا input يدوي type file -->
+                       @*  <input type="file"
+                               name="@fieldName"
+                               id="@config.FieldName"
+                               class="form-control custom-file-input"
+                               accept="@config.AllowedFileTypes"
+                        @(config.IsRequired ? "required" : "")
+                               multiple /> *@
+                        @* <input type="file" name="NamedFile[PassportCopy]" multiple />
+                        <input type="hidden" name="FieldName_@config.FieldName" value="@config.FieldName" /> *@
+
+                        <input type="file" name="NamedFile[0].File" class="form-control custom-file-input" required="@config.IsMandatory" accept="@config.AllowedFileTypes" />
+                        <input type="hidden" name="NamedFile[0].FieldName" value="@config.FieldName" />
+                        <input type="hidden" class="field-label" value="@config.AttachName" /> <!-- 👈 add this -->
+                        @Html.ValidationMessageFor(model => model.NamedFile, "", new { @class = "text-danger position-absolute" })
+
+                    </div>
+                </div>
+            }
+            <!-- Submit Button -->
+            <div class="col-lg-12 col-md-12">
+                <button type="button" onclick="submitFormViaAjax(event)" class="default-btn SubmitForm">إرسال الطلب <i class="flaticon-plus"></i></button>
+            </div>
+        </div>
+    </form>
+</div>
+
+@section Scripts{
+<script type="text/javascript">
+
+
+    jQuery(document).ready(function () {
+        //get_sbu();
+      //  loadImage();
+    });
+
+    jQuery(document).ready(function () {
+        Swal.fire({
+            icon: 'warning',
+            title: 'تنويه ،،،!',
+            text: 'يرجى التأكد من صحة بيانات المنشأة بالكامل وتحديث المرفقات في حال انتهاء صلاحيتها.',
+        });
+    });
+
+    $(document).ready(function () {
+        $('form').submit(function () {
+            // Disable the submit button
+            $(':submit', this).prop('disabled', true);
+            $(this).append('<div class="preloader-area"> ' +
+                '<div class="spinner">' +
+                '   <div class="inner">' +
+                '      <div class="disc"></div>' +
+                '   <div class="disc"></div>' +
+                '     <div class="disc"></div>' +
+                '  </div>' +
+                ' </div>' +
+                '</div>');
+            // Optionally, you can show a loading spinner or perform other actions
+            $('.preloader-area').fadeOut(15000);
+            // Continue with form submission
+            return true;
+        });
+    });
+
+
+        // $(function () {
+        //     $("[id$=UserCivilID]").on('change', function () {
+        //         var regex = "^[1-3][0-9][0-9]((0[13578]|[1][02])(0[1-9]|[12][0-9]|3[01])|(0[469]|(11))(0[1-9]|[12][0-9]|30)|(02)(0[1-9]|1[0-9]|2[0-8]))[0-9]{5}$|(^[1-3](04|08|[2468][048]|[13579][26])|(300))(0229)[0-9]{5}$";
+        //         var value = $(this).val();
+        //         var status = ValidateRegeex(regex, value);
+        //         if (status != true) {
+        //             $(this).val("");
+        //             Swal.fire({
+        //                 icon: 'error',
+        //                 title: 'Error',
+        //                 text: 'الرقم المدني غير صحيح',
+        //                 confirmButtonColor: '#7FB3D5',
+        //                 confirmButtonText: 'Ok'
+        //             });
+                    
+        //         }
+             
+        //         console.log(JSON.stringify({ UserCivilID: $(this).val() }));
+        //         $.ajax({
+        //             url: '/Account/GetUserDataPACI',
+        //             type: "POST",
+        //             data: { CivilID: $(this).val() }, // use JSON.stringify for proper formatting
+        //             // dataType: "json",
+        //             //contentType: "application/json; charset=utf-8",
+        //             success: function (response) {
+        //                 // Check if the response was successful
+        //                 if (response.success) {
+        //                     // Populate the fields with data from the server
+        //                     $('#FullNameAr').val(response.data.arFullName);
+        //                     $('#Email').val(response.data.email);
+        //                     $('#Mobile').val(response.data.mobile);
+        //                     $('#Error-UserCivilID').hide();
+
+        //                 } else {
+        //                     // Display error message if CivilID is invalid
+
+        //                     $('#Error-UserCivilID')
+        //                         .text(response.message)
+        //                         .show();
+        //                     $("[id$=UserCivilID]").val("");
+        //                 }
+        //             },
+        //             error: function (xhr, status, error) {
+        //                 console.log("Error: " + error);
+
+        //                 console.log("Response Text: ", xhr.responseText);
+        //             }
+        //         });
+
+        //     });
+        // });
+
+
+    function get_sbu() {
+        var id = $('#ActivitiList').find(":selected").attr('value');
+        $.ajax({
+            type: "POST",
+            url: "/Tourism/GetActivity",
+            data: "id=" + id,
+            success: function (data) {
+                console.log(data[1]);
+                if (id != "0") {
+                    if (data.length > 0) {
+                        $('#ActivitiID').val(data[1].value);
+                        $('#ActivitiName').val(data[1].text);
+                    } else {
+                        $('#ActivitiID').val('');
+                        $('#ActivitiName').val('');
+                    }
+                }
+
+            }
+        });
+    }
+
+    //---------- sweet alert  ------------
+
+    $(function loadImage() {
+
+        var errorMsg = '@ViewBag.test'
+        var msg = '@ViewBag.Message'
+
+        if (msg == 'Success') {
+            Swal.fire({
+                icon: 'success',
+                title: 'تأكـيد',
+                text: 'تم حفظ البيانات بنجاح',
+                confirmButtonColor: '#7FB3D5',
+                confirmButtonText: 'الانتقال لقائمة الطلبات !'
+            }).then(function () { window.location = '../Tourism/RequestsList'; });
+
+        }
+        else if (msg == 'error') {
+            Swal.fire({
+                icon: 'error',
+                title: 'تأكـيد',
+                text: errorMsg,
+                confirmButtonColor: '#7FB3D5',
+                confirmButtonText: 'الانتقال لقائمة الطلبات !'
+            }).then(function () { window.location = 'PreApprovRequest'; });
+        };
+
+
+    });
+
+    /*---------- TextBox Validation ----------*/
+
+    function ValidateRegeex(regex, value) {
+        var expre = new RegExp(regex);
+        return expre.test(value);
+    }
+
+    $(function () {
+        $("[id$=UserCivilID]").on('change', function () {
+
+            var regex = "^[1-3][0-9][0-9]((0[13578]|[1][02])(0[1-9]|[12][0-9]|3[01])|(0[469]|(11))(0[1-9]|[12][0-9]|30)|(02)(0[1-9]|1[0-9]|2[0-8]))[0-9]{5}$|(^[1-3](04|08|[2468][048]|[13579][26])|(300))(0229)[0-9]{5}$";
+            var value = $(this).val();
+            var status = ValidateRegeex(regex, value);
+            if (status != true) {
+                $(this).val("");
+                Swal.fire({
+                    icon: 'error',
+                    title: 'Error',
+                    text: 'الرقم المدني غير صحيح',
+                    confirmButtonColor: '#7FB3D5',
+                    confirmButtonText: 'Ok'
+                });
+                // alert("برجاء كتابة اسم الصحيفة باللغة العربية");
+            }
+
+        });
+    });
+
+
+
+    $(function () {
+        $("[id$=AaliNumber]").on('change', function () {
+
+            var regex = "^[0-9]+$";
+            var value = $(this).val();
+            var status = ValidateRegeex(regex, value);
+            if (status != true) {
+                $(this).val("");
+                Swal.fire({
+                    icon: 'error',
+                    title: 'Error',
+                    text: 'أرقام فقط',
+                    confirmButtonColor: '#7FB3D5',
+                    confirmButtonText: 'Ok'
+                });
+            }
+
+            //alert(value);
+            get_Amount(value);
+        });
+    });
+
+    async function get_Amount(ID) {
+        try {
+            const response = await $.ajax({
+                type: "POST",
+                url: "/Tourism/getAddressDataFromPaci",
+                data: { ID: ID },
+                dataType: "json"  // Ensure the response is expected in JSON format
+            });
+
+            // Update form fields with the data returned from the server
+            $('#Governrate').val(response.governoratearabic || "");
+            $('#Area').val(response.neighborhoodarabic || "");
+            $('#BlockNo').val(response.blockarabic || "");
+            $('#Street').val(response.streetarabic || "");
+            $('#BuildingName').val(response.buildingnamearabic || "");
+            $('#UnitNo').val(response.unit_no || "");
+            $('#FloorNo').val(response.floor_no || "");
+            $('#BuildingNo').val(response.parcelarabic || "");
+
+        } catch (error) {
+            // Reset the fields if an error occurs
+            $('#AaliNumber').val("");
+            $('#Governrate').val("");
+            $('#Area').val("");
+            $('#BlockNo').val("");
+            $('#Street').val("");
+            $('#BuildingNo').val("");
+            $('#UnitNo').val("");
+            $('#FloorNo').val("");
+            $('#BuildingName').val("");
+
+            // Display error message using SweetAlert
+            Swal.fire({
+                icon: 'error',
+                title: 'خطأ...',
+                text: 'عفوا , الرقم الالي غير صحيح!',
+                cancelButtonText: "Speed Case?"
+            });
+        }
+    }
+
+
+    $(function () {
+        $("[id$=CompanyCivilId]").on('change', function () {
+
+            var regex = "^[0-9]+$";
+            var value = $(this).val();
+            var status = ValidateRegeex(regex, value);
+            if (status != true) {
+                $(this).val("");
+                Swal.fire({
+                    icon: 'error',
+                    title: 'Error',
+                    text: 'أرقام فقط',
+                    confirmButtonColor: '#7FB3D5',
+                    confirmButtonText: 'Ok'
+                });
+                // alert("برجاء كتابة اسم الصحيفة باللغة العربية");
+            }
+        });
+    });
+
+    
+
+
+        async function submitFormViaAjax(event) {
+            event?.preventDefault();
+        const uploadedFiles = new FormData();
+
+        // 🟢 1. Add all normal text inputs (non-file)
+        $('#PreApprovalForm').serializeArray().forEach(function (input) {
+            uploadedFiles.append(input.name, input.value);
+        });
+        var ActivityTypeId = $('#ActivitiList').val();  // Get selected value from the dropdown
+        uploadedFiles.append('ActivityTypeId', ActivityTypeId);
+        console.log('Selected Activity Value:', ActivityTypeId);
+
+        let fileIndex = 0;
+
+        // 🟢 2. Add file inputs with dynamic names like ContractDocuments[FieldName]
+        const dynamicFileInputs = document.querySelectorAll('#PreApprovalForm input[type="file"]');
+
+        dynamicFileInputs.forEach((input) => {
+            const files = input.files;
+
+            // 🔍 ابحث عن hidden input يلي الملف مباشرة ويحتوي على اسم الحقل
+          
+                     const formGroup = input.closest('.form-group');
+            const hiddenInput = formGroup.querySelector('input[type="hidden"][name$=".FieldName"]');
+            const labelInput = formGroup.querySelector('input.field-label');
+
+            const fieldName = hiddenInput ? hiddenInput.value : `UnknownField_${fileIndex}`;
+            const labelName = labelInput ? labelInput.value : '';
+            const isRequired = input.hasAttribute('required');
+
+            if (files.length > 0) {
+                for (let i = 0; i < files.length; i++) {
+                    uploadedFiles.append(`NamedFile[${fileIndex}].FieldName`, fieldName);
+                    uploadedFiles.append(`NamedFile[${fileIndex}].LabelName`, labelName); // ✅ here
+                    uploadedFiles.append(`NamedFile[${fileIndex}].File`, files[i]);
+                    uploadedFiles.append(`NamedFile[${fileIndex}].IsRequired`, isRequired ? "true" : "false");
+                    fileIndex++;
+                }
+            }
+            else {
+                console.warn(`⚠️ No file selected for field: ${fieldName}`);
+            }
+        });
+
+        // 🟡 Optional: Debug output
+        for (let [key, value] of uploadedFiles.entries()) {
+            console.log(`${key}:`, value);
+        }
+
+        // 🔵 3. Submit using fetch
+        try {
+            const response = await fetch('/Tourism/PreApprovRequest', {
+                method: 'POST',
+                body: uploadedFiles
+            });
+
+            if (response.ok) {
+                    Swal.fire('تم بنجاح', 'تم إرسال البيانات', 'success').then(() => {
+                        window.location.href = '/Home/GetAllRequest';  // Redirect to the 'GetAllRequest' page
+                    });
+
+            } else {
+                Swal.fire('خطأ', 'حدث خطأ في المعالجة', 'error');
+            }
+        } catch (error) {
+            console.error('Upload error:', error);
+            Swal.fire('خطأ', 'فشل الإرسال: ' + error.message, 'error');
+        }
+    }
+
+
+
+</script>
+}

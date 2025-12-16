@@ -1,0 +1,732 @@
+﻿<style >
+body {
+    font-family: 'Cairo', sans-serif;
+    background-color: #f8f9fc;
+}
+
+.modern-card {
+    background-color: #ffffff;
+    border-radius: 12px;
+    border: 1px solid #e0e0e0;
+    box-shadow: none;
+    margin: 0;
+}
+
+/* رأس الكارد */
+/* .modern-card-header {
+        background-color: #3A5795;
+        border-top-left-radius: 12px;
+        border-top-right-radius: 12px;
+        padding: 16px 24px;
+        color: #fff;
+        font-size: 18px;
+        font-weight: bold;
+    } */
+
+.modern-card-header {
+    background: linear-gradient(90deg, #637BAD, #3A5795); /* تدرج لوني */
+    color: #fff;
+    font-size: 18px;
+    font-weight: bold;
+    padding: 16px 24px;
+    border-top-left-radius: 12px;
+    border-top-right-radius: 12px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    box-shadow: inset 0 -1px 0 rgba(255, 255, 255, 0.2);
+}
+/* جدول البيانات */
+.dataTables_wrapper {
+    background: #fff;
+    padding: 16px;
+    border-radius: 0;
+    box-shadow: none;
+    margin: 0;
+}
+
+table.dataTable {
+    width: 100% !important;
+    border-collapse: collapse;
+}
+    table.dataTable thead {
+        background-color: #217295;
+        border-bottom: none;
+    }
+
+        table.dataTable thead th {
+            background-color: #637BAD;
+            color: #ffffff;
+            font-size: 14px;
+            font-weight: 700;
+            padding: 14px 12px;
+            text-align: center;
+            vertical-align: middle;
+            white-space: nowrap;
+            border-bottom: 1px solid #637BAD;
+            transition: background-color 0.3s ease;
+        }
+
+
+    table.dataTable tbody td {
+        background-color: #fff;
+        font-size: 14px;
+        color: #333;
+        padding: 12px;
+        border-bottom: 1px solid #eee;
+        text-align: center;
+        vertical-align: middle;
+    }
+
+    table.dataTable tbody tr:nth-child(even) td {
+        background-color: #fafafa;
+    }
+
+.dataTables_wrapper .dataTables_length,
+.dataTables_wrapper .dataTables_filter,
+.dataTables_wrapper .dataTables_info,
+.dataTables_wrapper .dataTables_paginate {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    flex-wrap: wrap;
+    gap: 1rem;
+    direction: rtl;
+}
+
+    .dataTables_wrapper .dataTables_filter input {
+        padding: 8px 14px;
+        border-radius: 8px;
+        border: 1px solid #ccc;
+        background-color: #f9f9f9;
+        font-size: 14px;
+        min-width: 220px;
+        transition: 0.3s ease;
+    }
+
+        .dataTables_wrapper .dataTables_filter input:focus {
+            outline: none;
+            border-color: #0d6efd;
+            background-color: #fff;
+        }
+
+    .dataTables_wrapper .dataTables_length select {
+        padding: 6px 10px;
+        border-radius: 6px;
+        border: 1px solid #ccc;
+        background-color: #fff;
+        font-size: 14px;
+        min-width: 60px;
+    }
+
+    .dataTables_wrapper .dataTables_paginate .paginate_button {
+        border-radius: 8px;
+        padding: 6px 12px;
+        background-color: #f0f0f0;
+        border: 1px solid #ddd;
+        color: #333 !important;
+        margin: 0 2px;
+        font-size: 13px;
+        transition: 0.2s;
+    }
+
+        .dataTables_wrapper .dataTables_paginate .paginate_button.current,
+        .dataTables_wrapper .dataTables_paginate .paginate_button:hover {
+            background-color: #0d6efd !important;
+            color: #fff !important;
+            border-color: #0d6efd !important;
+        }
+
+.btn-outline-primary.action-circle-btn {
+    width: 36px;
+    height: 36px;
+    padding: 0;
+    border-radius: 50%;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    border: 1.5px solid #637BAD;
+    background-color: #f0f8ff;
+    color: #637BAD;
+    transition: all 0.2s ease-in-out;
+}
+
+    .btn-outline-primary.action-circle-btn:hover {
+        background-color: #637BAD;
+        color: #fff;
+    }
+
+.status-badge {
+    font-size: 13px;
+    font-weight: 600;
+    padding: 6px 12px;
+    border-radius: 20px;
+    background-color: #eee;
+    color: #444;
+    display: inline-block;
+}
+
+.btn-view-details {
+    width: 36px;
+    height: 36px;
+    border: none;
+    border-radius: 50%;
+    background-color: #637BAD;
+    color: #fff;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 16px;
+    cursor: pointer;
+    transition: 0.3s ease;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+    .btn-view-details:hover {
+        background-color: #5cb4d3; /* لون أغمق قليلاً عند التحويم */
+        transform: scale(1.05);
+    }
+
+.dataTables_wrapper .dataTables_filter input {
+    background-color: #fff;
+    border: 1.5px solid #75c0e0;
+    border-radius: 8px;
+    padding: 8px 14px;
+    font-size: 14px;
+    color: #333;
+    min-width: 250px;
+    transition: 0.3s ease-in-out;
+}
+
+    .dataTables_wrapper .dataTables_filter input::placeholder {
+        color: #999;
+        font-size: 13px;
+        letter-spacing: 0.5px;
+    }
+
+    /* عند التركيز */
+    .dataTables_wrapper .dataTables_filter input:focus {
+        outline: none;
+        border-color: #3a5795;
+        box-shadow: 0 0 0 2px rgba(13, 110, 253, 0.1);
+    }
+
+.status-badge {
+    font-size: 13px;
+    font-weight: 600;
+    padding: 6px 14px;
+    border-radius: 20px;
+    display: inline-block;
+}
+
+.status-pending {
+    background-color: #fff3cd;
+    color: #856404;
+}
+
+.status-approved {
+    background-color: #d1e7dd;
+    color: #0f5132;
+}
+
+.status-rejected {
+    background-color: #f8d7da;
+    color: #842029;
+}
+
+.status-processing {
+    background-color: #cfe2ff;
+    color: #084298;
+}
+
+.dataTables_filter label {
+    display: flex;
+    align-items: center;
+    font-weight: bold;
+    gap: 8px;
+}
+
+.dataTables_filter input {
+    border: 1px solid #3a5795;
+    border-radius: 8px;
+    padding: 6px 12px;
+    min-width: 220px;
+    font-size: 14px;
+}
+
+
+
+
+
+
+
+.tx-check {
+    accent-color: #3A5795;
+}
+
+
+#licenseModifyModal .partner-item {
+    display: flex;
+    align-items: center;
+    gap: .5rem;
+    padding: .75rem 1rem;
+    border-bottom: 1px solid #eef1f6;
+}
+
+    #licenseModifyModal .partner-item:last-child {
+        border-bottom: 0;
+    }
+
+#licenseModifyModal .partner-main {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    flex: 1;
+    min-width: 0; 
+}
+
+#licenseModifyModal .partner-name {
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+#licenseModifyModal .tx-check {
+    accent-color: #3A5795;
+}
+
+#licenseModifyModal .list-group-item {
+    border-color: #eef1f6;
+}
+
+
+
+
+
+
+
+
+
+
+/* ===== License Modify Modal (flat rows + 2-line name + icon) ===== */
+#licenseModifyModal .tx-list {
+    margin: 0;
+    padding: 0;
+}
+
+#licenseModifyModal .tx-item {
+    display: flex;
+    align-items: flex-start;
+    justify-content: space-between;
+    gap: 12px;
+    padding: 12px 14px;
+    border-bottom: 1px solid #eef1f6;
+    background: #fff;
+}
+
+    #licenseModifyModal .tx-item:last-child {
+        border-bottom: none;
+    }
+
+#licenseModifyModal .tx-leading {
+    display: flex;
+    align-items: flex-start;
+    gap: 10px;
+    flex: 1;
+    min-width: 0; /* allow text truncation/wrapping properly */
+}
+
+#licenseModifyModal .tx-check {
+    margin-top: 2px;
+    accent-color: #3A5795; /* blue check mark */
+}
+
+
+
+#licenseModifyModal .tx-name {
+    font-weight: 700;
+    color: #0f172a;
+    line-height: 1.35;
+    /* clamp to two lines */
+    display: -webkit-box;
+    -webkit-line-clamp: 2;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+}
+
+#licenseModifyModal .tx-aux {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    flex-wrap: wrap;
+}
+
+/* keep your existing status-badge palette working nicely on white */
+#licenseModifyModal .status-badge {
+    font-size: 12px;
+    padding: 6px 12px;
+    border-radius: 999px;
+    line-height: 1;
+}
+
+
+/* Flat tile icon (used in header and items) */
+#licenseModifyModal .tx-icon {
+    width: 32px;
+    height: 32px;
+    border-radius: 8px;
+    display: grid;
+    place-items: center;
+    background: #eef2ff; /* soft flat */
+    color: #3A5795; /* your primary */
+    font-size: 18px;
+}
+
+/* Make the Start button show an icon nicely with RTL spacing */
+#licenseModifyModal #lm-start i {
+    vertical-align: middle;
+}
+
+/* Flat tile icon (header + rows) */
+#licenseModifyModal .tx-icon {
+    width: 32px;
+    height: 32px;
+    border-radius: 8px;
+    display: grid;
+    place-items: center;
+    background: #eef2ff; /* soft */
+    color: #3A5795; /* primary */
+    font-size: 18px;
+}
+
+/* One-row items with thin dividers */
+#licenseModifyModal .tx-list {
+    margin: 0;
+    padding: 0;
+}
+
+#licenseModifyModal .tx-item {
+    display: flex;
+    align-items: flex-start;
+    justify-content: space-between;
+    gap: 12px;
+    padding: 12px 14px;
+    border-bottom: 1px solid #eef1f6;
+    background: #fff;
+}
+
+    #licenseModifyModal .tx-item:last-child {
+        border-bottom: none;
+    }
+
+#licenseModifyModal .tx-leading {
+    display: flex;
+    align-items: flex-start;
+    gap: 10px;
+    flex: 1;
+    min-width: 0; /* enable wrapping/clamp */
+}
+
+/* Blue checkbox tick */
+#licenseModifyModal .tx-check {
+    margin-top: 2px;
+    accent-color: #3A5795;
+}
+
+/* Transaction name: clamp to 2 lines */
+#licenseModifyModal .tx-name {
+    font-weight: 700;
+    color: #0f172a;
+    line-height: 1.35;
+    display: -webkit-box;
+    -webkit-line-clamp: 2;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+}
+
+/* Right-side badges area */
+#licenseModifyModal .tx-aux {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    flex-wrap: wrap;
+}
+
+/* (If you previously forced .btn-close absolute, neutralize it here) */
+#licenseModifyModal .modal-header {
+    position: static;
+    padding-inline-end: 16px;
+}
+
+    #licenseModifyModal .modal-header .btn-close {
+        display: none !important;
+    }
+#lm-list .tx-item {
+    cursor: pointer;
+    transition: background-color .15s ease;
+}
+
+    #lm-list .tx-item:hover {
+        background: #f6f8ff; 
+    }
+
+        #lm-list .tx-item:hover .tx-name {
+/*            text-decoration: underline; 
+*/            text-underline-offset: 2px;
+            text-decoration-thickness: 1px;
+        }
+
+    #lm-list .tx-item .tx-check {
+        cursor: pointer;
+    }
+
+    #lm-list .tx-item.is-disabled {
+        cursor: not-allowed;
+    }
+
+        #lm-list .tx-item.is-disabled:hover {
+            background: transparent;
+        }
+
+
+
+
+/* ===== Fix header/body alignment & compact header ===== */
+.manage-jobs-table .myTable {
+    width: 100% !important;
+    table-layout: fixed; /* unified column calculation */
+    border-collapse: collapse; /* avoid spacing gaps */
+    direction: rtl; /* ensure RTL sizing is consistent */
+}
+
+    .manage-jobs-table .myTable thead th,
+    .manage-jobs-table .myTable tbody td {
+        box-sizing: border-box; /* make padding count the same way */
+        white-space: nowrap; /* consistent wrapping for both */
+        padding: .55rem .75rem; /* unify padding */
+    }
+
+    .manage-jobs-table .myTable thead th {
+        font-size: .875rem; /* slightly smaller header to fit text */
+        line-height: 1.2;
+    }
+
+    /* --- Pin widths for the small/action columns (adjust as you wish) --- */
+    /* 1) first column (empty / actions placeholder) */
+    .manage-jobs-table .myTable th:nth-child(1),
+    .manage-jobs-table .myTable td:nth-child(1) {
+        width: 44px;
+        text-align: center;
+    }
+
+    /* 2) "م" (counter) */
+    .manage-jobs-table .myTable th:nth-child(2),
+    .manage-jobs-table .myTable td:nth-child(2) {
+        width: 52px;
+        text-align: center;
+    }
+
+    /* 6) start date */
+    .manage-jobs-table .myTable th:nth-child(6),
+    .manage-jobs-table .myTable td:nth-child(6) {
+        width: 130px;
+    }
+
+    /* 9) "تفاصيل الترخيص" (buttons) */
+    .manage-jobs-table .myTable th:nth-child(9),
+    .manage-jobs-table .myTable td:nth-child(9) {
+        width: 110px;
+        text-align: center;
+    }
+
+    /* 10) "سجل الحركات" (buttons) */
+    .manage-jobs-table .myTable th:nth-child(10),
+    .manage-jobs-table .myTable td:nth-child(10) {
+        width: 110px;
+        text-align: center;
+    }
+
+/* --- DataTables sort icon space in RTL (prevents TH from being wider than TD) --- */
+table.dataTable thead > tr > th.sorting,
+table.dataTable thead > tr > th.sorting_asc,
+table.dataTable thead > tr > th.sorting_desc {
+    padding-inline-end: 1.75rem !important; /* room for the arrow without shifting width */
+}
+
+table.dataTable thead .sorting:after,
+table.dataTable thead .sorting_asc:after,
+table.dataTable thead .sorting_desc:after {
+    inset-inline-end: .5rem; /* RTL-friendly placement of the sort arrow */
+    left: auto;
+    right: auto;
+}
+
+/* Prevent tall headers: keep labels on one or two lines with ellipsis */
+.manage-jobs-table .myTable thead th > span,
+.manage-jobs-table .myTable thead th {
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+/* Optional: keep cells visually tighter so everything fits */
+.manage-jobs-table .myTable tbody td {
+    font-size: .9rem;
+}
+
+
+
+/* ثبات المحاذاة مع التكبير/التصغير */
+.manage-jobs-table .myTable {
+    width: 100% !important;
+    table-layout: fixed; /* يعتمد على colgroup */
+    border-collapse: collapse;
+    direction: rtl;
+}
+
+    .manage-jobs-table .myTable thead th,
+    .manage-jobs-table .myTable tbody td {
+        box-sizing: border-box;
+        white-space: nowrap;
+        padding: .55rem .75rem;
+        vertical-align: middle;
+        font-size: .9rem;
+    }
+
+    .manage-jobs-table .myTable col.col-blank {
+        width: 2.8rem;
+    }
+
+    .manage-jobs-table .myTable col.col-idx {
+        width: 3.2rem;
+    }
+
+    .manage-jobs-table .myTable col.col-date {
+        width: 10ch;
+    }
+    .manage-jobs-table .myTable col.col-actions {
+        width: 8.5rem;
+    }
+
+    .manage-jobs-table .myTable col.col-licno {
+        width: 12ch;
+    }
+
+    .manage-jobs-table .myTable col.col-owner {
+        width: auto;
+    }
+
+    .manage-jobs-table .myTable col.col-company {
+        width: auto;
+    }
+
+    .manage-jobs-table .myTable col.col-flag {
+        width: 12ch;
+    }
+
+    .manage-jobs-table .myTable col.col-activity {
+        width: 16ch;
+    }
+
+    .manage-jobs-table .myTable thead th {
+        font-size: .875rem;
+        line-height: 1.2; /* رأس أنحف قليلاً */
+    }
+
+table.dataTable thead > tr > th.sorting,
+table.dataTable thead > tr > th.sorting_asc,
+table.dataTable thead > tr > th.sorting_desc {
+    padding-inline-end: 1.75rem !important;
+}
+
+table.dataTable thead .sorting:after,
+table.dataTable thead .sorting_asc:after,
+table.dataTable thead .sorting_desc:after {
+    inset-inline-end: .5rem;
+    left: auto;
+    right: auto;
+}
+
+.manage-jobs-table .myTable thead th,
+.manage-jobs-table .myTable thead th > span {
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+
+#kt_requests_table .cell-expired {
+    color: #d41919;
+    font-weight: 700;
+}
+
+#kt_requests_table .cell-expiring {
+    color: #b54700;
+    font-weight: 700;
+}
+
+#kt_requests_table tr.row-expired {
+    background: #ffeaea;
+}
+
+#kt_requests_table tr.row-expiring {
+    background: #fff3e6;
+}
+/* السماح بالتمرير الأفقي بدل طيّ الأعمدة */
+.dataTables_wrapper {
+    overflow-x: auto;
+}
+
+table.dataTable {
+    width: 100% !important;
+}
+
+    /* خلى العناوين والخلايا سطر واحد عشان العرض ما يتهزّش */
+    table.dataTable thead th,
+    table.dataTable tbody td {
+        white-space: nowrap;
+    }
+
+    /* لو إضافة Responsive كانت بتحط عمود “تحكم” للتوسيع، أخفي زرّه */
+    table.dataTable td.dtr-control:before {
+        display: none !important;
+    }
+
+/* تأكد إن غلاف السكول ممكن يمرّر */
+.dataTables_wrapper .dataTables_scroll {
+    overflow: auto;
+}
+/* اسمح بالتمرير الأفقي بدل طيّ الأعمدة */
+
+
+
+    /* ثبّت الأعمدة على سطر واحد عشان العرض ما يتهزش */
+    table.dataTable thead th,
+    table.dataTable tbody td {
+        white-space: nowrap;
+    }
+
+    /* اخفي زر التوسيع لو كان اتضاف قبل كده */
+    table.dataTable td.dtr-control:before {
+        display: none !important;
+    }
+
+/* لو بتستخدم scrollX من DataTables، خلّي الغلاف قابل للتمرير */
+.dataTables_wrapper .dataTables_scroll {
+    overflow: auto;
+}
+/* allow horizontal scroll wrapper to show a scrollbar */
+.dataTables_wrapper .dataTables_scroll {
+    overflow: auto;
+}
+
+/* keep cells on one line so widths don’t collapse */
+table.dataTable thead th,
+table.dataTable tbody td {
+    white-space: nowrap;
+}
+
+/* if a control cell was injected previously by Responsive, hide its icon */
+table.dataTable td.dtr-control:before {
+    display: none !important;
+}
+
+

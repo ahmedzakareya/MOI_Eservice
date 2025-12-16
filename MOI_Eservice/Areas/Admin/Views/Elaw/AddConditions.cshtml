@@ -1,0 +1,35 @@
+﻿@model ConditionVM
+
+<div class="container mt-4">
+    <h2 class="text-right">إضافة جديد</h2>
+
+    <form asp-action="AddConitions" method="post">
+        <div class="form-group">
+            <label for="licenceType" class="float-right">نوع الطلب</label>
+            <select id="licenceType" name="LicenceType" class="form-control text-right">
+                <option value="">-- اختر --</option>
+                @foreach (var licence in Model.LicencesType)
+                {
+                    <option value="@licence.Value">@licence.Text</option>
+                }
+            </select>
+        </div>
+
+        <div class="form-group">
+            <label for="termsAndConditions" class="float-right">الشروط والأحكام</label>
+            <textarea id="termsAndConditions" name="Condition" rows="10" class="form-control">
+                @Model.Condition
+            </textarea>
+        </div>
+
+        <button type="submit" class="btn btn-primary float-right">إضافة</button>
+    </form>
+</div>
+
+<script src="https://cdn.ckeditor.com/4.20.2/standard/ckeditor.js"></script>
+<script>
+    CKEDITOR.replace('termsAndConditions', {
+        language: 'ar',
+        height: 300
+    });
+</script>

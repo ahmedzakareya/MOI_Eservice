@@ -1,0 +1,83 @@
+﻿@model StatisticsViewModel
+
+@{
+    ViewData["Title"] = "Index";
+    Layout = "~/Areas/Admin/Views/Shared/_LayoutEserviceTourism.cshtml";
+    var LoggedInUser = ViewBag.username;
+    int serviceId = ViewBag.serviceId;
+    int totalRequests = Model.AllRequests ?? 0;
+
+    // Avoid division by zero
+    int SafeDivide(int numerator) => totalRequests > 0 ? (int)(((double)numerator / totalRequests) * 100) : 0;
+
+    // Percentages
+    int PercentageForNewRequest = SafeDivide(Model.NewRequests ?? 0);
+    int PercentageForEndLicences = SafeDivide(Model.EndLicenseRequests ?? 0);
+    int PercentageForRequestChange = SafeDivide(Model.ChangeRequest ?? 0);
+    int PercentageForWhoConc = SafeDivide(Model.WhoConc ?? 0);
+    int PercentageForChangeActivity = SafeDivide(Model.ChangeActivityRequests ?? 0);
+    int PercentageForRenew = SafeDivide(Model.RenewRequests ?? 0);
+    int PercentageForChangeCompanyName = SafeDivide(Model.ChangeCompanyName ?? 0);
+    int PercentageForChangeManager = SafeDivide(Model.ChangeManagerRequests ?? 0);
+    int PercentageForChangeOwner = SafeDivide(Model.ChangeOwnerRequest ?? 0);
+    int PercentageForPreApprovementConvert = SafeDivide(Model.PreApprovementConvert ?? 0);
+    int PercentageForPreApprovementNew = SafeDivide(Model.PreApprovementNew ?? 0);
+    int PercentageForChangeAddress = SafeDivide(Model.ChangeAddress ?? 0);
+
+    // Optional: TotalActiveRequest if needed
+    int TotalActiveRequest =
+        (Model.NewRequests ?? 0) +
+        (Model.EndLicenseRequests ?? 0) +
+        (Model.ChangeRequest ?? 0) +
+        (Model.RenewRequests ?? 0);
+
+    var metrics = new List<(string Title, int Count, int Percentage, string CssClass, string Icon)>
+    {
+        ("الطلبات الجديدة", Model.NewRequests ?? 0, PercentageForNewRequest, "bg-success", "ki-arrow-up"),
+        ("طلبات إنشاء الموافقة المبدئية", Model.PreApprovementNew ?? 0, PercentageForPreApprovementNew, "bg-success", "ki-check"),
+        ("طلبات تحويل الموافقة المبدئية", Model.PreApprovementConvert ?? 0, PercentageForPreApprovementConvert, "bg-warning", "ki-repeat"),
+        ("تغيير إسم الشركة", Model.ChangeCompanyName ?? 0, PercentageForChangeCompanyName, "bg-primary", "ki-building"),
+        ("طلبات التعديل", Model.ChangeRequest ?? 0, PercentageForRequestChange, "bg-info", "ki-pencil"),
+        ("تغيير النشاط", Model.ChangeActivityRequests ?? 0, PercentageForChangeActivity, "bg-danger", "ki-activity"),
+        ("تغيير العنوان", Model.ChangeAddress ?? 0, PercentageForChangeAddress, "bg-info", "ki-map"),
+        ("تنازل", Model.ChangeOwnerRequest ?? 0, PercentageForChangeOwner, "bg-danger", "ki-user-minus"),
+        ("طلبات الإنهاء", Model.EndLicenseRequests ?? 0, PercentageForEndLicences, "bg-dark", "ki-trash"),
+        ("طلبات التجديد", Model.RenewRequests ?? 0, PercentageForRenew, "bg-success", "ki-refresh"),
+        ("تغيير المدير المسئول", Model.ChangeManagerRequests ?? 0, PercentageForChangeManager, "bg-secondary", "ki-user-cog")
+    };
+
+}
+
+<!--begin::Content wrapper-->
+
+<!--end::Content wrapper-->
+
+<div class="shadow-lg h-100 m-3">
+    <div class="row g-4 m-3">
+        @foreach (var (title, count, percent, cssClass, icon) in metrics)
+        {
+            <div class="col-sm-6 col-md-4 col-lg-3">
+                <div class="card shadow-sm bg-white rounded-3 h-100">
+                    <div class="card-body">
+                        <h2 class="fw-bold text-dark mb-1">@count</h2>
+                        <span class="text-muted d-block mb-3">@title</span>
+
+                        <div class="d-flex justify-content-between">
+                            <span class="fw-semibold text-gray-600">@count @title</span>
+                            <span class="fw-semibold text-gray-600">@percent%</span>
+                        </div>
+
+                        <div class="progress h-6px mt-2">
+                            <div class="progress-bar @cssClass" role="progressbar" style="width: @percent%;" aria-valuenow="@percent" aria-valuemin="0" aria-valuemax="100"></div>
+                        </div>
+                    </div>
+
+                    <!-- Footer with background and icon -->
+                    <div class="text-white fw-semibold text-center p-2 rounded-bottom @cssClass">
+                        <i class="ki @icon me-2"></i> @title
+                    </div>
+                </div>
+            </div>
+        }
+</div>
+</div>

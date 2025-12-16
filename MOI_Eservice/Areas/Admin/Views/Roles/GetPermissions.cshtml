@@ -1,0 +1,209 @@
+﻿@model IEnumerable<PermissionVM>
+
+@{
+    ViewBag.Title = "Permissions Management";
+    Layout = "~/Areas/Admin/Views/Shared/_LayoutEserviceTourism.cshtml";
+}
+
+<!--begin::Content-->
+<div id="kt_app_content" class="app-content flex-column-fluid">
+    <div id="kt_app_content_container" class="app-container container-fluid">
+        <!--begin::Card-->
+        <div class="card card-flush">
+            <!--begin::Card header-->
+            <div class="card-header mt-6">
+                <div class="card-title">
+                    <!--begin::Search-->
+                    <div class="d-flex align-items-center position-relative my-1 me-5">
+                        <i class="ki-outline ki-magnifier fs-3 position-absolute ms-5"></i>
+                        <input type="text" id="permissionSearch" class="form-control form-control-solid w-250px ps-13" placeholder="Search Permissions" />
+                    </div>
+                    <!--end::Search-->
+                </div>
+                <div class="card-toolbar">
+                    <!-- Add Permission Button -->
+                    <button type="button" class="btn btn-light-primary" data-bs-toggle="modal" data-bs-target="#kt_modal_add_permission">
+                        <i class="ki-outline ki-plus-square fs-3"></i>Add Permission
+                    </button>
+                </div>
+            </div>
+            <!--end::Card header-->
+            <!--begin::Card body-->
+            <div class="card-body pt-0">
+                <!--begin::Table-->
+                <table class="table align-middle table-row-dashed fs-6 gy-5 mb-0" id="permissionsTable">
+                    <thead>
+                        <tr class="text-start text-gray-500 fw-bold fs-7 text-uppercase gs-0">
+                            <th>#</th>
+                            <th>Name</th>
+                            <th class="text-end">Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody class="fw-semibold text-gray-600">
+                        @if (Model != null && Model.Any())
+                        {
+                            int serial = 0;
+                            foreach (var permission in Model)
+                            {
+                                serial++;
+                                <tr>
+                                    <td>@serial</td>
+                                    <td>@permission.NameAr</td>
+                                    <td class="text-end">
+                                        <button class="btn btn-icon btn-active-light-primary w-30px h-30px me-3 edit-permission" asp-route-id="@permission.Id" data-id="@permission.Id" data-bs-toggle="modal" data-bs-target="#kt_modal_edit_permission">
+                                            <i class="ki-outline ki-setting-3 fs-3"></i>
+                                        </button>
+                                        <button class="btn btn-icon btn-active-light-primary w-30px h-30px delete-permission" data-id="@permission.Id">
+                                            <i class="ki-outline ki-trash fs-3"></i>
+                                        </button>
+                                    </td>
+                                </tr>
+                            }
+                        }
+                        else
+                        {
+                            <tr>
+                                <td colspan="3" class="text-center text-muted">No permissions available.</td>
+                            </tr>
+                        }
+                    </tbody>
+                </table>
+                <!--end::Table-->
+            </div>
+            <!--end::Card body-->
+        </div>
+        <!--end::Card-->
+    </div>
+</div>
+<!--end::Content-->
+<!-- Add Permission Modal -->
+<div class="modal fade" id="kt_modal_add_permission" tabindex="-1" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered mw-650px">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2 class="fw-bold">Add Permission</h2>
+                <div class="btn btn-icon btn-sm btn-active-icon-primary" data-bs-dismiss="modal">
+                    <i class="ki-outline ki-cross fs-1"></i>
+                </div>
+            </div>
+            <div class="modal-body scroll-y mx-5 my-7">
+                <form id="addPermissionForm">
+                    <div class="fv-row mb-7">
+                        <label class="fs-6 fw-semibold form-label mb-2">Permission Name</label>
+                        <input class="form-control form-control-solid" id="NameAr" placeholder="Enter permission name" required />
+                    </div>
+                    <div class="text-center pt-15">
+                        <button type="button" class="btn btn-primary" id="submitPermission">Submit</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Edit Permission Modal -->
+<div class="modal fade" id="kt_modal_edit_permission" tabindex="-1" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered mw-650px">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2 class="fw-bold">Edit Permission</h2>
+                <div class="btn btn-icon btn-sm btn-active-icon-primary" data-bs-dismiss="modal">
+                    <i class="ki-outline ki-cross fs-1"></i>
+                </div>
+            </div>
+            <div class="modal-body scroll-y mx-5 my-7">
+                <form id="editPermissionForm">
+                    <input type="hidden" id="editPermissionId"  />
+                    <div class="fv-row mb-7">
+                        <label class="fs-6 fw-semibold form-label mb-2">Permission Name</label>
+                        <input class="form-control form-control-solid" id="editNameAr" placeholder="Enter permission name" required />
+                    </div>
+                    <div class="text-center pt-15">
+                        <button type="button" class="btn btn-primary" id="submitEditPermission">Save Changes</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Scripts
+{
+    <script>
+        const apiBaseUrl = '@ViewBag.ApiBaseUrl';
+
+        // Add Permission
+        document.getElementById("submitPermission").addEventListener("click", async function () {
+            try {
+                const data = { NameAr: document.getElementById("NameAr").value };
+                const response = await fetch(`${apiBaseUrl}AddPermission`, {
+                    method: "POST",
+                    headers: { "Content-Type": "application/json" },
+                    body: JSON.stringify(data)
+                });
+                if (!response.ok) throw new Error("Failed to add permission");
+                alert("Permission added successfully!");
+                location.reload();
+            } catch (error) {
+                alert("Failed to add permission. Try again.");
+                console.error(error);
+            }
+        });
+
+        // Edit Permission
+        document.querySelectorAll(".edit-permission").forEach(button => {
+            button.addEventListener("click", async function () {
+                const id = button.getAttribute("data-id");
+                const response = await fetch(`${apiBaseUrl}GetPermissionById/${id}`);
+                const permission = await response.json();
+                document.getElementById("editPermissionId").value = permission.id;
+                document.getElementById("editNameAr").value = permission.nameAr;
+            });
+        });
+
+        document.getElementById("submitEditPermission").addEventListener("click", async function () {
+            try {
+                const data = {
+                    Id: document.getElementById("editPermissionId").value,
+                    NameAr: document.getElementById("editNameAr").value
+                };
+                const response = await fetch(`${apiBaseUrl}EditPermission`, {
+                    method: "POST",
+                    headers: { "Content-Type": "application/json" },
+                    body: JSON.stringify(data)
+                });
+                if (!response.ok) throw new Error("Failed to edit permission");
+                alert("Permission updated successfully!");
+                location.reload();
+            } catch (error) {
+                alert("Failed to update permission. Try again.");
+                console.error(error);
+            }
+        });
+
+        // Delete Permission
+        document.querySelectorAll(".delete-permission").forEach(button => {
+            button.addEventListener("click", async function () {
+                if (!confirm("Are you sure you want to delete this permission?")) return;
+                const id = button.getAttribute("data-id");
+                try {
+                    const response = await fetch(`${apiBaseUrl}DeletePermission/${id}`, { method: "POST" });
+                    if (!response.ok) throw new Error("Failed to delete permission");
+                    alert("Permission deleted successfully!");
+                    location.reload();
+                } catch (error) {
+                    alert("Failed to delete permission. Try again.");
+                    console.error(error);
+                }
+            });
+        });
+
+        // Filter Permissions
+        document.getElementById("permissionSearch").addEventListener("keyup", function () {
+            const searchText = this.value.toLowerCase();
+            document.querySelectorAll("#permissionsTable tbody tr").forEach(row => {
+                row.style.display = row.textContent.toLowerCase().includes(searchText) ? "" : "none";
+            });
+        });
+    </script>
+}

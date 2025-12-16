@@ -1,0 +1,443 @@
+﻿@model UserVM
+@{
+    ViewData["Title"] = "Index";
+    Layout = "~/Areas/Admin/Views/Shared/_LayoutEserviceTourism.cshtml";
+}
+
+<!--begin::Content wrapper-->
+<div class="d-flex flex-column flex-column-fluid">
+    <!--begin::Toolbar-->
+    <div id="kt_app_toolbar" class="app-toolbar pt-6 pb-2">
+        <!--begin::Toolbar container-->
+        <div id="kt_app_toolbar_container" class="app-container container-fluid d-flex align-items-stretch">
+            <!--begin::Toolbar wrapper-->
+            <div class="app-toolbar-wrapper d-flex flex-stack flex-wrap gap-4 w-100">
+                <!--begin::Page title-->
+                <div class="page-title d-flex flex-column justify-content-center gap-1 me-3">
+                    <!--begin::Title-->
+                    <h1 class="page-heading d-flex flex-column justify-content-center text-gray-900 fw-bold fs-3 m-0">المستخدمين</h1>
+                    <!--end::Title-->
+                    <!--begin::Breadcrumb-->
+                    <ul class="breadcrumb breadcrumb-separatorless fw-semibold fs-7 my-0">
+                        <!--begin::Item-->
+                        <li class="breadcrumb-item text-muted">
+                            <a href="index.html" class="text-muted text-hover-primary">الرئيسية</a>
+                        </li>
+                        <!--end::Item-->
+                        <!--begin::Item-->
+                        <li class="breadcrumb-item">
+                            <span class="bullet bg-gray-500 w-5px h-2px"></span>
+                        </li>
+                        <!--end::Item-->
+                        <!--begin::Item-->
+                        <li class="breadcrumb-item text-muted">تعديل بيانات مستخدم</li>
+                        <!--end::Item-->
+                    </ul>
+                    <!--end::Breadcrumb-->
+                </div>
+                <!--end::Page title-->
+            </div>
+            <!--end::Toolbar wrapper-->
+        </div>
+        <!--end::Toolbar container-->
+    </div>
+    <!--end::Toolbar-->
+    <!--begin::Content-->
+    <div id="kt_app_content" class="app-content flex-column-fluid">
+        <!--begin::Content container-->
+        <div id="kt_app_content_container" class="app-container container-fluid">
+            <!--begin::Careers - Apply-->
+            <div class="card">
+                <!--begin::Body-->
+                <div class="card-body p-lg-10">
+                    <!--begin::Layout-->
+                    <div class="d-flex flex-column flex-lg-row mb-17">
+                        <!--begin::Content-->
+                        <div class="flex-lg-row-fluid me-0">
+                            <!--begin::Form-->
+                            <form class="form" id="DeleteUserForm" method="post">
+                                <!--begin::Input group-->
+                                <input asp-for="User.SysUserId" type="hidden" id="SysUserId" />
+                                <div class="d-flex flex-column mb-7 fv-row">
+                                    <!--begin::Label-->
+                                    <label class="fs-6 fw-semibold mb-2">
+                                        <span class="required">القطاع</span>
+                                        <span class="ms-1" data-bs-toggle="tooltip" title="القطاع">
+                                            <i class="ki-outline ki-information fs-7"></i>
+                                        </span>
+                                    </label>
+                                    <!--end::Label-->
+                                    <!--begin::Input-->
+                                    <select id="sectorId" asp-for="User.SectorId" aria-label="Select a Country" data-control="select2"
+                                            data-placeholder="إختر القطاع ..."
+                                            class="form-select form-select-solid fw-bold" asp-items="Model.Sectors" onchange="SectorId_OnChange()" required>
+                                        @*                                         <option  disabled selected="selected">--إختر القطاع--</option>
+                                        *@
+                                    </select>
+                                    @*  @foreach (var item in Model.Sectors)
+                                    {
+                                    <p>@item.Value - @item.Text</p>
+                                    } *@
+                                    <!--end::Input-->
+                                </div>
+                                <!--end::Input group-->
+                                <!--begin::Input group-->
+                                <div class="row">
+                                    <div class="col-md-6 mb-7 fv-row">
+                                        <!--begin::Label-->
+                                        <label class="fs-6 fw-semibold mb-2">
+                                            <span class="required">الإدارة</span>
+                                        </label>
+                                        <!--end::Label-->
+                                        <!--begin::Input-->
+                                        <select id="departId" asp-for="User.DepId" data-control="select2"
+                                                data-placeholder="إختر الإدارة ..." onchange="DepartId_OnChange()"
+                                                class="form-select form-select-solid fw-bold" asp-items="Model.Departments" required>
+                                            @*                                             <option  disabled selected="selected">--إختر الإدارة--</option>
+                                            *@
+                                        </select>
+                                        <!--end::Input-->
+                                    </div>
+                                    <!--end::Input group-->
+                                    <!--begin::Input group-->
+                                    <div class="col-md-6 mb-7 fv-row">
+                                        <!--begin::Label-->
+                                        <label class="fs-6 fw-semibold mb-2">
+                                            <span>المراقبة</span>
+                                        </label>
+                                        <!--end::Label-->
+                                        <!--begin::Input-->
+                                        <select id="muraqabaId" asp-for="User.MuraqabaId" data-control="select2"
+                                                data-placeholder="إختر المراقبة ..." onchange="MuraqabaId_OnChange()"
+                                                class="form-select form-select-solid fw-bold" asp-items="Model.Muraqabas">
+                                            @*                                             <option  disabled selected="selected">--إختر المراقبة--</option>
+                                            *@
+                                        </select>
+                                        <!--end::Input-->
+                                    </div>
+                                    <!--end::Input group-->
+                                </div>
+                                <div class="row">
+                                    <!--begin::Input group-->
+                                    <div class="col-md-6 mb-7 fv-row">
+                                        <!--begin::Label-->
+                                        <label class="fs-6 fw-semibold mb-2">
+                                            <span>القسم</span>
+                                        </label>
+                                        <!--end::Label-->
+                                        <!--begin::Input-->
+                                        <select id="qismId" asp-for="User.QismId" asp-items="Model.Qisms" aria-label="Select a Country" data-control="select2"
+                                                data-placeholder="إختر القسم ..."
+                                                class="form-select form-select-solid fw-bold">
+                                            <option disabled selected="selected">--إختر القسم--</option>
+                                        </select>
+                                        <!--end::Input-->
+                                    </div>
+                                    <!--end::Input group-->
+
+                                </div>
+                                <!--begin::Billing toggle-->
+                                <div class="fw-bold fs-3 rotate collapsible mb-7" data-bs-toggle="collapse" href="#kt_modal_add_customer_billing_info" role="button" aria-expanded="false" aria-controls="kt_customer_view_details">
+                                    بيانات الموظف
+                                    <span class="ms-2 rotate-180">
+                                        <i class="ki-outline ki-down fs-3"></i>
+                                    </span>
+                                </div>
+                                <!--end::Billing toggle-->
+                                <!--begin::Billing form-->
+                                <div id="kt_modal_add_customer_billing_info" class="collapse show">
+                                    <!--begin::Input group-->
+                                    <div class="row g-9 mb-7">
+                                        <!--begin::Col-->
+                                        <div class="col-md-6 fv-row">
+                                            <!--begin::Label-->
+                                            <label class="required fs-6 fw-semibold mb-2">الرقم المدني</label>
+                                            <!--end::Label-->
+                                            <!--begin::Input-->
+                                            <input class="form-control form-control-solid" asp-for="User.CivilId" id="civilIdInput" required readonly />
+                                            <!--end::Input-->
+                                        </div>
+                                        <!--end::Col-->
+                                        <!--begin::Col-->
+                                        <div class="col-md-6 fv-row">
+                                            <!--begin::Label-->
+                                            <label class="fs-6 fw-semibold mb-2">الإسم بالكامل</label>
+                                            <!--end::Label-->
+                                            <!--begin::Input readonly-->
+                                            <input type="text" style="direction:rtl" class="form-control form-control-solid" id="fullName" asp-for="User.Name" readonly />
+                                            <!--end::Input-->
+                                        </div>
+                                        <!--end::Col-->
+
+                                    </div>
+                                    <!--end::Input group-->
+                                    <!--begin::Input group-->
+                                    <div class="row g-9 mb-7">
+                                        <!--begin::Col-->
+                                        <div class="col-md-6 fv-row">
+                                            <!--begin::Label-->
+                                            <label class="fs-6 fw-semibold mb-2">رقم الهاتف</label>
+                                            <!--end::Label-->
+                                            <span asp-validation-for="User.Mobile" class="text-danger"></span>
+                                            <!--begin::Input-->
+                                            <input type="number" id="mobile" style="direction:rtl" class="form-control form-control-solid" asp-for="User.Mobile" maxlength="8" />
+                                            <!--end::Input-->
+                                        </div>
+                                        <!--end::Col-->
+                                        <!--begin::Col-->
+                                        <div class="col-md-6 fv-row">
+                                            <!--begin::Label-->
+                                            <label class="fs-6 fw-semibold mb-2">البريد الإلكتروني</label>
+                                            <!--end::Label-->
+                                            <!--begin::Input-->
+                                            <input type="email" class="form-control form-control-solid" id="email" asp-for="User.Email" />
+                                            <!--end::Input-->
+                                        </div>
+                                        <!--end::Col-->
+
+                                    </div>
+                                    <!--end::Input group-->
+                                   
+                                    <!--end::Input group-->
+                                </div>
+                                <!--end::Billing form-->
+                                <h4 class="m-5 p-5">الأدوار</h4>
+                                <div id="RolesContainer">
+                                </div>
+
+                                <h4 class="m-5 p-5">الصلاحيات</h4>
+                                <div id="permissionContainer">
+                                </div>
+
+                                <div class="col-md-6 fv-row">
+                                    <!--begin::Button-->
+                                    <button type="submit" id="kt_modal_add_customer_submit" class="btn btn-primary">
+                                        <span class="indicator-label">حذف  </span>
+                                        <span class="indicator-progress">
+                                            Please wait...
+                                            <span class="spinner-border spinner-border-sm align-middle ms-2"></span>
+                                        </span>
+                                    </button>
+                                    <!--end::Button-->
+                                    <!--begin::Button-->
+                                    <a asp-action="Index" class="btn btn-secondary">عودة </a>
+                                    <!--end::Button-->
+                                </div>
+                            </form>
+                            <!--end::Form-->
+                        </div>
+                        <!--end::Content-->
+                    </div>
+                    <!--end::Layout-->
+                </div>
+                <!--end::Body-->
+            </div>
+            <!--end::Careers - Apply-->
+        </div>
+        <!--end::Content container-->
+    </div>
+    <!--end::Content-->
+</div>
+<!--end::Content wrapper-->
+@section Scripts
+{
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+    <script>
+
+        $(document).ready(function () {
+            var apiBaseUrl = '@ViewBag.ApiBaseUrl';
+
+        // Generic function to fetch hierarchy names
+        function fetchHierarchyName(elementClass, inputId) {
+                var id = $(elementClass).data('id');
+            console.log($(elementClass).data('id'));
+        var url = apiBaseUrl + 'GetHierarchyNameByIdAsync?hierarchyName=' + id;
+
+        if (id) {
+            $.ajax({
+                url: url,
+                type: 'GET',
+                success: function (data) {
+                    console.log("Returned data:", data);
+                        console.log(document.getElementById(inputId).value);
+                    // Assuming data is the expected name
+                    document.getElementById(inputId).value = data; // Set the value of the input field
+                },
+                error: function () {
+                    console.error('Failed to retrieve name.');
+                    document.getElementById(inputId).value = 'خطأ في تحميل الاسم';
+                }
+            });
+                }
+            }
+
+        // Fetch names for various hierarchy inputs using IDs
+        fetchHierarchyName('.sector-name', 'sectorId'); // Set the ID of the input field for sector name
+        fetchHierarchyName('.depart-name', 'departId'); // Set the ID of the input field for department name
+        fetchHierarchyName('.qism-name', 'qismId'); // Set the ID of the input field for Qism name
+        fetchHierarchyName('.muraqaba-name', 'muraqabaId'); // Set the ID of the input field for Muraqaba name
+        });
+    </script>
+        <script>
+            function showLoader() {
+                $('#loader').show(); // Assuming you have a loader element
+                }
+
+            function hideLoader() {
+                $('#loader').hide();
+                }
+
+            $(document).ready(function () {
+                    var apiBaseUrl = '@ViewBag.ApiBaseUrl'; // Get the dynamic base URL
+            document.addEventListener("DOMContentLoaded", function () {
+                fetchSectors();
+                    });
+
+            function fetchSectors() {
+                $.ajax({
+                    url: apiBaseUrl + 'GetSectors',
+                    type: 'GET',
+                    success: function (data) {
+                        var sectorDropdown = $('#sectorId');
+                        sectorDropdown.empty(); // Clear existing options
+
+                        sectorDropdown.append('<option disabled selected="selected">--إختر القطاع--</option>');
+
+                        // Check if data is valid
+                        if (data && Array.isArray(data.$values)) {
+                            $.each(data.$values, function (i, item) {
+                                sectorDropdown.append('<option value="' + item.value + '">' + item.text + '</option>');
+                            });
+                        } else {
+                            console.error("Data format is incorrect or no sectors found");
+                        }
+                    },
+                    error: function (xhr, status, error) {
+                        console.error("Failed to fetch sectors:", error);
+                        $('#sectorId').append('<option value="">Error fetching sectors</option>');
+                    }
+                });
+                    }
+
+            // Handle Sector dropdown change
+            $('#sectorId').change(function () {
+                        var sectorId = $(this).val();
+            $('#departId').empty().append('<option value="">Select Department</option>');
+            $('#muraqabaId').empty().append('<option value="">Select Muraqaba</option>');
+            $('#qismId').empty().append('<option value="">Select Qism</option>');
+            $.ajax({
+                url: apiBaseUrl + 'GetDepartments/' + sectorId,
+            type: 'GET',
+            success: function (data) {
+                $('#departId').empty().append('<option value="">Select Department</option>'); // Clear Department dropdown
+            if (data && Array.isArray(data.$values)) {
+                $.each(data.$values, function (i, item) {
+                    $('#departId').append('<option value="' + item.value + '">' + item.text + '</option>');
+                });
+                                }
+                            },
+            error: function (xhr, status, error) {
+                console.error("Failed to fetch departments:", error);
+            $('#departId').empty().append('<option value="">Error fetching departments</option>');
+                            }
+                        });
+                    });
+
+            // Handle Department dropdown change
+            $('#departId').change(function () {
+                        var departmentId = $(this).val();
+            $.get(apiBaseUrl + 'getMoraqaba/' + departmentId, function (data) {
+                $('#muraqabaId').empty().append('<option value="">Select Moraqaba</option>'); // Clear Moraqaba dropdown
+
+                            if (data.$values && data.$values.length > 0) {
+                $.each(data.$values, function (i, item) {
+                    $('#muraqabaId').append('<option value="' + item.value + '">' + item.text + '</option>');
+                });
+            $('#muraqabaId').show(); // Show if data exists
+                            } else {
+                $('#muraqabaId').hide(); // Hide if no data
+                            }
+                        }).fail(function () {
+                console.error("Failed to fetch moraqaba.");
+            $('#muraqabaId').empty().append('<option value="">Error fetching moraqaba</option>').hide();
+                        });
+                    });
+
+            // Handle Moraqaba dropdown change
+            $('#muraqabaId').change(function () {
+                        var moraqabaId = $(this).val();
+            $.get(apiBaseUrl + 'getQism/' + moraqabaId, function (data) {
+                $('#qismId').empty().append('<option value="">Select Qism</option>'); // Clear Qism dropdown
+
+                            if (data.$values && data.$values.length > 0) {
+                $.each(data.$values, function (i, item) {
+                    $('#qismId').append('<option value="' + item.value + '">' + item.text + '</option>');
+                });
+            $('#qismId').show(); // Show if data exists
+                            } else {
+                $('#qismId').hide(); // Hide if no data
+                            }
+                        }).fail(function () {
+                console.error("Failed to fetch qism.");
+            $('#qismId').empty().append('<option value="">Error fetching qism</option>').hide();
+                        });
+                    });
+
+            let checkboxId = `permission_${id}`;
+            let checkbox = document.getElementById(checkboxId);
+            console.log(checkboxId);
+            console.log(checkbox);
+            if (checkbox) {
+                // Perform actions with the checkbox
+                checkbox.checked = true; // or false, depending on what you want to do
+                    }
+                });
+
+
+
+    </script>
+    <script>
+        $(document).ready(function () {
+            $('#DeleteUserForm').submit(function (e) {
+                e.preventDefault(); // Prevent the default form submission
+
+                // Get the user ID from a hidden field or another part of the form
+                var userId = $("#userId").val();
+                console.log(userId);
+                // Confirm before deletion
+                if (!confirm("Are you sure you want to delete this user?")) {
+                    return;
+                }
+
+                // API Base URL from server-side ViewBag
+                var apiBaseUrl = '@ViewBag.ApiBaseUrl';
+
+                // Delete User
+                $.ajax({
+                    url: apiBaseUrl + 'Delete/',
+                    type: 'POST',
+                    contentType: 'application/json',
+                    data: JSON.stringify({ userId: userId }), // Send userId as JSON
+
+                    success: function (response) {
+                        alert(response.message || "User deleted successfully.");
+
+                        // Redirect to User List Page after deletion
+                        setTimeout(function () {
+                            window.location.href = '@Url.Action("Index", "User", new { area = "Admin" })';
+                        }, 1000); // Small delay to show the message
+                    },
+                    error: function (xhr, status, error) {
+                        console.log(xhr.responseText);
+                        alert("Failed to delete user: " + xhr.responseText);
+                    }
+                });
+            });
+        });
+
+
+
+
+
+    </script>
+}

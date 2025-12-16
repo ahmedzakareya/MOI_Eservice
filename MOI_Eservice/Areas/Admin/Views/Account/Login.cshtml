@@ -1,0 +1,236 @@
+﻿@model MoiEserviceSysUserVM
+
+@{
+    Layout = null;
+}
+
+<!DOCTYPE html>
+<!--
+Author: Keenthemes
+Product Name: Metronic
+Product Version: 8.2.3
+Purchase: https://1.envato.market/EA4JP
+Website: http://www.keenthemes.com
+Contact: support@keenthemes.com
+Follow: www.twitter.com/keenthemes
+Dribbble: www.dribbble.com/keenthemes
+Like: www.facebook.com/keenthemes
+License: For each use you must have a valid license purchased only from above link in order to legally use the theme for your project.
+-->
+<html lang="en" direction="rtl" dir="rtl">
+<!--begin::Head-->
+<head>
+    <base href="../../../" />
+    <title>وزارة الاعلام - نظام التراخيص الإلكترونية</title>
+    <meta charset="utf-8" />
+    <meta name="description" Admin="The most advanced Bootstrap 5 Admin Theme with 40 unique prebuilt layouts on Themeforest trusted by 100,000 beginners and professionals. Multi-demo, Dark Mode, RTL support and complete React, Angular, Vue, Asp.Net Core, Rails, Spring, Blazor, Django, Express.js, Node.js, Flask, Symfony & Laravel versions. Grab your copy now and get life-time updates for free." />
+    <meta name="keywords" Admin="metronic, bootstrap, bootstrap 5, angular, VueJs, React, Asp.Net Core, Rails, Spring, Blazor, Django, Express.js, Node.js, Flask, Symfony & Laravel starter kits, admin themes, web design, figma, web development, free templates, free admin themes, bootstrap theme, bootstrap template, bootstrap dashboard, bootstrap dak mode, bootstrap button, bootstrap datepicker, bootstrap timepicker, fullcalendar, datatables, flaticon" />
+    <meta name="viewport" Admin="width=device-width, initial-scale=1" />
+    <meta property="og:locale" Admin="en_US" />
+    <meta property="og:type" Admin="article" />
+    <meta property="og:title" Admin="وزارة الاعلام - نظام التراخيص الإلكترونية" />
+    <meta property="og:url" Admin="https://keenthemes.com/metronic" />
+    <meta property="og:site_name" Admin="Metronic by Keenthemes" />
+    <link rel="canonical" href="https://preview.keenthemes.com/metronic8" />
+    <link rel="shortcut icon" href="~/Admin/assets/media/logos/stateLogo.png" />
+    <!--begin::Fonts(mandatory for all pages)-->
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Inter:300,400,500,600,700" />
+    <!--end::Fonts-->
+    <!--begin::Global Stylesheets Bundle(mandatory for all pages)-->
+    <link href="~/Admin/assets/plugins/global/plugins.bundle.css" rel="stylesheet" type="text/css" />
+    <link href="~/Admin/assets/css/style.bundle.css" rel="stylesheet" type="text/css" />
+    <link href='https://fonts.googleapis.com/css?family=Cairo' rel='stylesheet'>
+    <style>
+        body {
+            font-family: 'Cairo';
+            font-size: 22px;
+        }
+    </style>
+    <!--end::Global Stylesheets Bundle-->
+    <script>// Frame-busting to prevent site from being loaded within a frame without permission (click-jacking) if (window.top != window.self) { window.top.location.replace(window.self.location.href); }</script>
+</head>
+<!--end::Head-->
+<!--begin::Body-->
+<body id="kt_body" class="app-default" data-kt-app-page-loading-enabled="true" >
+    <!--begin::Theme mode setup on page load-->
+    <script>var defaultThemeMode = "light"; var themeMode; if (document.documentElement) { if (document.documentElement.hasAttribute("data-bs-theme-mode")) { themeMode = document.documentElement.getAttribute("data-bs-theme-mode"); } else { if (localStorage.getItem("data-bs-theme") !== null) { themeMode = localStorage.getItem("data-bs-theme"); } else { themeMode = defaultThemeMode; } } if (themeMode === "system") { themeMode = window.matchMedia("(prefers-color-scheme: dark)").matches ? "dark" : "light"; } document.documentElement.setAttribute("data-bs-theme", themeMode); }</script>
+    <!--end::Theme mode setup on page load-->
+    <!--begin::Page loading(append to body)-->
+    
+    
+    <!--end::Page loading-->
+    <!--begin::Root-->
+    <div class="d-flex flex-column flex-root" id="kt_app_root">
+        <!--begin::Authentication - Sign-in -->
+        <div class="d-flex flex-column flex-lg-row flex-column-fluid">
+            <!--begin::Body-->
+            <div class="d-flex flex-column flex-lg-row-fluid w-lg-50 p-10 order-2 order-lg-1">
+                <!--begin::Form-->
+                <div class="d-flex flex-center flex-column flex-lg-row-fluid">
+                    <!--begin::Wrapper-->
+                    <div class="w-lg-500px p-10">
+                        <!--begin::Form-->
+                        <form id="loginForm" asp-area="Admin" asp-action="Login" asp-controller="Account" enctype="multipart/form-data">
+                            <!--begin::Heading-->
+                            <div class="text-center mb-11">
+                                <!--begin::Title-->
+                                <h1 class="text-gray-900 fw-bolder mb-3">تسجيل الدخول</h1>
+                                <!--end::Title-->
+                                <!--begin::Subtitle-->
+                                <div class="text-gray-500 fw-semibold fs-6">نظام التراخيص وزارة الاعلام - الموظفين</div>
+                                <!--end::Subtitle=-->
+                            </div>
+                            <!--begin::Heading-->
+                            <div class="row g-3 mb-9">
+                                <!--begin::Col-->
+                               
+
+                            </div>
+                            <!--begin::Input group=-->
+                            <div class="fv-row mb-8">
+                                <!--begin::Email-->
+                                @*<input type="text" placeholder="إسم المستخدم" name="email" autocomplete="off" class="form-control bg-transparent" />*@
+                                @Html.TextBoxFor(m => m.Username, new { @class = "form-control bg-transparent", placeholder = "إسم المستخدم" })
+                                <!--end::Email-->
+                            </div>
+                            <!--end::Input group=-->
+                            <div class="fv-row mb-3">
+                                <!--begin::Password-->
+                                @*<input type="password" placeholder="كلمة المرور" name="password" autocomplete="off" class="form-control bg-transparent" />*@
+                                @Html.TextBoxFor(m => m.UserPasswordEncrypted, new { @class = "form-control bg-transparent", placeholder = "كلمة المرور", type = "password" })
+
+                                <!--end::Password-->
+                            </div>
+                            <!--end::Input group=-->
+                            <!--begin::Wrapper-->
+                            
+                            <!--end::Wrapper-->
+                            <!--begin::Submit button-->
+                            <div class="d-grid mb-10">
+                                <button type="submit" id="kt_sign_in_submit" class="btn btn-primary">
+                                    <!--begin::Indicator label-->
+                                    <span class="indicator-label">تسجيل دخول</span>
+                                    <!--end::Indicator label-->
+                                    <!--begin::Indicator progress-->
+                                    <span class="indicator-progress">
+                                        Please wait...
+                                        <span class="spinner-border spinner-border-sm align-middle ms-2"></span>
+                                    </span>
+                                    <!--end::Indicator progress-->
+                                </button>
+
+                            </div>
+                            <!--end::Submit button-->
+                            <!--begin::Sign up-->
+
+                            <!--end::Sign up-->
+                        </form>
+                        <!--end::Form-->
+                    </div>
+                    <!--end::Wrapper-->
+                </div>
+                <!--end::Form-->
+                <!--begin::Footer-->
+
+                <!--end::Footer-->
+            </div>
+            <!--end::Body-->
+            <!--begin::Aside-->
+            <div class="d-flex flex-lg-row-fluid w-lg-50 bgi-size-cover bgi-position-center order-1 order-lg-2" style="background-image: url(../Admin/assets/media/misc/auth-bg.png)">
+                <!--begin::Admin-->
+                <div class="d-flex flex-column flex-center py-7 py-lg-15 px-5 px-md-15 w-100">
+                    <!--begin::Logo-->
+                    <a href="index.html" class="mb-0 mb-lg-12">
+                        <img alt="Logo" src="~/Admin/assets/media/logos/MOI_Logo.png" class="h-60px h-lg-75px" />
+                    </a>
+                    <!--end::Logo-->
+                    <!--begin::Image-->
+                    <img class="d-none d-lg-block mx-auto w-275px w-md-50 w-xl-500px mb-10 mb-lg-20" src="~/Admin/assets/media/misc/auth-screens.png" alt="" />
+                    <!--end::Image-->
+                    <!--begin::Title-->
+                    <h1 class="d-none d-lg-block text-white fs-2qx fw-bolder text-center mb-7">نظام التراخيص الإلكترونية </h1>
+                    <!--end::Title-->
+                    <!--begin::Text-->
+                   
+                    <!--end::Text-->
+                </div>
+                <!--end::Admin-->
+            </div>
+            <!--end::Aside-->
+        </div>
+        <!--end::Authentication - Sign-in-->
+    </div>
+    <!--end::Root-->
+    <!--begin::Javascript-->
+    <script>var hostUrl = "~/Admin/assets/";</script>
+    <!--begin::Global Javascript Bundle(mandatory for all pages)-->
+    <script src="~/Admin/assets/plugins/global/plugins.bundle.js"></script>
+    <script src="~/Admin/assets/js/scripts.bundle.js"></script>
+    <!--end::Global Javascript Bundle-->
+    <!--begin::Custom Javascript(used for this page only)-->
+    <script src="~/Admin/assets/js/custom/authentication/sign-in/general.js"></script>
+    <!--end::Custom Javascript-->
+    <!--end::Javascript-->
+</body>
+<!--end::Body-->
+</html>
+
+<script>
+    $(document).ready(function () {
+        $('#loginForm').submit(function (e) {
+            e.preventDefault(); // prevent default form submission
+           
+
+            var user = $("#Username").val();
+            var password = $("#UserPasswordEncrypted").val();
+           
+            if (user =='') {
+                $("#Username").css({
+                    "border": "1px solid red",
+                    "background": "#FFCECE"
+                });
+               
+            } else if (password == '') {
+                $("#UserPasswordEncrypted").css({
+                    "border": "1px solid red",
+                    "background": "#FFCECE"
+                });
+            } else {
+                var formData = $(this).serialize(); // serialize form data
+
+                $.post({
+                    url: 'Admin/Account/Login', // specify the URL of your Login action
+                    data: formData, // send form data
+                    success: function (response) {
+                        if (response.success) {
+                            // Login success
+                            window.location.href = response.redirectTo;
+                         
+                        } else {
+                          
+                            Swal.fire({
+                                icon: "error",
+                                title: "خطأ...",
+                                text: response.responseText,
+                                confirmButtonText: "تم"
+
+                            })
+                        }
+                    },
+                    error: function (xhr, status, error) {
+                        // Handle error
+                        console.error(xhr.responseText);
+                    }
+                });
+            }
+
+           
+        });
+    });
+
+
+
+
+</script>
+
+

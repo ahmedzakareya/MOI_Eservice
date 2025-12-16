@@ -1,0 +1,105 @@
+﻿@model List<SystemOptionVM>
+
+@{
+    var logo = Model.FirstOrDefault(x => x.NameEnglish == "SiteLogo")?.Value ?? "/assets/images/MOI_Logo_W.png";
+    var socialLinks = Model.Where(x => x.CategoryNameEn == "SocialLinks").ToList();
+    var aboutLinks = Model.Where(x => x.Code == "About").ToList();
+    var serviceLinks = Model.Where(x => x.Code == "Services").ToList();
+    var contactInfo = Model.Where(x => new[] { "PhoneNumber", "Email", "Address" }.Contains(x.Code)).ToList();
+    var copyright = Model.FirstOrDefault(x => x.Code == "Copyright")?.Value;
+    var NavLinksReset = Model.Where(x => x.CategoryNameEn == "NavLinksReset").FirstOrDefault();
+    var NavLinksRegister = Model.Where(x => x.CategoryNameEn == "NavLinksRegister").FirstOrDefault();
+    var NavLinksLogin = Model.Where(x => x.CategoryNameEn == "NavLinksLogin").FirstOrDefault();
+    var NavLinksContact = Model.Where(x => x.CategoryNameEn == "NavLinksContact").FirstOrDefault();
+    var NavLinksHome = Model.Where(x => x.CategoryNameEn == "NavLinksHome").FirstOrDefault();
+}
+
+<footer class="footer-area pt-5">
+    <div class="container">
+        <div class="row justify-content-center">
+            <!-- Logo & Social -->
+            <div class="col-lg-3 col-sm-6">
+                <div class="single-footer-widget">
+                    <div class="widget-logo">
+                        <a href="@NavLinksHome">
+                            <img src="@logo" width="175" alt="logo">
+                        </a>
+                    </div>
+                    <ul class="widget-social-links">
+                        <li><span>تابعنا:</span></li>
+                        @foreach (var link in socialLinks)
+                        {
+                            <li>
+                                <a href="@link.Value" target="_blank">
+                                    <i class="@link.DefaultValue"></i>
+                                </a>
+                            </li>
+                        }
+                    </ul>
+                </div>
+            </div>
+
+            <!-- About -->
+            <div class="col-lg-3 col-sm-6">
+                <div class="single-footer-widget ps-5">
+                    <h3>عن الوزارة</h3>
+                    <ul class="quick-links">
+                        @foreach (var link in aboutLinks)
+                        {
+                            <li><a href="@link.Value" target="_blank">@link.NameArabic</a></li>
+                        }
+                    </ul>
+                </div>
+            </div>
+
+            <!-- Services -->
+            <div class="col-lg-3 col-sm-6">
+                <div class="single-footer-widget ps-5">
+                    <h3>خدمات أخرى</h3>
+                    <ul class="quick-links">
+                        @foreach (var link in serviceLinks)
+                        {
+                            <li><a href="@link.Value" target="_blank">@link.NameArabic</a></li>
+                        }
+                    </ul>
+                </div>
+            </div>
+
+            <!-- Contact Info -->
+            <div class="col-lg-3 col-sm-6">
+                <div class="single-footer-widget">
+                    <h3>اتصل بنا</h3>
+                    <ul class="widget-info">
+                        @foreach (var item in contactInfo)
+                        {
+                            if (item.Code == "Address")
+                            {
+                                <li><i class="ri-map-pin-line"></i> @item.Value</li>
+                            }
+                             if (item.Code == "PhoneNumber")
+                            {
+                                <li>
+                                    <i class="ri-phone-line"></i>
+                                    <a href="tel:@item.Value" style="direction: ltr;">@item.Value</a>
+                                </li>
+                            }
+                            if (item.Code == "Email")
+                            {
+                                <li>
+                                    <i class="ri-mail-line"></i>
+                                    <a href="mailto:@item.Value">@item.Value</a>
+                                </li>
+                            }
+                        }
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Copyright -->
+    @await Component.InvokeAsync("Copyright")
+
+<div class="go-top">
+    <i class="ri-arrow-up-line"></i>
+</div>

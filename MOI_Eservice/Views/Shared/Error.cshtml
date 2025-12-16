@@ -1,0 +1,67 @@
+﻿@model System.Web.Mvc.HandleErrorInfo
+
+@{
+    ViewBag.Title = "خطأ فني";
+    Layout = "~/Views/Shared/_LoginLayout.cshtml";
+    string RootSub = System.Configuration.ConfigurationManager.AppSettings["rootCheck"].ToString();
+    string year = DateTime.Today.Year.ToString();
+    string month = DateTime.Today.Month.ToString();
+    string day = DateTime.Today.Day.ToString();
+
+    string url = RootSub + "/ExceptionLog/" + year + "/" + month + "/" + day + "/" + @TempData["Ex"].ToString();
+}
+<style>
+    .footer-area {
+        position: fixed;
+        bottom: 0;
+        width: 100%;
+    }
+</style>
+
+
+<div class="error-area ptb-100">
+    <div class="container">
+        <div class="error-content">
+            @*<img src="~/Content/assets/images/error.png" alt="image">*@
+            @*<img src="~/Content/assets/images/404PPage.gif" style="width: 500px;" />*@
+            <img src="~/assets/images/404.gif" style="width: 400px; margin-top: -100px; margin-bottom: -100px;" />
+            <h2 class="text-danger mt-4">خطأ فني</h2>
+            <p class="text-danger mt-5">حدث خطأ أثناء معالجة طلبك.</p>
+            <br />
+            @if (TempData["Ex"] != null)
+            {
+                <p class="text-danger">@TempData["Ex"].ToString()</p>
+                <br /><a href="@url" target="_blank" id="LogFile" ><p class="text-danger">@TempData["Ex"].ToString()</p></a><br />
+            }
+
+            <a href="@Url.Action("Index","Home")" class="default-btn">العودة للصفحة الرئيسية <i class="flaticon-list-1"></i></a>
+        </div>
+    </div>
+</div>
+
+@*<script type="text/javascript">
+    $(document).ready(function () {
+
+        // Return today's date and time
+        var currentTime = new Date()
+
+        // returns the month (from 0 to 11)
+        var month = currentTime.getMonth() + 1
+
+        // returns the day of the month (from 1 to 31)
+        var day = currentTime.getDate()
+
+        // returns the year (four digits)
+        var year = currentTime.getFullYear()
+
+        // write output MM/dd/yyyy
+        //document.write(year + "/" + month + "/" + day)
+
+        var filePath = @RootSub + "ExceptionLog/" + year + "/" + month + "/" + day + "/" + @TempData["Ex"].ToString();
+
+        document.write(filePath);
+
+        $("#LogFile").attr("href", filePath)
+
+    });
+</script>*@

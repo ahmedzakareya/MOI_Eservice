@@ -1,0 +1,418 @@
+﻿@model RoleVMV
+
+@{
+    ViewBag.Title = "Edit Role";
+    Layout = "~/Areas/Admin/Views/Shared/_LayoutEserviceTourism.cshtml";
+}
+
+<div class="modal-dialog-centered mw-750px">
+    <div class="modal-content">
+        <div class="modal-body scroll-y mx-lg-5 my-7">
+            <form id="EditRoleForm" class="form">
+                <!-- Role Name -->
+                <div class="fv-row mb-10">
+                    <label class="fs-5 fw-bold form-label mb-2">
+                        <span class="required">Role Name</span>
+                    </label>
+                    <input type="text" id="roleName" class="form-control form-control-solid" value="@Model.RoleName" placeholder="Enter a role name" required />
+                </div>
+
+                <!-- Modules, Menu Items, and Permissions -->
+                <div id="modulesContainer" class="fv-row">
+                    <!-- Dynamically populated modules with menu items and permissions -->
+                </div>
+
+                <!-- Form Actions -->
+                <div class="text-center pt-15">
+                    <button type="reset" class="btn btn-light me-3" data-kt-roles-modal-action="cancel">Discard</button>
+                    <button type="button" class="btn btn-primary" id="submitRole">
+                        <span class="indicator-label">Submit</span>
+                        <span class="indicator-progress">
+                            Please wait...
+                            <span class="spinner-border spinner-border-sm align-middle ms-2"></span>
+                        </span>
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    <script>
+        const apiBaseUrl = '@ViewBag.ApiBaseUrl';
+        let checkboxState = {}; // State to track checkboxes
+
+        document.addEventListener("change", function (event) {
+            if (event.target.name === "permissions" && event.target.type === "checkbox") {
+                const menuItemId = event.target.getAttribute("data-menu-item-id");
+                const permissionId = event.target.getAttribute("data-permission-id");
+                const moduleId = event.target.getAttribute("data-module-id");
+
+                const key = `${menuItemId}_${permissionId}_${moduleId}`;
+
+                if (event.target.checked) {
+                    checkboxState[key] = {
+                        MenuItemId: menuItemId,
+                        PermissionId: permissionId,
+                        ModuleId: moduleId
+                    };
+                } else {
+                    delete checkboxState[key];
+                }
+
+                console.log("Updated checkboxState:", checkboxState);
+            }
+        });
+
+        // async function loadRoleDetails() {
+        //     const roleId = '@Model.RoleId';
+        //     try {
+        //         const response = await fetch(`${apiBaseUrl}GetRoleById?id=${roleId}`);
+        //         if (!response.ok) throw new Error("Failed to fetch role details");
+
+        //         const roleDetails = await response.json();
+        //         console.log("Fetched role details:", roleDetails);
+
+        //         renderModulesWithMenuItemsAndPermissions(roleDetails.modules.$values, roleDetails.userVMs);
+        //     } catch (error) {
+        //         console.error("Error loading role details:", error);
+        //     }
+        // }
+        // async function loadModulesAndPermissions(roleId) {
+        //     try {
+        //         console.log("Fetching all modules, menu items, and permissions...");
+        //         const allDataResponse = await fetch(`${apiBaseUrl}GetModulesWithMenuItemsAndPermission`);
+        //         if (!allDataResponse.ok) throw new Error("Failed to fetch modules and permissions");
+
+        //         const allData = await allDataResponse.json();
+        //         const allModules = allData.modules.$values;
+
+        //         console.log("Fetched all modules and permissions:", allModules);
+
+        //         console.log(`Fetching role details for role ID: ${roleId}...`);
+        //         const roleResponse = await fetch(`${apiBaseUrl}GetRoleById?id=${roleId}`);
+        //         if (!roleResponse.ok) throw new Error("Failed to fetch role details");
+
+        //         const roleDetails = await roleResponse.json();
+        //         const selectedPermissions = new Set(
+        //             roleDetails.modules.$values.flatMap(module =>
+        //                 module.menuItems.$values.flatMap(menuItem =>
+        //                     menuItem.permissions.$values.filter(permission => permission.selected).map(permission => permission.id)
+        //                 )
+        //             )
+        //         );
+
+        //         console.log("Fetched role details with selected permissions:", roleDetails);
+
+        //         renderModulesWithMenuItemsAndPermissions(allModules, selectedPermissions);
+        //     } catch (error) {
+        //         console.error("Error loading modules and permissions:", error);
+        //     }
+        // }
+
+
+        // function renderModulesWithMenuItemsAndPermissions(modules, users) {
+        //     const container = document.getElementById("modulesContainer");
+        //     container.innerHTML = ""; // Clear existing content
+
+        //     if (Array.isArray(modules)) {
+        //         modules.forEach(module => {
+        //             const moduleDiv = document.createElement("div");
+        //             moduleDiv.classList.add("module-section", "mb-5");
+        //             moduleDiv.innerHTML = `
+        //                 <div class="module-header mb-3">
+        //                     <strong>${module.name}</strong>
+        //                 </div>
+        //             `;
+        //             container.appendChild(moduleDiv);
+
+        //             const table = document.createElement("table");
+        //             table.classList.add("table", "table-bordered", "mt-3");
+        //             table.innerHTML = `
+        //                 <thead>
+        //                     <tr>
+        //                         <th>Menu Item</th>
+        //                         <th>Permissions</th>
+        //                     </tr>
+        //                 </thead>
+        //                 <tbody></tbody>
+        //             `;
+        //             moduleDiv.appendChild(table);
+
+        //             const tbody = table.querySelector("tbody");
+
+        //             module.menuItems.$values.forEach(menuItem => {
+        //                 const row = document.createElement("tr");
+
+        //                 const menuItemCell = document.createElement("td");
+        //                 menuItemCell.textContent = menuItem.name;
+        //                 row.appendChild(menuItemCell);
+
+        //                 const permissionsCell = document.createElement("td");
+        //                 permissionsCell.classList.add("permissions-cell");
+
+        //                 menuItem.permissions.$values.forEach(permission => {
+        //                     const permissionCheckbox = document.createElement("div");
+        //                     permissionCheckbox.classList.add("form-check", "form-check-inline");
+        //                     permissionCheckbox.innerHTML = `
+        //                         <input type="checkbox" class="form-check-input" name="permissions"
+        //                             data-menu-item-id="${menuItem.id}"
+        //                             data-permission-id="${permission.id}"
+        //                             data-module-id="${module.Id}"
+        //                             value="${menuItem.id}_${permission.id}"
+        //                             ${permission.selected ? "checked" : ""}>
+        //                         <label class="form-check-label">${permission.nameAr}</label>
+        //                     `;
+        //                     permissionsCell.appendChild(permissionCheckbox);
+        //                 });
+
+        //                 row.appendChild(permissionsCell);
+        //                 tbody.appendChild(row);
+        //             });
+        //         });
+        //     }
+        // }
+
+        // async function submitRole() {
+        //     const roleName = document.getElementById("roleName").value.trim();
+
+        //     if (!roleName) {
+        //         alert("Role Name is required!");
+        //         return;
+        //     }
+
+        //     const checkedCheckboxes = document.querySelectorAll("input[name='permissions']:checked");
+
+        //     if (checkedCheckboxes.length === 0) {
+        //         alert("Please select at least one permission.");
+        //         return;
+        //     }
+
+        //     const CombinedAssignments = Array.from(checkedCheckboxes).map(input => ({
+        //         MenuItemId: input.getAttribute("data-menu-item-id"),
+        //         PermissionId: input.getAttribute("data-permission-id"),
+        //         ModuleId: input.getAttribute("data-module-id")
+        //     }));
+
+        //     const formData = {
+        //         Id: '@Model.RoleId',
+        //         Name: roleName,
+        //         CombinedAssignments: CombinedAssignments
+        //     };
+
+        //     try {
+        //         const response = await fetch(`${apiBaseUrl}UpdateRoleWithPermissions`, {
+        //             method: "POST",
+        //             headers: { "Content-Type": "application/json" },
+        //             body: JSON.stringify(formData)
+        //         });
+
+        //         if (!response.ok) throw new Error("Failed to update role");
+
+        //         const result = await response.json();
+        //         alert(result.message || "Role updated successfully!");
+        //         location.reload();
+        //     } catch (error) {
+        //         console.error("Error updating role:", error);
+        //         alert("Failed to update role. Please try again.");
+        //     }
+        // }
+
+        // document.getElementById("submitRole").addEventListener("click", submitRole);
+
+        // // document.addEventListener("DOMContentLoaded", loadRoleDetails);
+        // document.addEventListener("DOMContentLoaded", function () {
+        //     const roleId = '@Model.RoleId';
+        //     loadModulesAndPermissions(roleId); // Pass the Role ID to load data
+        // });
+
+
+        async function loadModulesAndPermissions(roleId) {
+            try {
+                console.log("Fetching all modules, menu items, and permissions...");
+                const allDataResponse = await fetch(`${apiBaseUrl}GetModulesWithMenuItemsAndPermission`);
+                if (!allDataResponse.ok) throw new Error("Failed to fetch modules and permissions");
+
+                const allData = await allDataResponse.json();
+                const allModules = allData.modules.$values;
+
+                console.log("Fetched all modules and permissions:", allModules);
+                console.log("Fetched all :", allData);
+                console.log(`Fetching role details for role ID: ${roleId}...`);
+                const roleResponse = await fetch(`${apiBaseUrl}GetRoleById?id=${roleId}`);
+                if (!roleResponse.ok) throw new Error("Failed to fetch role details");
+
+                const roleDetails = await roleResponse.json();
+                console.log("Modules:", roleDetails.modules.$values);
+
+                roleDetails.modules.$values.forEach(module => {
+                    console.log("Menu Items in Module:", module.menuItems.$values);
+                    module.menuItems.$values.forEach(menuItem => {
+                        console.log("Permissions in MenuItem:", menuItem.permissions.$values);
+                    });
+                });
+                // Create a set of selected permissions by moduleId, menuItemId, and permissionId
+                const selectedPermissions = new Set(
+                    roleDetails.modules.$values.flatMap(module =>
+                        module.menuItems.$values.flatMap(menuItem =>
+                            menuItem.permissions.$values
+                                .filter(permission => permission.selected) // Only include selected permissions
+                                .map(permission => `${module.id}_${menuItem.id}_${permission.id}`) // Unique key
+                        )
+                    )
+                );
+
+                // const selectedPermissions = new Set(
+                //     roleDetails.modules.$values.flatMap(module =>
+                //         module.menuItems.$values.flatMap(menuItem =>
+                //             menuItem.permissions.$values // Check permissions for each menu item
+                //                 .filter(permission => permission.selected) // Only selected permissions
+                //                 .map(permission => permission.id) // Map to IDs
+                //         )
+                //     )
+                // );
+               
+
+                console.log("Selected Permissions:", Array.from(selectedPermissions)); // Log all selected permissions
+                // console.log("Selected Permissions:", Array.from(selectedPermissionsIds)); // Log all selected permissions
+
+                console.log(selectedPermissions);
+                // console.log(selectedPermissionsIds);
+
+                console.log("Fetched role details with selected permissions:", roleDetails);
+
+                // Pass both allModules and selectedPermissions to the rendering function
+                renderModulesWithMenuItemsAndPermissions(allModules, selectedPermissions, allData);
+            } catch (error) {
+                console.error("Error loading modules and permissions:", error);
+            }
+        }
+
+        function renderModulesWithMenuItemsAndPermissions(modules, selectedPermissions, allData) {
+            const container = document.getElementById("modulesContainer");
+            container.innerHTML = ""; // Clear existing content
+
+            if (Array.isArray(modules)) {
+                modules.forEach(module => {
+                    const moduleDiv = document.createElement("div");
+                    moduleDiv.classList.add("module-section", "mb-5");
+                    moduleDiv.innerHTML = `
+                        <div class="module-header mb-3">
+                            <strong>${module.name}</strong>
+                        </div>
+                    `;
+                    container.appendChild(moduleDiv);
+
+                    const table = document.createElement("table");
+                    table.classList.add("table", "table-bordered", "mt-3");
+                    table.innerHTML = `
+                        <thead>
+                            <tr>
+                                <th>Menu Item</th>
+                                <th>Permissions</th>
+                            </tr>
+                        </thead>
+                        <tbody></tbody>
+                    `;
+                    moduleDiv.appendChild(table);
+
+                    const tbody = table.querySelector("tbody");
+
+                    module.menuItems.$values.forEach(menuItem => {
+                        const row = document.createElement("tr");
+
+                        const menuItemCell = document.createElement("td");
+                        menuItemCell.textContent = menuItem.name;
+                        row.appendChild(menuItemCell);
+
+                        const permissionsCell = document.createElement("td");
+                        permissionsCell.classList.add("permissions-cell");
+
+                        allData.permissions.$values.forEach(permission => {
+                            // Construct the key for this specific context
+                            const permissionKey = `${module.id}_${menuItem.id}_${permission.id}`;
+                            const isSelected = selectedPermissions.has(permissionKey); // Check if permission is selected
+
+                            console.log(`Checking permission: ${permissionKey}, Selected: ${isSelected}`);
+
+                            const permissionCheckbox = document.createElement("div");
+                            permissionCheckbox.classList.add("form-check", "form-check-inline");
+                            permissionCheckbox.innerHTML = `
+                                <input type="checkbox" class="form-check-input" name="permissions"
+                                    data-menu-item-id="${menuItem.id}"
+                                    data-permission-id="${permission.id}"
+                                    data-module-id="${module.id}"
+                                    value="${menuItem.id}_${permission.id}"
+                                    ${isSelected ? "checked" : ""}>
+                                <label class="form-check-label">${permission.nameAr}</label>
+                            `;
+                            permissionsCell.appendChild(permissionCheckbox);
+                        });
+
+                        row.appendChild(permissionsCell);
+                        tbody.appendChild(row);
+                    });
+                });
+            }
+        }
+
+
+        async function submitRole() {
+            const roleName = document.getElementById("roleName").value.trim();
+
+            if (!roleName) {
+                alert("Role Name is required!");
+                return;
+            }
+
+            const checkedCheckboxes = document.querySelectorAll("input[name='permissions']:checked");
+
+            if (checkedCheckboxes.length === 0) {
+                alert("Please select at least one permission.");
+                return;
+            }
+
+            const CombinedAssignments = Array.from(checkedCheckboxes).map(input => ({
+                MenuItemId: input.getAttribute("data-menu-item-id"),
+                PermissionId: input.getAttribute("data-permission-id"),
+                ModuleId: input.getAttribute("data-module-id")
+            }));
+
+
+            const formData = {
+                RoleId: @Model.RoleId, // Ensure you have the correct role ID
+                RoleName: roleName.trim(), // Ensure roleName is not empty or malformed
+                CombinedAssignments: CombinedAssignments
+            };
+            console.log("Payload to be sent:", JSON.stringify(formData, null, 2));
+
+           
+
+            try {
+                const response = await fetch(`${apiBaseUrl}UpdateRoleWithPermissions`, {
+                    method: "POST",
+                    headers: { "Content-Type": "application/json" },
+                    body: JSON.stringify(formData)
+                });
+
+                if (!response.ok) throw new Error("Failed to update role");
+
+                const result = await response.json();
+                alert(result.message || "Role updated successfully!");
+                location.reload();
+            } catch (error) {
+                console.error("Error updating role:", error);
+                alert("Failed to update role. Please try again.");
+            }
+        }
+
+        document.getElementById("submitRole").addEventListener("click", submitRole);
+
+        document.addEventListener("DOMContentLoaded", function () {
+            const roleId = '@Model.RoleId';
+            loadModulesAndPermissions(roleId); // Pass the Role ID to load data
+        });
+
+    </script>
+}

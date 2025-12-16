@@ -1,0 +1,2403 @@
+﻿@model RequestDetailsVM
+
+@{
+    ViewBag.Title = "RequestDetails";
+    Layout = "~/Areas/Admin/Views/Shared/_LayoutEserviceTourism.cshtml";
+    // var LoggedInUser = ViewBag.LoggedInUser;
+    // dynamic userData = JsonSerializer.Deserialize<dynamic>(LoggedInUser);
+    // int serviceId = userData.GetProperty("ServiceId").GetInt32();
+    string _baseUrl;
+
+    var user = User.Identity.IsAuthenticated ? User.Identity.Name : "Guest";
+
+}
+<style>
+    button.disappear[disabled] {
+        background-color: #ddd;
+        color: #999;
+        cursor: not-allowed;
+    }
+
+    button.disappearrefuse[disabled] {
+        background-color: #ddd;
+        color: #999;
+        cursor: not-allowed;
+    }
+
+</style>
+
+<!--begin::Content wrapper-->
+<div class="d-flex flex-column flex-column-fluid">
+    <!--begin::Toolbar-->
+    <div id="kt_app_toolbar" class="app-toolbar pt-6 pb-2">
+        <!--begin::Toolbar container-->
+        <div id="kt_app_toolbar_container" class="app-container container-fluid d-flex align-items-stretch">
+            <!--begin::Toolbar wrapper-->
+            <div class="app-toolbar-wrapper d-flex flex-stack flex-wrap gap-4 w-100">
+                <!--begin::Page title-->
+                <div class="page-title d-flex flex-column justify-content-center gap-1 me-3">
+                    <!--begin::Title-->
+                    <h1 class="page-heading d-flex flex-column justify-content-center text-gray-900 fw-bold fs-3 m-0">بيانات الطلب</h1>
+                    <!--end::Title-->
+                    <!--begin::Breadcrumb-->
+                    <ul class="breadcrumb breadcrumb-separatorless fw-semibold fs-7 my-0">
+                        <!--begin::Item-->
+                        <li class="breadcrumb-item text-muted">
+                            <a href="/Index" class="text-muted text-hover-primary">الرئيسية</a>
+                        </li>
+                        <!--end::Item-->
+                        <!--begin::Item-->
+                        <li class="breadcrumb-item">
+                            <span class="bullet bg-gray-500 w-5px h-2px"></span>
+                        </li>
+                        <li class="breadcrumb-item text-muted">
+                            <a href="Admin/Tourism/AllRequest" class="text-muted text-hover-primary">قائمة الطلبات</a>
+                        </li>
+                        <!--end::Item-->
+                        <!--begin::Item-->
+                        <li class="breadcrumb-item">
+                            <span class="bullet bg-gray-500 w-5px h-2px"></span>
+                        </li>
+                        <!--end::Item-->
+                        <!--begin::Item-->
+                        <li class="breadcrumb-item text-muted">بيانات الطلب</li>
+                        <!--end::Item-->
+                    </ul>
+                    <!--end::Breadcrumb-->
+                </div>
+                <!--end::Page title-->
+
+            </div>
+            <!--end::Toolbar wrapper-->
+        </div>
+        <!--end::Toolbar container-->
+    </div>
+    <!--end::Toolbar-->
+    <!--begin::Content-->
+    <form id="loginForm" asp-area="Admin" asp-controller="Home" method="post" asp-action="RequestDetails" enctype="multipart/form-data">
+        <div id="kt_app_content" class="app-content flex-column-fluid">
+            <!--begin::Content container-->
+            <div id="kt_app_content_container" class="app-container container-fluid">
+                <!--begin::Layout-->
+                <div class=" flex-lg-row">
+                    <!--begin::Sidebar-->
+                    <div class="flex-column flex-lg-row-auto  mb-10">
+                        <!--begin::Card-->
+                        <div class="card mb-5 mb-xl-8">
+                            <!--begin::Card body-->
+                            <div class="card-body">
+                                <!--begin::Summary-->
+                                <!--begin::User Info-->
+                                <div class="d-flex flex-center flex-column py-5">
+
+                                    <!--begin::Name-->
+                                    <a href="#" class="fs-3 text-gray-800 text-hover-primary fw-bold mb-3">بيانات الطلب الأساسية</a>
+                                    <!--end::Name-->
+                                    <!--begin::Position-->
+
+                                    <div class="mb-9">
+
+                                        @{
+                                            string statusColorClass = string.Empty;
+                                            switch (Model.RequestDVM?.RequestStatusId)
+                                            {
+                                                case 1:
+                                                    statusColorClass = "badge badge-lg badge-light-primary d-inline";
+                                                    break;
+                                                case 2:
+                                                    statusColorClass = "badge badge-lg badge-light-info d-inline";
+                                                    break;
+                                                case 4:
+                                                    statusColorClass = "badge badge-lg badge-light-warning d-inline";
+                                                    break;
+                                                case 3:
+                                                    statusColorClass = "badge badge-lg badge-info d-inline";
+                                                    break;
+                                                case 5:
+                                                    statusColorClass = "badge badge-lg badge-light-info d-inline";
+                                                    break;
+                                                case 6:
+                                                    statusColorClass = "badge badge-lg badge-light-success d-inline";
+                                                    break;
+                                                case 7:
+                                                    statusColorClass = "badge badge-lg badge-light-success d-inline";
+                                                    break;
+                                                case 8:
+                                                    statusColorClass = "badge badge-lg badge-light-danger d-inline";
+                                                    break;
+                                                case 12:
+                                                    statusColorClass = "badge badge-lg badge-light-warning d-inline";
+                                                    break;
+                                                case 13:
+                                                    statusColorClass = "badge badge-lg badge-light-danger d-inline";
+                                                    break;
+                                                default:
+                                                    statusColorClass = "badge badge-lg badge-light-secondary d-inline"; // Default case, if needed
+                                                    break;
+                                            }
+                                        }
+                                        <div id="RequestStatusMain" class="@statusColorClass">
+                                            @Model.RequestDVM?.ReqStatusName
+                                        </div>
+
+                                        <!--begin::Badge-->
+                                        <!--begin::Badge-->
+                                    </div>
+                                    <!--end::Position-->
+                                    <!--begin::Info-->
+                                    <!--begin::Info heading-->
+                                    <div class="fw-bolder  mb-3   badge  py-3 px-4 fs-7  badge-light-danger">
+                                        @Model.RequestDVM?.Reqno
+                                        <span class="ms-2" ddata-bs-toggle="popover" data-bs-trigger="hover" data-bs-html="true" data-bs-content="Number of support tickets assigned, closed and pending this week.">
+                                            <i class="ki-outline ki-information fs-7"></i>
+                                        </span>
+                                    </div>
+
+                                </div>
+                                <!--end::User Info-->
+                                <!--end::Summary-->
+                                <!--begin::Details toggle-->
+                                <div class="d-flex flex-stack fs-4 py-3">
+                                    <div class="fw-bold rotate collapsible" data-bs-toggle="collapse" href="#kt_user_view_details" role="button" aria-expanded="false" aria-controls="kt_user_view_details">
+                                        التفاصيل
+                                        <span class="ms-2 rotate-180">
+                                            <i class="ki-outline ki-down fs-3"></i>
+                                        </span>
+                                    </div>
+
+                                </div>
+                                <!--end::Details toggle-->
+                                <div class="separator"></div>
+                                <!--begin::Details content-->
+                                <div id="kt_user_view_details" class="collapse show">
+                                    <div class="pb-5 fs-6">
+                                        <!--begin::Details item-->
+                                        <div class="fw-bold mt-5">رقم الطلب</div>
+                                        <div class="text-gray-600 mt-1">@Model.RequestDVM?.Reqno</div>
+                                        <!--begin::Details item-->
+                                        <!--begin::Details item-->
+                                        <div class="fw-bold mt-5">تاريخ الطلب</div>
+                                        <div class="text-gray-600 mt-1">
+                                            <a href="#" class="text-gray-600 text-hover-primary">
+
+                                                @Model.RequestDVM?.Licreqtime.Value.ToString("dd - MM - yyyy")
+                                            </a>
+                                        </div>
+                                        <!--begin::Details item-->
+                                        <!--begin::Details item-->
+                                        <div class="fw-bold mt-5">نوع الطلب</div>
+                                        <div class="text-gray-600 mt-1">@Model.RequestDVM?.ReqTypeName</div>
+                                        <!--begin::Details item-->
+                                        <!--begin::Details item-->
+                                        <div class="fw-bold mt-5">حالة الطلب</div>
+                                        <div class="text-gray-600 mt-1" id="statusname3">@Model.RequestDVM?.ReqStatusName</div>
+                                        <!--begin::Details item-->
+                                        <!--begin::Details item-->
+                                        <div class="fw-bold mt-5">الرسوم المستحقة</div>
+                                        <div class="badge  py-3 px-4 fs-7  badge-light-danger mt-1">@Model.RequestDVM?.Licamount</div>
+                                        <!--begin::Details item-->
+                                        <!--begin::Details item-->
+
+
+                                    </div>
+                                    <!--begin::Notice-->
+                                    <div class="notice d-flex bg-light-primary rounded border-primary border border-dashed mb-9 p-6">
+                                        <!--begin::Icon-->
+                                        <i class="ki-outline ki-design-1 fs-2tx text-primary me-4"></i>
+                                        <!--end::Icon-->
+                                        <!--begin::Wrapper-->
+                                        <div class="d-flex flex-stack flex-grow-1">
+                                            <!--begin::Content-->
+                                            <div class="fw-semibold">
+                                                <div class="fs-6 text-gray-700">
+                                                    <a href="#" class="me-1">ملاحظات : </a>
+                                                    @Model.RequestDVM?.RequestNote
+                                                </div>
+                                            </div>
+                                            <!--end::Content-->
+                                        </div>
+                                        <!--end::Wrapper-->
+                                    </div>
+                                    <!--end::Notice-->
+                                </div>
+                                <!--end::Details content-->
+                                @* <div id="uploadSection" class="fs-6 fw-semibold me-2" style="display: none;">
+                                <label>يرجى ارفاق الموافقة النهائية:</label>
+                                <input type="file" class="form-control" id="pdfFileInput" name="pdfFile" accept=".pdf" />
+                                <input type="text" class="form-control" id="fileNameInput" name="fileName" placeholder="أدخل اسم الملف" />
+
+                                </div> *@
+
+                                @await Component.InvokeAsync("Attachment", new
+                                    {
+                                        RequestId = Model.RequestDVM.RequestId,
+                                        ReqNo = Model.RequestDVM.Reqno,
+                                        serviceId = Model.RequestDVM.ServiceId,
+                                        activityTypeId = Model.RequestDVM.ActivityTypeId,
+                                        requestStatusId = Model.RequestDVM.RequestStatusId,
+                                        requestTypeId = Model.RequestDVM.ReqtypeId,
+                                        transactionTypeId = Model.RequestDVM.Transactions?.FirstOrDefault()?.TransTypeId ?? null,
+                                        uploadController = "Tourism"
+                                    })
+
+                            </div>
+                            <!--end::Card body-->
+                        </div>
+                        <!--end::Card-->
+
+                    </div>
+                    <!--end::Sidebar-->
+                    <!--begin::Content-->
+                    <div class="flex-lg-row-fluid ms-lg-15">
+                        <!--begin:::Tabs-->
+                        <ul class="nav nav-custom nav-tabs nav-line-tabs nav-line-tabs-2x border-0 fs-4 fw-semibold mb-8">
+                            <!--begin:::Tab item-->
+                            <li class="nav-item">
+                                <a class="nav-link text-active-primary pb-4 active" data-bs-toggle="tab" href="#kt_user_view_overview_Details">تفاصيل الطلب </a>
+                            </li>
+                            <!--end:::Tab item-->
+                            <!--begin:::Tab item-->
+                            <!--begin:::Tab item-->
+                            <li class="nav-item">
+                                <a class="nav-link text-active-primary pb-4 " data-bs-toggle="tab" href="#kt_user_view_Mianlicences_tab">معلومات الترخيص</a>
+                            </li>
+                            <!--end:::Tab item-->
+                            @if (Model.RequestDVM.ActivityTypeId == (int)ActivityTypeEnum.Hotel ||
+                            Model.RequestDVM.ActivityTypeId == (int)ActivityTypeEnum.ApartmentHotel ||
+                            Model.RequestDVM.ActivityTypeId == (int)ActivityTypeEnum.Resorts)
+                            {
+                                <!--begin:::Tab item-->
+                                <li class="nav-item">
+                                    <a class="nav-link text-active-primary pb-4 " data-bs-toggle="tab" href="#kt_user_view_overview_BuildingDetails">بيانات المنشأة </a>
+                                </li>
+                                <!--end:::Tab item-->
+                            }
+                            <!--begin:::Tab item-->
+                            <li class="nav-item">
+                                <a class="nav-link text-active-primary pb-4 " data-bs-toggle="tab" href="#kt_user_view_overview_CompanyDetails">بيانات الشركة </a>
+                            </li>
+                            <!--end:::Tab item-->
+                            <!--begin:::Tab item-->
+                            <li class="nav-item">
+                                <a class="nav-link text-active-primary pb-4 " data-bs-toggle="tab" href="#kt_user_view_overview_ApplicantDetails">بيانات المالك والمدير المسئول  </a>
+                            </li>
+                            <!--end:::Tab item-->
+                            <!--begin:::Tab item-->
+                            <li class="nav-item">
+                                <a class="nav-link text-active-primary pb-4 " data-bs-toggle="tab" href="#kt_user_view_overview_ManagerDetails">بيانات مدير التسويق والمبيعات والعمليات  </a>
+                            </li>
+                            <!--end:::Tab item-->
+                            <!--begin:::Tab item-->
+                            <li class="nav-item">
+                                <a class="nav-link text-active-primary pb-4" data-kt-countup-tabs="true" data-bs-toggle="tab" href="#kt_user_view_overview_attachment">مرفقات الطلب</a>
+                            </li>
+                            <!--end:::Tab item-->
+                            <!--begin:::Tab item-->
+                            <li class="nav-item">
+                                <a class="nav-link text-active-primary pb-4" data-bs-toggle="tab" href="#kt_user_view_overview_Payments">بيانات الدفع </a>
+                            </li>
+                            <!--end:::Tab item-->
+                            <!--begin:::Tab item-->
+                            <li class="nav-item">
+                                <a class="nav-link text-active-primary pb-4" data-bs-toggle="tab" href="#kt_user_view_overview_LogUser">السجل التاريخي </a>
+                            </li>
+                            <!--end:::Tab item-->
+                            <!--begin:::Tab item-->
+                            <!--end:::Tab item-->
+                        </ul>
+                        <!--end:::Tabs-->
+                        <!--begin:::Tab content-->
+
+                        <div id="statusButtons">
+                            @* <button type="button" id="currentStatus" class="btn btn-light-primary btn-sm" onclick="moveToNextStatus(@Model.RequestDVM.RequestId, @Model.RequestDVM.ServiceId, @Model.RequestDVM.ActivityTypeId, @Model.RequestDVM.RequestStatusId)">
+                            @Model.RequestDVM.ReqStatusName
+                            </button> *@
+                            @foreach (var button in Model.AllowedButtons )
+                            {
+                                <button type="button"
+                                        class="btn btn-light-primary btn-sm disappear submitAttachmentButton me-2"
+                                        data-request-id="@Model.RequestDVM.RequestId"
+                                        data-service-id="@Model.RequestDVM.ServiceId"
+                                        data-activity-type-id="@Model.RequestDVM.ActivityTypeId"
+                                        data-status-id="@button.NextStatusId"
+                                        data-reqtype-id="@Model.RequestDVM.ReqtypeId"
+                                        data-reqno="@Model.RequestDVM.Reqno"
+                                        data-action-key="@button.ActionKey"
+                                        data-permission-required="@button.IsPermissionRequired">
+                                    @Model.RequestDVM.ReqStatusName
+                                </button>
+                            }
+
+                            <button id="RefuseRequestbutton" type="button" class="btn btn-light-danger btn-sm disappearrefuse"
+                                    data-request-id="@Model.RequestDVM.RequestId"
+                                    data-service-id="@Model.RequestDVM.ServiceId"
+                                    data-activity-type-id="@Model.RequestDVM.ActivityTypeId"
+                                    data-status-id="@((int)RequestStatusEnum.RequestDeclined)"
+                                    data-reqtype-id="@Model.RequestDVM.ReqtypeId"
+                                    data-reqno="@Model.RequestDVM.Reqno"
+                                    onclick="moveToNextStatus(this)">
+                                رفض الطلب
+                            </button>
+                            <button id="SendNotifyToUser" type="button" class="btn btn-light-danger btn-sm disappearrefuse"
+                                    data-request-id="@Model.RequestDVM.RequestId"
+                                    data-service-id="@Model.RequestDVM.ServiceId"
+                                    data-activity-type-id="@Model.RequestDVM.ActivityTypeId"
+                                    data-status-id="@Model.RequestDVM.RequestStatusId"
+                                    data-reqtype-id="@Model.RequestDVM.ReqtypeId"
+                                    data-reqno="@Model.RequestDVM.Reqno"
+                                    onclick="moveToNextStatus(this)">
+                                إرسال ملاحظات للمراجع
+                            </button>
+
+                        </div>
+                        <div class="tab-content" id="myTabContent">
+                            <!--begin:::Tab pane-->
+                            <div class="tab-pane fade show active" id="kt_user_view_overview_Details" role="tabpanel">
+
+                                <!--begin::Row to hold both columns side by side-->
+                                <div class="row">
+
+                                    <!--begin::Request Info-->
+                                    <div class="col-md-6">
+                                        <div class="card pt-4 h-100">
+                                            <div class="card-header border-0">
+                                                <div class="card-title flex-column">
+                                                    <span class="d-inline-block position-relative ms-2">
+                                                        <span class="d-inline-block mb-2 fs-1 fw-bold">البيانات الاساسية للطلب</span>
+                                                        <span class="d-inline-block position-absolute h-3px bottom-0 end-0 start-0 bg-primary translate rounded"></span>
+                                                    </span>
+                                                </div>
+                                            </div>
+                                            <div class="card-body pb-5">
+                                                <div class="fw-bold mt-5">رقم الطلب</div>
+                                                <div class="text-gray-600 mt-1">@Model.RequestDVM.Reqno</div>
+
+                                                <div class="fw-bold mt-5">تاريخ الطلب</div>
+                                                <div class="text-gray-600 mt-1">
+                                                    @Model.RequestDVM.Licreqtime?.ToString("yyyy-MM-dd")
+                                                </div>
+
+                                                <div class="fw-bold mt-5">نوع الطلب</div>
+                                                <div class="text-gray-600 mt-1">@Model.RequestDVM.ReqTypeName</div>
+
+                                                <div class="fw-bold mt-5">حالة الطلب</div>
+                                                <div class="text-gray-600 mt-1" id="status4">@Model.RequestDVM.ReqStatusName</div>
+
+                                                <div class="notice bg-light-primary rounded border-primary border border-dashed p-6 mt-5">
+                                                    <label for="RequestNote" class="me-1 fw-semibold">ملاحظات:</label>
+                                                    <textarea id="RequestNote" asp-for="RequestDVM.RequestNote" class="form-control" rows="3" placeholder="اكتب ملاحظاتك هنا...">@Model.RequestDVM.RequestNote</textarea>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <!--end::Request Info-->
+                                    <!--begin::Right side: either EndLicences or Renouncement-->
+                                    <div class="col-md-6">
+                                        @if (Model.RequestDVM.ReqtypeId == (int)RequestTypeEnum.EndLicences)
+                                        {
+                                            <div class="card pt-4 h-100">
+                                                <div class="card-header border-0">
+                                                    <div class="card-title flex-column">
+                                                        <span class="d-inline-block position-relative ms-2">
+                                                            <span class="d-inline-block mb-2 fw-bold">طلب إنهاء الترخيص</span>
+                                                            <span class="d-inline-block position-absolute h-3px bottom-0 end-0 start-0 bg-primary translate rounded"></span>
+                                                        </span>
+                                                        <div class="fs-6 fw-semibold mb-3 text-muted">سبب الإنهاء:</div>
+                                                    </div>
+                                                </div>
+                                                <div class="card-body pb-5">
+                                                    <div class="text-gray-700 fw-semibold">
+                                                        @Model.EndLicencesTransVM.LicendingReason.ReasonName
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        }
+                                        else if (Model.RequestDVM.ReqtypeId == (int)RequestTypeEnum.Renouncement)
+                                        {
+                                            <div class="card pt-4 h-100">
+                                                <div class="card-header border-0">
+                                                    <div class="card-title flex-column">
+                                                        <span class="d-inline-block position-relative ms-2">
+                                                            <span class="d-inline-block mb-2 fw-bold">طلب تنازل</span>
+                                                            <span class="d-inline-block position-absolute h-3px bottom-0 end-0 start-0 bg-primary translate rounded"></span>
+                                                        </span>
+                                                    </div>
+                                                </div>
+                                                <div class="card-body pb-5">
+                                                    <div class="d-flex flex-wrap">
+                                                        <!-- Old Owner -->
+                                                        <div class="flex-equal me-5">
+                                                            <h6 class="mb-3 text-primary">بيانات المالك القديم</h6>
+                                                            <table class="table">
+                                                                <tr><td>الاسم:</td><td>@Model.OwnerChangeTransVM?.OldName</td></tr>
+                                                                <tr><td>الرقم المدني:</td><td>@Model.OwnerChangeTransVM?.OldCivilId</td></tr>
+                                                                <tr><td>رقم الهاتف:</td><td>@Model.OwnerChangeTransVM?.OldMobile</td></tr>
+                                                                <tr><td>البريد الإلكتروني:</td><td>@Model.OwnerChangeTransVM?.OldEmail</td></tr>
+                                                            </table>
+                                                        </div>
+
+                                                        <!-- New Owner -->
+                                                        <div class="flex-equal">
+                                                            <h6 class="mb-3 text-primary">بيانات المالك الجديد</h6>
+                                                            <table class="table">
+                                                                <tr><td>الاسم:</td><td>@Model.OwnerChangeTransVM?.NewName</td></tr>
+                                                                <tr><td>الرقم المدني:</td><td>@Model.OwnerChangeTransVM?.NewCivilId</td></tr>
+                                                                <tr><td>رقم الهاتف:</td><td>@Model.OwnerChangeTransVM?.NewMobile</td></tr>
+                                                                <tr><td>البريد الإلكتروني:</td><td>@Model.OwnerChangeTransVM?.NewEmail</td></tr>
+                                                            </table>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        }
+                                    </div>
+                                    <!--end::Right side-->
+
+                                </div>
+                                <!--end::Row-->
+
+
+
+                            </div>
+                            <!--end:::Tab pane-->
+                            <!--begin:::Tab Licences pane-->
+                            <div class="tab-pane fade " id="kt_user_view_Mianlicences_tab" role="tabpanel">
+
+                                <!--begin::Card-->
+                                <div class="card card-flush pt-3 mb-5 mb-xl-10">
+                                    <!--begin::Card header-->
+                                    <div class="card-header">
+
+                                        <!--begin::Card title-->
+                                        <div class="card-title flex-column mb-11">
+                                            <!--begin::Underline-->
+                                            <span class="d-inline-block position-relative ms-2">
+                                                <!--begin::Label-->
+                                                <span class="d-inline-block mb-2 fs-1  fw-bold">
+                                                    معلومات الترخيص
+                                                </span>
+                                                <!--end::Label-->
+                                                <!--begin::Line-->
+                                                <span class="d-inline-block position-absolute h-3px bottom-0 end-0 start-0 bg-primary translate rounded"></span>
+                                                <!--end::Line-->
+
+                                            </span>
+
+                                        </div>
+
+
+                                        <!--end::Card title-->
+                                        <!--begin::Card toolbar-->
+
+                                    </div>
+                                    <!--end::Card header-->
+                                    <!--begin::Card body-->
+                                    <div class="card-body pt-3">
+                                        <!--begin::Section-->
+                                        <div class="mb-10">
+                                            <!--begin::Title-->
+                                            <!--begin::Card title-->
+                                            <div class="card-title flex-column">
+                                                <!--begin::Underline-->
+                                                <span class="d-inline-block position-relative ms-2">
+                                                    <!--begin::Label-->
+                                                    <span class="d-inline-block mb-2  fw-bold">
+                                                        البيانات الاساسية للترخيص
+                                                    </span>
+                                                    <!--end::Label-->
+                                                    <!--begin::Line-->
+                                                    <span class="d-inline-block position-absolute h-3px bottom-0 end-0 start-0 bg-danger translate rounded"></span>
+                                                    <!--end::Line-->
+                                                </span>
+                                            </div>
+                                            <!--end::Card title-->
+                                            <!--end::Title-->
+                                            <!--begin::Details-->
+                                            <div class="d-flex flex-wrap py-5">
+                                                <!--begin::Row-->
+                                                <div class="flex-equal me-5">
+                                                    <!--begin::Details-->
+                                                    <table class="table fs-6 fw-semibold gs-0 gy-2 gx-2 m-0">
+                                                        <!--begin::Row-->
+                                                        <tr>
+                                                            <td class="text-gray-500 min-w-175px w-175px">رقم الترخيص : </td>
+                                                            <td class="text-gray-800 min-w-200px" id="licenseCell">
+                                                                <span href="pages/apps/customers/view.html" class="text-gray-800 badge badge-light-primary  text-hover-primary">@Model.RequestDVM.Licno</span>
+                                                            </td>
+                                                        </tr>
+                                                        <!--end::Row-->
+                                                        <!--begin::Row-->
+                                                        <tr>
+                                                            <td class="text-gray-500">نوع النشاط : </td>
+                                                            <td class="text-gray-800">@Model.RequestDVM.ActivityName</td>
+                                                        </tr>
+                                                        <!--end::Row-->
+                                                        <!--begin::Row-->
+                                                        <tr>
+                                                            <td class="text-gray-500">تاريخ الاصدار  : </td>
+                                                            <td class="text-gray-800" id="issueDateCell">
+                                                                <span class="badge @(Model.LicencesVM?.IssueDate.HasValue == true ? "badge-light-success" : "badge-light-warning")">
+                                                                    @Model.LicencesVM?.IssueDate?.ToString("dd - MM - yyyy") ?? ""
+                                                                </span>
+                                                            </td>
+                                                        </tr>
+                                                        <!--end::Row-->
+                                                        <!--begin::Row-->
+                                                        <tr>
+                                                            <td class="text-gray-500">تاريخ الإنتهاء  : </td>
+                                                            <td class="text-gray-800" id="issueDateCell">
+                                                                <span class="badge @(Model.LicencesVM?.ExpireDate.HasValue == true ? "badge-light-success" : "badge-light-warning")">
+                                                                    @Model.LicencesVM?.ExpireDate?.ToString("dd - MM - yyyy")
+                                                                </span>
+                                                            </td>
+                                                        </tr>
+                                                        <!--end::Row-->
+                                                        <!--begin::Row-->
+                                                        <!--end::Row-->
+                                                    </table>
+                                                    <!--end::Details-->
+                                                </div>
+                                                <!--end::Row-->
+                                                <!--begin::Row-->
+                                                <div class="flex-equal">
+                                                    <!--begin::Details-->
+                                                    <table class="table fs-6 fw-semibold gs-0 gy-2 gx-2 m-0">
+                                                        <!--begin::Row-->
+                                                        <tr>
+                                                            <td class="text-gray-500"> اسم الترخيص :  </td>
+                                                            <td class="text-gray-800">@Model.RequestDVM?.Licname</td>
+                                                        </tr>
+                                                        <!--end::Row-->
+                                                        <!--begin::Row-->
+                                                        <tr>
+                                                            <td class="text-gray-500">رقم الترخيص التجاري : </td>
+                                                            <td class="text-gray-800">@Model.LicencesVM?.CommercialLicNo</td>
+                                                        </tr>
+                                                        <!--end::Row-->
+                                                        <!--begin::Row-->
+                                                        <tr>
+                                                            <td class="text-gray-500">ملاحظات :  </td>
+                                                            <td class="text-gray-800">@Model.RequestDVM?.RequestNote</td>
+                                                        </tr>
+                                                        <!--end::Row-->
+                                                    </table>
+                                                    <!--end::Details-->
+                                                </div>
+                                                <!--end::Row-->
+                                            </div>
+                                            <!--end::Row-->
+                                        </div>
+                                        <!--end::Section-->
+
+                                    </div>
+                                    <!--end::Card body-->
+
+                                </div>
+                                <!--end::Card-->
+
+
+
+                            </div>
+                            <!--end:::Tab Licences pane-->
+                            @if (Model.RequestDVM.ActivityTypeId == (int)ActivityTypeEnum.Hotel ||
+                            Model.RequestDVM.ActivityTypeId == (int)ActivityTypeEnum.ApartmentHotel ||
+                            Model.RequestDVM.ActivityTypeId == (int)ActivityTypeEnum.Resorts)
+                            {
+                                <!--begin:::Tab Building pane-->
+                                <div class="tab-pane fade " id="kt_user_view_overview_BuildingDetails" role="tabpanel">
+                                    <!--begin::Card-->
+                                    <div class="card card-flush pt-3 mb-5 mb-xl-10">
+                                        <!--begin::Card body-->
+                                        <div class="card-body pt-3">
+                                            <!--begin::Section-->
+                                            <div class="mb-10">
+                                                <!--begin::Card title-->
+                                                <div class="card-title flex-column">
+                                                    <!--begin::Underline-->
+                                                    <span class="d-inline-block position-relative ms-2">
+                                                        <!--begin::Label-->
+                                                        <span class="d-inline-block mb-2  fw-bold">
+                                                            بيانات المنشأة
+                                                        </span>
+                                                        <!--end::Label-->
+                                                        <!--begin::Line-->
+                                                        <span class="d-inline-block position-absolute h-3px bottom-0 end-0 start-0 bg-danger translate rounded"></span>
+                                                        <!--end::Line-->
+                                                    </span>
+                                                </div>
+                                                <!--end::Card title-->
+                                                <!--begin::Details-->
+                                                <div class="d-flex flex-wrap py-5">
+                                                    <!--begin::Row-->
+                                                    <div class="flex-equal me-5">
+                                                        <!--begin::Details-->
+                                                        <table class="table fs-6 fw-semibold gs-0 gy-2 gx-2 m-0">
+
+                                                            <!--begin::Row-->
+                                                            <tr>
+                                                                <td class="text-gray-500">إسم المنشأة الفندقية :   </td>
+                                                                <td class="text-gray-800">@Model.LicencesVM?.LicName</td>
+
+                                                            </tr>
+                                                            <!--end::Row-->
+                                                            <!--begin::Row-->
+                                                            <tr>
+                                                                <td class="text-gray-500">الرقم المدني للجهة :   </td>
+                                                                <td class="text-gray-800">@Model.CompanyVM?.CompanyCivilId</td>
+                                                            </tr>
+                                                            <!--end::Row-->
+                                                            <!--begin::Row-->
+                                                            <tr>
+                                                                <td class="text-gray-500">المنطقة :   </td>
+                                                                <td class="text-gray-800">@Model.CompanyVM?.AddressNavigation?.Area</td>
+                                                            </tr>
+                                                            <!--end::Row-->
+                                                            <!--begin::Row-->
+                                                            <tr>
+                                                                <td class="text-gray-500">المبني  :   </td>
+                                                                <td class="text-gray-800">@Model.CompanyVM?.AddressNavigation?.BuildingName</td>
+                                                            </tr>
+                                                            <!--end::Row-->
+                                                            <tr>
+                                                                <td class="text-gray-500">رقم المخطط المساحي :   </td>
+                                                                <td class="text-gray-800">@Model.CompanyVM?.AddressNavigation?.AreaChartNo</td>
+
+                                                            </tr>
+                                                            <!--end::Row-->
+
+
+                                                        </table>
+                                                        <!--end::Details-->
+                                                    </div>
+                                                    <!--end::Row-->
+                                                    <!--begin::Row-->
+                                                    <div class="flex-equal">
+                                                        <!--begin::Details-->
+                                                        <table class="table fs-6 fw-semibold gs-0 gy-2 gx-2 m-0">
+                                                            <!--begin::Row-->
+                                                            <tr>
+                                                                <td class="text-gray-500">القطعة :   </td>
+                                                                <td class="text-gray-800">@Model.CompanyVM?.AddressNavigation?.Area</td>
+                                                            </tr>
+                                                            <!--end::Row-->
+                                                            <!--begin::Row-->
+                                                            <tr>
+                                                                <td class="text-gray-500">مساحة الأرض : </td>
+                                                                <td class="text-gray-800">@Model.CompanyVM?.AddressNavigation?.AreaSize</td>
+                                                            </tr>
+                                                            <!--end::Row-->
+                                                            <!--begin::Row-->
+                                                            <tr>
+                                                                <td class="text-gray-500">المحافظة : </td>
+                                                                <td class="text-gray-800">@Model.CompanyVM?.AddressNavigation?.GovernorateArabic </td>
+                                                            </tr>
+                                                            <!--end::Row-->
+                                                            <!--begin::Row-->
+                                                            <tr>
+                                                                <td class="text-gray-500">الشارع : </td>
+                                                                <td class="text-gray-800">@Model.CompanyVM?.AddressNavigation?.StreetArabic </td>
+                                                            </tr>
+                                                            <!--end::Row-->
+                                                            <!--begin::Row-->
+                                                            <tr>
+                                                                <td class="text-gray-500">الرقم الآلي للجهة :   </td>
+                                                                <td class="text-gray-800">@Model.CompanyVM?.AddressNavigation?.AalliNo</td>
+                                                            </tr>
+                                                            <!--end::Row-->
+                                                        </table>
+                                                        <!--end::Details-->
+                                                    </div>
+                                                    <!--end::Row-->
+                                                </div>
+                                                <!--end::Row-->
+                                            </div>
+                                            <!--end::Section-->
+
+                                        </div>
+                                        <!--end::Card body-->
+
+                                    </div>
+                                    <!--end::Card-->
+                                </div>
+                                <!--end:::Tab Building pane-->
+                            }
+                            <!--begin:::Tab Company pane-->
+                            <div class="tab-pane fade " id="kt_user_view_overview_CompanyDetails" role="tabpanel">
+                                <!--begin::Card-->
+                                <div class="card card-flush pt-3 mb-5 mb-xl-10">
+                                    <!--begin::Card body-->
+                                    <div class="card-body pt-3">
+                                        <!--begin::Section-->
+                                        <div class="mb-10">
+                                            <!--begin::Card title-->
+                                            <div class="card-title flex-column">
+                                                <!--begin::Underline-->
+                                                <span class="d-inline-block position-relative ms-2">
+                                                    <!--begin::Label-->
+                                                    <span class="d-inline-block mb-2  fw-bold">
+                                                        بيانات الشركة
+                                                    </span>
+                                                    <!--end::Label-->
+                                                    <!--begin::Line-->
+                                                    <span class="d-inline-block position-absolute h-3px bottom-0 end-0 start-0 bg-danger translate rounded"></span>
+                                                    <!--end::Line-->
+                                                </span>
+                                            </div>
+                                            <!--end::Card title-->
+                                            <!--begin::Details-->
+                                            <div class="d-flex flex-wrap py-5">
+                                                <!--begin::Row-->
+                                                <div class="flex-equal me-5">
+                                                    <!--begin::Details-->
+                                                    <table class="table fs-6 fw-semibold gs-0 gy-2 gx-2 m-0">
+                                                        <!--begin::Row-->
+                                                        <tr>
+                                                            <td class="text-gray-500 min-w-175px w-175px">الشركة المديرة بالعربي : </td>
+                                                            <td class="text-gray-800 min-w-200px">
+                                                                <a href="pages/apps/customers/view.html" class="text-gray-800 badge badge-light-primary  text-hover-primary">@Model.CompanyVM?.DirCompanyAr</a>
+                                                            </td>
+                                                        </tr>
+                                                        <!--end::Row-->
+                                                        <!--begin::Row-->
+                                                        <tr>
+                                                            <td class="text-gray-500">الشركة المالكة بالعربي :   </td>
+                                                            <td class="text-gray-800">@Model.CompanyVM?.OwnerCompanyAr</td>
+
+                                                        </tr>
+                                                        <!--end::Row-->
+                                                        <!--begin::Row-->
+                                                        <tr>
+                                                            <td class="text-gray-500">السجل التجاري للشركة :   </td>
+                                                            <td class="text-gray-800">@Model.CompanyVM?.RecordNo</td>
+                                                        </tr>
+                                                        <!--end::Row-->
+                                                        <!--begin::Row-->
+                                                        <tr>
+                                                            <td class="text-gray-500">رقم الترخيص التجاري :   </td>
+                                                            <td class="text-gray-800">@Model.CompanyVM?.CommercialLicNo</td>
+                                                        </tr>
+                                                        <!--end::Row-->
+
+
+                                                    </table>
+                                                    <!--end::Details-->
+                                                    @if (Model.RequestDVM.ActivityTypeId == (int)ActivityTypeEnum.Parks ||
+                                                    Model.RequestDVM.ActivityTypeId == (int)ActivityTypeEnum.Sailing)
+                                                    {
+                                                        <!--begin::Details-->
+                                                        <div class="d-flex flex-wrap py-5">
+                                                            <!--begin::Row-->
+                                                            <div class="flex-equal me-5">
+                                                                <!--begin::Details-->
+                                                                <table class="table fs-6 fw-semibold gs-0 gy-2 gx-2 m-0">
+
+
+                                                                    <!--begin::Row-->
+                                                                    <tr>
+                                                                        <td class="text-gray-500">الرقم المدني للجهة :   </td>
+                                                                        <td class="text-gray-800">@Model.CompanyVM?.CompanyCivilId</td>
+                                                                    </tr>
+                                                                    <!--end::Row-->
+                                                                    <!--begin::Row-->
+                                                                    <tr>
+                                                                        <td class="text-gray-500">المنطقة :   </td>
+                                                                        <td class="text-gray-800">@Model.CompanyVM?.AddressNavigation?.Area</td>
+                                                                    </tr>
+                                                                    <!--end::Row-->
+                                                                    <!--begin::Row-->
+                                                                    <tr>
+                                                                        <td class="text-gray-500">المبني  :   </td>
+                                                                        <td class="text-gray-800">@Model.CompanyVM?.AddressNavigation?.BuildingName</td>
+                                                                    </tr>
+
+
+                                                                </table>
+                                                                <!--end::Details-->
+                                                            </div>
+                                                            <!--end::Row-->
+                                                            <!--begin::Row-->
+                                                            <div class="flex-equal">
+                                                                <!--begin::Details-->
+                                                                <table class="table fs-6 fw-semibold gs-0 gy-2 gx-2 m-0">
+                                                                    <!--begin::Row-->
+                                                                    <tr>
+                                                                        <td class="text-gray-500">القطعة :   </td>
+                                                                        <td class="text-gray-800">@Model.CompanyVM?.AddressNavigation?.Area</td>
+                                                                    </tr>
+                                                                    <!--end::Row-->
+                                                                    <!--begin::Row-->
+                                                                    <tr>
+                                                                        <td class="text-gray-500">المحافظة : </td>
+                                                                        <td class="text-gray-800">@Model.CompanyVM?.AddressNavigation?.GovernorateArabic </td>
+                                                                    </tr>
+                                                                    <!--end::Row-->
+                                                                    <!--begin::Row-->
+                                                                    <tr>
+                                                                        <td class="text-gray-500">الشارع : </td>
+                                                                        <td class="text-gray-800">@Model.CompanyVM?.AddressNavigation?.StreetArabic </td>
+                                                                    </tr>
+                                                                    <!--end::Row-->
+                                                                    <!--begin::Row-->
+                                                                    <tr>
+                                                                        <td class="text-gray-500">الرقم الآلي للجهة :   </td>
+                                                                        <td class="text-gray-800">@Model.CompanyVM?.AddressNavigation?.AalliNo</td>
+                                                                    </tr>
+                                                                    <!--end::Row-->
+                                                                </table>
+                                                                <!--end::Details-->
+                                                            </div>
+                                                            <!--end::Row-->
+                                                        </div>
+                                                        <!--end::Row-->
+                                                    }
+                                                </div>
+                                                <!--end::Row-->
+
+                                            </div>
+                                            <!--end::Row-->
+                                        </div>
+                                        <!--end::Section-->
+
+                                    </div>
+                                    <!--end::Card body-->
+                                </div>
+                                <!--end::Card-->
+                            </div>
+                            <!--end:::Tab Company pane-->
+                            <!--begin:::Tab Applicant pane-->
+                            <div class="tab-pane fade " id="kt_user_view_overview_ApplicantDetails" role="tabpanel">
+                                <!--begin::Card-->
+                                <div class="card card-flush pt-3 mb-5 mb-xl-10">
+                                    <!--begin::Card body-->
+                                    <div class="card-body pt-3">
+                                        <!--begin::Section-->
+                                        <div class="mb-10">
+                                            <!--begin::Card title-->
+                                            <div class="card-title flex-column">
+                                                <!--begin::Underline-->
+                                                <span class="d-inline-block position-relative ms-2">
+                                                    <!--begin::Label-->
+                                                    <span class="d-inline-block mb-2  fw-bold">
+                                                        بيانات صاحب الترخيص
+                                                    </span>
+                                                    <!--end::Label-->
+                                                    <!--begin::Line-->
+                                                    <span class="d-inline-block position-absolute h-3px bottom-0 end-0 start-0 bg-danger translate rounded"></span>
+                                                    <!--end::Line-->
+                                                </span>
+                                            </div>
+                                            <!--end::Card title-->
+                                            <!--begin::Details-->
+                                            <div class="d-flex flex-wrap py-5">
+                                                <!--begin::Row-->
+                                                <div class="flex-equal me-5">
+                                                    <!--begin::Details-->
+                                                    <table class="table fs-6 fw-semibold gs-0 gy-2 gx-2 m-0">
+                                                        <!--begin::Row-->
+                                                        <tr>
+                                                            <td class="text-gray-500 min-w-175px w-175px">إسم صاحب الترخيص :  </td>
+                                                            <td class="text-gray-800 min-w-200px">
+                                                                <a href="pages/apps/customers/view.html" class="text-gray-800 badge badge-light-primary  text-hover-primary">@Model.RequestDVM.ApplicantPerson.Name1</a>
+                                                            </td>
+                                                        </tr>
+                                                        <!--end::Row-->
+                                                        <!--begin::Row-->
+                                                        <tr>
+                                                            <td class="text-gray-500">الرقم المدني :  </td>
+                                                            <td class="text-gray-800">@Model.RequestDVM.ApplicantPerson?.CivilId</td>
+
+                                                        </tr>
+                                                        <!--end::Row-->
+
+
+
+
+                                                    </table>
+                                                    <!--end::Details-->
+                                                    <!--begin::Details-->
+                                                    <table class="table fs-6 fw-semibold gs-0 gy-2 gx-2 m-0">
+                                                        <!--begin::Row-->
+                                                        <tr>
+                                                            <td class="text-gray-500 min-w-175px w-175px">رقم الهاتف  :  </td>
+                                                            <td class="text-gray-800 min-w-200px">
+                                                                @Model.RequestDVM.ApplicantPerson.Phone
+                                                            </td>
+                                                        </tr>
+                                                        <!--end::Row-->
+                                                        <!--begin::Row-->
+                                                        <tr>
+                                                            <td class="text-gray-500">الرقم المدني :  </td>
+                                                            <td class="text-gray-800">@Model.PersonApplicantVM.Email</td>
+
+                                                        </tr>
+                                                        <!--end::Row-->
+
+
+
+
+                                                    </table>
+                                                    <!--end::Details-->
+                                                </div>
+                                                <!--end::Row-->
+
+                                            </div>
+                                            <!--end::Row-->
+                                        </div>
+                                        <!--end::Section-->
+
+                                    </div>
+                                    <!--end::Card body-->
+                                    <!--begin::Card body-->
+                                    <div class="card-body pt-3">
+                                        <!--begin::Section-->
+                                        <div class="mb-10">
+                                            <!--begin::Card title-->
+                                            <div class="card-title flex-column">
+                                                <!--begin::Underline-->
+                                                <span class="d-inline-block position-relative ms-2">
+                                                    <!--begin::Label-->
+                                                    <span class="d-inline-block mb-2  fw-bold">
+                                                        بيانات المدير المسئول
+                                                    </span>
+                                                    <!--end::Label-->
+                                                    <!--begin::Line-->
+                                                    <span class="d-inline-block position-absolute h-3px bottom-0 end-0 start-0 bg-danger translate rounded"></span>
+                                                    <!--end::Line-->
+                                                </span>
+                                            </div>
+                                            <!--end::Card title-->
+                                            <!--begin::Details-->
+                                            <div class="d-flex flex-wrap py-5">
+                                                <!--begin::Row-->
+                                                <div class="flex-equal me-5">
+                                                    <!--begin::Details-->
+                                                    <table class="table fs-6 fw-semibold gs-0 gy-2 gx-2 m-0">
+                                                        <!--begin::Row-->
+                                                        <tr>
+                                                            <td class="text-gray-500 min-w-175px w-175px">إسم المدير المسئول :  </td>
+                                                            <td class="text-gray-800 min-w-200px">
+                                                                <a href="pages/apps/customers/view.html" class="text-gray-800 badge badge-light-primary  text-hover-primary">@Model.ManagerPersonVM?.Name1</a>
+                                                            </td>
+                                                        </tr>
+                                                        <!--end::Row-->
+                                                        <!--begin::Row-->
+                                                        <tr>
+                                                            <td class="text-gray-500">الرقم المدني للمدير المسئول:   </td>
+                                                            <td class="text-gray-800">@Model.ManagerPersonVM?.CivilId</td>
+                                                        </tr>
+                                                        <!--end::Row-->
+                                                        <!--begin::Row-->
+                                                        <tr>
+                                                            <td class="text-gray-500">الإيميل للمدير المسئول:   </td>
+                                                            <td class="text-gray-800">@Model.ManagerPersonVM?.Email</td>
+                                                        </tr>
+                                                        <!--end::Row-->
+                                                        <!--begin::Row-->
+                                                        <tr>
+                                                            <td class="text-gray-500">رقم الجوال للمدير المسئول:   </td>
+                                                            <td class="text-gray-800">@Model.ManagerPersonVM?.Phone</td>
+                                                        </tr>
+                                                        <!--end::Row-->
+
+
+
+                                                    </table>
+                                                    <!--end::Details-->
+                                                </div>
+                                                <!--end::Row-->
+
+                                            </div>
+                                            <!--end::Row-->
+                                        </div>
+                                        <!--end::Section-->
+
+                                    </div>
+                                    <!--end::Card body-->
+                                    <!--begin::Card body-->
+                                    <div class="card-body pt-3">
+                                        <!--begin::Section-->
+                                        <div class="mb-10">
+                                            <!--begin::Card title-->
+                                            <div class="card-title flex-column">
+                                                <!--begin::Underline-->
+                                                <span class="d-inline-block position-relative ms-2">
+                                                    <!--begin::Label-->
+                                                    <span class="d-inline-block mb-2  fw-bold">
+                                                        بيانات المفوض بالتوقيع
+                                                    </span>
+                                                    <!--end::Label-->
+                                                    <!--begin::Line-->
+                                                    <span class="d-inline-block position-absolute h-3px bottom-0 end-0 start-0 bg-danger translate rounded"></span>
+                                                    <!--end::Line-->
+                                                </span>
+                                            </div>
+                                            <!--end::Card title-->
+                                            <!--begin::Details-->
+                                            <div class="d-flex flex-wrap py-5">
+                                                <!--begin::Row-->
+                                                <div class="flex-equal me-5">
+                                                    <!--begin::Details-->
+                                                    <table class="table fs-6 fw-semibold gs-0 gy-2 gx-2 m-0">
+                                                        <!--begin::Row-->
+                                                        <tr>
+                                                            <td class="text-gray-500 min-w-175px w-175px">إسم المفوض  :  </td>
+                                                            <td class="text-gray-800 min-w-200px">
+                                                                <a href="pages/apps/customers/view.html" class="text-gray-800 badge badge-light-primary  text-hover-primary">@Model.Mandoob?.UserName</a>
+                                                            </td>
+                                                        </tr>
+                                                        <!--end::Row-->
+                                                        <!--begin::Row-->
+                                                        <tr>
+                                                            <td class="text-gray-500">الرقم المدني للمفوض بالتوقيع :   </td>
+                                                            <td class="text-gray-800">@Model.Mandoob?.CivilId</td>
+                                                        </tr>
+                                                        <!--end::Row-->
+                                                        <!--begin::Row-->
+                                                        <tr>
+                                                            <td class="text-gray-500">البريد الإلكتروني للمفوض :   </td>
+                                                            <td class="text-gray-800">@Model.Mandoob?.Email</td>
+                                                        </tr>
+                                                        <!--end::Row-->
+                                                        <!--begin::Row-->
+                                                        <tr>
+                                                            <td class="text-gray-500">رقم الهاتف المفوض :   </td>
+                                                            <td class="text-gray-800">@Model.Mandoob?.Mobile</td>
+                                                        </tr>
+                                                        <!--end::Row-->
+
+                                                    </table>
+                                                    <!--end::Details-->
+                                                </div>
+                                                <!--end::Row-->
+
+                                            </div>
+                                            <!--end::Row-->
+                                        </div>
+                                        <!--end::Section-->
+
+                                    </div>
+                                    <!--end::Card body-->
+                                </div>
+                                <!--end::Card-->
+                            </div>
+                            <!--end:::Tab Applicant pane-->
+                            <!--begin:::Tab Applicant pane-->
+                            <div class="tab-pane fade " id="kt_user_view_overview_ManagerDetails" role="tabpanel">
+                                <!--begin::Card-->
+                                <div class="card card-flush pt-3 mb-5 mb-xl-10">
+                                    <!--begin::Card body-->
+                                    <div class="card-body pt-3">
+                                        <!--begin::Section-->
+                                        <div class="mb-10">
+                                            <!--begin::Card title-->
+                                            <div class="card-title flex-column">
+                                                <!--begin::Underline-->
+                                                <span class="d-inline-block position-relative ms-2">
+                                                    <!--begin::Label-->
+                                                    <span class="d-inline-block mb-2  fw-bold">
+                                                        بيانات مدير المبيعات
+                                                    </span>
+                                                    <!--end::Label-->
+                                                    <!--begin::Line-->
+                                                    <span class="d-inline-block position-absolute h-3px bottom-0 end-0 start-0 bg-danger translate rounded"></span>
+                                                    <!--end::Line-->
+                                                </span>
+                                            </div>
+                                            <!--end::Card title-->
+                                            <!--begin::Details-->
+                                            <div class="d-flex flex-wrap py-5">
+                                                <!--begin::Row-->
+                                                <div class="flex-equal me-5">
+                                                    <!--begin::Details-->
+                                                    <table class="table fs-6 fw-semibold gs-0 gy-2 gx-2 m-0">
+                                                        <!--begin::Row-->
+                                                        <tr>
+                                                            <td class="text-gray-500 min-w-175px w-175px">إسم مدير المبيعات :  </td>
+                                                            <td class="text-gray-800 min-w-200px">
+                                                                <a href="pages/apps/customers/view.html" class="text-gray-800 badge badge-light-primary  text-hover-primary">@Model.RequestDVM.SalesManager.Name1</a>
+                                                            </td>
+                                                        </tr>
+                                                        <!--end::Row-->
+                                                        <!--begin::Row-->
+                                                        <tr>
+                                                            <td class="text-gray-500"> الرقم المدني لمدير المبيعات :  </td>
+                                                            <td class="text-gray-800">@Model.RequestDVM?.SalesManager.CivilId</td>
+
+                                                        </tr>
+                                                        <!--end::Row-->
+
+
+
+
+                                                    </table>
+                                                    <!--end::Details-->
+                                                    <!--begin::Details-->
+                                                    <table class="table fs-6 fw-semibold gs-0 gy-2 gx-2 m-0">
+                                                        <!--begin::Row-->
+                                                        <tr>
+                                                            <td class="text-gray-500 min-w-175px w-175px">رقم الهاتف لمدير المبيعات  :  </td>
+                                                            <td class="text-gray-800 min-w-200px">
+                                                                @Model.RequestDVM.SalesManager.Phone
+                                                            </td>
+                                                        </tr>
+                                                        <!--end::Row-->
+                                                        <!--begin::Row-->
+                                                        <tr>
+                                                            <td class="text-gray-500">إيميل مدير المبيعات :  </td>
+                                                            <td class="text-gray-800">@Model.RequestDVM.SalesManager.Email</td>
+
+                                                        </tr>
+                                                        <!--end::Row-->
+
+
+
+
+                                                    </table>
+                                                    <!--end::Details-->
+                                                </div>
+                                                <!--end::Row-->
+
+                                            </div>
+                                            <!--end::Row-->
+                                        </div>
+                                        <!--end::Section-->
+
+                                    </div>
+                                    <!--end::Card body-->
+                                    <!--begin::Card body-->
+                                    <div class="card-body pt-3">
+                                        <!--begin::Section-->
+                                        <div class="mb-10">
+                                            <!--begin::Card title-->
+                                            <div class="card-title flex-column">
+                                                <!--begin::Underline-->
+                                                <span class="d-inline-block position-relative ms-2">
+                                                    <!--begin::Label-->
+                                                    <span class="d-inline-block mb-2  fw-bold">
+                                                        بيانات مدير التسويق
+                                                    </span>
+                                                    <!--end::Label-->
+                                                    <!--begin::Line-->
+                                                    <span class="d-inline-block position-absolute h-3px bottom-0 end-0 start-0 bg-danger translate rounded"></span>
+                                                    <!--end::Line-->
+                                                </span>
+                                            </div>
+                                            <!--end::Card title-->
+                                            <!--begin::Details-->
+                                            <div class="d-flex flex-wrap py-5">
+                                                <!--begin::Row-->
+                                                <div class="flex-equal me-5">
+                                                    <!--begin::Details-->
+                                                    <table class="table fs-6 fw-semibold gs-0 gy-2 gx-2 m-0">
+                                                        <!--begin::Row-->
+                                                        <tr>
+                                                            <td class="text-gray-500 min-w-175px w-175px">إسم مدير التسويق :  </td>
+                                                            <td class="text-gray-800 min-w-200px">
+                                                                <a href="pages/apps/customers/view.html" class="text-gray-800 badge badge-light-primary  text-hover-primary">@Model.RequestDVM.MarketingManager?.Name1</a>
+                                                            </td>
+                                                        </tr>
+                                                        <!--end::Row-->
+                                                        <!--begin::Row-->
+                                                        <tr>
+                                                            <td class="text-gray-500">الرقم المدني لمدير التسويق:   </td>
+                                                            <td class="text-gray-800">@Model.RequestDVM.MarketingManager?.CivilId</td>
+                                                        </tr>
+                                                        <!--end::Row-->
+                                                        <!--begin::Row-->
+                                                        <tr>
+                                                            <td class="text-gray-500">الإيميل لمدير التسويق:   </td>
+                                                            <td class="text-gray-800">@Model.RequestDVM.MarketingManager?.Email</td>
+                                                        </tr>
+                                                        <!--end::Row-->
+                                                        <!--begin::Row-->
+                                                        <tr>
+                                                            <td class="text-gray-500">رقم الجوال لمدير التسويق :   </td>
+                                                            <td class="text-gray-800">@Model.RequestDVM.MarketingManager?.Phone</td>
+                                                        </tr>
+                                                        <!--end::Row-->
+
+
+
+                                                    </table>
+                                                    <!--end::Details-->
+                                                </div>
+                                                <!--end::Row-->
+
+                                            </div>
+                                            <!--end::Row-->
+                                        </div>
+                                        <!--end::Section-->
+
+                                    </div>
+                                    <!--end::Card body-->
+                                    <!--begin::Card body-->
+                                    <div class="card-body pt-3">
+                                        <!--begin::Section-->
+                                        <div class="mb-10">
+                                            <!--begin::Card title-->
+                                            <div class="card-title flex-column">
+                                                <!--begin::Underline-->
+                                                <span class="d-inline-block position-relative ms-2">
+                                                    <!--begin::Label-->
+                                                    <span class="d-inline-block mb-2  fw-bold">
+                                                        بيانات مدير العمليات
+                                                    </span>
+                                                    <!--end::Label-->
+                                                    <!--begin::Line-->
+                                                    <span class="d-inline-block position-absolute h-3px bottom-0 end-0 start-0 bg-danger translate rounded"></span>
+                                                    <!--end::Line-->
+                                                </span>
+                                            </div>
+                                            <!--end::Card title-->
+                                            <!--begin::Details-->
+                                            <div class="d-flex flex-wrap py-5">
+                                                <!--begin::Row-->
+                                                <div class="flex-equal me-5">
+                                                    <!--begin::Details-->
+                                                    <table class="table fs-6 fw-semibold gs-0 gy-2 gx-2 m-0">
+                                                        <!--begin::Row-->
+                                                        <tr>
+                                                            <td class="text-gray-500 min-w-175px w-175px">إسم مدير العمليات :  </td>
+                                                            <td class="text-gray-800 min-w-200px">
+                                                                <a href="pages/apps/customers/view.html" class="text-gray-800 badge badge-light-primary  text-hover-primary">@Model.RequestDVM.OperationsManager?.Name1</a>
+                                                            </td>
+                                                        </tr>
+                                                        <!--end::Row-->
+                                                        <!--begin::Row-->
+                                                        <tr>
+                                                            <td class="text-gray-500">الرقم المدني لمدير العمليات:   </td>
+                                                            <td class="text-gray-800">@Model.RequestDVM.OperationsManager?.CivilId</td>
+                                                        </tr>
+                                                        <!--end::Row-->
+                                                        <!--begin::Row-->
+                                                        <tr>
+                                                            <td class="text-gray-500">الإيميل لمدير العمليات:   </td>
+                                                            <td class="text-gray-800">@Model.RequestDVM.OperationsManager?.Email</td>
+                                                        </tr>
+                                                        <!--end::Row-->
+                                                        <!--begin::Row-->
+                                                        <tr>
+                                                            <td class="text-gray-500">رقم الجوال لمدير العمليات :   </td>
+                                                            <td class="text-gray-800">@Model.RequestDVM.OperationsManager?.Phone</td>
+                                                        </tr>
+                                                        <!--end::Row-->
+
+
+
+                                                    </table>
+                                                    <!--end::Details-->
+                                                </div>
+                                                <!--end::Row-->
+
+                                            </div>
+                                            <!--end::Row-->
+                                        </div>
+                                        <!--end::Section-->
+
+                                    </div>
+                                    <!--end::Card body-->
+                                </div>
+                                <!--end::Card-->
+                            </div>
+                            <!--end:::Tab Applicant pane-->
+                            <!--begin:::Tab pane Attachment-->
+                            <div class="tab-pane fade" id="kt_user_view_overview_attachment" role="tabpanel">
+                                @{
+                                    int targetID = 0;
+                                    string tergetStr = "kt_docs_card_collapsible" + targetID.ToString();
+                                }
+
+                                @foreach (var item in Model.attachmentVM)
+                                {
+                                    targetID++;
+                                    string targetStr = "kt_docs_card_collapsible" + targetID.ToString();
+                                    <!--begin::Card-->
+                                    <div class="card shadow-sm pt-4 mb-6 mb-xl-9">
+                                        <div class="card-header collapsible cursor-pointer rotate" data-bs-toggle="collapse" data-bs-target="#@targetStr">
+                                            <div class="card-title flex-column">
+                                                <!-- Display the attachment name -->
+                                                @* <h2 class="mb-1 text-muted">@item.AttachName</h2> *@
+                                                <div class="d-inline-flex align-items-center">
+                                                    <!-- Checkbox for the attachment -->
+                                                    <input type="checkbox" data-id="@item.AttachId" name="attachmentsToUpload" value="@item.AttachPath" id="checkbox_@targetID" @if (item.IsApproved)
+                                                    {
+                                                        @:checked
+                                                    } class="form-check-input me-2">
+                                                    <label for="checkbox_@targetID" class="mb-1 text-muted">@item.AttachName</label>
+                                                </div>
+                                                <div class="card-title flex-column">
+                                                    <!--begin::Underline-->
+                                                    <span class="d-inline-block position-relative ms-2">
+                                                        <!--begin::Label-->
+                                                        <span class="d-inline-block mb-2 fw-bold">
+                                                            @item.AttachName
+                                                        </span>
+                                                        <!--end::Label-->
+                                                        <!--begin::Line-->
+                                                        <span class="d-inline-block position-absolute h-3px bottom-0 end-0 start-0 bg-primary translate rounded"></span>
+                                                        <!--end::Line-->
+                                                    </span>
+                                                </div>
+
+                                            </div>
+                                            <div class="card-toolbar rotate-180">
+                                                <i class="ki-duotone ki-down fs-1"></i>
+                                            </div>
+                                        </div>
+                                        <div id="@targetStr" class="collapse">
+                                            <div class="card-body">
+                                                <div>
+                                                    <!-- Ensure the path is correct for iframe -->
+                                                    <iframe src="@Url.Content("~/Admin/Files/Request_Documents/Tourism/" + item.AttachPath)" style="width: 100%; height: 500px;"></iframe>
+                                                </div>
+                                            </div>
+                                            <div class="card-footer">
+                                                <!-- Ensure the link to open in a new tab is correct -->
+                                                <a href="@Url.Content("~/Admin/Files/Request_Documents/Tourism/" + item.AttachPath)" class="btn btn-light-primary btn-sm" target="_blank">
+                                                    <i class="ki-outline ki-book-open fs-3"></i>
+                                                    فتح في شاشة منفصلة
+                                                </a>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div id="attachmentsSection">
+                                    </div>
+                                    <!--end::Card-->
+                                }
+
+                            </div>
+                            <!--end:::Tab pane-->
+                            <!--begin:::Tab pane-->
+                            <div class="tab-pane fade" id="kt_user_view_overview_Payments" role="tabpanel">
+
+
+                                <!-- begin::Invoice 3-->
+                                <div class="card" id="InvioceContent">
+                                    <!-- begin::Body-->
+                                    <div class="card-body py-20">
+                                        <!-- begin::Wrapper-->
+                                        <div class="mw-lg-950px mx-auto w-100">
+                                            <!-- begin::Header-->
+                                            <div class="d-flex justify-content-between flex-column flex-sm-row mb-19">
+                                                <!--begin::Card title-->
+                                                <div class="card-title flex-column">
+                                                    <!--begin::Underline-->
+                                                    <span class="d-inline-block position-relative ms-2">
+                                                        <!--begin::Label-->
+                                                        <span class="d-inline-block mb-2  fs-3x  fw-bold">
+                                                            بيانات فاتورة الدفع
+                                                        </span>
+                                                        <!--end::Label-->
+                                                        <!--begin::Line-->
+                                                        <span class="d-inline-block position-absolute h-3px bottom-0 end-0 start-0 bg-primary translate rounded"></span>
+                                                        <!--end::Line-->
+                                                    </span>
+                                                </div>
+                                                <!--end::Card title-->
+                                                <!--end::Logo-->
+                                                <div class="text-sm-end">
+                                                    <!--begin::Logo-->
+                                                    <a href="#" class="d-block mw-150px ms-sm-auto">
+                                                        <img alt="Logo" src="~/Admin/assets/media/logos/TasdeedLogo.png" class="w-100" />
+                                                    </a>
+                                                    <!--end::Logo-->
+                                                    <!--begin::Text-->
+                                                    <div class="text-sm-end fw-semibold fs-4 text-muted mt-7">
+                                                        <div>دولة الكويت  - وزارة الاعلام</div>
+                                                        <div>إدارة السياحة</div>
+                                                    </div>
+                                                    <!--end::Text-->
+                                                </div>
+                                            </div>
+                                            <!--end::Header-->
+                                            @if (@Model.PaymentDetailsVM != null)
+                                            {
+                                                <!--begin::Body-->
+                                                <div class="pb-12">
+                                                    <!--begin::Wrapper-->
+                                                    <div class="d-flex flex-column gap-7 gap-md-10">
+                                                        <!--begin::Message-->
+                                                        <div class="fw-bold fs-4">
+                                                            الدفع باسم /
+                                                            <span class="fs-6">@Model.RequestDVM.Licowner</span>,
+                                                            <br />
+                                                            <span class="text-muted fs-8">للترخيص الاعلامي :  <span class="badge badge-light-primary fs-8">@Model.RequestDVM.Licname</span></span>
+                                                        </div>
+                                                        <!--begin::Message-->
+                                                        <!--begin::Separator-->
+                                                        <div class="separator"></div>
+                                                        <!--begin::Separator-->
+                                                        <!--begin::Details-->
+                                                        <div class="d-flex flex-wrap py-5">
+                                                            <!--begin::Row-->
+                                                            <div class="flex-equal me-5">
+                                                                <!--begin::Details-->
+                                                                <table class="table fs-6 fw-semibold gs-0 gy-2 gx-2 m-0">
+                                                                    <!--begin::Row-->
+                                                                    <tr>
+                                                                        <td class="text-gray-500">المبلغ : </td>
+                                                                        <td class="text-gray-800">@Model.PaymentDetailsVM.TotalAmount</td>
+                                                                    </tr>
+                                                                    <!--end::Row-->
+                                                                    <!--begin::Row-->
+                                                                    <tr>
+                                                                        <td class="text-gray-500">رقم الدفع : </td>
+                                                                        <td class="text-gray-800">@Model.PaymentDetailsVM.Ref</td>
+                                                                    </tr>
+                                                                    <!--end::Row-->
+                                                                    <!--begin::Row-->
+                                                                    <tr>
+                                                                        <td class="text-gray-500"> تاريخ الدفع :   </td>
+                                                                        <td class="text-gray-800">
+                                                                            @if (Model.PaymentDetailsVM.PaymentDate != null)
+                                                                            {
+                                                                                <span class="badge badge-light-success"> @Model.PaymentDetailsVM.PaymentDate.Value.ToString("dd - MM - yyyy")</span>
+
+                                                                            }
+
+                                                                        </td>
+
+                                                                    </tr>
+                                                                    <!--begin::Row-->
+                                                                    <tr>
+                                                                        <td class="text-gray-500">طريقة الدفع :  </td>
+                                                                        <td class="text-gray-800">@Model.PaymentDetailsVM?.PaymentMethod</td>
+                                                                    </tr>
+                                                                    <!--end::Row-->
+                                                                    <!--end::Row-->
+
+
+                                                                </table>
+                                                                <!--end::Details-->
+                                                            </div>
+                                                            <!--end::Row-->
+                                                            <!--begin::Row-->
+                                                            <div class="flex-equal">
+                                                                <!--begin::Details-->
+                                                                <table class="table fs-6 fw-semibold gs-0 gy-2 gx-2 m-0">
+
+                                                                    <!--begin::Row-->
+                                                                    <tr>
+                                                                        <td class="text-gray-500">النتيجة :  </td>
+                                                                        <td class="text-gray-800">
+                                                                            @if (Model.PaymentDetailsVM?.Result != null)
+                                                                            {
+                                                                                <span class="badge badge-light-success">
+                                                                                    @Model.PaymentDetailsVM.Result
+
+                                                                                </span>
+                                                                            }
+
+                                                                        </td>
+                                                                    </tr>
+                                                                    <!--end::Row-->
+                                                                    <!--begin::Row-->
+                                                                    <tr>
+                                                                        <td class="text-gray-500">رقم التتبع :  </td>
+                                                                        <td class="text-gray-800">@Model.PaymentDetailsVM?.TrackId</td>
+                                                                    </tr>
+                                                                    <!--end::Row-->
+                                                                    <!--begin::Row-->
+                                                                    <tr>
+                                                                        <td class="text-gray-500">رقم التحويل :  </td>
+                                                                        <td class="text-gray-800">@Model.PaymentDetailsVM?.PaymentId</td>
+                                                                    </tr>
+                                                                    <!--end::Row-->
+                                                                    <!--begin::Row-->
+                                                                    <tr>
+                                                                        <td class="text-gray-500">رقم AUTH :  </td>
+                                                                        <td class="text-gray-800">@Model.PaymentDetailsVM?.Auth</td>
+                                                                    </tr>
+                                                                    <!--end::Row-->
+                                                                </table>
+                                                                <!--end::Details-->
+                                                            </div>
+                                                            <!--end::Row-->
+                                                        </div>
+
+                                                    </div>
+                                                    <!--end::Wrapper-->
+                                                </div>
+
+
+                                                <!--end::Body-->
+                                            }
+                                            else
+                                            {
+                                                <!--begin::Alert-->
+                                                <div class="alert alert-dismissible bg-light-danger d-flex flex-center flex-column py-10 px-10 px-lg-20 mb-10">
+                                                    <!--begin::Close-->
+                                                    @*<button type="button" class="position-absolute top-0 end-0 m-2 btn btn-icon btn-icon-danger" data-bs-dismiss="alert">
+                                                <i class="ki-duotone ki-cross fs-1"><span class="path1"></span><span class="path2"></span></i>
+                                                </button>*@
+                                                    <!--end::Close-->
+                                                    <!--begin::Icon-->
+                                                    <i class="ki-duotone ki-information-5 fs-5tx text-danger mb-5"><span class="path1"></span><span class="path2"></span><span class="path3"></span></i>
+                                                    <!--end::Icon-->
+                                                    <!--begin::Wrapper-->
+                                                    <div class="text-center">
+                                                        <!--begin::Title-->
+                                                        <h1 class="fw-bold text-muted mb-5">تنويه</h1>
+                                                        <!--end::Title-->
+                                                        <!--begin::Separator-->
+                                                        <div class="separator separator-dashed border-danger opacity-25 mb-5"></div>
+                                                        <!--end::Separator-->
+                                                        <!--begin::Content-->
+                                                        <div class="mb-9 text-gray-900 fw-bold ">
+                                                            لا توجد عمليات دفع عمليات دفع مسجلة  للطلب الحالي , في حال حدوث خطا في عمليه الدفع يرجي مراجعة الادارة المختصة .
+                                                        </div>
+                                                        <!--end::Content-->
+
+                                                    </div>
+                                                    <!--end::Wrapper-->
+                                                </div>
+                                                <!--end::Alert-->
+                                            }
+
+                                            <!-- begin::Footer-->
+                                            <div class="d-flex flex-stack flex-wrap mt-lg-20 pt-13">
+                                                <!-- begin::Actions-->
+                                                <!--<div class="my-1 me-5">-->
+                                                <!-- begin::Pint-->
+                                                <!--<button type="button" class="btn btn-success my-1 me-12" onclick="window.print();">Print Invoice</button>-->
+                                                <!-- end::Pint-->
+                                                <!-- begin::Download-->
+                                                <!--<button type="button" onclick="printDiv('InvioceContent')" class="btn btn-light-success my-1">Download</button>-->
+                                                <!-- end::Download-->
+                                                <!--</div>-->
+                                                <!-- end::Actions-->
+                                                <!-- begin::Action-->
+                                                <!--<a href="apps/invoices/create.html" class="btn btn-primary my-1">Create Invoice</a>-->
+                                                <!-- end::Action-->
+                                            </div>
+                                            <!-- end::Footer-->
+                                        </div>
+                                        <!-- end::Wrapper-->
+                                    </div>
+                                    <!-- end::Body-->
+                                </div>
+                                <!-- end::Invoice 1-->
+                            </div>
+                            <!--end:::Tab pane-->
+                            <!--begin:::Tab pane History -->
+                            <div class="tab-pane fade" id="kt_user_view_overview_LogUser" role="tabpanel">
+                                <!--begin::Card-->
+                                <!-- Begin::Historical Log -->
+                                <div class="card mb-5 mb-lg-10">
+                                    <!-- Begin::Card header -->
+                                    <div class="card-header">
+                                        <!-- Begin::Heading -->
+                                        <div class="card-title">
+                                            <h3>السجل التاريخي</h3>
+                                        </div>
+                                        <!-- End::Heading -->
+                                        <!-- Begin::Toolbar -->
+                                        <div class="card-toolbar">
+                                            <div class="my-1 me-4">
+                                                <!-- Begin::Select -->
+                                                <select class="form-select form-select-sm form-select-solid w-125px" data-control="select2" data-placeholder="Filter by Status" data-hide-search="true">
+                                                    <option value="all" selected="selected">All</option>
+                                                    <option value="completed">Completed</option>
+                                                    <option value="pending">Pending</option>
+                                                    <option value="error">Error</option>
+                                                </select>
+                                                <!-- End::Select -->
+                                            </div>
+                                            <a href="#" class="btn btn-sm btn-primary my-1">View All</a>
+                                        </div>
+                                        <!-- End::Toolbar -->
+                                    </div>
+                                    <!-- End::Card header -->
+                                    <!-- Begin::Card body -->
+                                    <div class="card-body p-0">
+                                        <!-- Begin::Table wrapper -->
+                                        <div class="table-responsive">
+                                            <!-- Begin::Table -->
+                                            <table id="logTable" class="table align-middle table-row-bordered table-row-solid gy-4 gs-9">
+                                                <!-- Begin::Thead -->
+                                                <thead class="border-gray-200 fs-5 fw-semibold bg-lighten">
+                                                    <tr>
+
+                                                        <th class="min-w-250px"> حالة الطلب </th>
+                                                        <th class="min-w-150px">تاريخ العملية</th>
+                                                        <th class="min-w-250px">ملاحظات</th>
+                                                        <th class="min-w-150px">المستخدم</th>
+                                                    </tr>
+                                                </thead>
+                                                <!-- End::Thead -->
+                                                <!-- Begin::Tbody -->
+                                                <tbody class="fw-6 fw-semibold text-gray-600">
+                                                    @foreach (var item in Model.RequestTransactionVM)
+                                                    {
+                                                        <tr>
+
+                                                            <td>@item.Activity</td>
+                                                            <td>@item.OperationDate?.ToString("dd-MM-yyyy HH:mm")</td>
+                                                            <td>@item.Notes</td>
+                                                            <td>@item.EmployeeName</td>
+                                                        </tr>
+                                                    }
+                                                </tbody>
+                                                <!-- End::Tbody -->
+                                            </table>
+                                            <!-- End::Table -->
+                                        </div>
+                                        <!-- End::Table wrapper -->
+                                    </div>
+                                    <!-- End::Card body -->
+                                </div>
+                                <!-- End::Historical Log -->
+                                <!--end:::Tab pane-->
+
+                            </div>
+                            <!--end:::Tab pane-->
+                            <!--end:::Tab content-->
+                        </div>
+
+                        <!--end::Content-->
+                    </div>
+                    <!--end::Layout-->
+
+
+
+                </div>
+                <!--end::Content container-->
+            </div>
+            <!--end::Content-->
+
+
+    </form>
+</div>
+<!--end::Content wrapper-->
+@section Scripts {
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js"></script>
+
+
+    <script>
+        // Define the base URL for API requests
+        const Dynamicurl = '@ViewBag.DynamicUrlApi';
+        let cachedAttachmentRules = null;
+        $(document).ready(function () {
+            initializeCheckboxStates();  // Set the initial state of checkboxes
+        });
+        document.addEventListener('DOMContentLoaded', function () {
+            console.log('Page Loaded: Initializing scripts.');
+            const serviceId = parseInt('@(Model.RequestDVM.ServiceId)');
+            const activityTypeId = parseInt('@(Model.RequestDVM.ActivityTypeId)');
+            const requestTypeId = parseInt('@(Model.RequestDVM.ReqtypeId)');
+            const initialStatusId = parseInt('@(Model.RequestDVM.RequestStatusId)');
+
+            console.log('Initial Status ID:', initialStatusId);
+
+            const isFinalStatus = '@(Model.IsFinalStatus)';
+            const requeststatus = '@(Model.requestStatus)';//payment
+            trackNoteChangesbeforAfter(); // Call this to start tracking the note changes
+
+            initializePage(initialStatusId);
+
+            console.log('Initial Status ID:', initialStatusId);
+            const statusButtons = document.querySelectorAll('#statusButtons button');
+            statusButtons.forEach(button => {
+                button.addEventListener('click', function () {
+                    handleButtonClick(this);
+                });
+            });
+            //renderFileInputs(serviceId, activityTypeId, initialStatusId, requestTypeId);
+
+
+            // Attach event listeners to all buttons using event delegation
+
+        });
+        let action = '';
+        let changeLogs = [];  // Array to store change logs
+
+        // Initialize the page based on the initial status ID
+        function initializePage(statusId) {
+            //checkInitialStatusForUploadFile(statusId);
+            checkStatusAndShowUploadForAttachment(statusId);
+
+            updateLicenseContent(
+                statusId,
+                '@(Model.RequestDVM?.Licno ?? "")',
+                '@(Model.RequestDVM?.LicenceNavigation?.IssueDate?.ToString("yyyy-MM-dd") ?? "")',
+                '@(Model.RequestDVM?.LicenceNavigation?.ExpireDate?.ToString("yyyy-MM-dd") ?? "")'
+            );
+
+            disableButtonForWaitingPayment(statusId);
+            hideButtonsForCertainStatuses(statusId);
+            hideRefuseButtonForCertainStatuses(statusId);
+        }
+        // This function will be called on page load to set the initial states from the model
+        function initializeCheckboxStates() {
+            $("input[type='checkbox']").each(function () {
+                const attachmentId = $(this).data('id');
+                const isChecked = $(this).prop('checked');
+
+                // Store the initial state from the model (based on whether the checkbox is checked or not)
+                previousCheckboxStates[attachmentId] = isChecked;
+            });
+        }
+        // Handle all button clicks
+        function handleButtonClick(button) {
+            action = button.id; // Button ID can determine the action
+            console.log(`Button clicked: ${action}`);
+            changeLogs.push(action);
+
+            // Collect necessary data before performing actions
+            // collectEvaluationData();  // Collect evaluation data from radio buttons
+            trackCheckboxChanges();   // Track changes in checkboxes
+            trackNoteChanges();       // Track changes in the note textarea
+            console.log(selectedAttachments);
+            console.log(uncheckedAttachments);
+            console.log(note);
+            // Log user action
+            logUserAction(action, button.id, {
+                selectedAttachments,
+                uncheckedAttachments,
+                note
+            });
+
+            // Send the collected data to the server
+            // sendDataToServer({
+            //     action: action,
+            //     selectedAttachments: selectedAttachments,
+            //     uncheckedAttachments: uncheckedAttachments,
+            //     note: note,
+            //     requestId: button.getAttribute('data-request-id'),
+            //     serviceId: button.getAttribute('data-service-id'),
+            //     activityTypeId: button.getAttribute('data-activity-type-id'),
+            //     statusId: button.getAttribute('data-status-id'),
+            //     reqTypeId: button.getAttribute('data-reqtype-id'),
+            //     reqNo: button.getAttribute('data-reqno')
+            // });
+        }
+
+        // Function to log user actions (for debugging or logging purposes)
+        function logUserAction(action, elementId, data) {
+            console.log("Action:", action);
+            console.log("Element ID:", elementId);
+            console.log("Data:", data);
+
+            localStorage.setItem('userAction', JSON.stringify({ action, elementId, data }));
+        }
+
+        // Track changes in checkboxes
+        function trackCheckboxChanges() {
+            $("input[type='checkbox']").each(function () {
+                const attachmentId = $(this).data('id');
+                const isChecked = $(this).prop('checked');
+                console.log("Checkbox ID:", attachmentId);  // Check the value of attachmentId
+
+                console.log("Checkbox Checked:", isChecked);
+                updateAttachmentList(isChecked, attachmentId);
+            });
+
+            // التفاعل مع التغيير في حالة الـcheckbox
+            $("input[type='checkbox']").on('change', function () {
+                const attachmentId = $(this).data('id');
+
+                console.log("Checkbox ID:", attachmentId);  // Check the value of attachmentId
+                const isChecked = $(this).prop('checked');
+                console.log("Checkbox Checked:", isChecked);
+
+                updateAttachmentList(isChecked, attachmentId);
+            });
+        }
+        // Track changes in checkboxes
+        const selectedAttachments = [];
+
+        let note = '';
+        let uncheckedAttachments = [];
+        // Update the attachment list based on checkbox state
+        function updateAttachmentList(isChecked, attachmentId) {
+            if (attachmentId != null && attachmentId !== undefined) {
+                if (isChecked) {
+                    // Add to selected attachments
+                    if (!selectedAttachments.includes(attachmentId)) {
+                        selectedAttachments.push(attachmentId);
+                    }
+                } else {
+                    // Add to unchecked attachments
+                    if (!uncheckedAttachments.includes(attachmentId)) {
+                        uncheckedAttachments.push(attachmentId);
+                    }
+                }
+            } else {
+                console.log("Attachment ID is null or undefined, skipping...");
+            }
+
+            console.log("Checked attachments:", selectedAttachments);
+            console.log("Unchecked attachments:", uncheckedAttachments);
+        }
+        // Track changes in the note textarea
+        function trackNoteChanges() {
+            $("#RequestNote").on('input', function () {
+                note = $(this).val().trim();
+                console.log("Note:", note);
+            });
+        }
+
+
+
+        // Object to store the previous states of the checkboxes
+        let previousCheckboxStates = {};
+
+        // Arrays to store selected and unchecked attachments
+
+        let allAttachmentsState = [];  // To store all attachments and their states
+
+        // Track change in the state of checkboxes
+        $("input[type='checkbox']").on('change', function () {
+            const attachmentId = $(this).data('id');  // Get the ID of the attachment
+            const isChecked = $(this).prop('checked');  // Get the current state of the checkbox (checked or unchecked)
+
+            // If this is the first time we are checking this attachmentId, initialize its previous state
+            if (previousCheckboxStates[attachmentId] === undefined) {
+                previousCheckboxStates[attachmentId] = isChecked;
+            }
+
+            // Get the old state before the change
+            const oldState = previousCheckboxStates[attachmentId] ? "checked" : "unchecked";
+            const newState = isChecked ? "checked" : "unchecked";
+
+            // If the state of this checkbox has changed
+            if (oldState !== newState) {
+                // Log the change: from previous state to current state
+                const logMessage = `Attachment ID: ${attachmentId} changed from ${oldState} to ${newState}`;
+                console.log(logMessage);  // Log the change to the console
+
+                // Store the change in the logs
+                // changeLogs.push({
+                //     attachmentId: attachmentId,
+                //     oldState: oldState,
+                //     newState: newState
+                // });
+                changeLogs.push(logMessage);
+                // Update the previous state to the current state
+                previousCheckboxStates[attachmentId] = isChecked;
+
+                // Update selected or unchecked attachments based on the new state
+                if (isChecked) {
+                    if (!selectedAttachments.includes(attachmentId)) {
+                        selectedAttachments.push(attachmentId);
+                    }
+                    // Remove from uncheckedAttachments if it was previously unchecked
+                    const index = uncheckedAttachments.indexOf(attachmentId);
+                    if (index !== -1) {
+                        uncheckedAttachments.splice(index, 1);
+                    }
+                } else {
+                    if (!uncheckedAttachments.includes(attachmentId)) {
+                        uncheckedAttachments.push(attachmentId);
+                    }
+                    // Remove from selectedAttachments if it was previously checked
+                    const index = selectedAttachments.indexOf(attachmentId);
+                    if (index !== -1) {
+                        selectedAttachments.splice(index, 1);
+                    }
+                }
+                allAttachmentsState.push({
+                    attachmentId: attachmentId,
+                    state: isChecked ? 'checked' : 'unchecked'
+                });
+                // Log the updated array for debugging
+                console.log("All Attachments State:", allAttachmentsState);
+                // Log the updated lists for debugging
+                console.log("Selected Attachments:", selectedAttachments);
+                console.log("Unchecked Attachments:", uncheckedAttachments);
+                console.log("Change Logs:", changeLogs);
+            }
+
+        });
+
+
+
+        let newnote = '';  // The current value of the note
+
+        let initialNote = $("#RequestNote").val().trim();  // Store the initial value of the note
+
+
+        let noteChangeLogged = false;  // To ensure we log the change only once (first and last)
+
+        function trackNoteChangesbeforAfter() {
+            $("#RequestNote").on('blur', function () {
+                newnote = $(this).val().trim();  // Update the current note
+
+                // Log change when the note is different from the initial one and hasn't been logged yet
+                if (!noteChangeLogged && newnote !== initialNote) {
+                    const logMessage = `Note changed from "${initialNote}" to "${newnote}"`;
+                    changeLogs.push(logMessage);  // Store the change in the logs
+
+                    // Log the change
+                    console.log(logMessage);
+
+                    // Optionally, set the initial note to the new value after logging the change
+                    initialNote = newnote;
+                    noteChangeLogged = true;  // Mark that the note change has been logged
+                }
+
+                // Reset log when user starts editing again
+                if (newnote === initialNote && noteChangeLogged) {
+                    noteChangeLogged = false;  // Allow further tracking if the note returns to its initial value
+                }
+            });
+        }
+        document.addEventListener("DOMContentLoaded", function () {
+            const submitButtons = document.querySelectorAll(".submitAttachmentButton");
+
+            submitButtons.forEach(button => {
+                button.addEventListener("click", async function () {
+                    // Call the first function
+                    const filesValid = await initializeAttachmentUpload();
+
+                    // Check if the first function passes (returns true), then call the second function
+                    if (filesValid) {
+                        // Call the second function if the first one is successful
+                        moveToNextStatus(this);
+                    }
+                });
+            });
+        });
+        const RequestDeclined = @((int)RequestStatusEnum.RequestDeclined);
+        const FinalLicenseIssuingProcessing = @((int)RequestStatusEnum.FinalLicenseIssuingProcessing);
+        const FinalLicenseIssued = @((int)RequestStatusEnum.FinalLicenseIssued);
+        const PaymentAndFinalLicencesIssued = @((int)RequestStatusEnum.PaymentAndFinalLicencesIssued);
+        const RequestType = @(RequestTypeEnum.Request);
+        const ReqTypeId = @(Model.RequestDVM.ReqtypeId);
+        const WaitingForPayment = @((int)RequestStatusEnum.WaitingForPayment);
+        let uploadedFiles = [];
+
+        // Handle moving to the next status
+        async function moveToNextStatus(element) {
+
+            try {
+                handleButtonClick(element);  // This will update selectedAttachments, uncheckedAttachments, etc.
+
+                const requestId = element.getAttribute('data-request-id');
+                const serviceId = element.getAttribute('data-service-id');
+                const activityTypeId = element.getAttribute('data-activity-type-id');
+                const currentStatusId = parseInt(element.getAttribute('data-status-id'));
+                const reqTypeId = element.getAttribute('data-reqtype-id');
+                const note = document.getElementById("RequestNote").value.trim();
+                const reqNo = element.getAttribute('data-reqno');
+
+                logUserAction('Button Click', element.id, { requestId, action: currentStatusId === RequestDeclined ? "Refuse" : "Move to next step", selectedAttachments, note });
+
+                trackNoteChangesbeforAfter();
+                if (currentStatusId === RequestDeclined && note === "") {
+                    alert('من فضلك أدخل سبب الرفض .');
+                    return;
+                }
+
+                const isRefuseAction = currentStatusId === RequestDeclined
+                    ? "Are you sure you want to refuse this request?"
+                    : `Move to the next step?`;
+                if (!confirm(isRefuseAction)) return;
+
+                //const formData = createFormData(requestId, currentStatusId, reqTypeId, activityTypeId, reqNo, note);
+                console.log(selectedAttachments);
+                console.log(uncheckedAttachments);
+                console.log(action);
+                if (!(uploadedFiles instanceof FormData)) {
+                    uploadedFiles = new FormData(); // Ensure uploadedFiles is always a FormData object
+                }
+                //let uploadedFiles = await handleFileUpload(currentStatusId, requestId, serviceId, reqTypeId, activityTypeId, null);
+                //console.log("Files uploaded:", uploadedFiles);  // سيتم طباعة الملفات بغض النظر عن حالتها
+                const dynamicFileInputs = document.querySelectorAll('input[type="file"][name^="AttachmentFiles-"]');
+
+                dynamicFileInputs.forEach((input, index) => {
+                    if (input.files.length > 0) {
+                        const checkboxes = document.querySelectorAll('input[name="attachmentsToUpload"]');
+
+
+                        const file = input.files[0]; // Handle the first file
+
+                        let fileName = input.getAttribute("data-filename") || associatedLabel.textContent.trim(); // Get filename
+                        const isMandatory = input.getAttribute("data-mandatory") === "True"; // Must be boolean
+                        const fieldName = input.getAttribute("data-fieldname") || "";
+
+                        // Append the file and its name to `uploadedFiles` as part of the `files` array
+                        uploadedFiles.append(`files[${index}].Files`, file); // Append the file
+                        uploadedFiles.append(`files[${index}].filename`, fileName); // Append the filename
+                        uploadedFiles.append(`files[${index}].ismandatory`, isMandatory);  // ✅ this was missing
+                        uploadedFiles.append(`files[${index}].fieldname`, fieldName);
+                    }
+                });
+
+
+                // Optionally, handle unchecked attachments directly using the following approach
+                const uncheckedAttachmentsFromDOM = $("input[type='checkbox']:not(:checked)").map(function () {
+                    return parseInt($(this).data('id'));  // Collect numeric ID of unchecked checkboxes
+                }).get();
+
+
+                // // Handle file upload if required
+                // if (currentStatusId === 7) {
+                //     if (!handleFileUpload(formData)) return;
+                // }
+                const SaveDataViewModel = {
+                    selectedAttachments: selectedAttachments,
+                    uncheckedAttachments: uncheckedAttachments,
+                    action: action,
+                    note: note,
+                    requestId: requestId,
+                    ReqNo: reqNo,
+                    activityTypeId: activityTypeId,
+                    reqTypeId: reqTypeId,
+                    ReqStatusId: currentStatusId,
+                    changeLogs: changeLogs,
+                    //files: uploadedFiles ,
+                    allAttachmentsState: allAttachmentsState
+
+                };
+                // Add SaveDataViewModel fields to FormData
+
+                // Add SaveDataViewModel fields to FormData
+                for (const key in SaveDataViewModel) {
+                    if (Array.isArray(SaveDataViewModel[key])) {
+                        SaveDataViewModel[key].forEach((value, index) => {
+                            if (key === "allAttachmentsState") {
+                                // If it is the list of AttachmentState objects
+                                uploadedFiles.append(`allAttachmentsState[${index}].AttachmentId`, value.attachmentId);
+                                uploadedFiles.append(`allAttachmentsState[${index}].State`, value.state);
+                            } else {
+                                uploadedFiles.append(`${key}[${index}]`, value);
+                            }
+                        });
+                    } else if (SaveDataViewModel[key] !== undefined && SaveDataViewModel[key] !== null) {
+                        uploadedFiles.append(key, SaveDataViewModel[key]);
+                    }
+                }
+
+                // Call the API to update the status
+                const response = await fetch('SaveData/', {
+                    method: 'POST',
+                    body: uploadedFiles
+                    // method: 'POST',
+                    // headers: {
+                    //          'Content-Type': 'application/json'
+                    //           },
+                    // body: JSON.stringify(SaveDataViewModel)
+                });
+
+                if (!response.ok) throw new Error('Failed to modify request status');
+
+                const result = await response.json();
+                if (typeof result.updatedRequest === 'string') {
+                    result.updatedRequest = JSON.parse(result.updatedRequest);
+                }
+
+                console.log(result);
+                console.log(result.updatedRequest);
+                const nextStatusId = result.updatedRequest.statusid; // Updated status ID
+                const nextStatusName = result.updatedRequest.statusname || "Unknown Status";
+                const statusElement = document.querySelector(`#RequestStatusbutton[data-request-id="${requestId}"]`);
+                //element.textContent = isRefuseAction ? "Request Refused" : nextStatusName;
+                //element.setAttribute("data-status-id", nextStatusId);
+                if (action === "RequestStatusbutton" && statusElement) {
+                    statusElement.textContent = nextStatusName; // Update the button's text
+                    statusElement.setAttribute("data-status-id", nextStatusId); // Update the status ID
+                    console.log("RequestStatusbutton updated successfully.");
+                }
+                updateStatusUI(result.updatedRequest);
+                console.log(result);
+                console.log(result.updatedRequest);
+                if (result.updatedRequest) {
+                    addLogRowToTable(result.updatedRequest);
+                }
+                location.reload();
+                alert(result.message || "Status updated successfully.");
+            } catch (error) {
+                console.error("Error updating status:", error);
+                alert("An error occurred while updating the status.");
+            }
+        }
+
+
+        // async function handleFileUpload(currentStatusId, requestId, serviceId, requestTypeId, activityTypeId, transactionTypeId) {
+        //     if (!cachedAttachmentRules) {
+        //         const apiUrl = `${Dynamicurl}/GetAttachmentRules?serviceId=${serviceId}&activityTypeId=${activityTypeId}&requestStatusId=${currentStatusId}&requestTypeId=${requestTypeId}`;
+        //         try {
+        //             const response = await fetch(apiUrl);
+        //             if (!response.ok) {
+        //                 throw new Error(`Failed to fetch attachment rules. Status: ${response.status}`);
+        //             }
+        //             cachedAttachmentRules = await response.json();
+        //         } catch (error) {
+        //             console.error('Error in handleFileUpload:', error);
+        //             alert('An error occurred while verifying file uploads. Please try again.');
+        //             return null; // Return null in case of an error
+        //         }
+        //     }
+
+        //     if (cachedAttachmentRules.$values.length === 0) {
+        //         console.log("No attachment rules found, exiting file upload checks.");
+        //         return null; // Return null if no attachment rules are found
+        //     }
+
+        //     // Prepare FormData to hold files and data
+        //     const formData = new FormData();
+
+        //     // Iterate over attachment rules to handle file uploads
+        //     for (const rule of cachedAttachmentRules.$values) {
+        //         const fileInputId = `fileInput_${rule.id}`;
+        //         const fileInput = document.getElementById(fileInputId);
+
+        //         if (rule.isMandatory && (!fileInput || fileInput.files.length === 0)) {
+        //             alert(`Please upload the file for "${rule.attachName}"`);
+        //             return null; // Return null if a mandatory file is not uploaded
+        //         }
+
+        //         if (fileInput && fileInput.files.length > 0) {
+        //             const pdfFile = fileInput.files[0];
+        //             // formData.append(`files[${rule.id}]`, pdfFile, rule.attachName); // Append file with rule ID and name
+        //             //formData.append("Files", pdfFile, rule.attachName);
+        //             formData.append("Files", pdfFile); // Append the file to FormData
+        //             formData.append("filename", rule.attachName); // Append the file name to FormData
+        //             console.log(`File added for ${rule.attachName}:`, pdfFile);
+        //         }
+        //     }
+        //     console.log(formData);
+        //     return formData; // Return FormData containing all files
+        // }
+
+        // Render dynamic file input fields based on attachment rules
+        // async function renderFileInputs(serviceId, activityTypeId, requestStatusId, requestTypeId) {
+        //     const apiUrl = `${Dynamicurl}/GetAttachmentRules?serviceId=${serviceId}&activityTypeId=${activityTypeId}&requestStatusId=${requestStatusId}&requestTypeId=${requestTypeId}`;
+
+        //     try {
+        //         const response = await fetch(apiUrl);
+        //         if (!response.ok) {
+        //             throw new Error(`Failed to fetch attachment rules. Status: ${response.status}`);
+        //         }
+
+        //         const cachedAttachmentRules = await response.json();
+        //         const uploadSection = document.getElementById('uploadSection');
+        //         uploadSection.innerHTML = '';
+
+        //         if (!cachedAttachmentRules.$values || cachedAttachmentRules.$values.length === 0) {
+        //             console.log("No attachment rules found, skipping file input rendering.");
+        //             uploadSection.style.display = 'none';
+        //             return; // Exit if no rules
+        //         }
+
+
+        //         cachedAttachmentRules.$values.forEach(rule => {
+        //             const fileGroup = document.createElement('div');
+        //             fileGroup.classList.add('form-group', 'mb-3');
+
+        //             const label = document.createElement('label');
+        //             label.textContent = `${rule.attachName}${rule.isMandatory ? ' *' : ''}`;
+        //             fileGroup.appendChild(label);
+
+        //             const fileInput = document.createElement('input');
+        //             fileInput.type = 'file';
+        //             fileInput.id = `fileInput_${rule.id}`;
+        //             fileInput.name = `file_${rule.id}`;
+        //             fileInput.classList.add('form-control');
+        //             if (rule.isMandatory) fileInput.required = true;
+        //             fileGroup.appendChild(fileInput);
+
+        //             uploadSection.appendChild(fileGroup);
+        //         });
+
+        //         uploadSection.style.display = cachedAttachmentRules.$values.length > 0 ? 'block' : 'none';
+        //     } catch (error) {
+        //         console.error('Error rendering file inputs:', error);
+        //         alert('Failed to load attachment rules.');
+        //     }
+        // }
+        // // Handle file upload for specific statuses
+        // function handleFileUpload(formData) {
+        //     const fileInput = document.getElementById('pdfFileInput');
+        //     const fileNameInput = document.getElementById('fileNameInput');
+        //     if (fileInput && fileInput.files.length > 0) {
+        //         const file = fileInput.files[0];
+        //         const filename = fileNameInput ? fileNameInput.value : file.name;
+
+        //         formData.append('pdfFile', file);
+        //         formData.append('fileName', filename);
+
+        //         console.log('File to be uploaded:', file);
+        //         createAttachmentCard(file, filename);
+        //         return true;
+        //     } else {
+        //         alert('Please select a PDF file to upload.');
+        //         return false;
+        //     }
+        // }
+
+        // Show the upload section for the initial status
+        function checkInitialStatusForUploadFile(statusId) {
+            const uploadSection = document.getElementById('uploadSection');
+            if (uploadSection) {
+                uploadSection.style.display = statusId === FinalLicenseIssuingProcessing ? 'block' : 'none';
+            }
+        }
+
+        // Show or hide the attachment section based on status
+        function checkStatusAndShowUploadForAttachment(statusId) {
+            const attachmentSection = document.getElementById('attachmentsSection');
+            if (attachmentSection) {
+                attachmentSection.style.display = statusId === FinalLicenseIssuingProcessing || statusId === FinalLicenseIssued ? 'block' : 'none';
+            }
+        }
+
+        // Hide buttons for certain statuses
+        function hideButtonsForCertainStatuses(statusId) {
+            const statusButtons = document.getElementById('statusButtons');
+            if (statusButtons) {
+                statusButtons.style.display = statusId === RequestDeclined || statusId === FinalLicenseIssued ? 'none' : 'block';
+            }
+        }
+
+        // Disable button when status is "Waiting for Payment" (5)
+        function disableButtonForWaitingPayment(statusId) {
+            const statusButtons = document.getElementById('statusButtons');
+            if (statusId === WaitingForPayment && statusButtons) {
+                statusButtons.disabled = true;
+                statusButtons.style.pointerEvents = "none";
+                statusButtons.textContent = "Payment Pending";
+                statusButtons.style.backgroundColor = "#f8d7da"; // Light red background
+                statusButtons.style.color = "#721c24"; // Dark red text
+                statusButtons.style.borderColor = "#f5c6cb"; // Light red border
+                statusButtons.style.cursor = "not-allowed";
+            }
+        }
+
+        // Hide refuse button for certain statuses
+        function hideRefuseButtonForCertainStatuses(statusId) {
+            const refuseButton = document.getElementById('RefuseRequestbutton');
+            const notifyButton = document.getElementById('SendNotifyToUser');
+            if (statusId === FinalLicenseIssuingProcessing || statusId === FinalLicenseIssued || statusId === PaymentAndFinalLicencesIssued) {
+                refuseButton.style.display = "none";
+                notifyButton.style.display = "none";
+            }
+        }
+
+        // Update the status UI dynamically
+        function updateStatusUI(updatedRequestData) {
+            const updatedStatusId = updatedRequestData.statusid;
+            const updatedStatusName = updatedRequestData.statusname;
+
+            let statusColorClass = '';
+            switch (updatedStatusId) {
+                case 1: statusColorClass = 'badge badge-lg badge-light-primary d-inline'; break;
+                case 2: statusColorClass = 'badge badge-lg badge-light-info d-inline'; break;
+                case 3: statusColorClass = 'badge badge-lg badge-info d-inline'; break;
+                case 4: statusColorClass = 'badge badge-lg badge-light-warning d-inline'; break;
+                case 5: statusColorClass = 'badge badge-lg badge-light-info d-inline'; break;
+                case 6: statusColorClass = 'badge badge-lg badge-light-success d-inline'; break;
+                case 7: statusColorClass = 'badge badge-lg badge-light-success d-inline'; break;
+                case 8: statusColorClass = 'badge badge-lg badge-light-danger d-inline'; break;
+                default: statusColorClass = 'badge badge-lg badge-light-default d-inline'; break;
+            }
+
+            const statusMainRequest = document.getElementById("RequestStatusMain");
+            const buttonText = document.getElementById('RequestStatusbutton');
+            const buttonStatus2 = document.getElementById('status4');
+            const buttonStatus3 = document.getElementById('statusname3');
+
+
+            if (statusMainRequest) {
+                statusMainRequest.textContent = updatedStatusName;
+                buttonStatus2.textContent = updatedStatusName;
+                buttonStatus3.textContent = updatedStatusName;
+                statusMainRequest.className = statusColorClass;
+
+
+                if (action === "RequestStatusbutton" && buttonText) {
+                    buttonText.textContent = updatedStatusName;
+                    buttonText.className = `btn ${statusColorClass}`;
+                }
+            }
+
+            checkStatusAndShowUploadForAttachment(updatedStatusId);
+            checkInitialStatusForUploadFile(updatedStatusId);
+            hideButtonsForCertainStatuses(updatedStatusId);
+            hideRefuseButtonForCertainStatuses(updatedStatusId)
+            disableButtonForWaitingPayment(updatedStatusId);
+
+            updateLicenseContent(updatedStatusId, updatedRequestData.licno, updatedRequestData.issueDate, updatedRequestData.expireDate);
+        }
+
+        // Create an attachment card dynamically
+        // function createAttachmentCard(file, fileName) {
+        //     const attachmentSection = document.getElementById('attachmentsSection');
+        //     const newCard = document.createElement('div');
+        //     newCard.classList.add('card', 'shadow-sm', 'pt-4', 'mb-6', 'mb-xl-9');
+        //     newCard.innerHTML = `
+        //                     <div class="card-header collapsible cursor-pointer rotate" data-bs-toggle="collapse" data-bs-target="#newAttach">
+        //                         <div class="card-title flex-column">
+        //                             <span class="d-inline-block position-relative ms-2">
+        //                                 <span class="d-inline-block mb-2 fw-bold">${fileName}</span>
+        //                                 <span class="d-inline-block position-absolute h-3px bottom-0 end-0 start-0 bg-primary translate rounded"></span>
+        //                             </span>
+        //                         </div>
+        //                         <div class="card-toolbar rotate-180">
+        //                             <i class="ki-duotone ki-down fs-1"></i>
+        //                         </div>
+        //                     </div>
+        //                     <div id="newAttach" class="collapse">
+        //                         <div class="card-body">
+        //                             <iframe src="${URL.createObjectURL(file)}" style="width: 100%; height: 500px;"></iframe>
+        //                         </div>
+        //                         <div class="card-footer">
+        //                             <a href="${URL.createObjectURL(file)}" class="btn btn-light-primary btn-sm" target="_blank">
+        //                                 <i class="ki-outline ki-book-open fs-3"></i> Open in a new tab
+        //                             </a>
+        //                         </div>
+        //                     </div>
+        //                 `;
+        //     attachmentSection.appendChild(newCard);
+        // }
+
+        // Update license content dynamically with issue date and expire date
+
+        function updateLicenseContent(statusId, licensesNo, issueDate, expireDate) {
+            const licenseCell = document.getElementById('licenseCell');
+            const issueDateCell = document.getElementById('issueDateCell');
+            const expireDateCell = document.getElementById('expireDateCell');
+            if (ReqTypeId === RequestType) {
+                if (licenseCell) {
+                    licenseCell.innerHTML = (statusId === FinalLicenseIssuingProcessing || statusId === FinalLicenseIssued)
+                        ? `<span class="text-gray-800 badge badge-light-success">${licensesNo || ''}</span>`
+                        : '';
+                }
+            }
+            if (issueDateCell) {
+                issueDateCell.innerHTML = issueDate
+                    ? `<span class="badge badge-light-success">${new Date(issueDate).toLocaleDateString('ar-EG')}</span>`
+                    : '';
+            }
+
+            if (expireDateCell) {
+                expireDateCell.innerHTML = expireDate
+                    ? `<span class="badge badge-light-success">${new Date(expireDate).toLocaleDateString('ar-EG')}</span>`
+                    : '';
+            }
+        }
+        function addLogRowToTable(userLog) {
+            const logTableBody = document.querySelector('#logTable tbody');
+            const newRow = document.createElement('tr');
+
+            newRow.innerHTML = `
+
+                                                         <td>${userLog.requestTransaction.activity || '-'}</td>
+                                                        <td>${userLog.requestTransaction.operationDate ? new Date(userLog.requestTransaction.operationDate).toLocaleString() : '-'}</td>
+                                                              <td>${userLog.requestTransaction.note || '-'}</td>
+                                                               <td>${userLog.userLog.userFullName || '-'}</td>
+                                            `;
+
+            logTableBody.prepend(newRow);
+        }
+
+    </script>
+
+    <script src="~/Admin/assets/js/attachmentUpload.js"></script>
+
+
+
+
+}

@@ -1,0 +1,30 @@
+﻿@model SystemOptionVM
+
+@{
+    ViewBag.Title = "Delete System Option";
+    Layout = "~/Areas/Admin/Views/Shared/_LayoutEserviceTourism.cshtml";
+}
+
+<!--begin::Content wrapper-->
+<div class="d-flex flex-column flex-column-fluid">
+    <div id="kt_app_content" class="app-content flex-column-fluid">
+        <div id="kt_app_content_container" class="app-container container-fluid">
+            <div class="card">
+                <div class="card-body p-lg-10">
+                    <h2>Are you sure you want to delete the System Option?</h2>
+                    <div>
+                        <p><strong>Arabic Name:</strong> @Model.NameArabic</p>
+                        <p><strong>English Name:</strong> @Model.NameEnglish</p>
+                        <p><strong>Category (Arabic):</strong> @Model.CategoryNameAr</p>
+                        <p><strong>Category (English):</strong> @Model.CategoryNameEn</p>
+                    </div>
+                    <form method="post" asp-action="DeleteSystemOption" asp-route-id="@Model.Id">
+                        <button type="submit" class="btn btn-danger">Delete</button>
+                        <a asp-action="Index" class="btn btn-secondary">Cancel</a>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<!--end::Content wrapper-->

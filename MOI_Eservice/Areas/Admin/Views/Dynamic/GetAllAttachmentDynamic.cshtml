@@ -1,0 +1,77 @@
+﻿@model List<AddWorkflowWithAttachmentsVM>
+
+@{
+    ViewBag.Title = "Manage Attachment Rules";
+    Layout = "~/Areas/Admin/Views/Shared/_LayoutEserviceTourism.cshtml";
+    var apiBaseUrl = ViewBag.ApiBaseUrl;
+}
+
+<div class="container mt-4">
+    <h2 class="mb-4">قواعد المرفقات</h2>
+
+    <a asp-action="AddWorkFlowAttach" class="btn btn-success mb-3">إضافة جديد</a>
+
+    <table class="table table-bordered table-hover">
+        <thead class="table-light">
+            <tr>
+                <th>الاسم</th>
+                <th>إجباري؟</th>
+                <th>الخدمة</th>
+                <th>نوع الطلب</th>
+                <th>نوع المعاملة</th>
+                <th>الحالة</th>
+                <th>الإجراءات</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var item in Model)
+            {
+                <tr>
+                    <td>@item.AttachName</td>
+                    <td>@(item.IsMandatory ? "نعم" : "لا")</td>
+                    <td>@item.ServiceName</td>
+                    <td>@item.RequestTypeName</td>
+                    <td>@item.TransactionTypeName</td>
+                    <td>@item.RequestStatusName</td>
+                    <td>
+                        <a asp-action="UpdateWorkflowAttach" asp-route-id="@item.Id" class="btn btn-sm btn-warning">تعديل</a>
+                        <button onclick="deleteAttachmentRule(@item.Id)" class="btn btn-sm btn-danger">حذف</button>
+                        <form asp-action="CloneWorkflowAttach" asp-controller="Dynamic" asp-area="Admin" asp-route-id="@item.Id" method="post" style="display:inline;">
+                            <button type="submit" class="btn btn-sm btn-outline-primary">
+                                <i class="fa fa-copy"></i> نسخ
+                            </button>
+                        </form>
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+</div>
+
+@section Scripts {
+    <script>
+        const apiBaseUrl = '@apiBaseUrl';
+
+        async function deleteAttachmentRule(id) {
+            if (!confirm('هل أنت متأكد أنك تريد حذف هذه القاعدة؟')) return;
+
+            try {
+                const response = await fetch(`${apiBaseUrl}DeleteAttachmentRule/${id}`, {
+                    method: 'POST'
+                });
+
+                if (response.ok) {
+                    alert('تم حذف القاعدة بنجاح!');
+                    window.location.reload(); // ✅ Full page refresh
+                } else {
+                    const error = await response.text();
+                    console.error('Delete failed:', error);
+                    alert('فشل في حذف القاعدة.');
+                }
+            } catch (err) {
+                console.error('Exception while deleting:', err);
+                alert('حدث خطأ أثناء الحذف.');
+            }
+        }
+    </script>
+}

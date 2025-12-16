@@ -1,0 +1,192 @@
+﻿@model IEnumerable<ActivityTypesLookup>
+
+@{
+    ViewBag.Title = "Activity Types Management";
+    Layout = "~/Areas/Admin/Views/Shared/_LayoutEserviceTourism.cshtml";
+}
+
+<div id="kt_app_content" class="app-content flex-column-fluid">
+    <div id="kt_app_content_container" class="app-container container-fluid">
+        <div class="card card-flush">
+            <div class="card-header mt-6">
+                <div class="card-title">
+                    <div class="d-flex align-items-center position-relative my-1 me-5">
+                        <i class="ki-outline ki-magnifier fs-3 position-absolute ms-5"></i>
+                        <input type="text" id="activitySearch" class="form-control form-control-solid w-250px ps-13" placeholder="Search Activity Types" />
+                    </div>
+                </div>
+                <div class="card-toolbar">
+                    <button type="button" class="btn btn-light-primary" data-bs-toggle="modal" data-bs-target="#kt_modal_add_activity_type">
+                        <i class="ki-outline ki-plus-square fs-3"></i>Add Activity Type
+                    </button>
+                </div>
+            </div>
+            <div class="card-body pt-0">
+                <table class="table align-middle table-row-dashed fs-6 gy-5 mb-0" id="activityTypesTable">
+                    <thead>
+                        <tr class="text-start text-gray-500 fw-bold fs-7 text-uppercase gs-0">
+                            <th>#</th>
+                            <th>Name</th>
+                            <th class="text-end">Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody class="fw-semibold text-gray-600">
+                        @if (Model != null && Model.Any())
+                        {
+                            int serial = 0;
+                            foreach (var item in Model)
+                            {
+                                serial++;
+                                <tr>
+                                    <td>@serial</td>
+                                    <td>@item.NameAr</td>
+                                    <td class="text-end">
+                                        <button class="btn btn-icon btn-active-light-primary w-30px h-30px me-3 edit-activity-type" data-id="@item.Id" data-bs-toggle="modal" data-bs-target="#kt_modal_edit_activity_type">
+                                            <i class="ki-outline ki-setting-3 fs-3"></i>
+                                        </button>
+                                        <button class="btn btn-icon btn-active-light-primary w-30px h-30px delete-activity-type" data-id="@item.Id">
+                                            <i class="ki-outline ki-trash fs-3"></i>
+                                        </button>
+                                    </td>
+                                </tr>
+                            }
+                        }
+                        else
+                        {
+                            <tr><td colspan="3" class="text-center text-muted">No activity types available.</td></tr>
+                        }
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Add Modal -->
+<div class="modal fade" id="kt_modal_add_activity_type" tabindex="-1" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered mw-650px">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2 class="fw-bold">Add Activity Type</h2>
+                <div class="btn btn-icon btn-sm btn-active-icon-primary" data-bs-dismiss="modal">
+                    <i class="ki-outline ki-cross fs-1"></i>
+                </div>
+            </div>
+            <div class="modal-body scroll-y mx-5 my-7">
+                <form id="addActivityTypeForm">
+                    <div class="fv-row mb-7">
+                        <label class="fs-6 fw-semibold form-label mb-2">Name</label>
+                        <input class="form-control form-control-solid" id="ActivityTypeName" placeholder="Enter name" required />
+                    </div>
+                    <div class="text-center pt-15">
+                        <button type="button" class="btn btn-primary" id="submitActivityType">Submit</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Edit Modal -->
+<div class="modal fade" id="kt_modal_edit_activity_type" tabindex="-1" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered mw-650px">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2 class="fw-bold">Edit Activity Type</h2>
+                <div class="btn btn-icon btn-sm btn-active-icon-primary" data-bs-dismiss="modal">
+                    <i class="ki-outline ki-cross fs-1"></i>
+                </div>
+            </div>
+            <div class="modal-body scroll-y mx-5 my-7">
+                <form id="editActivityTypeForm">
+                    <input type="hidden" id="editActivityTypeId" />
+                    <div class="fv-row mb-7">
+                        <label class="fs-6 fw-semibold form-label mb-2">Name</label>
+                        <input class="form-control form-control-solid" id="editActivityTypeName" placeholder="Enter name" required />
+                    </div>
+                    <div class="text-center pt-15">
+                        <button class="btn btn-primary" id="submitEditActivityType">Save Changes</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    <script>
+        const apiBaseUrl = '@ViewBag.ApiBaseUrl';
+
+        document.getElementById("submitActivityType").addEventListener("click", async function () {
+            try {
+                const data = { NameAr: document.getElementById("ActivityTypeName").value };
+                const response = await fetch(`${apiBaseUrl}CreateActivityTypes`, {
+                    method: "POST",
+                    headers: { "Content-Type": "application/json" },
+                    body: JSON.stringify(data)
+                });
+                if (!response.ok) throw new Error("Failed to add activity type");
+                alert("Activity type added successfully!");
+                location.reload();
+            } catch (error) {
+                alert("Failed to add activity type.");
+                console.error(error);
+            }
+        });
+
+        document.querySelectorAll(".edit-activity-type").forEach(button => {
+            button.addEventListener("click", async function () {
+                const id = button.getAttribute("data-id");
+                const response = await fetch(`${apiBaseUrl}GetActivityType?id=${id}`);
+                const data = await response.json();
+                document.getElementById("editActivityTypeId").value = data.id;
+                document.getElementById("editActivityTypeName").value = data.nameAr;
+            });
+        });
+
+        document.getElementById("submitEditActivityType").addEventListener("click", async function () {
+            try {
+                const data = {
+                    Id: document.getElementById("editActivityTypeId").value,
+                    NameAr: document.getElementById("editActivityTypeName").value
+                };
+                const response = await fetch(`${apiBaseUrl}UpdateActivityTypes?id=${data.Id}`, {
+                    method: "POST",
+                    headers: { "Content-Type": "application/json" },
+                    body: JSON.stringify(data)
+                });
+                if (!response.ok) throw new Error("Failed to update activity type");
+                alert("Activity type updated successfully!");
+                location.reload();
+            } catch (error) {
+                alert("Failed to update activity type.");
+                console.error(error);
+            }
+        });
+
+        document.querySelectorAll(".delete-activity-type").forEach(button => {
+            button.addEventListener("click", async function () {
+                if (!confirm("Are you sure you want to delete this activity type?")) return;
+                const id = button.getAttribute("data-id");
+                try {
+                    const response = await fetch(`${apiBaseUrl}DeleteActivityTypes?id=${id}`, {
+                        method: "POST"
+                    });
+                    if (!response.ok) throw new Error("Failed to delete activity type");
+                    alert("Activity type deleted successfully!");
+                    location.reload();
+                } catch (error) {
+                    alert("Failed to delete activity type.");
+                    console.error(error);
+                }
+            });
+        });
+
+        document.getElementById("activitySearch").addEventListener("keyup", function () {
+            const searchText = this.value.toLowerCase();
+            document.querySelectorAll("#activityTypesTable tbody tr").forEach(row => {
+                row.style.display = row.textContent.toLowerCase().includes(searchText) ? "" : "none";
+            });
+        });
+    </script>
+}

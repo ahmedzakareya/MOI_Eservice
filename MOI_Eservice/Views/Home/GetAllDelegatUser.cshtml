@@ -1,0 +1,52 @@
+﻿@model List<DelegationRequestVM>
+
+@{
+    ViewBag.Title = "RequestsList";
+    var token = Context.Session.GetString("UserToken");
+    var userId = Context.Session.GetString("UserId");
+    var userName = Context.Session.GetString("UserUserName");
+    var civilId = Context.Session.GetString("UserCivilId");
+    var fullName = Context.Session.GetString("UserFullName");
+    var accountTypeId = Context.Session.GetString("UserAccouuntTypeId");
+    ViewData["Title"] = "طلبات التفويض";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<div class="container mt-5">
+    <div class="d-flex justify-content-between align-items-center mb-4">
+        <h4>طلبات التفويض</h4>
+        <a asp-action="RegisterDelegateUser" asp-controller="Home" class="btn btn-success">
+            <i class="ri-user-add-line"></i> إضافة مفوض جديد
+        </a>
+    </div>
+
+    <table class="table table-bordered text-center">
+        <thead class="table-light">
+            <tr>
+                <th>الاسم</th>
+                <th>الرقم المدني</th>
+                <th>رقم الجوال</th>
+                @* <th>نوع الحساب</th> *@
+                <th>عرض</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var item in Model)
+            {
+                <tr>
+                    <td>@item.Mandoob.FullNameAr</td>
+                    <td>@item.Mandoob.CivilId</td>
+                    <td>@item.Mandoob.Mobile</td>
+                    @* <td>
+                        @(item. == (int)AccountTypeEnum.Kuwaiti ? "رئيسي" : "غير رئيسي")
+                    </td> *@
+                    <td>
+                        <a asp-action="ShowLicensesMandoob" asp-controller="Home" asp-route-MandoobId="@item.Mandoob.Id" class="btn btn-outline-info btn-sm">
+                            عرض التراخيص
+                        </a>
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+</div>

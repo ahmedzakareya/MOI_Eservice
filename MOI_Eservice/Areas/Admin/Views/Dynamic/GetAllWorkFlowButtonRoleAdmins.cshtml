@@ -1,0 +1,95 @@
+﻿@model List<WorkFlowButtonRoleAdmin>
+@{
+    ViewBag.Title = "Workflow Button Role Admins";
+    Layout = "~/Areas/Admin/Views/Shared/_LayoutEserviceTourism.cshtml";
+    int serial = 1;
+}
+
+<!--begin::Toolbar-->
+<div id="kt_app_toolbar" class="app-toolbar pt-6 pb-2">
+    <div id="kt_app_toolbar_container" class="app-container container-fluid d-flex align-items-stretch">
+        <div class="app-toolbar-wrapper d-flex flex-stack flex-wrap gap-4 w-100">
+            <div class="page-title d-flex flex-column justify-content-center gap-1 me-3">
+                <h1 class="page-heading text-gray-900 fw-bold fs-3 m-0">Workflow Button Role Admins</h1>
+            </div>
+            <div class="d-flex align-items-center gap-2 gap-lg-3">
+                <a asp-action="AddWorkFlowButtonRoleAdmin" asp-area="Admin" class="btn btn-primary">
+                    <i class="ki-outline ki-plus fs-2"></i> إضافة ربط زر بدور
+                </a>
+            </div>
+        </div>
+    </div>
+</div>
+<!--end::Toolbar-->
+<!--begin::Content-->
+<div id="kt_app_content" class="app-content flex-column-fluid">
+    <div id="kt_app_content_container" class="app-container container-fluid">
+        <div class="card">
+            <div class="card-header border-0 pt-6">
+                <div class="card-title">
+                    <div class="d-flex align-items-center position-relative my-1">
+                        <i class="ki-outline ki-magnifier fs-3 position-absolute ms-5"></i>
+                        <input type="text" class="form-control form-control-solid w-250px ps-12" placeholder="بحث..." id="searchInput" onkeyup="filterTable()" />
+                    </div>
+                </div>
+            </div>
+
+            <div class="card-body pt-0">
+                <table class="table align-middle table-row-dashed fs-6 gy-5" id="buttonsTable">
+                    <thead>
+                        <tr class="text-start text-muted fw-bold fs-7 text-uppercase gs-0">
+                            <th>#</th>
+                            <th>اسم الزر</th>
+                            <th>الدور</th>
+                            <th class="text-end">الإجراءات</th>
+                        </tr>
+                    </thead>
+                    <tbody class="text-gray-600 fw-semibold">
+                        @foreach (var item in Model)
+                        {
+                            <tr>
+                                <td>@serial++</td>
+                                <td>@item.WorkFlowActionButton?.ButtonText</td>
+                                <td>@item.RoleAdmin?.Name</td>
+                                <td class="text-end">
+                                    <a asp-action="UpdateWorkFlowButtonRoleAdmin" asp-route-id="@item.Id" asp-area="Admin" class="btn btn-icon btn-active-light-primary">
+                                        <i class="ki-outline ki-setting-3 fs-3"></i>
+                                    </a>
+                                    <a asp-action="DeleteWorkFlowButtonRoleAdmin" asp-route-id="@item.Id" asp-area="Admin" class="btn btn-icon btn-active-light-danger" onclick="return confirm('هل أنت متأكد من الحذف؟');">
+                                        <i class="ki-outline ki-trash fs-3"></i>
+                                    </a>
+                                </td>
+                            </tr>
+                        }
+                        @if (!Model.Any())
+                        {
+                            <tr>
+                                <td colspan="4" class="text-center text-muted">لا توجد بيانات حالياً.</td>
+                            </tr>
+                        }
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>
+<!--end::Content-->
+@* @section Scripts {
+    <script>
+        function filterTable() {
+            const searchInput = document.getElementById("searchInput").value.toLowerCase();
+            const rows = document.querySelectorAll("#buttonsTable tbody tr");
+
+            rows.forEach(row => {
+                const cells = row.querySelectorAll("td");
+                let match = false;
+                cells.forEach(cell => {
+                    if (cell.textContent.toLowerCase().includes(searchInput)) {
+                        match = true;
+                    }
+                });
+                row.style.display = match ? "" : "none";
+            });
+        }
+    </script>
+} *@

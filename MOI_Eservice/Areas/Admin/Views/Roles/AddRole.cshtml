@@ -1,0 +1,222 @@
+﻿@model RoleVM
+
+@{
+    ViewBag.Title = "Add Role";
+    Layout = "~/Areas/Admin/Views/Shared/_LayoutEserviceTourism.cshtml";
+}
+
+<div class="modal-dialog-centered mw-750px">
+    <div class="modal-content">
+        
+        <div class="modal-body scroll-y mx-lg-5 my-7">
+            <form id="AddRoleForm" class="form">
+                <!-- Role Name -->
+                <div class="fv-row mb-10">
+                    <label class="fs-5 fw-bold form-label mb-2">
+                        <span class="required">Role Name</span>
+                    </label>
+                    <input type="text" id="roleName" class="form-control form-control-solid" placeholder="Enter a role name" required />
+                </div>
+
+                <!-- Modules, Menu Items, and Permissions -->
+                <div id="modulesContainer" class="fv-row">
+                    <!-- Dynamically populated modules with menu items and permissions -->
+                </div>
+
+                <!-- Form Actions -->
+                <div class="text-center pt-15">
+                    <button type="reset" class="btn btn-light me-3" data-kt-roles-modal-action="cancel">Discard</button>
+                    <button type="button" class="btn btn-primary" id="submitRole">
+                        <span class="indicator-label">Submit</span>
+                        <span class="indicator-progress">
+                            Please wait...
+                            <span class="spinner-border spinner-border-sm align-middle ms-2"></span>
+                        </span>
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    <script>
+        const apiBaseUrl = '@ViewBag.ApiBaseUrl';
+        let checkboxState = {}; // Global state object to track checkboxes
+
+        document.addEventListener("change", function (event) {
+            if (event.target.name === "permissions" && event.target.type === "checkbox") {
+                const menuItemId = event.target.getAttribute("data-menu-item-id");
+                const permissionId = event.target.getAttribute("data-permission-id");
+                const moduleId = event.target.getAttribute("data-module-id");
+
+                const key = `${menuItemId}_${permissionId}_${moduleId}`;
+
+                if (event.target.checked) {
+                    // Add to state
+                    checkboxState[key] = {
+                        MenuItemId: menuItemId,
+                        PermissionId: permissionId,
+                        ModuleId: moduleId
+                    };
+                } else {
+                    // Remove from state
+                    delete checkboxState[key];
+                }
+
+                console.log("Updated checkboxState:", checkboxState);
+            }
+        });
+        async function loadModulesAndPermissions() {
+            try {
+                console.log("Fetching modules and permissions...");
+                const response = await fetch(`${apiBaseUrl}GetModulesWithMenuItemsAndPermission`);
+                if (!response.ok) throw new Error("Failed to fetch modules and permissions");
+
+                const { modules, permissions } = await response.json();
+                console.log("Fetched modules:", modules);
+                console.log("Fetched permissions:", permissions);
+
+                renderModulesWithMenuItemsAndPermissions(modules.$values, permissions.$values);
+            } catch (error) {
+                console.error("Error loading modules and permissions:", error);
+            }
+        }
+
+        function renderModulesWithMenuItemsAndPermissions(modules, permissions) {
+            const container = document.getElementById("modulesContainer");
+            container.innerHTML = ""; // Clear any existing content
+
+            console.log("Rendering modules and menu items...");
+            if (Array.isArray(modules)) {
+                modules.forEach(module => {
+                    console.log("Processing module:", module);
+
+                    // Create a module section
+                    const moduleDiv = document.createElement("div");
+                    moduleDiv.classList.add("module-section", "mb-5");
+                    moduleDiv.innerHTML = `
+                            <div class="module-header mb-3">
+                                <strong>${module.moduleName}</strong>
+                            </div>
+                        `;
+                    container.appendChild(moduleDiv);
+
+                    // Create a table for menu items and permissions
+                    const table = document.createElement("table");
+                    table.classList.add("table", "table-bordered", "mt-3");
+                    table.innerHTML = `
+                            <thead>
+                                <tr>
+                                    <th>Menu Item</th>
+                                    <th>Permissions</th>
+                                </tr>
+                            </thead>
+                            <tbody></tbody>
+                        `;
+                    moduleDiv.appendChild(table);
+
+                    const tbody = table.querySelector("tbody");
+
+                    // Populate menu items and permissions
+                    module.menuItems.$values.forEach(menuItem => {
+                        console.log("Processing menu item:", menuItem);
+
+                        const row = document.createElement("tr");
+
+                        // Menu Item Column
+                        const menuItemCell = document.createElement("td");
+                        menuItemCell.textContent = menuItem.menuItemName;
+                        row.appendChild(menuItemCell);
+
+                        // Permissions Column
+                        const permissionsCell = document.createElement("td");
+                        permissionsCell.classList.add("permissions-cell");
+
+                        permissions.forEach(permission => {
+                            console.log("Processing permission:", permission);
+
+                            const permissionCheckbox = document.createElement("div");
+                            permissionCheckbox.classList.add("form-check", "form-check-inline");
+                            permissionCheckbox.innerHTML = `
+                                            <input type="checkbox" class="form-check-input" name="permissions"
+                                                data-menu-item-id="${menuItem.menuItemId}"
+                                        data-permission-id="${permission.id}"
+                                        data-module-id="${module.moduleId}"
+                                        value="${menuItem.menuItemId}_${permission.id}">
+                                    <label class="form-check-label">${permission.nameAr}</label>
+                                `;
+                            permissionsCell.appendChild(permissionCheckbox);
+                        });
+
+                        row.appendChild(permissionsCell);
+                        tbody.appendChild(row);
+                    });
+                });
+            }
+        }
+
+        // Submit the role with permissions, menu items, and modules
+        async function submitRole() {
+            const roleName = document.getElementById("roleName").value.trim();
+            console.log("Role name entered:", roleName);
+
+            if (!roleName) {
+                alert("Role Name is required!");
+                return;
+            }
+
+            // Query all checked checkboxes at submission time
+            const checkedCheckboxes = document.querySelectorAll("input[name='permissions']:checked");
+
+            if (checkedCheckboxes.length === 0) {
+                alert("Please select at least one permission.");
+                return;
+            }
+
+
+            //console.log("Final state before submission:", checkboxState);
+
+            // Collect permissions from the checked checkboxes
+            const CombinedAssignments = Array.from(checkedCheckboxes).map(input => ({
+                MenuItemId: input.getAttribute("data-menu-item-id"),
+                PermissionId: input.getAttribute("data-permission-id"),
+                ModuleId: input.getAttribute("data-module-id")
+            }));
+
+            console.log("Collected Permissions:", CombinedAssignments);
+
+            const formData = {
+                name: roleName,
+                CombinedAssignments: CombinedAssignments
+            };
+            console.log(formData);
+            try {
+                console.log("Submitting form data:", formData);
+                const response = await fetch(`${apiBaseUrl}AddRoleWithHisPermission`, {
+                    method: "POST",
+                    headers: { "Content-Type": "application/json" },
+                    body: JSON.stringify(formData)
+                });
+
+                if (!response.ok) throw new Error("Failed to create role");
+
+                const result = await response.json();
+                console.log("Server response:", result);
+
+                alert(result.message || "Role created successfully!");
+                location.reload();
+            } catch (error) {
+                console.error("Error creating role:", error);
+                alert("Failed to create role. Please try again.");
+            }
+        }
+
+        document.getElementById("submitRole").addEventListener("click", submitRole);
+
+        // Load modules and permissions on page load
+        document.addEventListener("DOMContentLoaded", loadModulesAndPermissions);
+    </script>
+
+
+}

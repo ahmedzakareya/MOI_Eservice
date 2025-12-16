@@ -1,0 +1,10 @@
+﻿@* @model IEnumerable<EserviceTypeModel>
+<label><i class="ri-filter-3-line"></i></label>
+<select class="selectize-filter" id="eserviceDiv" name="eserviceDiv">
+    <option value="0">إختر الترخيص</option>
+    @foreach (var item in Model)
+    {
+        <option value="@item.Id">@item.EserviceTypeAr</option>
+    }
+</select>
+ *@

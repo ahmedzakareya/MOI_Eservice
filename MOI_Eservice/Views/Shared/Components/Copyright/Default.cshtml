@@ -1,0 +1,23 @@
+﻿@model List<SystemOptionVM>
+
+@{
+    var logo = Model.FirstOrDefault(x => x.NameEnglish == "SiteLogo")?.Value ?? "/assets/images/MOI_Logo_W.png";
+    var socialLinks = Model.Where(x => x.CategoryNameEn == "SocialLinks").ToList();
+    var aboutLinks = Model.Where(x => x.Code == "About").ToList();
+    var serviceLinks = Model.Where(x => x.Code == "Services").ToList();
+    var contactInfo = Model.Where(x => new[] { "PhoneNumber", "Email", "Address" }.Contains(x.Code)).ToList();
+    var copyright = Model.FirstOrDefault(x => x.Code == "Copyright")?.Value;
+    var NavLinksReset = Model.Where(x => x.CategoryNameEn == "NavLinksReset").FirstOrDefault();
+    var NavLinksRegister = Model.Where(x => x.CategoryNameEn == "NavLinksRegister").FirstOrDefault();
+    var NavLinksLogin = Model.Where(x => x.CategoryNameEn == "NavLinksLogin").FirstOrDefault();
+    var NavLinksContact = Model.Where(x => x.CategoryNameEn == "NavLinksContact").FirstOrDefault();
+    var NavLinksHome = Model.Where(x => x.CategoryNameEn == "NavLinksHome").FirstOrDefault();
+}
+
+
+    <!-- Copyright -->
+    <div class="copyright-area m-0">
+        <div class="container">
+            <p>@(copyright)</p>
+        </div>
+    </div>

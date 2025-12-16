@@ -1,0 +1,75 @@
+﻿@* @* 
+
+@{
+    var empJson = Context.Session.GetString("MoiUser");
+
+
+
+    AspNetUser emp = string.IsNullOrEmpty(empJson) ? null : JsonConvert.DeserializeObject<AspNetUser>(empJson);
+
+}
+<li class="nav-item">
+    <a href="@Url.Action("MyAccount","Home")" class="nav-link">
+        <span class="icon"><i class="ri-home-line"></i></span>
+        <span class="menu-title">حسابي  </span>
+    </a>
+</li>
+
+<li class="nav-item">
+    <a href="@Url.Action("MyProfile","Home")" class="nav-link">
+        <span class="icon"><i class="ri-user-line"></i></span>
+        <span class="menu-title">الملف الشخصي  </span>
+    </a>
+</li>
+
+<li class="nav-item">
+    <a href="@Url.Action("Index","UserLicenses")" class="nav-link">
+        <span class="icon"><i class="ri-briefcase-line"></i></span>
+        <span class="menu-title">تراخيصي</span>
+    </a>
+</li>
+
+
+<li class="nav-item">
+    <a href="@Url.Action("Index","UserRequests")" class="nav-link">
+        <span class="icon"><i class="ri-file-list-line"></i></span>
+        <span class="menu-title">متابعة الطلبات</span>
+    </a>
+</li>
+
+@*if (Session["MoiUser"] != null)
+{
+    if (emp.AccountTypeId == "100")
+    {
+        <li class="nav-item">
+            <a href="@Url.Action("UserRequests","Account")" class="nav-link">
+                <span class="icon"><i class="ri-user-shared-line"></i></span>
+                <span class="menu-title">طلبات التفويض</span>
+            </a>
+        </li>
+    }
+}*@
+
+@* <li class="nav-item">
+    <a href="@Url.Action("ChangePassword","Manage")" class="nav-link">
+        <span class="icon"><i class="ri-lock-line"></i></span>
+        <span class="menu-title">تغيير كلمة السر </span>
+    </a>
+</li> *@
+@*if (emp != null)
+{
+    using (Html.BeginForm("LogOff", "Account", FormMethod.Post, new { id = "logoutForm" }))
+    {
+        @Html.AntiForgeryToken()
+        <li class="nav-item">
+            <a href="javascript:document.getElementById('logoutForm').submit()" class="nav-link">
+                <span class="icon"><i class="ri-logout-circle-r-line"></i></span>
+                <span class="menu-title">تسجيل الخروج</span>
+            </a>
+        </li>
+    }
+}
+
+
+
+ *@ 

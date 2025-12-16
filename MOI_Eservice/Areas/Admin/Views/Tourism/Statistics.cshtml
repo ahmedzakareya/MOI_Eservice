@@ -1,0 +1,432 @@
+﻿@model StatisticsViewModel
+
+
+
+@{
+    ViewData["Title"] = "Index";
+    Layout = "~/Areas/Admin/Views/Shared/_LayoutEserviceTourism.cshtml";
+  
+   
+    int totalRequests = Model.AllRequests ?? 0;
+
+    // Avoid division by zero
+    int SafeDivide(int numerator) => totalRequests > 0 ? (int)(((double)numerator / totalRequests) * 100) : 0;
+
+    // Percentages
+    int PercentageForNewRequest = SafeDivide(Model.NewRequests ?? 0);
+    int PercentageForEndLicences = SafeDivide(Model.EndLicenseRequests ?? 0);
+    int PercentageForRequestChange = SafeDivide(Model.ChangeRequest ?? 0);
+    int PercentageForWhoConc = SafeDivide(Model.WhoConc ?? 0);
+    int PercentageForRenew = SafeDivide(Model.RenewRequests ?? 0);
+    int PercentageForChangeCompanyName = SafeDivide(Model.ChangeCompanyName ?? 0);
+    int PercentageForChangeManager = SafeDivide(Model.ChangeManagerRequests ?? 0);
+    int PercentageForChangeOwner = SafeDivide(Model.ChangeOwnerRequest ?? 0);
+    int PercentageForPreApprovementConvert = SafeDivide(Model.PreApprovementConvert ?? 0);
+    int PercentageForPreApprovementNew = SafeDivide(Model.PreApprovementNew ?? 0);
+    int PercentageForChangeAddress = SafeDivide(Model.ChangeAddress ?? 0);
+
+    // Optional: TotalActiveRequest if needed
+    int TotalActiveRequest =
+        (Model.NewRequests ?? 0) +
+        (Model.EndLicenseRequests ?? 0) +
+        (Model.ChangeRequest ?? 0) +
+        (Model.RenewRequests ?? 0);
+
+    var metrics = new List<(string Title, int Count, int Percentage, string CssClass, string Icon)>
+    {
+        ("الطلبات الجديدة", Model.NewRequests ?? 0, PercentageForNewRequest, "bg-success", "ki-arrow-up"),
+        ("طلبات إنشاء الموافقة المبدئية", Model.PreApprovementNew ?? 0, PercentageForPreApprovementNew, "bg-success", "ki-check"),
+        ("طلبات تحويل الموافقة المبدئية", Model.PreApprovementConvert ?? 0, PercentageForPreApprovementConvert, "bg-warning", "ki-repeat"),
+        ("تغيير إسم الشركة", Model.ChangeCompanyName ?? 0, PercentageForChangeCompanyName, "bg-primary", "ki-building"),
+        ("طلبات التعديل", Model.ChangeRequest ?? 0, PercentageForRequestChange, "bg-info", "ki-pencil"),
+        ("تنازل", Model.ChangeOwnerRequest ?? 0, PercentageForChangeOwner, "bg-danger", "ki-user-minus"),
+        ("طلبات الإنهاء", Model.EndLicenseRequests ?? 0, PercentageForEndLicences, "bg-dark", "ki-trash"),
+        ("طلبات التجديد", Model.RenewRequests ?? 0, PercentageForRenew, "bg-success", "ki-refresh"),
+    };
+
+}
+
+
+
+
+<div class="flex-lg-row-fluid ms-lg-15">
+    <ul class="nav nav-custom nav-tabs nav-line-tabs nav-line-tabs-2x border-0 fs-4 fw-semibold mb-8 bg-white shadow-sm rounded-3 p-4 m-4">
+        <li class="nav-item">
+            <a class="nav-link text-active-primary pb-4 active" data-bs-toggle="tab" href="#requestsTab">الطلبات</a>
+        </li>
+        <li class="nav-item">
+            <a class="nav-link text-active-primary pb-4" data-bs-toggle="tab" href="#licensesTab">التراخيص</a>
+        </li>
+        <li class="nav-item">
+            <a class="nav-link text-active-primary pb-4" data-bs-toggle="tab" href="#chartTab">المبالغ المحصلة</a>
+        </li>
+        <li class="nav-item">
+            <a class="nav-link text-active-primary pb-4" data-bs-toggle="tab" href="#classificationTab">تصنيفات التراخيص</a>
+        </li>
+    </ul>
+
+    <div class="tab-content bg-white h-100 p-5 shadow-sm rounded-4" id="metricsTabContent">
+        <div class="tab-pane fade show active" id="requestsTab" role="tabpanel">
+            <div class="row g-4">
+                @foreach (var (title, count, percent, cssClass, icon) in metrics)
+                {
+                    <div class="col-sm-6 col-md-4 col-lg-3">
+                        <div class="card h-100 border-0 shadow-sm">
+                            <div class="card-body d-flex flex-column justify-content-between p-4">
+                                <div class="text-center">
+                                    <h2 class="fw-bolder fs-1 text-dark">@count</h2>
+                                    <div class="fs-6 text-gray-600 mb-3">@title</div>
+                                </div>
+
+                                <div class="d-flex justify-content-between align-items-center mb-2">
+                                    <span class="fw-semibold text-muted">@count @title</span>
+                                    <span class="fw-semibold text-muted">@percent%</span>
+                                </div>
+
+                                <div class="progress h-6px mb-3">
+                                    <div class="progress-bar @cssClass" role="progressbar" style="width: @percent%;" aria-valuenow="@percent" aria-valuemin="0" aria-valuemax="100"></div>
+                                </div>
+                            </div>
+
+                            <div class="text-center p-3 fw-bold text-white @cssClass rounded-bottom">
+                                <i class="ki @icon me-2"></i> @title
+                            </div>
+                        </div>
+                    </div>
+                }
+                <div class="row mt-8">
+                    <div class="col-md-6">
+                        <div class="card shadow-sm rounded-3 p-4">
+                            <h5 class="mb-4 fw-bold text-gray-700">By Request Status Wise</h5>
+                            <canvas id="barChart" height="200"></canvas>
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <div class="card shadow-sm rounded-3 p-4">
+                            <h5 class="mb-4 fw-bold text-gray-700">By Request Type Wise</h5>
+                            <canvas id="pieChart" height="200"></canvas>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="tab-pane fade" id="licensesTab" role="tabpanel">
+            <!-- Cards Row -->
+            <div class="row g-4 mb-4">
+                <div class="col-md-4">
+                    <div class="card border-0 shadow-sm h-100">
+                        <div class="card-body text-center">
+                            <h2 class="fw-bolder text-success">@Model.LicencesActive</h2>
+                            <div class="fw-semibold text-gray-600">التراخيص النشطة</div>
+                        </div>
+                        <div class="card-footer bg-success text-white text-center fw-semibold">
+                            <i class="bi bi-bar-chart-line"></i> التراخيص النشطة
+                        </div>
+                    </div>
+                </div>
+
+                <div class="col-md-4">
+                    <div class="card border-0 shadow-sm h-100">
+                        <div class="card-body text-center">
+                            <h2 class="fw-bolder text-warning">@Model.LicencesWillEnd</h2>
+                            <div class="fw-semibold text-gray-600">التراخيص سوف تنتهي</div>
+                        </div>
+                        <div class="card-footer bg-warning text-white text-center fw-semibold">
+                            <i class="bi bi-bar-chart-line"></i> التراخيص سوف تنتهي
+                        </div>
+                    </div>
+                </div>
+
+                <div class="col-md-4">
+                    <div class="card border-0 shadow-sm h-100">
+                        <div class="card-body text-center">
+                            <h2 class="fw-bolder text-danger">@Model.LicencesEnded</h2>
+                            <div class="fw-semibold text-gray-600">التراخيص المنتهية</div>
+                        </div>
+                        <div class="card-footer bg-danger text-white text-center fw-semibold">
+                            <i class="bi bi-bar-chart-line"></i> التراخيص المنتهية
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="card shadow-sm rounded-3 p-4">
+                <h5 class="mb-4 fw-bold text-gray-700">حسب نوع الترخيص</h5>
+                <canvas id="licenseStatusChart" height="130"></canvas>
+            </div>
+        </div>
+        <div class="tab-pane fade" id="chartTab" role="tabpanel">
+            <div class="card shadow-sm rounded-3 p-4">
+                <h5 class="mb-4 fw-bold text-gray-700">إحصائية المبالغ المحصلة</h5>
+
+                <!-- 🔽 Date Range Filter -->
+                <div class="row mb-4">
+                    <div class="col-md-4">
+                        <label class="form-label">من تاريخ</label>
+                        <input type="date" id="fromDate" class="form-control" />
+                    </div>
+                    <div class="col-md-4">
+                        <label class="form-label">إلى تاريخ</label>
+                        <input type="date" id="toDate" class="form-control" />
+                    </div>
+                    <div class="col-md-4 d-flex align-items-end">
+                        <button onclick="getTotalAmountByPeriod()" class="btn btn-outline-primary w-100">احسب المبلغ</button>
+                    </div>
+                </div>
+
+                <!-- 🔽 Total Amount Display -->
+                <h5 id="totalAmountCollected" class="text-dark fs-3 fw-bold mb-4">
+                    المبلغ الإجمالي المحصل: 0 د.ك
+                </h5>
+
+                <!-- 🔽 Chart -->
+                <canvas id="barChartSum" width="300" height="100"></canvas>
+            </div>
+        </div>
+        <div class="tab-pane fade" id="classificationTab" role="tabpanel">
+            <div class="card shadow-sm rounded-3 p-4">
+                <h5 class="mb-4 fw-bold text-gray-700">تصنيف التراخيص</h5>
+                <div style="height: 350px; width: 350px; text-align:center;">
+                    <canvas id="classificationChart" height="700" width="600"></canvas>
+                </div>
+                <div id="classificationTableContainer" style="display:none;" class="mt-4">
+                    <h5>تفاصيل التراخيص</h5>
+                    <table id="classificationTable" class="table table-bordered fs-3">
+                        <thead>
+                            <tr>
+                                <th>رقم الترخيص</th>
+                                <th>اسم الترخيص</th>
+                                <th>تاريخ الانتهاء</th>
+                                <th>التصنيف</th>
+                            </tr>
+                        </thead>
+                        <tbody></tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+<style>
+    .nav-tabs .nav-link.active {
+        border-bottom: 3px solid #3699FF;
+        background-color: transparent;
+    }
+
+    .progress-bar.bg-light-purple {
+        background-color: #A084DC !important;
+    }
+
+    .progress-bar.bg-light-blue {
+        background-color: #63B3ED !important;
+    }
+
+    .progress-bar.bg-light-orange {
+        background-color: #F6AD55 !important;
+    }
+
+    .card:hover {
+        transform: scale(1.01);
+        transition: 0.2s ease-in-out;
+    }
+</style>
+
+@section Scripts {
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+<script>
+    const barCtx = document.getElementById('barChart').getContext('2d');
+        const barCtxSum = document.getElementById('barChartSum').getContext('2d');
+
+    const pieCtx = document.getElementById('pieChart').getContext('2d');
+
+    const barChart = new Chart(barCtx, {
+        type: 'bar',
+        data: {
+            labels: ['نشطة', 'إنتظار', 'تم الرفض'],
+            datasets: [{
+                label: 'عدد الطلبات',
+                    data: [@(Model.AllRequestActive ?? 0), @(Model.NewRequests ?? 0), @(Model.RefusedRequest ?? 0)], // Replace with your dynamic values
+                backgroundColor: '#3699FF'
+            }]
+        },
+        options: {
+            responsive: true,
+            plugins: { legend: { display: false } }
+        }
+    });
+       
+    const pieChart = new Chart(pieCtx, {
+        type: 'pie',
+        data: {
+                labels: [' إنشاء موافقة مبدئية', ' تحويل موافقة مبدئية', 'إصدار', 'تجديد', 'تعديل بيانات', 'تنازل', 'بدل فاقد', 'تصنيف', 'لمن يهمه الأمر'],
+            datasets: [{
+                    data: [@Model.PreApprovementNew,@Model.PreApprovementConvert, @Model.NewRequests, @Model.RenewRequests, @Model.ChangeRequest, @Model.ChangeOwnerRequest, @Model.ReplacementOfLostRequests, @Model.WithoutClassification, @Model.WhoConc], // Replace with your dynamic values
+                backgroundColor: [
+                    '#A084DC', '#63B3ED', '#3699FF', '#1E1E2D',
+                    '#F6AD55', '#F87171', '#48BB78', '#FC8181'
+                ]
+            }]
+        },
+        options: {
+            responsive: true
+        }
+    });
+
+        const licenseStatusCtx = document.getElementById('licenseStatusChart');
+        if (licenseStatusCtx) {
+            new Chart(licenseStatusCtx, {
+                type: 'bar',
+                data: {
+                    labels: ['فندق', 'شقق فندقية', 'منتجعات', 'تنظيم وتأجير الرحلات السياحية والبرية والبحرية والإرشاد السياحي الداخلي', 'منتزهات الإستجمام والشواطيء والسواحل'],
+                    datasets: [{
+                        label: 'عدد التراخيص',
+                        data: [
+        @(Model.LicencesHotel ?? 0),
+        @(Model.LicencesApartmentHotel ?? 0),
+        @(Model.LicencesResort ?? 0),
+        @(Model.LicencesSailing ?? 0),
+        @(Model.LicencesParks ?? 0),
+
+                        ],
+                        backgroundColor: '#3699FF'
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    plugins: {
+                        legend: { display: false }
+                    },
+                    scales: {
+                        y: {
+                            beginAtZero: true
+                        }
+                    }
+                }
+            });
+        }
+
+        const barChartSum = new Chart(barCtxSum, {
+            type: 'bar',
+            data: {
+                labels: ['طلب اصدار ترخيص تشغيلي', 'طلب شهادة لمن يهمه الأمر', 'طلب بدل فاقد', 'طلب تصنيف', 'طلب إصدار ترخيص أنشطة سياحية', 'طلب تعديل بيانات', 'طلب تجديد'],
+                datasets: [{
+                    label: 'عدد الطلبات',
+                    data: [@(Model.SumLicHoteAppaResor ?? 0), @(Model.SumLicWhoConc ?? 0), @(Model.SumLicReplacement ?? 0), @(Model.SumLicClassify ?? 0), @(Model.SumLicActivities ?? 0), @(Model.SumLicEdit ?? 0), @(Model.SumLicRenew ?? 0)], // Replace with your dynamic values
+                    backgroundColor: '#3699FF'
+                }]
+            },
+            options: {
+                responsive: true,
+                plugins: { legend: { display: false } }
+            }
+        });
+
+        const classificationCtx = document.getElementById('classificationChart');
+        const classificationData = @Html.Raw(Json.Serialize(Model.ClassificationStats)); // Comes from Razor
+
+        // 👉 Extract arrays of names, counts, and IDs
+        const labels = classificationData.map(c => c.name);
+        const values = classificationData.map(c => c.count);
+        const ids = classificationData.map(c => c.id);
+        if (classificationCtx) {
+            new Chart(classificationCtx, {
+                type: 'pie',
+                data: {
+                    labels: labels,
+                    datasets: [{
+                        data: values,
+                        backgroundColor: [
+                            '#F87171', '#60A5FA', '#FBBF24', '#34D399',
+                            '#A78BFA', '#FB923C', '#FCA5A5', '#FCD34D',
+                            '#93C5FD', '#6EE7B7', '#D8B4FE', '#FDBA74'
+                        ]
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    plugins: {
+                        legend: { position: 'right' }
+                    },
+                    onClick: function (event, elements) {
+                        if (elements.length > 0) {
+                            const chartIndex = elements[0].index;
+                            const selectedId = ids[chartIndex]; // ✅ Use ID instead of name
+                            fetchLicensesByClassification(selectedId);
+                        }
+                    }
+                }
+            });
+        }
+
+       // const apiBaseUrl = '@Html.Raw(Json.Serialize(ViewBag.ApiBaseUrl))';
+        const apiBaseUrl = '@ViewBag.ApiBaseUrl';
+
+        function fetchLicensesByClassification(classificationId) {
+            fetch(`${apiBaseUrl}GetLicensesByClassification?id=${classificationId}`)
+                .then(res => {
+                    if (!res.ok) {
+                        throw new Error(`HTTP error! Status: ${res.status}`);
+                    }
+                    return res.json();
+                })
+                .then(data => {
+                    const licenses = data.$values;
+
+                    if (!Array.isArray(licenses)) {
+                        console.error("Expected an array in $values but got:", licenses);
+                        return;
+                    }
+
+                    const tbody = document.querySelector('#classificationTable tbody');
+                    tbody.innerHTML = '';
+
+                    licenses.forEach(lic => {
+                        const row = `
+                    <tr>
+                                <td class="fs-5">${lic.licNo}</td>
+                                <td class="fs-5">${lic.licName}</td>
+                                <td class="fs-5">${lic.expireDate}</td>
+                                <td class="fs-5">${lic.classification}</td>
+                    </tr>`;
+                        tbody.innerHTML += row;
+                    });
+
+                    document.getElementById('classificationTableContainer').style.display = 'block';
+                
+                })
+                .catch(error => {
+                    console.error("Error fetching licenses:", error);
+                });
+        };
+
+        function getTotalAmountByPeriod() {
+            const fromDate = document.getElementById('fromDate').value;
+            const toDate = document.getElementById('toDate').value;
+
+            if (!fromDate || !toDate) {
+                alert("يرجى اختيار تاريخ البداية والنهاية.");
+                return;
+            }
+
+            const url = `${apiBaseUrl}GetTotalCollectedAmountByPeriod?fromDate=${fromDate}&toDate=${toDate}`;
+
+            fetch(url)
+                .then(res => {
+                    if (!res.ok) throw new Error(`HTTP error! Status: ${res.status}`);
+                    return res.json();
+                })
+                .then(total => {
+                    // Update the amount display
+                    document.getElementById("totalAmountCollected").textContent = `المبلغ الإجمالي المحصل: ${total} د.ك`;
+                })
+                .catch(err => {
+                    console.error("Error fetching total amount:", err);
+                    alert("حدث خطأ أثناء جلب المبلغ.");
+                });
+        }
+
+</script>
+}
+

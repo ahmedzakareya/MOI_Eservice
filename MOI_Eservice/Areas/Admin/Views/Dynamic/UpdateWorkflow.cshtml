@@ -1,0 +1,362 @@
+﻿@model WorkFlowVM
+
+@{
+    ViewBag.Title = "Update Workflow";
+    Layout = "~/Areas/Admin/Views/Shared/_LayoutEserviceTourism.cshtml";
+}
+
+<div class="d-flex flex-column flex-column-fluid">
+    <!-- Toolbar -->
+    <div class="app-toolbar pt-6 pb-2">
+        <div class="app-container container-fluid d-flex align-items-stretch">
+            <div class="d-flex flex-stack flex-wrap gap-4 w-100">
+                <div class="page-title d-flex flex-column justify-content-center gap-1 me-3">
+                    <h1 class="text-gray-900 fw-bold fs-3 m-0">Update Workflow</h1>
+                    <ul class="breadcrumb fw-semibold fs-7 my-0">
+                        <li class="breadcrumb-item text-muted">
+                            <a asp-action="Index" asp-controller="Home" class="text-hover-primary">Home</a>
+                        </li>
+                        <li class="breadcrumb-item">
+                            <span class="bullet bg-gray-500"></span>
+                        </li>
+                        <li class="breadcrumb-item text-muted">Update Workflow</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Content -->
+    <div class="app-content flex-column-fluid">
+        <div class="app-container container-fluid">
+            <div class="card">
+                <div class="card-body p-lg-10">
+                    <form id="updateWorkflowForm" method="post">
+                        <input type="hidden" asp-for="Id" />
+
+                        <!-- First Row -->
+                        <div class="row mb-7">
+                            <div class="col-md-6">
+                                <label class="required">Service</label>
+                                <select id="serviceDropdown" asp-for="ServiceId" asp-items="Model.Services" class="form-select form-select-solid fw-bold">
+                                    <option value="" disabled selected>--Select Service--</option>
+                                </select>
+                            </div>
+                            @* <div class="col-md-6">
+                            <label class="required">Activity Type</label>
+                            <select id="activityDropdown" asp-for="ActivityTypeId" asp-items="Model.ActivityTypes" class="form-select form-select-solid fw-bold">
+                            <option value="" disabled selected>--Select Activity Type--</option>
+                            </select>
+                            </div> *@
+                        </div>
+
+                        <!-- Second Row -->
+                        <div class="row mb-7">
+                            <div class="col-md-6">
+                                <label class="required">Request Type</label>
+                                <select id="requestTypeDropdown" asp-for="RequestTypeId" asp-items="Model.RequestTypes" class="form-select form-select-solid fw-bold">
+                                    <option value="" disabled selected>--Select Request Type--</option>
+                                </select>
+                            </div>
+                            <div class="col-md-6" id="transactionTypeContainer" style="display: none;">
+                                <label class="required">Transaction Type</label>
+                                <select id="transactionTypeDropdown" asp-for="TransactionTypeId" class="form-select form-select-solid fw-bold">
+                                    <option value="" disabled selected>--Select Transaction Type--</option>
+                                </select>
+                            </div>
+                        </div>
+
+                        <!-- Third Row -->
+                        <div class="row mb-7">
+                            <div class="col-md-6">
+                                <label class="required">Next Status</label>
+                                <select id="nextStatusDropdown" asp-for="NextStatusId" asp-items="Model.RequestStatus" class="form-select form-select-solid fw-bold">
+                                    <option value="" disabled selected>--Select Status--</option>
+                                </select>
+                            </div>
+                            <div class="col-md-6">
+                                <label class="required">Current Status</label>
+                                <select id="currentStatusDropdown" asp-for="CurrentStatusId" asp-items="Model.RequestStatus" class="form-select form-select-solid fw-bold">
+                                    <option value="" disabled selected>--Select Status--</option>
+                                </select>
+                            </div>
+                        </div>
+
+                        <!-- Conditions and Flag -->
+                        <div class="row mb-7">
+                            <div class="col-md-6">
+                                <label class="required">Flag</label>
+                                <input class="form-control form-control-solid" asp-for="FlagRequestStatus" />
+                            </div>
+                            <div class="col-md-6">
+                                <label>الشروط</label>
+                                <textarea class="form-control form-control-solid" asp-for="Conditions"></textarea>
+                            </div>
+                        </div>
+                        <div class="row mb-7">
+                            <div class="col-md-6">
+                                @*  <div class="form-check form-switch form-check-custom form-check-solid">
+                                @Html.HiddenFor(model => model.IsPermissionRequired)
+                                *@
+                                <div class="form-check form-switch">
+                                    <input class="form-check-input"
+                                           type="checkbox"
+                                           id="IsPermissionRequired"
+                                           name="IsPermissionRequired"
+                                    @(Model.IsPermissionRequired ? "checked" : "") />
+                                    <label class="form-check-label" for="IsPermissionRequired">هل يتطلب صلاحيات؟</label>
+                                    @* </div> *@
+                                </div>
+                            </div>
+                        </div>
+                        <!-- Buttons -->
+                        <div class="d-flex justify-content-start gap-3">
+                            <button type="button" class="btn btn-primary" id="submitButton">Update</button>
+                            <a asp-action="Index" class="btn btn-secondary">Back</a>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+@section Scripts {
+    <script>
+        document.addEventListener("DOMContentLoaded", function () {
+            const apiBaseUrl = '@ViewBag.ApiBaseUrl';
+            const requestTypeChangeId = '@((int)RequestTypeEnum.ChangeData)';
+
+            preloadDropdowns();
+
+            document.getElementById("serviceDropdown").addEventListener("change", (e) => {
+                fetchActivityTypes(e.target.value);
+            });
+
+            document.getElementById("requestTypeDropdown").addEventListener("change", (e) => {
+                toggleTransactionType(e.target.value);
+            });
+
+            document.getElementById("submitButton").addEventListener("click", submitWorkflow);
+
+            async function submitWorkflow() {
+                const form = document.getElementById('updateWorkflowForm');
+                const formData = new FormData(form);
+                const data = Object.fromEntries(formData.entries());
+                data.IsPermissionRequired = form.querySelector('#IsPermissionRequired').checked;
+                console.log('Sending:', data);
+
+                if (!confirm("Are you sure you want to update this workflow?")) return;
+
+                try {
+                    const response = await fetch(`${apiBaseUrl}UpdateWorkFlow/`, {
+                        method: 'POST',
+                        headers: { 'Content-Type': 'application/json' },
+                        body: JSON.stringify(data)
+                    });
+
+                    if (!response.ok) throw new Error(`Error: ${response.statusText}`);
+
+                    const result = await response.json();
+                    alert(result.message || "Workflow updated successfully.");
+                    window.location.href = '@Url.Action("GetAllWorkFlows", "Dynamic", new { area = "Admin" })';
+                } catch (error) {
+                    console.error('Error:', error);
+                    alert("Failed to update workflow.");
+                }
+            }
+
+            async function fetchActivityTypes(serviceId) {
+                const dropdown = document.getElementById("activityDropdown");
+                dropdown.innerHTML = '<option value="" disabled selected>--Select Activity Type--</option>';
+                if (!serviceId) return;
+
+                try {
+                    const response = await fetch(`${apiBaseUrl}GetActivityTypes/${serviceId}`);
+                    const data = await response.json();
+
+                    data.$values.forEach(activity => {
+                        const option = document.createElement("option");
+                        option.value = activity.id;
+                        option.textContent = activity.nameAr;
+                        dropdown.appendChild(option);
+                    });
+                } catch (error) {
+                    console.error('Error fetching activity types:', error);
+                }
+            }
+
+            function toggleTransactionType(requestTypeId) {
+                const container = document.getElementById("transactionTypeContainer");
+                const dropdown = document.getElementById("transactionTypeDropdown");
+
+                if (parseInt(requestTypeId) === parseInt(requestTypeChangeId)) {
+                    container.style.display = "block";
+                    fetchTransactionTypes();
+                } else {
+                    container.style.display = "none";
+                    dropdown.innerHTML = '<option value="" disabled selected>--Select Transaction Type--</option>';
+                }
+            }
+
+            function preloadDropdowns() {
+                document.getElementById("serviceDropdown").value = '@Model.ServiceId';
+                document.getElementById("requestTypeDropdown").value = '@Model.RequestTypeId';
+                document.getElementById("transactionTypeDropdown").value = '@Model.TransactionTypeId';
+
+                toggleTransactionType('@Model.RequestTypeId');
+            }
+        });
+
+        function fetchTransactionTypes() {
+            const apiBaseUrl = '@ViewBag.ApiBaseUrl';
+
+            fetch(`${apiBaseUrl}GetTransactionTypes`)
+                .then(response => {
+                    if (!response.ok) throw new Error(`Failed to fetch transaction types: ${response.status}`);
+                    return response.json();
+                })
+                .then(data => {
+                    const dropdown = document.getElementById('transactionTypeDropdown');
+                    dropdown.innerHTML = '<option value="" disabled selected>--Select Transaction Type--</option>';
+
+                    if (data && Array.isArray(data.$values)) {
+                        data.$values.forEach(type => {
+                            dropdown.innerHTML += `<option value="${type.id}">${type.name}</option>`;
+                        });
+                    } else {
+                        console.warn("Unexpected response format:", data);
+                        dropdown.innerHTML += '<option disabled>Error loading types</option>';
+                    }
+                })
+                .catch(error => {
+                    console.error('Error fetching transaction types:', error);
+                });
+        }
+    </script>
+}
+
+@* @section Scripts {
+    <script>
+        document.addEventListener("DOMContentLoaded", function () {
+            const apiBaseUrl = '@ViewBag.ApiBaseUrl';
+            const requestTypeChangeId = '@ViewBag.EditRequestType';
+
+            // Preload dropdowns
+            preloadDropdowns();
+
+            // Event listeners
+            document.getElementById("serviceDropdown").addEventListener("change", (e) => {
+                fetchActivityTypes(e.target.value);
+            });
+
+            document.getElementById("requestTypeDropdown").addEventListener("change", (e) => {
+                toggleTransactionType(e.target.value);
+            });
+
+            document.getElementById("submitButton").addEventListener("click", submitWorkflow);
+
+            async function submitWorkflow() {
+                const form = document.getElementById('updateWorkflowForm');
+                const formData = new FormData(form);
+                const data = Object.fromEntries(formData.entries());
+                console.log('Submitting data:', JSON.stringify(data, null, 2));
+
+                if (!confirm("Are you sure you want to update this workflow?")) return;
+
+                try {
+                    const response = await fetch(`${apiBaseUrl}UpdateWorkFlow/`, {
+                        method: 'POST',
+                        headers: { 'Content-Type': 'application/json' },
+                        body: JSON.stringify(data)
+                    });
+
+                    if (!response.ok) throw new Error(`Error: ${response.statusText}`);
+
+                    const result = await response.json();
+                    alert(result.message || "Workflow updated successfully.");
+                    window.location.href = '@Url.Action("GetAllWorkFlows", "Dynamic", new { area = "Admin" })';
+                } catch (error) {
+                    console.error('Error:', error);
+                    alert("Failed to update workflow.");
+                }
+            }
+
+            async function fetchActivityTypes(serviceId) {
+                const dropdown = document.getElementById("activityDropdown");
+                dropdown.innerHTML = '<option value="" disabled selected>--Select Activity Type--</option>';
+
+                if (!serviceId) return;
+
+                try {
+                    const response = await fetch(`${apiBaseUrl}GetActivityTypes/${serviceId}`);
+                    const data = await response.json();
+                    data.$values.forEach(activity => {
+                        const option = document.createElement("option");
+                        option.value = activity.id;
+                        option.textContent = activity.nameAr;
+                        dropdown.appendChild(option);
+                    });
+                } catch (error) {
+                    console.error('Error fetching activity types:', error);
+                }
+            }
+
+            // function toggleTransactionType(requestTypeId) {
+            //     const container = document.getElementById("transactionTypeContainer");
+            //     container.style.display = requestTypeId === requestTypeChangeId ? "block" : "none";
+            // }
+            document.getElementById('requestTypeDropdown').addEventListener('change', function () {
+                const selectedRequestTypeId = this.value; // Get the selected value (ID)
+                const transactionTypeContainer = document.getElementById('transactionTypeContainer');
+                const transactionTypeDropdown = document.getElementById('transactionTypeDropdown');
+                const ChangeData = @((int)RequestTypeEnum.ChangeData)
+                                    if (selectedRequestTypeId === ChangeData) { // Replace "123" with the ID for 'تعديل'
+                    transactionTypeContainer.style.display = 'block';
+
+                    // Fetch Transaction Types dynamically if needed
+                    fetchTransactionTypes();
+                } else {
+                    transactionTypeContainer.style.display = 'none';
+                    transactionTypeDropdown.innerHTML = '<option value="" disabled selected>--Select Transaction Type--</option>';
+                }
+            });
+            function preloadDropdowns() {
+                document.getElementById("serviceDropdown").value = '@Model.ServiceId';
+
+                document.getElementById("requestTypeDropdown").value = '@Model.RequestTypeId';
+                document.getElementById("transactionTypeDropdown").value = '@Model.TransactionTypeId';
+                toggleTransactionType('@Model.RequestTypeId');
+            }
+        });
+
+
+        function fetchTransactionTypes() {
+            const apiBaseUrl = '@ViewBag.ApiBaseUrl'; // API base URL
+
+            fetch(`${apiBaseUrl}GetTransactionTypes`) // Update the API endpoint as per your requirements
+                .then(response => {
+                    if (!response.ok) throw new Error(`Failed to fetch transaction types: ${response.status}`);
+                    return response.json();
+                })
+                .then(data => {
+
+                    const transactionTypeDropdown = document.getElementById('transactionTypeDropdown');
+                    transactionTypeDropdown.innerHTML = '<option value="" disabled selected>--Select Transaction Type--</option>';
+                    console.log(data);
+
+                    // Assuming data is an array of transaction types
+                    if (data && Array.isArray(data.$values)) {
+                        data.$values.forEach(type => {
+                            transactionTypeDropdown.innerHTML += `<option value="${type.id}">${type.name}</option>`;
+                        });
+                    } else {
+                        console.warn("Unexpected response format:", data); // Debugging log
+                        $('#transactionTypeDropdown').append('<option value="" disabled>Error loading Transaction Type</option>');
+                    }
+                })
+                .catch(error => {
+                    console.error('Error fetching transaction types:', error);
+                });
+        }
+    </script>
+} *@

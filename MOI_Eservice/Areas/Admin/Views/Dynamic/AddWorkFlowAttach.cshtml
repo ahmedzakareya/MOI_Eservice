@@ -1,0 +1,254 @@
+﻿@model AddWorkflowWithAttachmentsVM
+@{
+    ViewBag.Title = "Add Attachment Rules";
+    Layout = "~/Areas/Admin/Views/Shared/_LayoutEserviceTourism.cshtml";
+}
+
+<div class="d-flex flex-column flex-column-fluid">
+    <div id="kt_app_toolbar" class="app-toolbar pt-6 pb-2">
+        <div id="kt_app_toolbar_container" class="app-container container-fluid d-flex align-items-stretch">
+            <div class="app-toolbar-wrapper d-flex flex-stack flex-wrap gap-4 w-100">
+                <div class="page-title d-flex flex-column justify-content-center gap-1 me-3">
+                    <h1 class="page-heading d-flex flex-column justify-content-center text-gray-900 fw-bold fs-3 m-0">
+                        Add Attachment Rules
+                    </h1>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div id="kt_app_content" class="app-content flex-column-fluid">
+        <div id="kt_app_content_container" class="app-container container-fluid">
+            <div class="card">
+                <div class="card-body p-lg-10">
+                    <form id="addAttachmentForm" method="post" asp-action="AddAttachmentRules">
+                        <div class="row">
+                            <div class="col-md-6 mb-7">
+                                <label class="fs-6 fw-semibold mb-2"><span class="required">Service</span></label>
+                                <select id="serviceDropdown" name="ServiceId" class="form-select form-select-solid" required>
+                                    <option value="" disabled selected>-- Select Service --</option>
+                                    @foreach (var service in Model.Services)
+                                    {
+                                        <option value="@service.Value">@service.Text</option>
+                                    }
+                                </select>
+                            </div>
+
+                            <div class="col-md-6 mb-7">
+                                <label class="fs-6 fw-semibold mb-2"><span class="required">Activity Type</span></label>
+                                <select id="activityDropdown" name="ActivityTypeId" class="form-select form-select-solid" >
+                                    <option value="" disabled selected>-- Select Activity Type --</option>
+                                </select>
+                            </div> 
+                        </div>
+
+                        <div class="row">
+                            <div class="col-md-6 mb-7">
+                                <label class="fs-6 fw-semibold mb-2"><span class="required">Request Type</span></label>
+                                <select id="requestTypeDropdown" name="RequestTypeId" class="form-select form-select-solid" >
+                                    <option value="" disabled selected>-- Select Request Type --</option>
+                                    @foreach (var reqType in Model.RequestTypes)
+                                    {
+                                        <option value="@reqType.Value">@reqType.Text</option>
+                                    }
+                                </select>
+                            </div>
+
+                            <div class="col-md-6 mb-7">
+                                <label class="fs-6 fw-semibold mb-2"><span class="required">Request Status</span></label>
+                                <select id="requestStatusDropdown" name="RequestStatusId" class="form-select form-select-solid" >
+                                    <option value="" disabled selected>-- Select Request Status --</option>
+                                    @foreach (var status in Model.RequestStatus)
+                                    {
+                                        <option value="@status.Value">@status.Text</option>
+                                    }
+                                </select>
+                            </div>
+                        </div>
+
+                        <div class="row">
+                            <div class="col-md-6 mb-7">
+                                <label class="fs-6 fw-semibold mb-2">Label Name</label>
+                                <input type="text" id="attachmentName" name="AttachmentName" class="form-control" required />
+                            </div>
+                            <div class="col-md-6 mb-7">
+                                <label class="fs-6 fw-semibold mb-2">Is Required</label>
+                                <input type="checkbox" id="isRequired" name="IsRequired" class="form-check-input" checked />
+                            </div>
+                        </div>
+                         <div class="row">
+                            <div class="col-md-6 mb-7">
+                                <label class="fs-6 fw-semibold mb-2">View Type</label>
+                                <input type="text" asp-for="ViewTypeForAttach" id="ViewTypeForAttach" class="form-control"  />
+                            </div>
+                            <div class="col-md-6 mb-7">
+                                <label class="fs-6 fw-semibold mb-2">Flag View</label>
+                                <input type="text" asp-for="FlagView" id="FlagView" class="form-control"  />
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-md-6 mb-7 fv-row">
+                                <label class="fs-6 fw-semibold mb-2">Max File Size (MB)</label>
+                                <input type="number" class="form-control form-control-solid" id="MaxFileSize" asp-for="MaxFileSize" />
+                            </div>
+
+                            <div class="col-md-6 mb-7 fv-row">
+                                <label class="fs-6 fw-semibold mb-2">Allowed File Types</label>
+                                <input type="text" class="form-control form-control-solid" id="AllowedFileTypes" asp-for="AllowedFileTypes" />
+                            </div>
+                        </div>
+                        <div class="row">
+
+                            <div class="col-md-6 mb-7 fv-row">
+                                <label class="fs-6 fw-semibold mb-2">FieldName</label>
+                                <input type="text" class="form-control form-control-solid" id="FieldName" asp-for="@Model.FieldName" />
+                            </div>
+                            <div class="col-md-6 mb-7 fv-row">
+                                <label class="fs-6 fw-semibold mb-2">Description</label>
+                                <input type="text" class="form-control form-control-solid" id="Description" asp-for="Description" />
+                            </div>
+                        </div>
+                        <div class="d-flex justify-content-end mt-5">
+                            <button type="button" class="btn btn-primary" onclick="submitAttachment()">Add Rule</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+
+            <div class="card mt-5">
+                <div class="card-header">
+                    <h3 class="card-title">Defined Attachment Rules</h3>
+                </div>
+                <div class="card-body">
+                    <table id="attachmentRulesTable" class="table table-striped text-center">
+                        <thead>
+                            <tr>
+                                <th>Service</th>
+                                <th>Activity Type</th>
+                                <th>Request Type</th>
+                                <th>Request Status</th>
+                                <th>Attachment Name</th>
+                                <th>Is Required</th>
+                                <th>Actions</th>
+                            </tr>
+                        </thead>
+                        <tbody id="attachmentRulesTableBody">
+                            <!-- Rules will be dynamically added here -->
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    <script>
+        const apiBaseUrl = '@ViewBag.ApiBaseUrl';
+
+        // // Fetch Activity Types based on ServiceId
+        document.getElementById('serviceDropdown').addEventListener('change', async function () {
+            const serviceId = this.value;
+            const response = await fetch(`${apiBaseUrl}GetActivityTypes/${serviceId}`);
+            const activities = await response.json();
+            const items = activities.$values || [];
+
+            populateDropdown('activityDropdown', items);
+        });
+
+        // Populate Dropdowns
+        function populateDropdown(dropdownId, items) {
+            const dropdown = document.getElementById(dropdownId);
+            dropdown.innerHTML = '<option value="" disabled selected>-- Select --</option>';
+            if (items && Array.isArray(items)) {
+                items.forEach(item => {
+                    dropdown.innerHTML += `<option value="${item.id}">${item.nameAr}</option>`;
+                });
+            }else
+            {
+                alert('Tpe is not valid');
+            }
+        }
+
+        // Submit Attachment Rule
+        async function submitAttachment() {
+            const data = {
+              ServiceId: document.getElementById('serviceDropdown').value,
+        RequestTypeId: document.getElementById('requestTypeDropdown').value,
+        RequestStatusId: document.getElementById('requestStatusDropdown').value || null,
+        TransactionTypeId: document.getElementById('transactionTypeDropdown')?.value || null,
+        AttachName: document.getElementById('attachmentName').value,
+        IsMandatory: document.getElementById('isRequired').checked,
+        ViewTypeForAttach: document.getElementById('ViewTypeForAttach').value,
+        FlagView: document.getElementById('FlagView').value,
+        MaxFileSize: document.getElementById('MaxFileSize').value ? parseInt(document.getElementById('MaxFileSize').value) : null,
+        AllowedFileTypes: document.getElementById('AllowedFileTypes').value,
+        FieldName: document.getElementById('FieldName').value,
+        Description: document.getElementById('Description').value
+            };
+
+            try {
+                const response = await fetch(`${apiBaseUrl}AddAttachRule`, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify(data)
+                });
+                console.error('Error Response:', await response.text());
+
+                if (response.ok) {
+                    alert('Attachment rule added successfully!');
+                    
+                    fetchAttachmentRules(); // Refresh the rules table
+                } else {
+                    const error = await response.json();
+                    console.error('Error from API:', error);
+                    alert('Failed to add attachment rule.');
+                }
+            } catch (error) {
+                console.error('Error submitting attachment:', error);
+            }
+        }
+
+
+        // Fetch Attachment Rules and Populate Table
+        async function fetchAttachmentRules() {
+            const response = await fetch(`${apiBaseUrl}GetAllAttachmentRules`);
+            const rules = await response.json();
+            var rulesvalue = rules.$values;
+            const tableBody = document.getElementById('attachmentRulesTableBody');
+            tableBody.innerHTML = ''; // Clear existing rows
+            if (rulesvalue && Array.isArray(rulesvalue)) {
+                rulesvalue.forEach(rule => {
+                    const row = `<tr>
+                            <td>${rule.serviceName}</td>
+                            <td>${rule.activityTypeName}</td>
+                            <td>${rule.requestTypeName}</td>
+                            <td>${rule.requestStatusName}</td>
+                                    <td>${rule.attachName}</td>
+                                    <td>${rule.isMandatory ? 'Yes' : 'No'}</td>
+                            <td>
+                                <button class="btn btn-danger btn-sm" onclick="deleteAttachmentRule(${rule.id})">Delete</button>
+                            </td>
+                        </tr>`;
+                    tableBody.innerHTML += row;
+                });
+            } else {
+                alert('Type Not Valid');
+            }
+        }
+
+        // Delete Attachment Rule
+        async function deleteAttachmentRule(id) {
+            const response = await fetch(`${apiBaseUrl}DeleteAttachmentRule/${id}`, { method: 'POST' });
+            if (response.ok) {
+                alert('Attachment rule deleted successfully!');
+                fetchAttachmentRules();
+            } else {
+                alert('Failed to delete attachment rule.');
+            }
+        }
+
+        // Initialize Fetch Rules on Page Load
+        document.addEventListener('DOMContentLoaded', fetchAttachmentRules);
+    </script>
+}

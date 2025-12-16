@@ -1,0 +1,141 @@
+﻿@model NewsVM
+@{
+    ViewData["Title"] = "الأخبار";
+    Layout = "~/Areas/Admin/Views/Shared/_LayoutEserviceTourism.cshtml";
+
+}
+<div class="container mt-5">
+    <h2>إضافة خبر جديد</h2>
+    <form asp-action="AddNews" asp-area="Admin" asp-controller="Elaw" method="post" enctype="multipart/form-data">
+        <div class="mb-3">
+            <input type="hidden" asp-for="Id" id="news-id" />
+            <label for="title" class="form-label">العنوان</label>
+            <input type="text" class="form-control" id="title" asp-for="Title" placeholder="ادخل العنوان" />
+        </div>
+        <div class="mb-3">
+            <label for="shortDescription" class="form-label">الوصف المختصر</label>
+            <textarea class="form-control" id="shortDescription" asp-for="SmallDescription" rows="3" placeholder="ادخل الوصف المختصر"></textarea>
+        </div>
+        <div class="mb-3">
+            <label for="image" class="form-label">الصورة</label>
+            <img id="image-preview" src="" class="img-thumbnail mb-2" style="width: 150px; height: auto;" alt="Preview Image" />
+
+            <input type="file" class="form-control" id="image" name="Image" accept="image/*" onchange="previewImage(event)" />
+        </div>
+        <div class="mb-3">
+            <label for="content" class="form-label">الوصف</label>
+            <textarea id="content" asp-for="Description" class="form-control"></textarea>
+        </div>
+        <button type="submit" id="form-submit-button" class="btn btn-primary">إضافة</button>
+    </form>
+
+    <hr />
+
+    <h3>قائمة الأخبار</h3>
+    <table class="table table-bordered">
+        <thead>
+            <tr>
+                <th>العنوان</th>
+                <th>الوصف المختصر</th>
+                <th>الصورة</th>
+                <th>تاريخ الإضافة</th>
+                <th>الحالة</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var news in Model.NewsList)
+            {
+                <tr>
+                    <!-- News Title -->
+                    <td>@news.Title</td>
+
+                    <!-- Small Description -->
+                    <td>@news.SmallDescription</td>
+
+                    <!-- News Image -->
+                    <td>
+                        <img src="@Url.Content($"~/Admin/Files/Request_Documents/Elaw/News/{news.Image}")"
+                             alt="@news.Title"
+                             class="img-thumbnail"
+                             style="width: 100px; height: auto;" />
+                    </td>
+
+                    <!-- Created Date -->
+                    <td>@news.CreatedDate.ToString("yyyy-MM-dd")</td>
+
+                    <!-- Status Checkbox -->
+                    <td>
+                        <input id="news-status" type="checkbox" @(news.Status ? "checked" : "") disabled />
+                    </td>
+                    <!-- Edit Button -->
+                    <td>
+                        <button class="btn btn-success btn-edit"
+                                data-id="@news.Id"
+                                data-title="@news.Title"
+                                data-shortdescription="@news.SmallDescription"
+                                data-description="@news.Description"
+                                data-image="@news.Image"
+                                data-status="@news.Status"
+                                onclick="editNews(this)">
+                            تعديل
+                        </button>
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+
+</div>
+@section Scripts
+{
+
+<script src="https://cdn.ckeditor.com/4.18.0/standard/ckeditor.js"></script>
+<script>
+    CKEDITOR.replace('content');
+</script>
+
+<script>
+        function previewImage(event) {
+            const imageInput = event.target;
+            const imagePreview = document.getElementById("image-preview");
+
+            if (imageInput.files && imageInput.files[0]) {
+                const reader = new FileReader();
+
+                reader.onload = function (e) {
+                    imagePreview.src = e.target.result;
+                };
+
+                reader.readAsDataURL(imageInput.files[0]);
+            }
+        }
+    function editNews(button) {
+        // Get data attributes from the button
+        const id = button.getAttribute("data-id");
+        const title = button.getAttribute("data-title");
+        const Shortdescription = button.getAttribute("data-shortdescription");
+            const description = button.getAttribute("data-description");
+        const image = button.getAttribute("data-image");
+        const status = button.getAttribute("data-status") === "True";
+
+        // Populate the form fields
+        document.getElementById("news-id").value = id;
+        document.getElementById("title").value = title;
+            document.getElementById("shortDescription").value = Shortdescription;
+            // Set the value for CKEditor
+            if (CKEDITOR.instances.content) {
+                CKEDITOR.instances.content.setData(description); // Dynamically set the description
+            }
+
+           
+
+            // Update image preview for existing image
+            const imagePreview = document.getElementById("image-preview");
+            imagePreview.src = image ? `/Admin/Files/Request_Documents/Elaw/News/${image}` : "/path/to/placeholder.jpg";
+        document.getElementById("news-status").checked = status;
+            document.getElementById("form-submit-button").innerText = "تعديل";
+
+    }
+</script>
+
+}

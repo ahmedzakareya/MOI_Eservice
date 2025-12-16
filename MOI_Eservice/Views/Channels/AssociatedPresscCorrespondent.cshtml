@@ -1,0 +1,252 @@
+﻿@model Business.ViewModel.MoiEserviceLicensesRequestVM
+
+@{
+    Layout = "~/Views/Shared/_LayoutEservice.cshtml";
+}
+
+<style>
+    .custom-file-upload {
+        border: 1px solid #ddd;
+        padding: 15px;
+        border-radius: 5px;
+        background-color: #f9f9f9;
+    }
+
+    .file-upload-label {
+        display: block;
+        padding: 8px 15px;
+        border-radius: 4px;
+        cursor: pointer;
+        text-align: center;
+        transition: all 0.3s;
+    }
+
+        .file-upload-label.bg-primary {
+            background-color: #0d6efd !important;
+        }
+
+        .file-upload-label:hover {
+            background-color: #0b5ed7 !important;
+        }
+
+        .file-upload-label i {
+            margin-left: 5px;
+        }
+
+    .file-name-display {
+        padding: 5px;
+        font-size: 14px;
+        color: #555;
+        word-break: break-word;
+    }
+
+    .pdf-preview-container {
+        border: 1px solid #eee;
+        padding: 10px;
+        border-radius: 5px;
+        background: #fff;
+    }
+
+    .pdf-preview-iframe {
+        width: 100%;
+        height: 300px;
+        border: 1px solid #ddd;
+        background: #f5f5f5;
+    }
+
+    .pdf-preview-header {
+        padding: 0 5px;
+    }
+</style>
+
+<div class="breadcrumb-area">
+    <ol class="breadcrumb">
+        <li class="item"><a href="MyAccount.html">الرئيسيه</a></li>
+        <li class="item"><a href="MyAccount.html">حسابي</a></li>
+        <li class="item">الملف الشخصي</li>
+    </ol>
+</div>
+
+<div class="my-profile-box">
+    <h3 class="text-danger">إصدار هوية للمراسل</h3>
+
+    <form id="myform" method="post" enctype="multipart/form-data" action="@Url.Action("ChannelRepresentativeOfficeNewRequest", "Channels")">
+        @Html.AntiForgeryToken()
+
+        <div class="row mb-4">
+            <div class="col-lg-12">
+                <div class="card border border-1">
+                    <div class="card-body">
+                        <div class="d-flex align-items-center justify-content-between mb-3">
+                            <div class="d-flex align-items-center">
+                                <div class="icon bg-light text-danger rounded-circle d-flex align-items-center justify-content-center me-3" style="width: 50px; height: 50px;">
+                                    <i class="ri-user-fill" style="font-size: 24px;"></i>
+                                </div>
+                                <h5 class="mb-0 fw-bold text-primary">بيانات المراسل</h5>
+                            </div>
+                            <div>
+                                <i class="ri-bookmark-line text-danger fs-5 me-2 hover-opacity" style="cursor: pointer;"></i>
+                                <i class="ri-bookmark-fill text-danger fs-5 d-none hover-opacity" style="cursor: pointer;"></i>
+                            </div>
+                        </div>
+
+                        <hr class="mt-2 mb-3 border-danger opacity-25" />
+
+                        <div class="row">
+                            <div class="col-xl-4 col-lg-6 mb-3">
+                                <div class="form-group">
+                                    <label>الإسم <span class="required">*</span></label>
+                                    <input type="text" class="form-control" placeholder="الإسم" asp-for="person.personName" name="person.personName" />
+                                </div>
+                            </div>
+
+                            <div class="col-xl-4 col-lg-6 mb-3">
+                                <div class="form-group">
+                                    <label>تاريخ الميلاد <span class="required">*</span></label>
+                                    <input type="date" class="form-control" asp-for="person.BirthDate" name="person.BirthDate" placeholder="تاريخ الميلاد" />
+                                </div>
+                            </div>
+
+                            <div class="col-xl-4 col-lg-6 mb-3">
+                                <div class="form-group">
+                                    <label>الجنسية <span class="required">*</span></label>
+                                    <select class="form-control select2" asp-for="person.NationalityId" name="person.NationalityId" id="person_nationality">
+                                        <option value="">اختر الجنسية</option>
+                                        @if (Model.countriesLookups != null)
+                                        {
+                                            foreach (var country in Model.countriesLookups)
+                                            {
+                                                <option value="@country.Id">@country.Name</option>
+                                            }
+                                        }
+                                    </select>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="row mb-4">
+            <div class="col-lg-12">
+                <div class="card border border-1">
+                    <div class="card-body">
+                        <div class="d-flex align-items-center justify-content-between mb-3">
+                            <div class="d-flex align-items-center">
+                                <div class="icon bg-light text-danger rounded-circle d-flex align-items-center justify-content-center me-3" style="width: 50px; height: 50px;">
+                                    <i class="ri-attachment-line" style="font-size: 24px;"></i>
+                                </div>
+                                <div>
+                                    <h5 class="mb-1 fw-bold text-primary">مرفقات الطلب</h5>
+                                    <span class="text-danger small fw-bold">الملفات بصيغه PDF بحد أقصى 2MB</span>
+                                </div>
+                            </div>
+                            <div>
+                                <i class="ri-bookmark-line text-danger fs-5 me-2 hover-opacity" style="cursor: pointer;"></i>
+                                <i class="ri-bookmark-fill text-danger fs-5 d-none hover-opacity" style="cursor: pointer;"></i>
+                            </div>
+                        </div>
+
+                        <hr class="mt-2 mb-3 border-danger opacity-25" />
+
+                        <div class="row">
+                            @foreach (var item in Model.attachRules)
+                            {
+                                var inputId = $"file-{item.Id}";
+                                var fileNameId = $"file-name-{item.Id}";
+                                var previewDivId = $"pdf-preview-{item.Id}";
+                                var iframeId = $"pdf-iframe-{item.Id}";
+                                var errorId = $"error-{item.Id}";
+                                var hiddenFileNameId = $"file-name-hidden-{item.Id}";
+
+                                <div class="col-md-6 mb-3">
+                                    <label class="form-label fw-bold text-secondary">@item.AttachName <span class="text-danger">*</span></label>
+                                    <div class="custom-file-upload">
+                                        <input type="file" id="@inputId" name="UploadedFiles" class="form-control-file d-none" accept=".pdf" required onchange="handleFileUpload(this, '@previewDivId', '@iframeId', '@fileNameId', '@errorId', '@item.Id')" />
+                                        <label for="@inputId" class="btn btn-outline-primary w-100">
+                                            <i class="ri-upload-cloud-line me-2"></i> اختر ملف PDF
+                                        </label>
+                                        <div id="@fileNameId" class="file-name-display mt-2 small text-muted"></div>
+                                        <div id="@errorId" class="text-danger small mt-1" style="display:none;">يجب اختيار ملف PDF فقط</div>
+                                        <div id="@previewDivId" class="pdf-preview-container mt-3" style="display:none;">
+                                            <div class="d-flex justify-content-between align-items-center mb-2">
+                                                <span class="fw-bold">معاينة الملف:</span>
+                                                <button type="button" class="btn btn-sm btn-outline-danger" onclick="clearPdfPreview('@previewDivId', '@inputId', '@fileNameId', '@iframeId', '@hiddenFileNameId')">
+                                                    <i class="ri-close-line"></i> إزالة
+                                                </button>
+                                            </div>
+                                            <iframe id="@iframeId" class="pdf-preview-iframe" frameborder="0"></iframe>
+                                        </div>
+                                        <input type="hidden" name="FileNames" id="@hiddenFileNameId" />
+                                    </div>
+                                </div>
+                            }
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="text-center">
+            <button type="submit" class="default-btn">
+                إرسال الطلب <i class="ri-edit-box-line"></i>
+            </button>
+        </div>
+    </form>
+</div>
+
+<div class="modal fade" id="pdfModal" tabindex="-1" aria-labelledby="pdfModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-xl modal-dialog-scrollable">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="pdfModalLabel">عرض الملف</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="إغلاق"></button>
+            </div>
+            <div class="modal-body">
+                <iframe id="modalPdfViewer" width="100%" height="600px" frameborder="0"></iframe>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    <script>
+        function handleFileUpload(input, previewDivId, iframeId, fileNameId, errorId, itemId) {
+            const file = input.files[0];
+            const errorEl = document.getElementById(errorId);
+            const fileNameEl = document.getElementById(fileNameId);
+            const previewDiv = document.getElementById(previewDivId);
+            const iframe = document.getElementById(iframeId);
+            const hiddenInput = document.getElementById("file-name-hidden-" + itemId);
+
+            if (!file || file.type !== "application/pdf") {
+                errorEl.style.display = "block";
+                fileNameEl.innerText = "";
+                previewDiv.style.display = "none";
+                iframe.src = "";
+                hiddenInput.value = "";
+                return;
+            }
+
+            errorEl.style.display = "none";
+            fileNameEl.innerText = file.name;
+            hiddenInput.value = file.name;
+
+            const reader = new FileReader();
+            reader.onload = function (e) {
+                iframe.src = e.target.result;
+                previewDiv.style.display = "block";
+            };
+            reader.readAsDataURL(file);
+        }
+
+        function clearPdfPreview(previewDivId, inputId, fileNameId, iframeId, hiddenInputId) {
+            document.getElementById(previewDivId).style.display = "none";
+            document.getElementById(fileNameId).innerText = "";
+            document.getElementById(iframeId).src = "";
+            document.getElementById(hiddenInputId).value = "";
+            document.getElementById(inputId).value = "";
+        }
+    </script>
+}

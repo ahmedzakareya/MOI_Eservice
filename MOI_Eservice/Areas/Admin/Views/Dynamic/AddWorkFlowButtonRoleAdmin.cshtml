@@ -1,0 +1,45 @@
+﻿@model WorkFlowButtonRoleAdmin
+
+@{
+    ViewBag.Title = "إضافة صلاحية زر";
+    Layout = "~/Areas/Admin/Views/Shared/_LayoutEserviceTourism.cshtml";
+}
+
+<div class="d-flex flex-column flex-column-fluid">
+    <div id="kt_app_content" class="app-content flex-column-fluid">
+        <div id="kt_app_content_container" class="app-container container-fluid">
+
+            <div class="card">
+                <div class="card-header">
+                    <h3 class="card-title fw-bold text-gray-800">إضافة صلاحية زر إلى دور</h3>
+                </div>
+                <div class="card-body">
+                    <form asp-action="AddWorkFlowButtonRoleAdmin" method="post">
+                        <div class="row mb-6">
+                            <div class="col-md-6">
+                                <label class="form-label required">الزر</label>
+                                <select asp-for="WorkFlowActionButtonId" class="form-select form-select-solid" asp-items="ViewBag.Buttons">
+                                    <option value="">-- اختر الزر --</option>
+                                </select>
+                            </div>
+                            <div class="col-md-6">
+                                <label class="form-label required">الدور</label>
+                                <select asp-for="RoleAdminId" class="form-select form-select-solid" asp-items="ViewBag.Roles">
+                                    <option value="">-- اختر الدور --</option>
+                                </select>
+                            </div>
+                        </div>
+
+                        <div class="text-end">
+                            <button type="submit" class="btn btn-primary">
+                                <i class="ki-duotone ki-check fs-2"></i> حفظ
+                            </button>
+                            <a asp-action="GetAllWorkFlowButtonRoleAdmins" class="btn btn-light">رجوع</a>
+                        </div>
+                    </form>
+                </div>
+            </div>
+
+        </div>
+    </div>
+</div>

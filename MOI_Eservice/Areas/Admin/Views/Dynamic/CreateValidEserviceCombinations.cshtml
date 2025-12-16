@@ -1,0 +1,81 @@
+﻿@model ValidEserviceCombinations
+
+@{
+    ViewBag.Title = "Create ValidEserviceCombinations";
+    Layout = "~/Areas/Admin/Views/Shared/_LayoutEserviceTourism.cshtml";
+}
+
+<div class="container-fluid mt-5">
+    <div class="card">
+        <div class="card-header">
+            <h3 class="card-title">Add Valid Eservice Combinations</h3>
+        </div>
+        <div class="card-body">
+            <form id="eserviceValidForm">
+              
+
+                <div class="mb-4">
+                    <label for="ActivityTypesId" class="form-label">Activity Type</label>
+                    @Html.DropDownList("ActivityTypesId", ViewBag.ActivityTypes as List<SelectListItem>, "-- Select --", new { @class = "form-select" })
+                </div>
+
+                <div class="mb-4">
+                    <label for="RequestTypeId" class="form-label">Request Type</label>
+                    @Html.DropDownList("RequestTypeId", ViewBag.RequestTypes as List<SelectListItem>, "-- Select --", new { @class = "form-select" })
+                </div>
+                <div class="mb-4">
+                    <label for="LicenceTypeId" class="form-label">Licences Type</label>
+                    @Html.DropDownList("LicenceTypeId", ViewBag.LicencesType as List<SelectListItem>, "-- Select --", new { @class = "form-select" })
+                </div>
+                <div class="mb-4">
+                    <label for="Sort" class="form-label">Sort</label>
+                    <input type="number" class="form-control" id="Sort" />
+                </div>
+
+                <div class="mb-4">
+                    <label for="IsAllowed" class="form-label">IsAllowed</label>
+                    <select id="IsAllowed" class="form-select">
+                        <option value="true" selected>Yes</option>
+                        <option value="false">No</option>
+                    </select>
+                </div>
+
+                <div class="text-end">
+                    <button type="submit" class="btn btn-success">Create</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    <script>
+        const apiBaseUrl = '@ViewBag.ApiBaseUrl';
+
+        document.getElementById('eserviceValidForm').addEventListener('submit', async function (e) {
+            e.preventDefault();
+
+            const data = {
+
+                ActivityTypeId: parseInt(document.getElementById("ActivityTypesId").value),
+                RequestTypeId: parseInt(document.getElementById("RequestTypeId").value),
+                LicenceTypeId: parseInt(document.getElementById("LicenceTypeId").value),
+                IsAllowed: document.getElementById("IsAllowed").value === "true"
+
+            }; 
+
+            const response = await fetch(apiBaseUrl + "CreateValidEserviceCombination", {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify(data)
+            });
+
+            if (response.ok) {
+                alert("Created successfully!");
+                window.location.href = '/Admin/dynamic/GetValidEserviceCombinations';
+            } else {
+                alert("Failed to create Eservice Type Branch.");
+            }
+        });
+    </script>
+}

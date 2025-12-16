@@ -1,0 +1,94 @@
+﻿@model RegisterDelegateVM
+@{
+    ViewData["Title"] = "تسجيل مفوض جديد";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<form asp-action="RegisterDelegateUser" asp-controller="Home" method="post" enctype="multipart/form-data">
+    <div class="row">
+        <div class="col-md-6 mb-3">
+            <label asp-for="MandoobCivilId" class="form-label">الرقم المدني لصاحب التفويض</label>
+            <input asp-for="MandoobCivilId" class="form-control p-2" />
+            <span asp-validation-for="MandoobCivilId" class="text-danger"></span>
+        </div>
+
+        <div class="col-md-6 mb-3">
+            <label asp-for="Mobile" class="form-label">رقم الهاتف</label>
+            <input asp-for="Mobile" class="form-control p-2" />
+            <span asp-validation-for="Mobile" class="text-danger"></span>
+        </div>
+
+        <div class="col-md-6 mb-3">
+            <label asp-for="FullNameAr" class="form-label">الاسم باللغة العربية</label>
+            <input asp-for="FullNameAr" class="form-control p-2" />
+            <span asp-validation-for="FullNameAr" class="text-danger"></span>
+        </div>
+
+        <div class="col-md-6 mb-3">
+            <label asp-for="Email" class="form-label">البريد الإلكتروني</label>
+            <input asp-for="Email" class="form-control p-2" />
+            <span asp-validation-for="Email" class="text-danger"></span>
+        </div>
+
+        <div class="col-md-6 mb-3">
+            <label asp-for="Password" class="form-label">كلمة المرور</label>
+            <input asp-for="Password" type="password" class="form-control p-2" />
+            <span asp-validation-for="Password" class="text-danger"></span>
+        </div>
+
+        <div class="col-md-6 mb-3">
+            <label asp-for="ConfirmPassword" class="form-label">تأكيد كلمة المرور</label>
+            <input asp-for="ConfirmPassword" type="password" class="form-control p-2" />
+            <span asp-validation-for="ConfirmPassword" class="text-danger"></span>
+        </div>
+
+        @* <div class="col-md-6 m-3">
+            <label asp-for="AccountTypeId" class="form-label">نوع الحساب</label>
+            <select asp-for="AccountTypeId" asp-items="ViewBag.AccountTypes" class="form-select">
+                <option value="">--- إختر من القائمة ---</option>
+            </select>
+            <span asp-validation-for="AccountTypeId" class="text-danger"></span>
+        </div> *@
+    </div>
+
+    <hr />
+    <h5 class="mt-4">التراخيص</h5>
+    <table class="table table-bordered">
+        <thead>
+            <tr>
+                <th>الاسم</th>
+                <th>كتاب التفويض</th>
+                <th>اختيار</th>
+            </tr>
+        </thead>
+        <tbody>
+            @for (int i = 0; i < Model.Licenses.Count; i++)
+            {
+                <tr>
+                    <td>@($"{Model.Licenses[i].ServiceName} - {Model.Licenses[i].LicName}")</td>
+                    <td>
+                        <input asp-for="Licenses[i].FilePath" type="file" class="form-control" />
+                    </td>
+                    <td>
+                        <input asp-for="Licenses[i].IsSelected" type="checkbox" />
+                        <input type="hidden" asp-for="Licenses[i].Id" />
+                        <input type="hidden" asp-for="Licenses[i].ServiceId" />
+                
+
+                        <input type="hidden" asp-for="Licenses[i].LicName" />
+                        <input type="hidden" asp-for="Licenses[i].ServiceName" />
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+
+    <div class="text-center mt-4">
+        <button type="submit" class="btn btn-primary">تسجيل</button>
+    </div>
+</form>
+
+@* @section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+}
+ *@

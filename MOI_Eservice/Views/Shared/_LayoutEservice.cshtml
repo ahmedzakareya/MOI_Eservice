@@ -1,0 +1,657 @@
+﻿@using System.Security.Claims
+
+
+@{
+    var token = Context.Session.GetString("UserToken");
+    var userId = Context.Session.GetString("UserId");
+    var userName = Context.Session.GetString("UserUserName");
+    var civilId = Context.Session.GetString("UserCivilId");
+    var fullName = Context.Session.GetString("UserFullName");
+    var accountTypeId = Context.Session.GetString("UserAccouuntTypeId");
+
+    if (userId == null)
+    {
+        Context.Response.Redirect("/home/index");
+    }
+}
+
+<!doctype html>
+<html lang="ar" dir="rtl">
+<head>
+    <!-- Required meta tags -->
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <title>Ministry Of Information Kuwait - EService | وزارة الاعلام - الخدمـات الإلكترونية</title>
+
+    <!-- Searchable dropdown Select2 styles -->
+    <link rel="stylesheet" href="~/assets/css/select2.css" />
+
+    <!-- Links of CSS files -->
+    <link rel="stylesheet" href="~/assets/css/bootstrap.rtl.min.css">
+    <link rel="stylesheet" href="~/assets/css/aos.css">
+    <link rel="stylesheet" href="~/assets/css/animate.min.css">
+    <link rel="stylesheet" href="~/assets/css/meanmenu.css">
+    <link rel="stylesheet" href="~/assets/css/flaticon.css">
+    <link rel="stylesheet" href="~/assets/css/remixicon.css">
+    <link rel="stylesheet" href="~/assets/css/odometer.min.css">
+    <link rel="stylesheet" href="~/assets/css/owl.carousel.min.css">
+    <link rel="stylesheet" href="~/assets/css/owl.theme.default.min.css">
+    <link rel="stylesheet" href="~/assets/css/magnific-popup.min.css">
+    <link rel="stylesheet" href="~/assets/css/fancybox.min.css">
+    <link rel="stylesheet" href="~/assets/css/selectize.min.css">
+    <link rel="stylesheet" href="~/assets/css/metismenu.min.css">
+    <link rel="stylesheet" href="~/assets/css/simplebar.min.css">
+    <link rel="stylesheet" href="~/assets/css/dropzone.min.css">
+    <link rel="stylesheet" href="~/assets/css/style.css">
+    <link rel="stylesheet" href="~/assets/css/navbar.css">
+    <link rel="stylesheet" href="~/assets/css/footer.css">
+    <link rel="stylesheet" href="~/assets/css/dashboard.css">
+    <link rel="stylesheet" href="~/assets/css/responsive.css">
+    <link rel="stylesheet" href="~/assets/css/rtl.css">
+
+
+    <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/v/bs5/dt-1.13.2/r-2.4.0/datatables.min.css" />
+
+    <link rel="icon" type="image/png" href="~/assets/images/favicon.png">
+    <link rel="apple-touch-icon-precomposed" href="images/favicon-apple.png" />
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/sweetalert2@11.7.1/dist/sweetalert2.min.css" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+
+    <link href="~/PagedList.css" rel="stylesheet" />
+    <style>
+        .datepicker-panel > ul > li[data-view="month current"], .datepicker-panel > ul > li[data-view="month prev"], .datepicker-panel > ul > li[data-view="month next"], .datepicker-panel > ul {
+            font-weight: bold !important;
+        }
+
+            .datepicker-panel > ul > li[data-view="month current"], .datepicker-panel > ul > li[data-view="month prev"], .datepicker-panel > ul > li[data-view="month next"] {
+                font-size: 13px !important;
+                background-color: #1657cb !important;
+                color: white !important;
+            }
+
+                .datepicker-panel > ul > li[data-view="month current"]:hover, .datepicker-panel > ul > li[data-view="month prev"]:hover, .datepicker-panel > ul > li[data-view="month next"]:hover {
+                    background-color: #00ccfe !important;
+                    color: black !important;
+                    -webkit-transition: all 500ms ease;
+                    -moz-transition: all 500ms ease;
+                    -o-transition: all 500ms ease;
+                    transition: all 500ms ease;
+                }
+
+        .datepicker-top-left:after, .datepicker-top-right:after {
+            border-bottom-color: #1657cb !important;
+            color: white !important;
+        }
+
+        .datepicker-panel > ul > li.highlighted {
+            background-color: #1657cb !important;
+            color: white !important;
+        }
+
+            .datepicker-panel > ul > li.highlighted:hover {
+                background-color: #00ccfe !important;
+                color: black !important;
+                -webkit-transition: all 500ms ease;
+                -moz-transition: all 500ms ease;
+                -o-transition: all 500ms ease;
+                transition: all 500ms ease;
+            }
+
+        .datepicker-panel > ul > li:hover {
+            background-color: #1657cb !important;
+            color: white !important;
+            -webkit-transition: all 500ms ease;
+            -moz-transition: all 500ms ease;
+            -o-transition: all 500ms ease;
+            transition: all 500ms ease;
+        }
+        /*table thead tr th, table tbody tr td {
+                    padding: 17px !important;
+                }*/
+        .my-profile-box form .form-group .form-control {
+            height: auto !important;
+        }
+
+        input {
+            border: 1px solid #1657cb !important;
+        }
+
+            input:not(:placeholder-shown) {
+                background-color: #f5f5f5 !important;
+                border: none !important;
+            }
+
+            input:placeholder-shown {
+                background-color: white !important;
+            }
+
+        .custom-file-input {
+            color: transparent;
+        }
+
+            .custom-file-input::-webkit-file-upload-button {
+                visibility: hidden;
+            }
+
+            .custom-file-input::before {
+                content: 'PDF إضافة ملف';
+                color: white;
+                display: inline-block;
+                background-color: #00ccfe;
+                /* border: 1px solid #1657cb; */
+                border-radius: 3px;
+                padding: 10px 17px;
+                outline: none;
+                -webkit-user-select: none;
+                cursor: pointer;
+                position: absolute;
+                bottom: 1px;
+                right: 0px;
+            }
+
+            .custom-file-input::after {
+                content: '_';
+                margin-left: 39px;
+                float: right;
+            }
+
+            .custom-file-input:hover::before {
+                border-color: black;
+            }
+
+            .custom-file-input:active {
+                outline: 0;
+            }
+
+                .custom-file-input:active::before {
+                    background: -webkit-linear-gradient(top, #e3e3e3, #f9f9f9);
+                }
+
+        label.Required::before {
+            content: "*";
+            color: red;
+            font-size: 20px;
+        }
+
+        .required {
+            color: red;
+            font-size: 20px;
+        }
+
+        .dataTables_wrapper .row {
+            padding-bottom: 15px !important;
+            direction: ltr !important;
+        }
+
+        input[type=search] {
+            padding: 10px 20px 10px 19px;
+            text-align: right;
+            direction: rtl;
+        }
+
+        .ThemeCol {
+            background: var(--main-color) !important;
+        }
+
+        .myTable {
+            direction: rtl !important;
+        }
+
+        .ThemeCol tr th {
+            color: white !important;
+            font-weight: bold !important;
+            text-align: right !important;
+        }
+
+        .select2-container--default .select2-selection--single {
+            height: calc(2.375rem + 2px) !important;
+            padding: 0.375rem 0.75rem !important;
+            border: 1px solid #1657cb !important;
+            border-radius: 0.375rem !important;
+            font-size: 1rem !important;
+            line-height: 1.5 !important;
+            background-color: #fff !important;
+            box-shadow: none !important;
+        }
+
+            .select2-container--default .select2-selection--single .select2-selection__rendered {
+                line-height: 1.5rem !important;
+            }
+
+            .select2-container--default .select2-selection--single .select2-selection__arrow {
+                height: 100% !important;
+                top: 0.4rem !important;
+            }
+    </style>
+
+    @if (IsSectionDefined("Styles"))
+    {
+        @RenderSection("Styles", required: false)
+    }
+
+    <script src="~/assets/js/jquery.min.js"></script>
+    <script src="~/assets/js/bootstrap.bundle.min.js"></script>
+</head>
+
+<body>
+    <!-- Start Preloader Area -->
+    <div class="preloader-area">
+        <div class="spinner">
+            <div class="inner">
+                <div class="disc"></div>
+                <div class="disc"></div>
+                <div class="disc"></div>
+            </div>
+        </div>
+    </div>
+    @*<div class="preloader-area2">
+    <div class="spinner">
+    <div class="inner">
+    <div class="disc"></div>
+    <div class="disc"></div>
+    <div class="disc"></div>
+    </div>
+    </div>
+    </div>*@
+    <!-- End Preloader Area -->
+    <!-- Start Sidemenu Area -->
+    <div class="sidemenu-area">
+        <div class="sidemenu-header">
+            <a href="@Url.Action("MyAccount","Home")" class="navbar-brand d-flex align-items-center">
+                <img src="~/assets/images/MOI_Logo.png" width="170" alt="image">
+            </a>
+
+            <div class="responsive-burger-menu d-block d-lg-none">
+                <span class="top-bar"></span>
+                <span class="middle-bar"></span>
+                <span class="bottom-bar"></span>
+            </div>
+        </div>
+
+        @{
+            Html.RenderPartial("~/Views/Shared/_SideMenu.cshtml");
+        }
+    </div>
+    <!-- End Sidemenu Area -->
+    <!-- Start Main Dashboard Content Wrapper Area -->
+    <div class="main-dashboard-content d-flex flex-column">
+
+        <!-- Start Navbar Area -->
+        <div class="navbar-area">
+            <div class="main-responsive-nav">
+                <div class="main-responsive-menu">
+                    <div class="responsive-burger-menu d-lg-none d-block">
+                        <span class="top-bar"></span>
+                        <span class="middle-bar"></span>
+                        <span class="bottom-bar"></span>
+                    </div>
+                </div>
+            </div>
+
+            <div class="main-navbar">
+                <nav class="navbar navbar-expand-md navbar-light">
+                    <div class="collapse navbar-collapse mean-menu" id="navbarSupportedContent">
+                        <ul class="navbar-nav me-auto">
+                            <li class="nav-item">
+                                <a href="@Url.Action("Index","Home")" class="nav-link">
+                                    الرئيسيه
+
+                                </a>
+
+
+                            </li>
+
+                            @*<li class="nav-item">
+                            <a href="#" class="nav-link">
+                            خدماتنا
+                            <i class="ri-arrow-down-s-line"></i>
+                            </a>
+
+                            <ul class="dropdown-menu">
+
+
+                            <li class="nav-item">
+                            <a href="services.html" class="nav-link">قطاع الصحافة و النشر و المطبوعات</a>
+                            </li>
+                            <li class="nav-item">
+                            <a href="services.html" class="nav-link">قطاع السياحة </a>
+                            </li>
+                            </ul>
+                            </li>*@
+
+                            @if (Context.Request.Path.ToString().ToLower().Contains("/home/myaccount") == false)
+                            {
+                                <li class="nav-item">
+                                    <a href="@Url.Action("MyAccount","Home")" class="nav-link">حسابى</a>
+                                </li>
+                            }
+
+                            <li class="nav-item">
+                                <a href="@Url.Action("Contact","Home")" class="nav-link">اتصل بنا</a>
+                            </li>
+                        </ul>
+
+                        <div class="others-options d-flex align-items-center">
+                            <div class="option-item">
+                                <div class="dropdown profile-nav-item">
+                                    <a href="#" class="dropdown-bs-toggle" role="button" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                        <div class="menu-profile">
+                                            <img src="~/assets/images/dashboard/photo.jpg" class="rounded-circle" alt="image">
+                                            <span class="name">@fullName</span>
+                                        </div>
+                                    </a>
+
+                                    <div class="dropdown-menu">
+                                        <div class="dropdown-header d-flex flex-column align-items-center">
+                                            <div class="figure mb-3">
+                                                <img src="~/assets/images/dashboard/photo.jpg" class="rounded-circle" alt="image">
+                                            </div>
+
+                                            <div class="info text-center">
+                                                <span class="name">@fullName</span>
+
+                                            </div>
+                                        </div>
+
+                                        <div class="dropdown-body">
+                                            <ul class="profile-nav p-0 pt-3">
+                                                <li class="nav-item active">
+                                                    <a href="@Url.Action("MyAccount","Home")" class="nav-link">
+                                                        <span class="icon"><i class="ri-home-line"></i></span>
+                                                        <span class="menu-title">حسابي</span>
+                                                    </a>
+                                                </li>
+
+                                                <li class="nav-item">
+                                                    <a href="@Url.Action("MyProfile","Account")" class="nav-link">
+                                                        <span class="icon"><i class="ri-user-line"></i></span>
+                                                        <span class="menu-title">الملف الشخصي</span>
+                                                    </a>
+                                                </li>
+
+                                                <li class="nav-item">
+                                                    <a href="@Url.Action("ChangePassword","Manage")" class="nav-link">
+                                                        <span class="icon"><i class="ri-settings-2-line"></i></span>
+                                                        <span class="menu-title">تغيير كلمة السر</span>
+                                                    </a>
+                                                </li>
+
+
+                                            </ul>
+                                        </div>
+
+                                        <div class="dropdown-footer">
+                                            <ul class="profile-nav">
+                                                @if (fullName != null)
+                                                {
+                                                    using (Html.BeginForm("LogOff", "Account", FormMethod.Post, new { id = "logoutForm" }))
+                                                    {
+                                                        @Html.AntiForgeryToken()
+                                                        <li class="nav-item">
+                                                            <a href="javascript:document.getElementById('logoutForm').submit()" class="nav-link">
+                                                                <i class="ri-logout-box-r-line"></i> <span>تسجيل الخروج</span>
+                                                            </a>
+                                                        </li>
+                                                    }
+                                                }
+                                            </ul>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </nav>
+            </div>
+        </div>
+        <!-- End Navbar Area -->
+        @RenderBody()
+        <!-- End Manage Jobs Area -->
+        <!-- Start Copyright Area -->
+        <div class="copyrights-area">
+            <div class="row align-items-center">
+                <div class="col-lg-12 col-sm-12 col-md-12">
+                    <p>جميع الحقوق محفوظة لدى وزارة الاعلام © 2025</p>
+                </div>
+
+
+            </div>
+        </div>
+        <!-- End Copyright Area -->
+
+    </div>
+    <!-- End Main Dashboard Content Wrapper Area -->
+    <!-- Links of JS files -->
+    <script src="~/assets/js/jquery-3.6.0.min.js"></script>
+    <script src="~/assets/js/jquery.validate.min.js"></script>
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-validate/1.19.5/jquery.validate.min.js"></script>
+
+    @*     <script src="~/Scripts/jquery.validate.js"></script>
+    *@
+    <script src="~/assets/js/jquery.meanmenu.js"></script>
+    <script src="~/assets/js/owl.carousel.min.js"></script>
+    <script src="~/assets/js/jquery.appear.js"></script>
+    <script src="~/assets/js/odometer.min.js"></script>
+    <script src="~/assets/js/jquery.magnific-popup.min.js"></script>
+    <script src="~/assets/js/fancybox.min.js"></script>
+    <script src="~/assets/js/selectize.min.js"></script>
+    <script src="~/assets/js/TweenMax.min.js"></script>
+    <script src="~/assets/js/aos.js"></script>
+    <script src="~/assets/js/metismenu.min.js"></script>
+    <script src="~/assets/js/simplebar.min.js"></script>
+    <script src="~/assets/js/dropzone.min.js"></script>
+    <script src="~/assets/js/sticky-sidebar.min.js"></script>
+    <script src="~/assets/js/jquery.ajaxchimp.min.js"></script>
+
+    <script src="~/assets/js/form-validator.min.js"></script>
+    <script src="~/assets/js/contact-form-script.js"></script>
+
+    <script src="https://cdn.datatables.net/v/bs5/dt-1.13.2/r-2.4.0/datatables.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11.7.1/dist/sweetalert2.all.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.0/js/select2.full.js"></script>
+
+    <script src="~/assets/js/wow.min.js"></script>
+    <script src="~/assets/js/main.js"></script>
+
+    <script src="https://js.arcgis.com/4.11/"></script>
+
+    <script type="text/javascript">
+        jQuery(document).ready(function () {
+
+            ////-------------- url ------------------
+
+            //var url = window.location.href;
+            //Swal.fire({
+            //    icon: 'error',
+            //    title: 'Error',
+            //    text: url,
+            //    confirmButtonColor: '#7FB3D5',
+            //    confirmButtonText: 'Ok'
+            //});
+            //if (url.indexOf("Eservices/Eservices") > -1) {
+            //    url.replace("Eservices/Eservices", "/Eservices");
+            //    window.location.href = url;
+            //    alert(url);
+            //}
+
+            // ---- ------ set cuatom validate for required field
+            $("input").each(function (index, element) {
+                $(element).on("invalid", function (event) {
+                    event.target.setCustomValidity("");
+                    if (!event.target.validity.valid) {
+                        event.target.setCustomValidity("لايجب ترك هذا الحقل فارغاً");
+                    }
+                });
+
+                $(element).on("input", function (event) {
+                    event.target.setCustomValidity("");
+                });
+            });
+
+            $("select").each(function (index, element) {
+                $(element).on("invalid", function (event) {
+                    event.target.setCustomValidity("");
+                    if (!event.target.validity.valid) {
+                        event.target.setCustomValidity("لايجب ترك هذا الحقل فارغاً");
+                    }
+                });
+
+                $(element).on("input", function (event) {
+                    event.target.setCustomValidity("");
+                });
+            });
+
+            $('.js-example-basic-single').select2();
+            $('.select2-selection').addClass('form-control');
+            $(function loadImage() {
+
+                var alertTitle = '@TempData["AlertTitle"]';
+                var msg = '@TempData["Message"]';
+                var alertType = '@TempData["AlertType"]';
+                var url = '@TempData["RedirectUrl"]';
+
+                if (alertType != null && msg != null && alertTitle != null) {
+                    if (url != null && url != '#') {
+
+
+                        if (alertType == 'Success') {
+                            Swal.fire({
+                                icon: 'success',
+                                title: alertTitle,
+                                text: msg,
+                                confirmButtonColor: '#1657CB',
+                                confirmButtonText: 'OK'
+                            }).then(function () {
+        @TempData.Remove("AlertTitle");
+        @TempData.Remove("Message");
+        @TempData.Remove("AlertType");
+        @TempData.Remove("RedirectUrl");
+                            });
+
+                        }
+                        else if (alertType == 'error') {
+                            Swal.fire({
+                                icon: 'error',
+                                title: alertTitle,
+                                text: msg,
+                                confirmButtonColor: '#1657CB',
+                                confirmButtonText: 'OK'
+                            }).then(function () {
+        @TempData.Remove("AlertTitle");
+        @TempData.Remove("Message");
+        @TempData.Remove("AlertType");
+        @TempData.Remove("RedirectUrl");
+                            });
+                        };
+                    } else {
+                        if (alertType == 'Success') {
+                            Swal.fire({
+                                icon: 'success',
+                                title: alertTitle,
+                                text: msg,
+                                confirmButtonColor: '#1657CB',
+                                confirmButtonText: 'OK'
+                            }).then(function () {
+        @TempData.Remove("AlertTitle");
+        @TempData.Remove("Message");
+        @TempData.Remove("AlertType");
+                            });
+
+                        }
+                        else if (alertType == 'error') {
+                            Swal.fire({
+                                icon: 'error',
+                                title: alertTitle,
+                                text: msg,
+                                confirmButtonColor: '#1657CB',
+                                confirmButtonText: 'OK'
+                            }).then(function () {
+        @TempData.Remove("AlertTitle");
+        @TempData.Remove("Message");
+        @TempData.Remove("AlertType");
+                            });
+                        };
+                    }
+                }
+            });
+
+        });
+
+        function ValidateRegeex(regex, value) {
+            var expre = new RegExp(regex);
+            return expre.test(value);
+
+        }
+        $(function () {
+            $("input[type='file']").on("change", function () {
+
+                var regex = "(.PDF|.pdf)$";
+                //"([a-zA-Z0-9\s_\\.\-:])+(.PDF|.pdf)$"
+                //^([\\u0621-\\u064A\\s])
+                var value = $(this).val();
+                var status = ValidateRegeex(regex, value);
+                if (status != true) {
+                    $(this).val("");
+                    Swal.fire({
+                        icon: 'error',
+                        title: 'Error',
+                        text: 'نوع الملف فقط بصيغة PDF',
+                        confirmButtonColor: '#7FB3D5',
+                        confirmButtonText: 'Ok'
+                    });
+                }
+
+                if ($(this).hasClass("BigFile")) {
+                    var fileSize = this.files[0].size
+                    fileSize = fileSize / 1024 / 1024;
+                    fileSize = fileSize.toFixed(2);
+                    if (this.files[0].size > 5242880) {
+                        Swal.fire({
+                            icon: 'error',
+                            title: 'Error',
+                            text: 'حجم الصوره "' + fileSize + '" ميجا ، يجب ان لايزيد عن 5 ميجا',
+                            confirmButtonColor: '#7FB3D5',
+                            confirmButtonText: 'Ok'
+                        });
+                        $(this).val('');
+
+                    }
+                } else {
+                    var fileSize = this.files[0].size
+                    fileSize = fileSize / 1024 / 1024;
+                    fileSize = fileSize.toFixed(2);
+                    if (this.files[0].size > 2097152) {
+                        Swal.fire({
+                            icon: 'error',
+                            title: 'Error',
+                            text: 'حجم الصوره "' + fileSize + '" ميجا ، يجب ان لايزيد عن 2 ميجا',
+                            confirmButtonColor: '#7FB3D5',
+                            confirmButtonText: 'Ok'
+                        });
+                        $(this).val('');
+
+                    }
+                }
+
+
+            });
+        });
+
+    </script>
+    <script>
+        $(document).ready(function () {
+            $('.select2').select2({
+                placeholder: "اختر عنصر ",
+                allowClear: true,
+                width: '100%'
+            });
+        });
+    </script>
+
+    @if (IsSectionDefined("Scripts"))
+    {
+        @RenderSection("Scripts", required: false)
+    }
+</body>
+</html>

@@ -1,0 +1,94 @@
+﻿@model List<SystemOptionVM>
+
+@{
+    var userName = Context.User.FindFirst(System.Security.Claims.ClaimTypes.Name)?.Value;
+    var userId = Context.User.FindFirst(System.Security.Claims.ClaimTypes.NameIdentifier)?.Value;
+    var civilId = Context.User.FindFirst("CivilId")?.Value;  // Custom claim
+    var fullName = Context.User.FindFirst("FullName")?.Value;
+    var isApplicant = Context.Session.GetString("UserIsApplicant");
+    var isDelegate = Context.Session.GetString("UserIsDelegate");
+    var accountTypeId = Convert.ToInt32(Context.Session.GetString("UserAccouuntTypeId"));
+    var NavLinksContact = Model.Where(x => x.CategoryNameEn == "NavLinksContact").FirstOrDefault();
+    var NavLinksHome = Model.Where(x => x.CategoryNameEn == "NavLinksHome").FirstOrDefault();
+    var logoWhite = Model.FirstOrDefault(x => x.Code == "SiteLogoWhite")?.Value ?? "/assets/images/MOI_Logo_W.png";
+    var logoBlack = Model.FirstOrDefault(x => x.Code == "SiteLogo")?.Value ?? "/assets/images/MOI_Logo.png";
+}
+
+<div class="sidemenu-area">
+    <div class="sidemenu-header">
+        <a href="@NavLinksHome" class="navbar-brand d-flex align-items-center">
+            <img src="@logoWhite" width="170" alt="image">
+        </a>
+        <div class="responsive-burger-menu d-block d-lg-none">
+            <span class="top-bar"></span>
+            <span class="middle-bar"></span>
+            <span class="bottom-bar"></span>
+        </div>
+    </div>
+
+    <div class="sidemenu-body">
+        <ul class="sidemenu-nav metisMenu h-100" id="sidemenu-nav" data-simplebar>
+            <li class="nav-item">
+                <a href="@Url.Action("MyAccount","Home")" class="nav-link">
+                    <i class="ri-home-line"></i> <span class="menu-title">حسابي</span>
+                </a>
+            </li>
+            <li class="nav-item">
+                <a href="@Url.Action("MyProfile","Home")" class="nav-link">
+                    <i class="ri-user-line"></i> <span class="menu-title">الملف الشخصي</span>
+                </a>
+            </li>
+            
+            <li class="nav-item">
+                <a href="@Url.Action("GetAllRequest","Home")" class="nav-link">
+                    <i class="ri-file-list-line"></i> <span class="menu-title">متابعة الطلبات</span>
+                </a>
+            </li>
+            @if (isApplicant == "True")
+            {
+            <li class="nav-item">
+                <a href="@Url.Action("GetAllLicences","Home")" class="nav-link">
+                    <i class="ri-briefcase-line"></i> <span class="menu-title">تراخيصي</span>
+                </a>
+            </li>
+           
+                <li class="nav-item">
+                    <a href="@Url.Action("GetAllDelegatUser", "Home")" class="nav-link">
+                        <i class="ri-user-shared-line"></i>
+                        <span class="menu-title">
+                        قائمة المفوضين
+                            
+                        </span>
+                    </a>
+                </li>
+            }
+            @if(isDelegate=="True")
+            {
+                <li class="nav-item">
+                    <a href="@Url.Action("GetLicencesDelegateFor", "Home")"
+                        class="nav-link">
+                        <i class="ri-user-shared-line"></i>
+                        <span class="menu-title">
+                            التراخيص المفوض بها
+
+                        </span>
+                    </a>
+                </li>
+                
+            }
+
+            @if (Model != null)
+            {
+                using (Html.BeginForm("LogOff", "Account", FormMethod.Post, new { id = "logoutForm" }))
+                {
+                    @Html.AntiForgeryToken()
+                    <li class="nav-item">
+                        <a href="javascript:document.getElementById('logoutForm').submit()" class="nav-link">
+                            <i class="ri-logout-circle-r-line"></i> <span class="menu-title">تسجيل الخروج</span>
+                        </a>
+                    </li>
+                }
+            }
+        </ul>
+    </div>
+</div>

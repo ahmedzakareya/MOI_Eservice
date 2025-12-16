@@ -1,0 +1,26 @@
+﻿@model List<AddMenuItemVM>
+
+<div id="sidebar-menu-dynamic">
+    @if (Model != null && Model.Any())
+    {
+        foreach (var item in Model)
+        {
+            <div class="menu-item">
+                <!--begin:Menu link-->
+                <a class="menu-link" href="@item.Url">
+                    <span class="menu-bullet">
+                        <span class="bullet bullet-dot"></span>
+                    </span>
+                    <span class="menu-title">@item.Name</span>
+                </a>
+                <!--end:Menu link-->
+            </div>
+        }
+    }
+    else
+    {
+        <div class="menu-item">
+            <span class="menu-title">No menu items available</span>
+        </div>
+    }
+</div>

@@ -1,0 +1,1422 @@
+﻿@model RequestFrontVM
+
+@{
+    ViewBag.Title = "RequestDetails";
+    Layout = "~/Views/Shared/_LayoutEservice.cshtml";
+    var token = Context.Session.GetString("UserToken");
+    var userId = Context.Session.GetString("UserId");
+    var userName = Context.Session.GetString("UserUserName");
+    var civilId = Context.Session.GetString("UserCivilId");
+    var fullName = Context.Session.GetString("UserFullName");
+    var accountTypeId = Context.Session.GetString("UserAccouuntTypeId");
+
+}
+@* ======= Styles (existing + flat colorful tabs) ======= *@
+
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/remixicon/fonts/remixicon.css">
+
+@* ======= Optional legacy datepicker commented block kept as provided ======= *@
+@*<div class="input-group date datepicker"
+    data-date-format="mm-dd-yyyy">*@
+<!--<input class="form-control datepicker" type="text"/>
+<span class="input-group-addon">
+    <i class="flaticon-plus"></i>
+</span>-->
+@*</div>*@
+<link href="~/assets/css/requeststyle.css" rel="stylesheet" />
+<div class="my-profile-box">
+    @if (Model.RequestVM.Licno != null)
+    {
+        <div class="request-header">
+            <h3>
+                تفاصيل الطلب رقم <span>@Model.RequestVM.Licno</span> /
+                <span class="activity">@Model.RequestVM.ActivityTypeNavigation.NameAr</span>
+            </h3>
+        </div>
+    }
+    else
+    {
+        <div class="request-header">
+            <h3>تفاصيل الطلب</h3>
+        </div>
+    }
+
+
+    @using (Html.BeginForm(new { enctype = "multipart/form-data" }))
+    {
+        @Html.AntiForgeryToken()
+        @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+
+        <div class="profile-authentication-tabs mw-100">
+            <div class="authentication-tabs-list">
+                <ul class="nav nav-tabs  mt-2 " id="myTab" role="tablist">
+                    <li class="nav-item">
+                        <a class="nav-link active"
+                           id="ReqDetails-tab"
+                           data-bs-toggle="tab"
+                           href="#ReqDetails"
+                           role="tab"
+                           aria-controls="ReqDetails"
+                           aria-selected="true">
+                            تفاصيل الطلب
+                        </a>
+                    </li>
+
+                    <li class="nav-item">
+                        <a class="nav-link"
+                           id="Attachements-tab"
+                           data-bs-toggle="tab"
+                           href="#Attachements"
+                           role="tab"
+                           aria-controls="Attachements"
+                           aria-selected="false">
+                            المرفقات
+                        </a>
+                    </li>
+                </ul>
+            </div>
+
+            <div class="tab-content pt-3" id="myTabContent">
+                <div class="tab-pane fade show active" id="ReqDetails" role="tabpanel" aria-labelledby="ReqDetails-tab">
+                    <div class="row align-items-center">
+                        <div class="basic-card">
+                            <div class="basic-card__header">
+                                <div class="basic-card__icon">
+                                    <i class="ri-information-line" aria-hidden="true"></i>
+                                </div>
+                                <div class="basic-card__title">البيانات الأساسية للطلب</div>
+                                @if (Model.RequestListVM?.Count > 1)
+                                {
+                                    <!-- Lightweight UI meta (not a badge) -->
+                                    <span class="basic-card__meta" aria-label="نوع الطلب">
+                                        <span class="meta-dot" aria-hidden="true"></span>
+                                        طلب مجمع
+                                    </span>
+                                }
+                                else
+                                {
+                                    <span class="basic-card__meta" aria-label="نوع الطلب">
+                                        <span class="meta-dot" aria-hidden="true"></span>
+                                        @Model.RequestVM.ReqTypeName
+                                    </span>
+                                }
+                                <!-- Lightweight UI meta (not a badge) -->
+                                
+                            </div>
+
+
+                            <div class="basic-card__body">
+                                <div class="row align-items-center">
+
+                                    <div class="col-12">
+                                        <div class="dt-card dt-card--separated" dir="rtl">
+                                            <div class="dt-card__head">
+                                                <i class="ri-calendar-line" aria-hidden="true"></i>
+                                                <span class="dt-card__title">تاريخ ووقت تقديم الطلب</span>
+                                            </div>
+
+                                            @{
+                                                var ci = new System.Globalization.CultureInfo("ar-KW");
+                                                DateTime? dt = Model.RequestVM?.Licreqtime;
+
+                                                string datePart = dt.HasValue ? dt.Value.ToString("yyyy/MM/dd", ci) : "-";
+                                                string timePart = dt.HasValue ? dt.Value.ToString("hh:mm tt", ci) : "-";
+                                                string weekday = dt.HasValue ? dt.Value.ToString("dddd", ci) : "";
+
+                                                bool isMorning = dt.HasValue && dt.Value.Hour < 12;
+                                                string dayNightIcon = isMorning ? "ri-sun-line" : "ri-moon-line";
+                                            }
+
+                                            <div class="dt-card__body">
+                                                <div class="dt-chips">
+                                                    <span class="dt-chip dt-chip--date">
+                                                        <i class="ri-calendar-2-line" aria-hidden="true"></i>
+                                                        <span>@datePart</span>
+                                                    </span>
+
+                                                    <span class="dt-chip dt-chip--time">
+                                                        <i class="@dayNightIcon" aria-hidden="true"></i>
+                                                        <span>@timePart</span>
+                                                    </span>
+
+                                                    @if (!string.IsNullOrWhiteSpace(weekday))
+                                                    {
+                                                        <span class="dt-chip dt-chip--day">
+                                                            <i class="@dayNightIcon" aria-hidden="true"></i>
+                                                            <span>@weekday</span>
+                                                        </span>
+                                                    }
+                                                </div>
+                                            </div>
+
+
+                                            <!-- preserve original value for posting -->
+                                            <input type="hidden" name="Licreqtime" value="@Model.RequestVM?.Licreqtime" />
+                                        </div>
+                                    </div>
+
+
+                                    @if (Model.RequestListVM?.Count > 1 )
+                                    {
+                                        if (Model.RenewRequest != null)
+                                        {
+                                            <div class="col-12 mt-3">
+                                                <section class="dt-card dt-card--separated" dir="rtl" aria-labelledby="basicSheetTitle">
+                                                    <div class="dt-card__head">
+                                                        <i class="ri-file-list-3-line info-request-icon" aria-hidden="true"></i>
+                                                        <span class="dt-card__title">  بيانات طلب التجديد </span>
+                                                    </div>
+
+                                                    <div class="info-rows">
+                                                        <div class="info-kv">
+                                                            @{
+                                                                DateTime? dtOldExpiryDate = Model.RenewRequest.OldExpiryDate;
+                                                                string datePartOldExpiry = dtOldExpiryDate.HasValue ? dtOldExpiryDate.Value.ToString("yyyy/MM/dd", ci) : "-";
+
+
+
+                                                                DateTime? dtNewExpiryDate = Model.RenewRequest.NewExpiryDate;
+                                                                string datePartNewExpiry = dtNewExpiryDate.HasValue ? dtNewExpiryDate.Value.ToString("yyyy/MM/dd", ci) : "-";
+
+
+                                                            }
+                                                            <div class="info-label">تاريخ الانتهاء الحالي</div>
+                                                            <div class="info-value">@datePartOldExpiry</div>
+                                                        </div>
+
+                                                        <div class="info-kv">
+                                                            <div class="info-label">تاريخ الانتهاء الجديد</div>
+                                                            <div class="info-value">@datePartNewExpiry</div>
+                                                        </div>
+
+                                                      
+
+                                                        @{
+                                                            var stId = Model?.RenewRequest?.RequestDetailsVM?.RequestDVM?.RequestStatusId ?? 0;
+                                                            var statusClass = stId switch
+                                                            {
+                                                                7 => "status-approved",
+                                                                9 => "status-rejected",
+                                                                1 or 2 or 4 => "status-processing",
+                                                                3 or 12 => "status-pending",
+                                                                _ => "status-pending"
+                                                            };
+                                                        }
+                                                        <div class="info-kv">
+                                                            <div class="info-label">حالة الطلب</div>
+                                                            <div class="info-value">
+                                                                <span class="status-badge @statusClass">
+                                                                    @(!string.IsNullOrWhiteSpace(Model?.RenewRequest?.RequestDetailsVM?.RequestDVM?.ReqStatusName) ? Model?.RenewRequest?.RequestDetailsVM?.RequestDVM?.ReqStatusName : "—")
+                                                                </span>
+                                                            </div>
+                                                        </div>
+
+                                                        @{
+                                                            var cii = new System.Globalization.CultureInfo("ar-KW");
+                                                            decimal? amt = Model?.RenewRequest?.RequestDetailsVM?.RequestDVM?.Licamount;
+                                                            string amountText = amt.HasValue ? string.Format(cii, "{0:N3}", amt) : "—";
+                                                            bool isPaid = string.Equals(Model?.RenewRequest?.RequestDetailsVM?.RequestDVM?.Licpaystatus?.Trim(), "1");
+                                                        }
+
+                                                        <div class="info-kv">
+                                                            <div class="info-label">حالة الدفع</div>
+                                                            <div class="info-value">
+                                                                <span class="pill @(isPaid ? "pill--success" : "pill--danger")">
+                                                                    @(isPaid ? "تم الدفع" : "لم يتم الدفع")
+                                                                </span>
+                                                            </div>
+                                                        </div>
+
+                                                        <div class="info-kv info-kv--full">
+                                                            <div class="info-label">الملاحظات</div>
+                                                            <div class="info-notes">
+                                                                @(!string.IsNullOrWhiteSpace(Model?.RenewRequest?.RequestDetailsVM?.RequestDVM?.RequestNote)
+                                                                    ? Model?.RenewRequest?.RequestDetailsVM?.RequestDVM?.RequestNote
+                                                                    : "— لا توجد ملاحظات —")
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </section>
+                                            </div>
+                                        }
+                                       @if (Model?.CompanyTransVM != null)
+                                        {
+                                            <div class="col-12 mt-3">
+                                                <section class="dt-card dt-card--separated" dir="rtl" aria-labelledby="basicSheetTitle">
+                                                    <div class="dt-card__head">
+                                                        <i class="ri-file-list-3-line info-request-icon" aria-hidden="true"></i>
+                                                        <span class="dt-card__title">  بيانات طلب تغيير  إسم الشركة </span>
+                                                    </div>
+
+                                                    <div class="info-rows">
+
+                                                        <section class="kv-scope" dir="rtl">
+                                                            <div class="info-kv info-kv--old">
+                                                                <div class="info-label">الإسم القديم للشركة</div>
+                                                                <div class="info-value">
+                                                                    <span class="tag tag--old">قديم</span>
+                                                                    @Model.CompanyTransVM.OldCompnayNameDir
+                                                                </div>
+                                                            </div>
+
+                                                          
+                                                        </section>
+
+
+                                                        <section class="kv-scope" dir="rtl">
+                                                            <div class="info-kv info-kv--new">
+                                                                <div class="info-label">الإسم الجديد للشركة</div>
+                                                                <div class="info-value">
+                                                                    <span class="tag tag--new">جديد</span>
+                                                                    @Model.CompanyTransVM.NewCompanyNameDir
+                                                                </div>
+                                                            </div>
+</section>
+
+
+
+
+                                                      
+
+
+                                                        @{
+                                                            var stId = Model?.CompanyTransVM?.RequestDetailsVM?.RequestDVM?.RequestStatusId ?? 0;
+                                                            var statusClass = stId switch
+                                                            {
+                                                                7 => "status-approved",
+                                                                9 => "status-rejected",
+                                                                1 or 2 or 4 => "status-processing",
+                                                                3 or 12 => "status-pending",
+                                                                _ => "status-pending"
+                                                            };
+                                                        }
+                                                      
+
+
+                                                        <div class="info-kv info-kv--full">
+                                                            <div class="info-label">الملاحظات</div>
+                                                            <div class="info-notes">
+                                                                @(!string.IsNullOrWhiteSpace(Model?.CompanyTransVM?.RequestDetailsVM?.RequestDVM?.RequestNote)
+                                                                    ? Model?.CompanyTransVM?.RequestDetailsVM?.RequestDVM?.RequestNote
+                                                                    : "— لا توجد ملاحظات —")
+                                                            </div>
+                                                        </div>
+
+                                                        @{
+                                                            var cii = new System.Globalization.CultureInfo("ar-KW");
+                                                            decimal? amt = Model?.CompanyTransVM?.RequestDetailsVM?.RequestDVM?.Licamount;
+                                                            string amountText = amt.HasValue ? string.Format(cii, "{0:N3}", amt) : "—";
+                                                            bool isPaid = string.Equals(Model?.CompanyTransVM?.RequestDetailsVM?.RequestDVM?.Licpaystatus?.Trim(), "1");
+                                                        }
+
+                                                        <div class="info-kv">
+                                                            <div class="info-label">حالة الدفع</div>
+                                                            <div class="info-value">
+                                                                <span class="pill @(isPaid ? "pill--success" : "pill--danger")">
+                                                                    @(isPaid ? "تم الدفع" : "لم يتم الدفع")
+                                                                </span>
+                                                            </div>
+                                                        </div>
+
+                                                        <div class="info-kv">
+                                                            <div class="info-label">حالة الطلب</div>
+                                                            <div class="info-value">
+                                                                <span class="status-badge @statusClass">
+                                                                    @(!string.IsNullOrWhiteSpace(Model?.CompanyTransVM?.RequestDetailsVM?.RequestDVM?.ReqStatusName) ? Model?.CompanyTransVM?.RequestDetailsVM?.RequestDVM?.ReqStatusName : "—")
+                                                                </span>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </section>
+                                            </div>
+                                        }
+
+                                        @if (Model?.CommercialTransVM != null)
+                                        {
+                                            <div class="col-12 mt-3">
+                                                <section class="dt-card dt-card--separated" dir="rtl" aria-labelledby="basicSheetTitle">
+                                                    <div class="dt-card__head">
+                                                        <i class="ri-file-list-3-line info-request-icon" aria-hidden="true"></i>
+                                                        <span class="dt-card__title">  بيانات طلب تغيير  الاسم التجاري </span>
+                                                    </div>
+
+                                                    <div class="info-rows">
+
+                                                        <section class="kv-scope" dir="rtl">
+                                                            <div class="info-kv info-kv--old">
+                                                                <div class="info-label">الإسم التجاري القديم</div>
+                                                                <div class="info-value">
+                                                                    <span class="tag tag--old">قديم</span>
+                                                                    @Model.CommercialTransVM.OldCommercialName
+                                                                </div>
+                                                            </div>
+
+
+                                                        </section>
+
+
+                                                        <section class="kv-scope" dir="rtl">
+                                                            <div class="info-kv info-kv--new">
+                                                                <div class="info-label">الإسم التجاري الجديد</div>
+                                                                <div class="info-value">
+                                                                    <span class="tag tag--new">جديد</span>
+                                                                    @Model.CommercialTransVM.NewCommercialName
+                                                                </div>
+                                                            </div>
+                                                        </section>
+
+
+
+
+
+
+
+                                                        @{
+                                                            var stId = Model?.CommercialTransVM?.RequestDetailsVM?.RequestDVM?.RequestStatusId ?? 0;
+                                                            var statusClass = stId switch
+                                                            {
+                                                                7 => "status-approved",
+                                                                9 => "status-rejected",
+                                                                1 or 2 or 4 => "status-processing",
+                                                                3 or 12 => "status-pending",
+                                                                _ => "status-pending"
+                                                            };
+                                                        }
+
+
+
+                                                        <div class="info-kv info-kv--full">
+                                                            <div class="info-label">الملاحظات</div>
+                                                            <div class="info-notes">
+                                                                @(!string.IsNullOrWhiteSpace(Model?.CommercialTransVM?.RequestDetailsVM?.RequestDVM?.RequestNote)
+                                                                    ? Model?.CommercialTransVM?.RequestDetailsVM?.RequestDVM?.RequestNote
+                                                                    : "— لا توجد ملاحظات —")
+                                                            </div>
+                                                        </div>
+
+                                                        @{
+                                                            var cii = new System.Globalization.CultureInfo("ar-KW");
+                                                            decimal? amt = Model?.CommercialTransVM?.RequestDetailsVM?.RequestDVM?.Licamount;
+                                                            string amountText = amt.HasValue ? string.Format(cii, "{0:N3}", amt) : "—";
+                                                            bool isPaid = string.Equals(Model?.CommercialTransVM?.RequestDetailsVM?.RequestDVM?.Licpaystatus?.Trim(), "1");
+                                                        }
+
+                                                        <div class="info-kv">
+                                                            <div class="info-label">حالة الدفع</div>
+                                                            <div class="info-value">
+                                                                <span class="pill @(isPaid ? "pill--success" : "pill--danger")">
+                                                                    @(isPaid ? "تم الدفع" : "لم يتم الدفع")
+                                                                </span>
+                                                            </div>
+                                                        </div>
+
+                                                        <div class="info-kv">
+                                                            <div class="info-label">حالة الطلب</div>
+                                                            <div class="info-value">
+                                                                <span class="status-badge @statusClass">
+                                                                    @(!string.IsNullOrWhiteSpace(Model?.CommercialTransVM?.RequestDetailsVM?.RequestDVM?.ReqStatusName) ? Model?.CommercialTransVM?.RequestDetailsVM?.RequestDVM?.ReqStatusName : "—")
+                                                                </span>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </section>
+                                            </div>
+                                        }
+                                        @if (Model?.ActivityChangeTransVM != null)
+                                        {
+                                            <div class="col-12 mt-3">
+                                                <section class="dt-card dt-card--separated" dir="rtl" aria-labelledby="basicSheetTitle">
+                                                    <div class="dt-card__head">
+                                                        <i class="ri-file-list-3-line info-request-icon" aria-hidden="true"></i>
+                                                        <span class="dt-card__title">  بيانات طلب تغيير  النشاط </span>
+                                                    </div>
+
+                                                    <div class="info-rows">
+
+                                                        <section class="kv-scope" dir="rtl">
+                                                            <div class="info-kv info-kv--old">
+                                                                <div class="info-label">إسم النشاط القديم</div>
+                                                                <div class="info-value">
+                                                                    <span class="tag tag--old">قديم</span>
+                                                                    @Model.ActivityChangeTransVM.OldActivityName
+                                                                </div>
+                                                            </div>
+
+
+                                                        </section>
+
+
+                                                        <section class="kv-scope" dir="rtl">
+                                                            <div class="info-kv info-kv--new">
+                                                                <div class="info-label">إسم النشاط الجديد</div>
+                                                                <div class="info-value">
+                                                                    <span class="tag tag--new">جديد</span>
+                                                                    @Model.ActivityChangeTransVM.NewActivityName
+                                                                </div>
+                                                            </div>
+                                                        </section>
+
+
+
+
+
+
+
+                                                        @{
+                                                            var stId = Model?.ActivityChangeTransVM?.RequestDetailsVM?.RequestDVM?.RequestStatusId ?? 0;
+                                                            var statusClass = stId switch
+                                                            {
+                                                                7 => "status-approved",
+                                                                9 => "status-rejected",
+                                                                1 or 2 or 4 => "status-processing",
+                                                                3 or 12 => "status-pending",
+                                                                _ => "status-pending"
+                                                            };
+                                                        }
+
+
+
+                                                        <div class="info-kv info-kv--full">
+                                                            <div class="info-label">الملاحظات</div>
+                                                            <div class="info-notes">
+                                                                @(!string.IsNullOrWhiteSpace(Model?.ActivityChangeTransVM?.RequestDetailsVM?.RequestDVM?.RequestNote)
+                                                                    ? Model?.ActivityChangeTransVM?.RequestDetailsVM?.RequestDVM?.RequestNote
+                                                                    : "— لا توجد ملاحظات —")
+                                                            </div>
+                                                        </div>
+
+                                                        @{
+                                                            var cii = new System.Globalization.CultureInfo("ar-KW");
+                                                            decimal? amt = Model?.ActivityChangeTransVM?.RequestDetailsVM?.RequestDVM?.Licamount;
+                                                            string amountText = amt.HasValue ? string.Format(cii, "{0:N3}", amt) : "—";
+                                                            bool isPaid = string.Equals(Model?.ActivityChangeTransVM?.RequestDetailsVM?.RequestDVM?.Licpaystatus?.Trim(), "1");
+                                                        }
+
+                                                        <div class="info-kv">
+                                                            <div class="info-label">حالة الدفع</div>
+                                                            <div class="info-value">
+                                                                <span class="pill @(isPaid ? "pill--success" : "pill--danger")">
+                                                                    @(isPaid ? "تم الدفع" : "لم يتم الدفع")
+                                                                </span>
+                                                            </div>
+                                                        </div>
+
+                                                        <div class="info-kv">
+                                                            <div class="info-label">حالة الطلب</div>
+                                                            <div class="info-value">
+                                                                <span class="status-badge @statusClass">
+                                                                    @(!string.IsNullOrWhiteSpace(Model?.ActivityChangeTransVM?.RequestDetailsVM?.RequestDVM?.ReqStatusName) ? Model?.ActivityChangeTransVM?.RequestDetailsVM?.RequestDVM?.ReqStatusName : "—")
+                                                                </span>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </section>
+                                            </div>
+                                        }
+                                        @if (Model?.ChangeManagerTransVM != null )
+                                        {
+                                          @* ---------- Context (status + payment) ---------- *@
+
+                                            var stId = Model?.ChangeManagerTransVM?.RequestDetailsVM?.RequestDVM?.RequestStatusId ?? 0;
+    var statusClass = stId switch
+    {
+        7            => "status-approved",
+        9            => "status-rejected",
+        1 or 2 or 4  => "status-processing",
+        3 or 12      => "status-pending",
+        _            => "status-pending"
+    };
+
+    bool isPaid = string.Equals(
+                                            Model?.ChangeManagerTransVM?.RequestDetailsVM?.RequestDVM?.Licpaystatus?.Trim(),
+        "1"
+    );
+
+
+<!-- ====== CARD: Change Manager (RTL) ====== -->
+<div class="col-12 mt-3">
+  <section class="dc-card" dir="rtl" aria-labelledby="changeManagerTitle">
+    <span class="dc-ribbon" aria-hidden="true"></span>
+
+    <!-- Main header -->
+    <header class="dt-card__head">
+      <i class="ri-file-list-3-line info-request-icon" aria-hidden="true"></i>
+      <span class="dt-card__title" id="changeManagerTitle">بيانات طلب تغيير المدير المسئول</span>
+    </header>
+
+    <div class="dc-sep"></div>
+
+    <div class="dc-body dc-body--gov">
+      <!-- ========== OLD (RED) ========== -->
+      <section class="dc-mini-card dc-mini--old dc-mini--gov" dir="rtl" aria-labelledby="oldManagerTitle">
+        <header class="dc-mini__head gov-head gov-head--old" role="group" aria-labelledby="oldManagerTitle">
+          <span class="gov-pill">قديم</span>
+          <h5 class="gov-title" id="oldManagerTitle">بيانات المدير القديم</h5>
+          <span class="gov-icon" aria-hidden="true"><i class="ri-user-line"></i></span>
+        </header>
+
+        <div class="dc-mini__divider"></div>
+
+        <div class="dc-mini__brand">
+          <div class="dc-mini__brand-title">البيانات الأساسية</div>
+        </div>
+
+        <ul class="dc-mini__list">
+          <li class="dc-mini__item">
+            <i class="ri-id-card-line dc-icon" aria-hidden="true"></i>
+            <div class="dc-mini__text">
+              <div class="dc-mini__primary">
+                @(!string.IsNullOrWhiteSpace(Model?.ChangeManagerTransVM?.ManagerOldcivilid) ? Model.ChangeManagerTransVM.ManagerOldcivilid : "—")
+              </div>
+              <div class="dc-mini__sub">الرقم المدني</div>
+            </div>
+          </li>
+
+          <li class="dc-mini__item">
+            <i class="ri-user-line dc-icon" aria-hidden="true"></i>
+            <div class="dc-mini__text">
+              <div class="dc-mini__primary">
+                @(!string.IsNullOrWhiteSpace(Model?.ChangeManagerTransVM?.ManagerOldname) ? Model.ChangeManagerTransVM.ManagerOldname : "—")
+              </div>
+              <div class="dc-mini__sub">الاسم</div>
+            </div>
+          </li>
+
+          <li class="dc-mini__item">
+            <i class="ri-calendar-2-line dc-icon" aria-hidden="true"></i>
+            <div class="dc-mini__text">
+              <div class="dc-mini__primary">
+                @(Model?.ChangeManagerTransVM?.ManagerOldbirthdate?.ToString("yyyy/MM/dd") ?? "—")
+              </div>
+              <div class="dc-mini__sub">تاريخ الميلاد</div>
+            </div>
+          </li>
+
+          <li class="dc-mini__item">
+            <i class="ri-flag-line dc-icon" aria-hidden="true"></i>
+            <div class="dc-mini__text">
+              <div class="dc-mini__primary">
+                @(!string.IsNullOrWhiteSpace(Model?.ChangeManagerTransVM?.OldNationalityName) ? Model.ChangeManagerTransVM.OldNationalityName : "—")
+              </div>
+              <div class="dc-mini__sub">الجنسية</div>
+            </div>
+          </li>
+
+          <li class="dc-mini__item">
+            <i class="ri-graduation-cap-line dc-icon" aria-hidden="true"></i>
+            <div class="dc-mini__text">
+              <div class="dc-mini__primary">
+                @(!string.IsNullOrWhiteSpace(Model?.ChangeManagerTransVM?.OldQualificationName) ? Model.ChangeManagerTransVM.OldQualificationName : "—")
+              </div>
+              <div class="dc-mini__sub">المؤهل الدراسي</div>
+            </div>
+          </li>
+
+          @* Optional:
+          <li class="dc-mini__item">
+            <i class="ri-earth-line dc-icon" aria-hidden="true"></i>
+            <div class="dc-mini__text">
+              <div class="dc-mini__primary">
+                @(!string.IsNullOrWhiteSpace(Model?.ChangeManagerTransVM?.OldQualificationCountryName) ? Model.ChangeManagerTransVM.OldQualificationCountryName : "—")
+              </div>
+              <div class="dc-mini__sub">جنسية المؤهل الدراسي</div>
+            </div>
+          </li> *@
+        </ul>
+      </section>
+
+      <!-- ========== NEW (GREEN) ========== -->
+      <section class="dc-mini-card dc-mini--new dc-mini--gov" dir="rtl" aria-labelledby="newManagerTitle">
+        <header class="dc-mini__head gov-head gov-head--new" role="group" aria-labelledby="newManagerTitle">
+          <span class="gov-pill">جديد</span>
+          <h5 class="gov-title" id="newManagerTitle">بيانات المدير الجديد</h5>
+          <span class="gov-icon" aria-hidden="true"><i class="ri-user-line"></i></span>
+        </header>
+
+        <div class="dc-mini__divider"></div>
+
+        <div class="dc-mini__brand">
+          <div class="dc-mini__brand-title">البيانات الأساسية</div>
+        </div>
+
+        <ul class="dc-mini__list">
+          <li class="dc-mini__item">
+            <i class="ri-id-card-line dc-icon" aria-hidden="true"></i>
+            <div class="dc-mini__text">
+              <div class="dc-mini__primary">
+                @(!string.IsNullOrWhiteSpace(Model?.ChangeManagerTransVM?.ManagerNewcivilid) ? Model.ChangeManagerTransVM.ManagerNewcivilid : "—")
+              </div>
+              <div class="dc-mini__sub">الرقم المدني</div>
+            </div>
+          </li>
+
+          <li class="dc-mini__item">
+            <i class="ri-user-line dc-icon" aria-hidden="true"></i>
+            <div class="dc-mini__text">
+              <div class="dc-mini__primary">
+                @(!string.IsNullOrWhiteSpace(Model?.ChangeManagerTransVM?.ManagerNewname1) ? Model.ChangeManagerTransVM.ManagerNewname1 : "—")
+              </div>
+              <div class="dc-mini__sub">الاسم</div>
+            </div>
+          </li>
+
+          <li class="dc-mini__item">
+            <i class="ri-calendar-2-line dc-icon" aria-hidden="true"></i>
+            <div class="dc-mini__text">
+              <div class="dc-mini__primary">
+                @(Model?.ChangeManagerTransVM?.ManagerNewbirthdate?.ToString("yyyy/MM/dd") ?? "—")
+              </div>
+              <div class="dc-mini__sub">تاريخ الميلاد</div>
+            </div>
+          </li>
+
+          <li class="dc-mini__item">
+            <i class="ri-flag-line dc-icon" aria-hidden="true"></i>
+            <div class="dc-mini__text">
+              <div class="dc-mini__primary">
+                @(!string.IsNullOrWhiteSpace(Model?.ChangeManagerTransVM?.NewNationality) ? Model.ChangeManagerTransVM.NewNationality : "—")
+              </div>
+              <div class="dc-mini__sub">الجنسية</div>
+            </div>
+          </li>
+
+          <li class="dc-mini__item">
+            <i class="ri-graduation-cap-line dc-icon" aria-hidden="true"></i>
+            <div class="dc-mini__text">
+              <div class="dc-mini__primary">
+                @(!string.IsNullOrWhiteSpace(Model?.ChangeManagerTransVM?.NewQualificationName) ? Model.ChangeManagerTransVM.NewQualificationName : "—")
+              </div>
+              <div class="dc-mini__sub">المؤهل الدراسي</div>
+            </div>
+          </li>
+
+          @* Optional:
+          <li class="dc-mini__item">
+            <i class="ri-earth-line dc-icon" aria-hidden="true"></i>
+            <div class="dc-mini__text">
+              <div class="dc-mini__primary">
+                @( Model?.countriesLookupVM?.FirstOrDefault(c => c.Id == Model?.ChangeManagerTransVM?.ManagerNewqualificationCountryid)?.Name ?? "—" )
+              </div>
+              <div class="dc-mini__sub">جنسية المؤهل الدراسي</div>
+            </div>
+          </li> *@
+        </ul>
+      </section>
+    </div><!-- /dc-body -->
+
+    <!-- ===== Meta (notes + statuses) ===== -->
+    <div class="dc-meta">
+      <div class="info-kv info-kv--full">
+        <div class="info-label">الملاحظات</div>
+        <div class="info-notes">
+                                                                @(!string.IsNullOrWhiteSpace(Model?.ChangeManagerTransVM?.RequestDetailsVM?.RequestDVM?.RequestNote)
+                                                                    ? Model.ChangeManagerTransVM.RequestDetailsVM.RequestDVM.RequestNote
+            : "— لا توجد ملاحظات —")
+        </div>
+      </div>
+
+      <div class="info-kv">
+        <div class="info-label">حالة الدفع</div>
+        <div class="info-value">
+          <span class="pill @(isPaid ? "pill--success" : "pill--danger")">
+            @(isPaid ? "تم الدفع" : "لم يتم الدفع")
+          </span>
+        </div>
+      </div>
+
+    
+
+
+
+                                                        <div class="info-kv">
+                                                            <div class="info-label">حالة الطلب</div>
+                                                            <div class="info-value">
+                                                                <span class="status-badge @statusClass">
+                                                                    @(!string.IsNullOrWhiteSpace(Model?.ChangeManagerTransVM?.RequestDetailsVM?.RequestDVM?.ReqStatusName) ? Model?.ChangeManagerTransVM?.RequestDetailsVM?.RequestDVM?.ReqStatusName : "—")
+                                                                </span>
+                                                            </div>
+                                                        </div>
+    </div>
+  </section>
+</div>
+
+
+                                        }
+                                    }
+                                    else
+                                    {
+                                    <div class="col-12 mt-3">
+                                            <section class="dt-card dt-card--separated" dir="rtl" aria-labelledby="basicSheetTitle">
+                                            <div class="dt-card__head">
+                                                <i class="ri-file-list-3-line info-request-icon" aria-hidden="true"></i>
+                                                <span class="dt-card__title">  بيانات الطلب </span>
+                                            </div>
+
+                                            <div class="info-rows">
+                                                <div class="info-kv">
+                                                    <div class="info-label">رقم الطلب</div>
+                                                    <div class="info-value">@Model.RequestVM?.Reqno</div>
+                                                </div>
+
+                                                <div class="info-kv">
+                                                    <div class="info-label">مقدم الطلب</div>
+                                                    <div class="info-value">@Model.AspnetUserVM.FullNameAr</div>
+                                                </div>
+                                                @if (Model.RequestListVM?.Count > 1)
+                                                {
+                                                    <div class="info-kv">
+                                                        <div class="info-label">نوع الطلب</div>
+                                                        <div class="info-value">طلب  مجمع</div>
+                                                    </div>
+                                                }
+                                                else
+
+                                                {
+                                                    <div class="info-kv">
+                                                        <div class="info-label">نوع الطلب</div>
+                                                        <div class="info-value">@Model.RequestVM?.ReqTypeName</div>
+                                                    </div>
+                                                }
+
+
+                                                <div class="info-kv">
+                                                    <div class="info-label">نوع النشاط</div>
+                                                    <div class="info-value">@Model.RequestVM.ActivityName</div>
+                                                </div>
+
+                                                <div class="info-kv">
+                                                    <div class="info-label">نوع الترخيص</div>
+                                                    <div class="info-value">@Model.RequestVM.LicTypeName</div>
+                                                </div>
+
+                                                @{
+                                                    var stId = Model?.RequestVM?.RequestStatusId ?? 0;
+                                                    var statusClass = stId switch
+                                                    {
+                                                        7 => "status-approved",
+                                                        9 => "status-rejected",
+                                                        1 or 2 or 4 => "status-processing",
+                                                        3 or 12 => "status-pending",
+                                                        _ => "status-pending"
+                                                    };
+                                                }
+                                                <div class="info-kv">
+                                                    <div class="info-label">حالة الطلب</div>
+                                                    <div class="info-value">
+                                                        <span class="status-badge @statusClass">
+                                                            @(!string.IsNullOrWhiteSpace(Model?.RequestVM?.ReqStatusName) ? Model.RequestVM.ReqStatusName : "—")
+                                                        </span>
+                                                    </div>
+                                                </div>
+
+                                                @{
+                                                    var cii = new System.Globalization.CultureInfo("ar-KW");
+                                                    decimal? amt = Model.RequestVM?.Licamount;
+                                                    string amountText = amt.HasValue ? string.Format(cii, "{0:N3}", amt) : "—";
+                                                    bool isPaid = string.Equals(Model.RequestVM?.Licpaystatus?.Trim(), "1");
+                                                }
+
+                                                <div class="info-kv">
+                                                    <div class="info-label">الرسوم المستحقة</div>
+                                                    <div class="info-value">
+                                                        <span class="money">
+                                                            <i class="ri-bank-card-line" aria-hidden="true"></i>
+                                                            @amountText
+                                                        </span>
+                                                    </div>
+                                                </div>
+
+                                                <div class="info-kv">
+                                                    <div class="info-label">حالة الدفع</div>
+                                                    <div class="info-value">
+                                                        <span class="pill @(isPaid ? "pill--success" : "pill--danger")">
+                                                            @(isPaid ? "تم الدفع" : "لم يتم الدفع")
+                                                        </span>
+                                                    </div>
+                                                </div>
+
+                                                <div class="info-kv info-kv--full">
+                                                    <div class="info-label">الملاحظات</div>
+                                                    <div class="info-notes">
+                                                        @(!string.IsNullOrWhiteSpace(Model.RequestVM?.RequestNote)
+                                                            ? Model.RequestVM.RequestNote
+                                                            : "— لا توجد ملاحظات —")
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </section>
+                                    </div>
+                                    }
+
+                                 
+
+                                    <div class="col-12 mt-3">
+                                        <section class="dt-card dt-card--separated" dir="rtl" aria-labelledby="basicSheetTitle">
+                                            <div class="dt-card__head">
+                                                <i class="ri-building-2-line info-company-icon" aria-hidden="true"></i>
+                                                <span class="dt-card__title">بيانات المنشأة</span>
+                                            </div>
+
+                                            <div class="info-rows">
+                                                <div class="info-kv">
+                                                    <div class="info-label">نوع الترخيص</div>
+                                                    <div class="info-value">@Model.LicencesVM?.LicTypeName</div>
+                                                </div>
+                                                <div class="info-kv">
+                                                    <div class="info-label">رقم الترخيص</div>
+                                                    <div class="info-value">@Model.LicencesVM?.LicNo</div>
+                                                </div>
+
+                                                <div class="info-kv">
+                                                    <div class="info-label">إسم الترخيص</div>
+                                                    <div class="info-value">@Model.LicencesVM?.LicName</div>
+                                                </div>
+
+                                                
+
+                                                <div class="info-kv">
+                                                    <div class="info-label">نوع النشاط</div>
+                                                    <div class="info-value">@Model.LicencesVM?.ActivityTypeName</div>
+                                                </div>
+                                                @{
+                                                    DateTime? dtDate = Model.LicencesVM?.IssueDate;
+                                                    string dateDateExpiry = dtDate.HasValue ? dtDate.Value.ToString("yyyy/MM/dd", ci) : "-";
+
+
+
+                                                    DateTime? dtExpiryDate = Model.LicencesVM?.ExpireDate;
+                                                    string datePartExpiry = dtExpiryDate.HasValue ? dtExpiryDate.Value.ToString("yyyy/MM/dd", ci) : "-";
+
+
+                                                }
+                                                <div class="info-kv">
+                                                    <div class="info-label">تاريخ الإصدار </div>
+                                                    <div class="info-value">@dateDateExpiry</div>
+                                                </div>
+
+                                                <div class="info-kv">
+                                                    <div class="info-label">تاريخ الإنتهاء</div>
+                                                    <div class="info-value">@datePartExpiry</div>
+                                                </div>
+
+                                            </div>
+                                        </section>
+                                    </div>
+
+
+                                    <div class="col-12 mt-3">
+                                        <section class="dt-card dt-card--separated" dir="rtl" aria-labelledby="basicSheetTitle">
+                                            <div class="dt-card__head">
+                                                <span class="info-company-avatar">
+                                                    <img src="@Url.Content("~/files/kuwaitfinderlogo.png")"
+                                                         alt="Company logo"
+                                                         onerror="this.src='/images/placeholders/company.png';" />
+                                                </span>
+                                                <span class="dt-card__title">بيانات العنوان</span>
+                                            </div>
+
+
+                                            <div class="info-rows">
+                                                <div class="info-kv">
+                                                    <div class="info-label">الرقم الآلي للعنوان</div>
+                                                    <div class="info-value">
+                                                        <span class="status-badge status-processing">
+                                                            @(!string.IsNullOrWhiteSpace(Model.LicencesVM?.Company?.AddressNavigation?.AalliNo)
+                                                                ? Model.LicencesVM.Company.AddressNavigation.AalliNo
+                                                                : "—")
+                                                        </span>
+                                                    </div>
+                                                </div>
+
+                                                <div class="info-kv">
+                                                    <div class="info-label">المحافظة</div>
+                                                    <div class="info-value">@Model.LicencesVM?.Company?.AddressNavigation?.GovernorateArabic</div>
+                                                </div>
+
+                                                <div class="info-kv">
+                                                    <div class="info-label">المنطقة</div>
+                                                    <div class="info-value">@Model.LicencesVM?.Company?.AddressNavigation?.Area</div>
+                                                </div>
+                                                <div class="info-kv">
+                                                    <div class="info-label">القطعة</div>
+                                                    <div class="info-value">@Model.LicencesVM?.Company?.AddressNavigation?.BlockArabic</div>
+                                                </div>
+                                                <div class="info-kv">
+                                                    <div class="info-label">الشارع</div>
+                                                    <div class="info-value">@Model.LicencesVM?.Company?.AddressNavigation?.StreetArabic</div>
+                                                </div>
+                                                <div class="info-kv">
+                                                    <div class="info-label">المبني </div>
+                                                    <div class="info-value">@Model.LicencesVM?.Company?.AddressNavigation?.BuildingName</div>
+                                                </div>
+                                                <div class="info-kv">
+                                                    <div class="info-label">الدور  / المحل </div>
+                                                    <div class="info-value">
+                                                        @{
+                                                            var floor = Model.LicencesVM?.Company?.AddressNavigation?.FloorNo;
+                                                            var unit = Model.LicencesVM?.Company?.AddressNavigation?.UnitNo;
+                                                            var floorText = !string.IsNullOrWhiteSpace(floor) ? floor : "—";
+                                                            var unitText = !string.IsNullOrWhiteSpace(unit) ? unit : "—";
+                                                        }
+                                                         @floorText <span style="opacity:.5;margin:0 .35rem;"></span> 
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </section>
+                                    </div>
+
+
+                                    <div class="col-12 mt-3">
+                                        <section class="dt-card dt-card--separated" dir="rtl" aria-labelledby="basicSheetTitle">
+                                            <div class="dt-card__head">
+                                                <span class="info-company-avatar">
+                                                    <img src="@Url.Content("~/assets/images/KNMID_Logo.png")"
+                                                         alt="Company logo"
+                                                         onerror="this.src='/images/placeholders/company.png';" />
+                                                </span>
+                                                <span class="dt-card__title">بيانات صاحب الترخيص</span>
+                                            </div>
+
+
+                                            <section class="info-sheet info-sheet--owner" dir="rtl" aria-labelledby="licenseOwnerTitle">
+                                                <div class="dt-card__head">
+                                                    <i class="ri-id-card-line info-request-icon" aria-hidden="true"></i>
+                                                    <span class="dt-card__title" id="licenseOwnerTitle">
+                                                        بيانات صاحب الترخيص
+                                                    </span>
+                                                </div>
+
+                                                <div class="info-rows">
+                                                    <div class="info-kv">
+                                                        <div class="info-label">الرقم المدني لصاحب الترخيص</div>
+                                                        <div class="info-value">@Model.ApplicantPerson?.CivilId</div>
+                                                    </div>
+
+                                                    <div class="info-kv">
+                                                        <div class="info-label">اسم صاحب الترخيص</div>
+                                                        <div class="info-value">@Model.ApplicantPerson?.Name1</div>
+                                                    </div>
+
+                                                    <div class="info-kv">
+                                                        <div class="info-label">الجنسية</div>
+                                                        <div class="info-value">@Model.ApplicantPerson?.NationaliyName</div>
+                                                    </div>
+
+                                                    <div class="info-kv">
+                                                        <div class="info-label">تاريخ الميلاد</div>
+                                                        @{
+                                                            var cib = new System.Globalization.CultureInfo("ar-KW");
+                                                        }
+                                                        <div class="info-value">
+                                                            @(Model.ApplicantPerson?.BirthDate?.ToString("yyyy/MM/dd", cib) ?? "—")
+                                                        </div>
+                                                    </div>
+
+                                                    <div class="info-kv">
+                                                        <div class="info-label">المؤهل الدراسي</div>
+                                                        <div class="info-value">@Model.ApplicantPerson?.QualificationsLookup?.Name</div>
+                                                    </div>
+
+                                                    <div class="info-kv">
+                                                        <div class="info-label">تاريخ المؤهل</div>
+                                                        <div class="info-value">
+                                                            @(Model.ApplicantPerson?.QualificationDate?.ToString("yyyy/MM/dd", cib) ?? "—")
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </section>
+
+                                        </section>
+                                    </div>
+
+
+                                    <div class="col-12 mt-3">
+                                        <section class="dt-card dt-card--separated" dir="rtl" aria-labelledby="basicSheetTitle">
+                                            <div class="dt-card__head">
+                                                <span class="info-company-avatar">
+                                                    <img src="@Url.Content("~/assets/images/KNMID_Logo.png")"
+                                                         alt="Company logo"
+                                                         onerror="this.src='/images/placeholders/company.png';" />
+                                                </span>
+                                                <span class="dt-card__title">بيانات مدير الترخيص</span>
+                                            </div>
+
+
+                                            <section class="info-sheet info-sheet--manager" dir="rtl" aria-labelledby="licenseManagerTitle">
+                                                <div class="dt-card__head">
+                                                    <i class="ri-user-3-line info-request-icon" aria-hidden="true"></i>
+                                                    <span class="dt-card__title" id="licenseManagerTitle">
+                                                        بيانات مدير الترخيص
+                                                    </span>
+                                                </div>
+
+                                                <div class="info-rows">
+                                                    <div class="info-kv">
+                                                        <div class="info-label">الرقم المدني لمدير الترخيص</div>
+                                                        <div class="info-value">
+                                                            @Model.ManagerPerson?.CivilId
+                                                        </div>
+                                                    </div>
+
+                                                    <div class="info-kv">
+                                                        <div class="info-label">اسم مدير الترخيص</div>
+                                                        <div class="info-value">
+                                                            @Model.ManagerPerson?.Name1
+                                                        </div>
+                                                    </div>
+
+                                                    <div class="info-kv">
+                                                        <div class="info-label">الجنسية</div>
+                                                        <div class="info-value">
+                                                            @Model.ManagerPerson?.NationaliyName
+                                                        </div>
+                                                    </div>
+
+                                                    <div class="info-kv">
+                                                        <div class="info-label">تاريخ الميلاد</div>
+                                                        <div class="info-value">
+                                                            @(Model.ManagerPerson?.BirthDate?.ToString("yyyy/MM/dd", cib) ?? "—")
+                                                        </div>
+                                                    </div>
+
+                                                    <div class="info-kv">
+                                                        <div class="info-label">المؤهل الدراسي</div>
+                                                        <div class="info-value">
+                                                            @Model.ManagerPerson?.QualificationsLookup?.Name
+                                                        </div>
+                                                    </div>
+
+                                                    <div class="info-kv">
+                                                        <div class="info-label">تاريخ المؤهل</div>
+                                                        <div class="info-value">
+                                                            @(Model.ManagerPerson?.QualificationDate?.ToString("yyyy/MM/dd", cib) ?? "—")
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </section>
+
+                                        </section>
+                                    </div>
+
+
+                                    <div class="col-12 mt-3">
+                                        <section class="dt-card dt-card--separated" dir="rtl" aria-labelledby="basicSheetTitle">
+                                            <div class="dt-card__head">
+                                                <i class="ri-team-line info-partners-icon" aria-hidden="true"></i>
+                                                <span class="dt-card__title">قائمة الشركاء</span>
+                                            </div>
+
+                                            <div class="partner-list">
+                                                @foreach (var item in Model.partnerVM)
+                                                {
+                                                    var name = item?.Name?.Trim() ?? "";
+                                                    var parts = name.Split(' ', StringSplitOptions.RemoveEmptyEntries);
+                                                    var initials = parts.Length == 0
+                                                    ? "?"
+                                                    : (parts.Length == 1
+                                                    ? parts[0].Substring(0, 1)
+                                                    : $"{parts[0].Substring(0, 1)}{parts[^1].Substring(0, 1)}");
+
+                                                    <div class="partner-item">
+                                                        <span class="partner-avatar" aria-hidden="true">@initials</span>
+
+                                                        <div class="partner-main">
+                                                            <div class="partner-name">@(!string.IsNullOrWhiteSpace(name) ? name : "—")</div>
+                                                            @* optional secondary line if you later add fields (e.g., Role / Share) *@
+                                                            @* <div class="partner-meta">شريك</div> *@
+                                                        </div>
+
+                                                        <i class="ri-user-3-line partner-trail" aria-hidden="true"></i>
+                                                    </div>
+                                                }
+                                            </div>
+                                        </section>
+                                    </div>
+
+                                </div>
+                            </div>
+                        </div>
+
+
+
+                    
+
+                        @if ((Model.RequestVM.RequestStatusId == (int)RequestStatusEnum.WaitingForPayment && Model.RequestVM.Licpaystatus != "1") || (Model.RequestVM.RequestStatusId == (int)RequestStatusEnum.WaitingBankGuarantee && Model.RequestVM.Licpaystatus != "1"))
+                        {
+                            <div class="pt-4">
+                                <button type="button" class="btn btn-primary"
+                                        onclick="location.href='@Url.Action("TourismPay", "Tourism", new { id = MyCrypto.Encode(Model.RequestVM.RequestId.ToString()) })'">
+                                    دفع الرسوم
+                                </button>
+                            </div>
+                        }
+                        <div class="col-xl-12 col-lg-12 col-md-12">
+                            <div class="form-group"></div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="tab-pane fade" id="Attachements" role="tabpanel" aria-labelledby="Attachements-tab">
+                    <div class="row job-alerts-area px-4 py-4">
+                        @if (Model.fileUploadConfigs?.Any() == true)
+                        {
+                            <div class="col-12 mb-4">
+                                <h5 class="fw-bold text-gray-800 mb-3">📎 المستندات المطلوبة الجديدة</h5>
+                                <div class="row g-4">
+                                    @foreach (var config in Model.fileUploadConfigs)
+                                    {
+                                        <div class="col-md-6">
+                                            <div class="form-group mb-3 border rounded p-3 shadow-sm bg-light">
+                                                <label class="form-label fw-semibold">
+                                                    @config.AttachName
+                                                    @if (config.IsMandatory)
+                                                    {
+                                                        <span class="text-danger">*</span>
+                                                    }
+                                                </label>
+
+                                                <div class="row align-items-center">
+                                                    <div class="col-8">
+                                                        <input type="file" class="form-control shadow-sm" required="@config.IsMandatory" accept="@config.AllowedFileTypes" />
+                                                        <input type="hidden" name="NamedFile.FieldName" value="@config.FieldName" />
+                                                        <input type="hidden" name="NamedFile.LabelName" value="@config.AttachName" />
+                                                        <input type="hidden" name="NamedFile.IsRequired" value="@config.IsMandatory" />
+                                                    </div>
+                                                    <div class="col-4 text-end">
+                                                        <button type="button" class="btn btn-primary" onclick="uploadCustomAttachment(this)">
+                                                            رفع
+                                                        </button>
+                                                    </div>
+                                                </div>
+
+                                            </div>
+                                        </div>
+                                    }
+                                </div>
+                            </div>
+                        }
+
+                        <div class="row g-3">
+                            @foreach (var item in Model.attachVMs)
+                            {
+                                var collapseId = $"att_{item.AttachId}";
+                                var fileUrl = Url.Content($"~/{ViewBag.PathAttachment}{item.AttachPath}");
+                                <div class="col-12 col-lg-6">
+                                    <div class="dt-card dt-card--separated dt-card--attachment" dir="rtl">
+                                        <div class="dt-card__head" title="@item.AttachName">
+                                            <i class="ri-file-2-line" aria-hidden="true"></i>
+                                            <span class="dt-card__title">@item.AttachName</span>
+                                            <button class="att-expander"
+                                                    type="button"
+                                                    data-bs-toggle="collapse"
+                                                    data-bs-target="#@collapseId"
+                                                    aria-expanded="false"
+                                                    aria-controls="@collapseId">
+                                                عرض
+                                                <i class="ri-arrow-down-s-line chev"></i>
+                                            </button>
+
+                                        </div>
+
+                                        <div class="collapse" id="@collapseId">
+                                            <div class="dt-card__body">
+                                                <div class="att-actions">
+                                                    <button type="button" class="btn btn-outline-primary btn-sm" onclick="window.open('@fileUrl')">
+                                                        <i class="ri-eye-line"></i> فتح في نافذة
+                                                    </button>
+                                                    <a class="btn btn-outline-secondary btn-sm" href="@fileUrl" download>
+                                                        <i class="ri-download-2-line"></i> تنزيل
+                                                    </a>
+                                                </div>
+
+                                                <div class="att-preview">
+                                                    @if (!string.IsNullOrEmpty(item.AttachPath) && item.AttachPath.EndsWith(".pdf", StringComparison.OrdinalIgnoreCase))
+                                                    {
+                                                        <iframe src="@fileUrl"></iframe>
+                                                    }
+                                                    else if (!string.IsNullOrEmpty(item.AttachPath) &&
+                                                    (item.AttachPath.EndsWith(".jpg", StringComparison.OrdinalIgnoreCase) ||
+                                                    item.AttachPath.EndsWith(".jpeg", StringComparison.OrdinalIgnoreCase) ||
+                                                    item.AttachPath.EndsWith(".png", StringComparison.OrdinalIgnoreCase) ||
+                                                    item.AttachPath.EndsWith(".webp", StringComparison.OrdinalIgnoreCase)))
+                                                    {
+                                                        <img src="@fileUrl" alt="@item.AttachName" />
+                                                    }
+                                                    else
+                                                    {
+                                                        <object data="@fileUrl" type="application/pdf"></object>
+                                                    }
+                                                </div>
+
+                                                @if (Model.RequestVM.RequestStatusId != (int)RequestStatusEnum.FinalLicenseIssued && item.IsApproved == false)
+                                                {
+                                                    <div class="mt-2">
+                                                        <input type="file"
+                                                               name="NamedFile.File"
+                                                               class="form-control"
+                                                               id="fileInput_@item.AttachId"
+                                                               data-field="@item.AttachFlag"
+                                                               data-label="@item.AttachName"
+                                                               data-required="@item.IsMandatory" />
+                                                        <input type="hidden" name="NamedFile.FieldName" value="@item.AttachFlag" />
+                                                        <input type="hidden" name="NamedFile.LabelName" value="@item.AttachName" />
+                                                        <input type="hidden" name="NamedFile.IsRequired" value="@item.IsMandatory" />
+
+                                                        <div class="d-flex justify-content-end mt-2">
+                                                            <button type="button"
+                                                                    class="btn btn-success btn-sm"
+                                                                    onclick="updateAttachment(event, @item.AttachId, '@Model.RequestVM.Reqno', @item.AttachRequestid)">
+                                                                تحديث المرفق
+                                                            </button>
+                                                        </div>
+                                                    </div>
+                                                }
+                                            </div>
+                                        </div>
+
+                                        <div class="att-status">
+                                            <span>الحالة</span>
+                                            @if (item.IsApproved)
+                                            {
+                                                <span class="badge-chip badge-approved">✔ معتمد</span>
+                                            }
+                                            else
+                                            {
+                                                <span class="badge-chip badge-pending">بانتظار الاعتماد</span>
+                                            }
+                                        </div>
+                                    </div>
+                                </div>
+                            }
+                        </div>
+
+
+                    </div>
+                </div> <!-- /#Attachements -->
+            </div> <!-- /.tab-content -->
+        </div> <!-- /.profile-authentication-tabs -->
+
+        <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+
+        @section Scripts
+        {
+            <script>
+                // Update existing attachment
+                async function updateAttachment(event, attachId, reqNo, requestId) {
+                    event.preventDefault();
+                    const fileInput = document.getElementById(`fileInput_${attachId}`);
+                    const file = fileInput?.files[0];
+                    if (!file) { Swal.fire("يرجى اختيار ملف قبل الإرسال", "", "warning"); return; }
+
+                    const parent = fileInput.closest('.form-group, .row');
+                    const fieldName = parent.querySelector('[name="NamedFile.FieldName"]')?.value;
+                    const labelName = parent.querySelector('[name="NamedFile.LabelName"]')?.value;
+                    const isRequired = parent.querySelector('[name="NamedFile.IsRequired"]')?.value === "True";
+
+                    const formData = new FormData();
+                    formData.append("file.File", file);
+                    formData.append("file.FieldName", fieldName);
+                    formData.append("file.LabelName", labelName);
+                    formData.append("file.IsRequired", isRequired);
+                    formData.append("attachId", attachId);
+                    formData.append("reqNo", reqNo);
+                    formData.append("RequestId", requestId);
+
+                    try {
+                        const response = await fetch(`/Elaw/UpdateAttachment`, { method: "POST", body: formData });
+                        if (response.ok) {
+                            const result = await response.json();
+                            Swal.fire("تم التحديث بنجاح", result.message || "", "success").then(() => location.reload());
+                        } else {
+                            const errorText = await response.text();
+                            Swal.fire("فشل التحديث", errorText, "error");
+                        }
+                    } catch (error) {
+                        console.error("Error uploading attachment:", error);
+                        Swal.fire("خطأ", "حدث خطأ أثناء رفع الملف", "error");
+                    }
+                }
+
+                // Upload new required attachment
+                async function uploadCustomAttachment(button) {
+                    const parent = button.closest(".row");
+                    const fileInput = parent.querySelector('input[type="file"]');
+                    const file = fileInput?.files[0];
+                    if (!file) { Swal.fire("يرجى اختيار ملف قبل الإرسال", "", "warning"); return; }
+
+                    const fieldName = parent.querySelector('[name="NamedFile.FieldName"]').value;
+                    const labelName = parent.querySelector('[name="NamedFile.LabelName"]').value;
+                    const isRequired = parent.querySelector('[name="NamedFile.IsRequired"]').value === "True";
+
+                    const reqNo = "@Model.RequestVM.Reqno";
+                    const requestId = "@Model.RequestVM.RequestId";
+
+                    const formData = new FormData();
+                    formData.append("file.File", file);
+                    formData.append("file.FieldName", fieldName);
+                    formData.append("file.LabelName", labelName);
+                    formData.append("file.IsRequired", isRequired);
+                    formData.append("reqNo", reqNo);
+                    formData.append("RequestId", requestId);
+
+                    try {
+                        const response = await fetch("/Elaw/UploadNewAttachment", { method: "POST", body: formData });
+                        if (response.ok) {
+                            const result = await response.json();
+                            Swal.fire("تم الحفظ", result.message || "تم رفع المرفق", "success")
+                                .then(() => window.location.reload());
+                        } else {
+                            const errorText = await response.text();
+                            Swal.fire("فشل", errorText, "error");
+                        }
+                    } catch (err) {
+                        console.error(err);
+                        Swal.fire("خطأ", "حدث خطأ أثناء رفع الملف", "error");
+                    }
+                }
+            </script>
+
+        <script>
+            // Create / move the teal sliding block to match the active tab
+            (function () {
+                // Get the tabs container
+                const tabs = document.querySelector('.profile-authentication-tabs .nav-tabs');
+                if (!tabs) return;
+
+                // Ensure indicator exists
+                let indicator = tabs.querySelector('.tab-indicator');
+                if (!indicator) {
+                    indicator = document.createElement('span');
+                    indicator.className = 'tab-indicator';
+                    tabs.prepend(indicator);
+                }
+
+                function moveIndicator(activeLink) {
+                    if (!activeLink) return;
+                    const tabRect = tabs.getBoundingClientRect();
+                    const linkRect = activeLink.getBoundingClientRect();
+                    const left = linkRect.left - tabRect.left + tabs.scrollLeft; // works LTR/RTL visually
+                    indicator.style.width = linkRect.width + 'px';
+                    indicator.style.transform = 'translateX(' + left + 'px)';
+                }
+
+                // Initial position (on load)
+                const initial = tabs.querySelector('.nav-link.active') || tabs.querySelector('.nav-link');
+                moveIndicator(initial);
+
+                // On Bootstrap tab shown
+                document.addEventListener('shown.bs.tab', function (e) {
+                    moveIndicator(e.target);
+                });
+
+                // Recalculate on resize (responsive)
+                window.addEventListener('resize', function () {
+                    const current = tabs.querySelector('.nav-link.active');
+                    moveIndicator(current);
+                });
+            })();
+        </script>
+        }
+    }
+</div>
+ 

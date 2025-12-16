@@ -1,0 +1,83 @@
+﻿@model ValidEserviceCombinations
+
+@{
+    ViewBag.Title = "Edit ValidEservice Combinations";
+    Layout = "~/Areas/Admin/Views/Shared/_LayoutEserviceTourism.cshtml";
+}
+
+<div class="container-fluid mt-5">
+    <div class="card">
+        <div class="card-header">
+            <h3 class="card-title">Edit Valid Eservice Combinations</h3>
+        </div>
+        <div class="card-body">
+            <form id="eserviceValidForm">
+              
+                <input type="hidden" asp-for="Id" id="Id" />
+                <div class="mb-4">
+                    <label for="ActivityTypesId" class="form-label">Activity Type</label>
+                    @Html.DropDownList("ActivityTypesId", ViewBag.ActivityTypes as List<SelectListItem>, Model.ActivityTypesLookup.NameAr, new { @class = "form-select" })
+                </div>
+
+                <div class="mb-4">
+                    <label for="RequestTypeId" class="form-label">Request Type</label>
+                    @Html.DropDownList("RequestTypeId", ViewBag.RequestTypes as List<SelectListItem>, Model.RequestsTypesLookup.NameAr, new { @class = "form-select" })
+                </div>
+                <div class="mb-4">
+                    <label for="LicenceTypeId" class="form-label">Licences Type</label>
+                    @Html.DropDownList("LicenceTypeId", ViewBag.LicencesType as List<SelectListItem>,Model.LicenceTypesLookup.NameAr, new { @class = "form-select" })
+                </div>
+                <div class="mb-4">
+                    <label for="Sort" class="form-label">Sort</label>
+                    <input type="number" class="form-control" id="Sort" />
+                </div>
+
+                <div class="mb-4">
+                    <label for="IsAllowed" class="form-label">IsAllowed</label>
+                    @Html.DropDownListFor(model => model.IsAllowed,
+                             new List<SelectListItem>
+                    {
+                    new SelectListItem { Text = "Yes", Value = "true", Selected = Model.IsAllowed },
+                    new SelectListItem { Text = "No", Value = "false", Selected = !Model.IsAllowed }
+                    },
+                             new { @class = "form-select", @id = "IsAllowed" })
+                </div>
+
+                <div class="text-end">
+                    <button type="submit" class="btn btn-success">Create</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    <script>
+        const apiBaseUrl = '@ViewBag.ApiBaseUrl';
+
+        document.getElementById('eserviceValidForm').addEventListener('submit', async function (e) {
+            e.preventDefault();
+
+            const data = {
+                Id: parseInt(document.getElementById("Id").value),
+                ActivityTypeId: parseInt(document.getElementById("ActivityTypesId").value),
+                RequestTypeId: parseInt(document.getElementById("RequestTypeId").value),
+                LicenceTypeId: parseInt(document.getElementById("LicenceTypeId").value),
+                IsAllowed: document.getElementById("IsAllowed").value === "true"
+            };
+
+            const response = await fetch(apiBaseUrl + "EditValidEserviceCombination", {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify(data)
+            });
+
+            if (response.ok) {
+                alert("Updated successfully!");
+                window.location.href = '/Admin/dynamic/GetValidEserviceCombinations';
+            } else {
+                alert("Failed to create Eservice Type Branch.");
+            }
+        });
+    </script>
+}

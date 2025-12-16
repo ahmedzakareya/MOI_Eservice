@@ -1,0 +1,65 @@
+﻿
+@model LoginViewModel
+@{
+    ViewBag.Title = "منصة التراخيص الالكترونية";
+    Layout = "~/Views/Shared/_LoginLayout.cshtml";
+}
+<div class="profile-authentication-area ptb-100">
+    <div class="container">
+        <div class="profile-authentication-tabs">
+            <div class="authentication-tabs-list">
+                <ul class="nav nav-tabs" id="myTab" role="tablist">
+                    <li class="nav-item">
+                        <a class="nav-link active" id="login-tab" data-bs-toggle="tab" href="#login" role="tab" aria-controls="login">تسجيل الدخول</a>
+                    </li>
+
+                    <!--<li class="nav-item">
+                        <a class="nav-link" id="register-tab" data-bs-toggle="tab" href="#register" role="tab" aria-controls="register">Register</a>
+                    </li>
+
+                    <li class="nav-item">
+                        <a class="nav-link" id="reset-password-tab" data-bs-toggle="tab" href="#reset-password" role="tab" aria-controls="reset-password">Reset Password</a>
+                    </li>-->
+                </ul>
+            </div>
+
+            <div class="tab-content" id="myTabContent">
+                <div class="tab-pane fade show active" id="login" role="tabpanel">
+                    <div class="eeza-authentication-form">
+                        @using (Html.BeginForm("Login", "Account"@* , new { ReturnUrl = ViewBag.ReturnUrl } *@, FormMethod.Post))
+                        {
+                            @Html.AntiForgeryToken()
+                            @Html.ValidationSummary("", new { @class = "text-danger" })
+                            <div class="form-group">
+                                @*<input type="text" class="form-control" placeholder="الرقم المدني  ">*@
+                                @Html.TextBoxFor(m => m.CivilId, new { @class = "form-control", @placeholder = "الرقم المدني  " , @maxlength = "12" })
+                            </div>
+
+                            <div class="form-group">
+                                @*<input type="text" class="form-control" placeholder="كلمة السر  ">*@
+                                @Html.PasswordFor(m => m.Password, new { @class = "form-control", @placeholder = "كلمة السر  " })
+                            </div>
+
+                            <div class="row align-items-center">
+                                <div class="col-lg-6 col-md-6 col-sm-6 remember-me-wrap">
+                                    
+                                    @* <a href="@Url.Action("Register","Account")" class="lost-your-password">تسجيل حساب جديد</a> *@
+                                    <a asp-action="Register" asp-controller="Account"  class="lost-your-password">تسجيل حساب جديد</a>
+
+                                </div>
+                                
+                                <div class="col-lg-6 col-md-6 col-sm-6 lost-your-password-wrap">
+                                    <a href="@Url.Action("ResetPassword","Account")" target="_blank" class="lost-your-password">نسيت كلمة السر؟</a>
+                                </div>
+                            </div>
+
+                            <button type="submit" class="default-btn"> تسجيل الدخول  <i class="ri-lock-unlock-line"></i></button>
+                        }
+
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+

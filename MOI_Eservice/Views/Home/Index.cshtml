@@ -1,0 +1,485 @@
+﻿@model HomePageViewModel
+
+
+@{
+    //var empJson = Context.Session.GetString("MoiUser");
+    //AspNetUser emp = string.IsNullOrEmpty(empJson) ? null : JsonConvert.DeserializeObject<AspNetUser>(empJson);
+
+    var userId = Context.Session.GetString("UserId");
+    var userName = Context.Session.GetString("UserUserName");
+    var civilId = Context.Session.GetString("UserCivilId");
+    var fullName = Context.Session.GetString("UserFullName");
+    var accountTypeId = Convert.ToInt32(Context.Session.GetString("UserAccouuntTypeId"));
+    var isApplicant = Context.Session.GetString("UserIsApplicant");
+    var isDelegate = Context.Session.GetString("UserIsDelegate") ;
+    Layout = "~/Views/Shared/_HomeLayout.cshtml";
+    var NavLinksContact = Model.SystemOptionVMs.FirstOrDefault(x => x.CategoryNameEn == "NavLinksContact");
+    var NavLinksHome = Model.SystemOptionVMs.FirstOrDefault(x => x.CategoryNameEn == "NavLinksHome");
+    var TitleMinistryEle = Model.SystemOptionVMs.FirstOrDefault(x => x.CategoryNameEn == "TitleMinistryEle");
+
+    string selectedUrl = "#";
+    string urlInitials = "";
+    var bannerImage = Model.SystemOptionVMs.FirstOrDefault(x => x.CategoryNameEn == "MainBanner")?.Value;
+
+
+}
+
+<style>
+    .topbar-action li a {
+        font-weight: normal !important;
+    }
+
+    .disableMe {
+        /*background-color: #888 !important;*/
+        cursor: not-allowed;
+    }
+
+    /******** pop up  *******/
+    #overlay {
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background-color: #000;
+        filter: alpha(opacity=70);
+        -moz-opacity: 0.7;
+        -khtml-opacity: 0.7;
+        opacity: 0.7;
+        z-index: 100;
+        display: none;
+    }
+
+    .cnt223a {
+        text-decoration: none;
+    }
+
+    .popup {
+        width: 100%;
+        margin: 0 auto;
+        display: none;
+        position: fixed;
+        z-index: 101;
+    }
+
+    .cnt223 {
+        width: 40%;
+        min-height: 150px;
+        margin: 100px auto;
+        background: #f3f3f3;
+        position: relative;
+        z-index: 103;
+        padding: 30px;
+        border-radius: 5px;
+        box-shadow: 0 2px 5px #000;
+    }
+
+        .cnt223 p {
+            clear: both;
+            color: #555555;
+            text-align: center;
+            direction: rtl;
+            font-size: 25px;
+        }
+
+    .cnt223a {
+        font-weight: bold;
+        border: solid 2px #fff0;
+        padding: 5px 13px;
+        border-radius: 5px;
+        color: white;
+        background: #d91900;
+        margin: 0 auto;
+        display: block;
+        width: 70px;
+        text-align: center;
+        margin-top: 35px;
+    }
+
+    .cnt223 .x {
+        float: right;
+        height: 35px;
+        left: 46px;
+        position: relative;
+        top: -46px;
+        width: 34px;
+        border-radius: 50%;
+    }
+
+        .cnt223 .x:hover {
+            cursor: pointer;
+        }
+
+    .popup {
+        top: 0%;
+        left: 0%;
+        background: #e8e8e87a;
+        height: 100vh !important;
+    }
+      .main-header-area {
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+        z-index: 1000;
+       /* background: rgba(255, 255, 255, 0.85);*/ /* translucent navbar */
+        backdrop-filter: blur(10px);
+        box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
+    }
+
+    .topbar-area {
+        background: #004080 !important;
+        font-size: 14px;
+    }
+
+    .topbar-action a,
+    .topbar-area a {
+        color: #fff !important;
+        font-weight: 500;
+    }
+
+    .navbar-area .navbar-nav .nav-link {
+        font-weight: bold;
+        color: #004080;
+    }
+
+    .navbar-area .nav-link.active,
+    .navbar-area .nav-link:hover {
+        color: #1657cb;
+    }
+
+    .main-banner-area-with-bg-image2 {
+        height: 100vh;
+        background-size: cover;
+        background-position: center;
+        display: flex;
+        align-items: center;
+        position: relative;
+    }
+
+    .main-banner-area-with-bg-image {
+        height: 100vh;
+        background-size: cover;
+        background-position: center;
+        display: flex;
+        align-items: center;
+        position: relative;
+    }
+    .main-banner-area-with-bg-image2::before {
+        content: '';
+        position: absolute;
+        top: 0; left: 0; width: 100%; height: 100%;
+        background: rgba(0, 0, 0, 0.4); /* overlay */
+        z-index: 1;
+    }
+
+    .main-banner-content-with-search {
+        z-index: 2;
+        position: relative;
+        text-align: center;
+        color: #fff;
+    }
+
+    .main-banner-content-with-search h1 {
+        font-size: 48px;
+        font-weight: 800;
+        color: #fff;
+        margin-bottom: 40px;
+    }
+
+    .main-banner-content-with-search form .form-select {
+        height: 48px;
+        border-radius: 8px;
+        font-size: 15px;
+    }
+
+    .search-btn {
+        background: #1657cb;
+        color: #fff;
+        padding: 12px 24px;
+        border-radius: 8px;
+        border: none;
+    }
+
+   
+    /**********************************/
+</style>
+
+<div class="preloader-area">
+    <div class="spinner">
+        <div class="inner">
+            <div class="disc"></div>
+            <div class="disc"></div>
+            <div class="disc"></div>
+        </div>
+    </div>
+</div>
+
+
+
+
+<header class="main-header-area">
+    <!-- Topbar -->
+    <div class="topbar-area py-2">
+        <div class="container-fluid px-4">
+            <div class="row align-items-center">
+                <!-- Social -->
+                <div class="col-lg-5 col-md-6">
+                    <ul class="list-inline mb-0">
+                        @foreach (var item in Model.SystemOptionVMs)
+                        {
+                            if (item.CategoryNameEn == "SocialLinks")
+                            {
+                                <li class="list-inline-item me-3">
+                                    <a href="@item.Value" target="_blank">
+                                        <i class="@item.DefaultValue"></i>
+                                    </a>
+                                </li>
+                            }
+                        }
+                    </ul>
+                </div>
+
+                <!-- User Actions -->
+                <div class="col-lg-7 col-md-6 text-end">
+                    <ul class="list-inline mb-0 topbar-action">
+                        @if (civilId != null)
+                        {
+                            using (Html.BeginForm("LogOff", "Account", FormMethod.Post, new { id = "logoutForm" }))
+                            {
+                                @Html.AntiForgeryToken()
+                                <li class="list-inline-item me-3">
+                                    <a href="@Url.Action("MyAccount", "Home")"><i class="flaticon-user"></i> حسابي</a>
+                                </li>
+                                <li class="list-inline-item me-3">
+                                    <a href="@Url.Action("GetAllRequest", "Home")"><i class="ri-file-list-line"></i> طلباتي</a>
+                                </li>
+                                @if(isApplicant =="True")
+                                {
+                                <li class="list-inline-item me-3">
+                                    <a href="@Url.Action("GetAllLicences", "Home")"><i class="ri-briefcase-line"></i> تراخيصي</a>
+                                </li>
+                                
+                                    <li class="list-inline-item me-3">
+                                        <a href="@Url.Action("GetAllDelegatUser", "Home")"><i class="ri-user-shared-line"></i> قائمة المفوضين </a>
+                                    </li>
+                                }
+                                @if(isDelegate =="True")
+                                {
+
+                                    <li class="list-inline-item me-3">
+                                        <a href="@Url.Action("GetLicencesDelegateFor", "Home")"><i class="ri-user-shared-line"></i> التراخيص المفوض بها </a>
+                                    </li>
+                                }
+                                <li class="list-inline-item">
+                                    <a href="javascript:document.getElementById('logoutForm').submit()">
+                                        <i class="ri-logout-box-r-line"></i> خروج
+                                    </a>
+                                </li>
+                            }
+                        }
+                        else
+                        {
+                            <li class="list-inline-item me-3">
+                                <a asp-controller="Account" asp-action="Login"><i class="flaticon-padlock"></i> تسجيل الدخول</a>
+                            </li>
+                            <li class="list-inline-item">
+                                <a asp-controller="Account" asp-action="Register"><i class="flaticon-user"></i> إنشاء حساب</a>
+                            </li>
+                        }
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Navbar -->
+    <div class="navbar-area">
+        <div class="main-navbar">
+            <div class="container-fluid px-5">
+                <nav class="navbar navbar-expand-md navbar-light">
+                    @foreach (var option in Model.SystemOptions)
+                    {
+                        if (option.Key == "SiteLogo")
+                        {
+                            <a class="navbar-brand" href="@NavLinksHome">
+                                <img src="@option.Value" width="180" alt="logo">
+                            </a>
+                        }
+                    }
+
+                    <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent">
+                        <span class="navbar-toggler-icon"></span>
+                    </button>
+
+                    <div class="collapse navbar-collapse m-auto" id="navbarSupportedContent">
+                        <ul class="navbar-nav m-auto">
+                            <li class="nav-item">
+                                <a href="@NavLinksHome.Value" class="nav-link active">@NavLinksHome.NameArabic</a>
+                            </li>
+                            <li class="nav-item">
+                                <a href="@NavLinksContact.Value" class="nav-link">@NavLinksContact.NameArabic</a>
+                            </li>
+                        </ul>
+                    </div>
+                </nav>
+            </div>
+        </div>
+    </div>
+</header>
+
+<!-- Banner -->
+<div class="main-banner-area-with-bg-image2 d-flex align-items-center"
+     style="background-image: url('@bannerImage');">
+    <div class="main-banner-area-with-bg-image w-100">
+        <div class="container-fluid text-center">
+            <div class="main-banner-content-with-search">
+                <h1 id="homeTitle">@TitleMinistryEle.Value</h1>
+
+               
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Start Top Category Area -->
+<div class="top-category-area">
+</div>
+<!-- End Top Category Area -->
+<!-- Start Job Seeker Area -->
+<section class="job-seeker-area py-5 bg-light text-center">
+    <div class="container">
+        <div class="section-title mb-5">
+            <h2 class="text-primary fw-bold">خطوات إصدار الترخيص</h2>
+        </div>
+
+        <div class="row justify-content-center">
+            <div class="col-lg-4 col-md-6">
+                <div class="single-job-seeker-card">
+                    <div class="seeker-image">
+                        <img src="~/assets/images/job-seeker/seeker-1.png" alt="image">
+                    </div>
+                    <h5 style="color: #1657cb;">التسجيل واختيار نوع الترخيص</h5>
+
+                    <div class="step">Step 1</div>
+                </div>
+
+                <div class="seeker-arrow-icon" style="z-index: 1">
+                    <img src="~/assets/images/job-seeker/layer-1.png" alt="image">
+                </div>
+            </div>
+
+            <div class="col-lg-4 col-md-6">
+                <div class="single-job-seeker-card">
+                    <div class="seeker-image">
+                        <img src="~/assets/images/job-seeker/seeker-2.png" alt="image">
+                    </div>
+                    <h5 style="color: #1657cb;">تعبئة البيانات المطلوبة</h5>
+
+                    <div class="step">Step 2</div>
+                </div>
+
+                <div class="seeker-arrow-icon" style="z-index: 1">
+                    <img src="~/assets/images/job-seeker/layer-2.png" alt="image">
+                </div>
+            </div>
+
+            <div class="col-lg-4 col-md-6">
+                <div class="single-job-seeker-card">
+                    <div class="seeker-image">
+                        <img src="~/assets/images/job-seeker/seeker-3.png" alt="image">
+                    </div>
+                    <h5 style="color: #1657cb;">مراجعة البيانات وإصدار الترخيص</h5>
+
+                    <div class="step">Step 3</div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- End Job Seeker Area -->
+<div class="row m-5">
+    <div class="row g-4">
+        @foreach (var card in Model.Cards)
+        {
+            if (!string.IsNullOrEmpty(card.ActivityName))
+            {
+                <div class="col-lg-4 col-md-6">
+                    <div class="card shadow rounded-4 border-0 h-100">
+                        <div class="card-body d-flex flex-column justify-content-between p-4">
+                            <!-- Title and Subtitle -->
+                            <div>
+                                <h5 class="card-title text-primary fw-bold mb-4">@card.ActivityName</h5>
+                                <p class="card-subtitle text-muted fs-6 mb-4">
+                                    <i class="ri-bank-line me-1"></i>@card.EserviceName
+                                </p>
+                            </div>
+
+                            <!-- Action Button -->
+                            <div class="mt-auto">
+                                <div class="dropdown w-100 text-end">
+                                    <button class="btn btn-primary btn-lg w-100 rounded-3 dropdown-toggle d-flex justify-content-between align-items-center"
+                                            type="button"
+                                            data-bs-toggle="dropdown"
+                                            aria-expanded="false">
+                                        <span><i class="flaticon-list-1 me-2"></i>ابدأ الآن</span>
+                                    </button>
+                                    <ul class="dropdown-menu dropdown-menu-end w-100 mt-2 border rounded-3 shadow-sm m-auto" style="left: 50%; transform: translateX(-50%);">
+                                        @foreach (var license in card.Licenses)
+                                        {
+                                            @* var urlPath = !string.IsNullOrEmpty(license.Url)
+                                            ? "~/" + license.Url
+                                            : Url.Action("ServiceDetails", "Home", new { id = license.Id });
+
+                                            <li class="text-start">
+                                                <a class="dropdown-item text-start py-2 px-3" href="@Url.Content(urlPath)">
+                                                    <i class="ri-file-list-line me-2 text-primary"></i> @license.Name
+                                                </a>
+                                            </li> *@
+                                            string fullUrl;
+
+                                            if (!string.IsNullOrEmpty(license.Url))
+                                            {
+                                                // Ensure the URL starts with "/"
+                                                var safeUrl = license.Url.StartsWith("/") ? license.Url : "/" + license.Url;
+
+                                                // Build full absolute URL
+                                                fullUrl = $"{Context.Request.Scheme}://{Context.Request.Host}{safeUrl}";
+                                            }
+                                            else
+                                            {
+                                                // Use fallback URL (relative path via Url.Action)
+                                                fullUrl = Url.Action("ServiceDetails", "Home", new { id = license.Id });
+                                            }
+
+                                            <li class="text-start">
+                                                <a class="dropdown-item text-start py-2 px-3" href="@fullUrl" target="_self">
+                                                    <i class="ri-file-list-line me-2 text-primary"></i> @license.Name
+                                                </a>
+                                            </li>
+                                        }
+                                    </ul>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
+            }
+        }
+    </div>
+
+    @if (Model.Cards == null || !Model.Cards.Any())
+    {
+        <div class="alert alert-info text-center mt-5 fs-5">
+            لا توجد تراخيص متاحة حالياً لهذه الخدمة.
+        </div>
+    }
+
+</div>
+
+@await Component.InvokeAsync("Footer")
+
+
+

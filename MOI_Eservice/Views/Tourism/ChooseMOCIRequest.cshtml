@@ -1,0 +1,251 @@
+﻿@model MOICDropdownVM
+
+
+
+@{
+    
+    ViewBag.Title = "ChooseMOCIRequest";
+    Layout = "~/Views/Shared/_LayoutEservice.cshtml";
+}
+<style>
+    .copyrights-area {
+        position: fixed;
+        right: 310px;
+        bottom: 0;
+        left: 300px;
+        width: 100%;
+    }
+
+</style>
+
+<div class="my-profile-box">
+    <h3>طلب إبداء الرأي للتجارة - تحديد نوع الطلب </h3>
+    <div class="container-fluid">
+        @using (Html.BeginForm())
+
+        {
+            @Html.AntiForgeryToken()
+
+            <div class="form-horizontal py-3">
+                @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+
+                <div class="row align-items-center">
+                    <div class="col-xl-4 col-md-6 col-sm-12">
+                        <div class="form-group">
+                            <label class="pb-3">يرجى إختيار نوع النشاط</label>
+                            <select name="ActivityTypeId" required id="ActivityTypeId" class="form-control">
+                                <option value="" disabled selected hidden>--- اختر نوع النشاط---</option>
+                                @foreach (var item in Model.ActivityTypes)
+
+                                {
+                                    <option value="@item.Value">@item.Text</option>
+                                }
+                            </select>
+                        </div>
+                    </div>
+
+                    <div class="col-xl-4 col-md-6 col-sm-12">
+                        <div class="form-group">
+                            <label class="pb-3">يرجى إختيار نوع الطلب</label>
+                            <select name="RequestTypeId" required id="RequestTypeId" class="form-control">
+                                <option value="" disabled selected hidden>--- اختر نوع الطلب---</option>
+                                @foreach (var item in Model.RequestTypes)
+
+                                {
+                                    <option value="@item.Value">@item.Text</option>
+                                }
+                            </select>
+                        </div>
+                    </div>
+
+                    <div class="col-xl-4 col-md-6 col-sm-12" id="LicListDiv" style="display: none">
+                        <div class="form-group">
+                            <label class=" pb-3">يرجي إختيار الترخيص </label>
+                            <select name="LicList" required id="LicList" class="form-control">
+                            </select>
+                            <p id="LicID" class="d-none"></p>
+                        </div>
+                    </div>
+
+                    <div class="col-lg-12 col-md-12 mt-4">
+                        <button type="button" class="default-btn" id="letterRequestBtn"
+                                style="border-bottom: solid 10px #6460ed; margin-left: 10px">
+                            اصدار طلب التجارة (موافقة ابداء الرأي)
+                            <i class="flaticon-plus"></i>
+                        </button>
+                    </div>
+                </div>
+            </div>
+        }
+    </div>
+</div>
+
+<script>
+
+    const addMoicId = '@((int)RequestTypeEnum.AddMoIC)';
+
+    $('#RequestTypeId').change(function () {
+        var selectedReqType = $(this).val();
+        var selectedActivityId = $('#ActivityTypeId').val();
+
+        if (!selectedActivityId) {
+            Swal.fire({
+                icon: 'warning',
+                title: 'تحذير',
+                text: 'يرجى اختيار نوع النشاط أولاً',
+            });
+            $(this).val(""); // Reset selection
+            return;
+        }
+
+        if (selectedReqType != addMoicId) {
+            $('#LicListDiv').show();
+
+            $.ajax({
+                url: '/Tourism/GetLicencesListDropDown',
+                type: 'GET',
+                data: { reqType: selectedReqType, ActivityID: selectedActivityId },
+                success: function (data) {
+                    $('#LicList').empty().append('<option value="" disabled selected hidden>--- اختر ---</option>');
+                    $.each(data, function (i, item) {
+                        $('#LicList').append(new Option(item.text, item.value));
+                    });
+                },
+                error: function () {
+                    console.log('Error loading license options.');
+                }
+            });
+        } else {
+            $('#LicListDiv').hide();
+            $('#LicList').empty();
+        }
+    });
+
+    $('#LicList').change(function () {
+        var selectedVal = $(this).val();
+        $.ajax({
+            url: '/TourismRequests/GetLicID',
+            type: 'GET',
+            data: { selectedValue: selectedVal },
+            success: function (data) {
+                $('#LicID').text(data);
+            },
+            error: function () {
+                console.log('Error occurred while fetching license ID');
+            }
+        });
+    });
+
+    $('#RequestTypeId, #LicList').change(function () {
+        var selectedReqType = $('#RequestTypeId').val();
+        var selectedLicId = $('#LicList').val();
+        var selectedActivityId = $('#ActivityTypeId').val();
+
+
+        var targetUrl = '@Url.Action("MOCIletterRequest", "Tourism")' +
+            '?ReqType=' + selectedReqType +
+            '&ActivitiID=' + selectedActivityId;
+
+        if (selectedReqType !== addMoicId && selectedLicId) {
+            targetUrl += '&LicID=' + selectedLicId;
+        }
+
+        $('#letterRequestBtn').attr('onclick', 'location.href="' + targetUrl + '"');
+    });
+
+    
+     
+
+</script>
+@* <script>
+    $(document).ready(function () {
+        const addMoicId = "18"; 
+
+        $('#dropdownList').change(function () {
+            const selectedValue = $(this).val();
+            const activityID = $('#ActivitiID').val();
+
+            if (!activityID) {
+                Swal.fire({
+                    icon: 'warning',
+                    title: 'تحذير',
+                    text: 'يرجى اختيار نوع النشاط أولاً',
+                });
+                return;
+            }
+
+            // Show/hide license list based on request type
+            if (selectedValue !== addMoicId) {
+                $('#LicListDiv').show();
+            } else {
+                $('#LicListDiv').hide();
+                $('#LicList').empty(); // Clear old options
+            }
+
+            // Fetch request type label
+            $.get("/TourismRequests/GetReqType", { selectedValue, ActivityID: activityID })
+                .done(function (data) {
+                    $('#reqType').text(data);
+
+                    // Fetch license dropdown values
+                    $.get("/TourismRequests/GetDropdownValues", { reqType: selectedValue, ActivityID: activityID })
+                        .done(function (dropdownValues) {
+                            $('#LicList').empty().append('<option value="" disabled selected hidden>--- اختر ---</option>');
+                            $.each(dropdownValues, function (index, item) {
+                                $('#LicList').append(new Option(item.Text, item.Value));
+                            });
+                        });
+                });
+        });
+
+        $('#ActivitiList').change(function () {
+            const id = $(this).val();
+
+            $.post("/TourismRequests/GetActivityAll", { id })
+                .done(function (data) {
+                    if (data.length > 0) {
+                        $('#ActivitiID').val(data[0].Value);
+                        $('#ActivitiName').val(data[0].Text);
+                    } else {
+                        $('#ActivitiID').val('');
+                        $('#ActivitiName').val('');
+                    }
+
+                    $('#dropdownList').val('');
+                    $('#LicList').empty().append('<option value="" disabled selected hidden>--- اختر ---</option>');
+                    $('#LicListDiv').hide();
+                });
+        });
+
+        $('#LicList').change(function () {
+            const selectedValue = $(this).val();
+
+            $.get("/TourismRequests/GetLicID", { selectedValue })
+                .done(function (data) {
+                    $('#LicID').text(data);
+                });
+        });
+
+        $('#dropdownList, #LicList').change(updateButtonLink);
+
+        function updateButtonLink() {
+            const selectedReqType = $('#dropdownList').val();
+            const selectedLicID = $('#LicList').val();
+            const ActivitiID = $('#ActivitiID').val();
+
+            const url = '@Url.Action("MOCIletterRequest", "Tourism")' +
+                '?ReqType=' + selectedReqType +
+                '&LicID=' + selectedLicID +
+                '&ActivitiID=' + ActivitiID;
+
+            $('#letterRequestBtn').attr('onclick', 'location.href="' + url + '"');
+        }
+
+        Swal.fire({
+            icon: 'warning',
+            title: 'تنويه ،،،!',
+            text: 'يرجى التأكد من صحة بيانات المنشأة بالكامل وتحديث المرفقات في حال انتهاء صلاحيتها.',
+        });
+    });
+</script>
+ *@

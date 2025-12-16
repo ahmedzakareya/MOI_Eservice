@@ -1,0 +1,631 @@
+﻿@model LicenceDetailsVM
+
+
+@{
+    ViewBag.Title = "LicenseDetails";
+    Layout = "~/Views/Shared/_LayoutEservice.cshtml";
+
+   var token = Context.Session.GetString("UserToken");
+    var userId = Context.Session.GetString("UserId");
+    var userName = Context.Session.GetString("UserUserName");
+    var civilId = Context.Session.GetString("UserCivilId");
+    var fullName = Context.Session.GetString("UserFullName");
+    var accountTypeId = Context.Session.GetString("UserAccouuntTypeId");
+  
+    var counter = 1;
+}
+<style>
+    .disabledBTN {
+        opacity: 0.5;
+        cursor: not-allowed !important;
+    }
+
+        .disabledBTN:hover {
+            background-color: lightgrey !important;
+        }
+
+    #Drop .selectize-input {
+        background-color: white !important;
+        border: 2px solid #f5f5f5 !important;
+    }
+
+    #Drop .form-control {
+        background-color: white !important;
+        border: none !important;
+    }
+
+   
+    .collapse-transition {
+        max-height: 0;
+        overflow: hidden;
+        transition: max-height 0.5s ease;
+    }
+
+        .collapse-transition.show {
+            max-height: 500px;
+        }
+
+
+</style>
+<div class="my-profile-box">
+    @if (Model.LicencesVM != null)
+    {
+        <h3>تفاصيل الترخيص رقم @Model.LicencesVM.LicNo / @Model.LicencesVM.ActivityTypeName</h3>
+    }
+    @if (Model.PreApprovementVM != null)
+    {
+        <h3>تفاصيل الترخيص رقم @Model.PreApprovementVM.LicenseNo / @Model.PreApprovementVM.ActivityTypesLookup.NameAr</h3>
+    }
+    <form asp-action="LicenseDetails" asp-controller="TourismHome" method="get" enctype="multipart/form-data">
+        <div asp-validation-summary="All" class="text-danger"></div>
+
+        <div class="profile-authentication-tabs mw-100">
+            <div class="authentication-tabs-list">
+                <ul class="nav nav-tabs w-100 mt-0" id="myTab" role="tablist">
+                    <li class="nav-item">
+                        <a class="nav-link active" id="ReqDetails-tab" data-bs-toggle="tab" href="#ReqDetails" role="tab" aria-controls="ReqDetails">تفاصيل الترخيص</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" id="Attachements-tab" data-bs-toggle="tab" href="#Attachements" role="tab" aria-controls="Attachements">المرفقات</a>
+                    </li>
+                </ul>
+            </div>
+
+            <div class="tab-content" id="myTabContent">
+                @if (Model.LicencesVM != null)
+                {
+                    <div class="tab-pane fade show active" id="ReqDetails" role="tabpanel" aria-labelledby="ReqDetails-tab">
+                        <div class="row align-items-center">
+                            <div class="col-xl-12 col-lg-12 col-md-12">
+                                <div class="form-group">
+                                </div>
+                            </div>
+
+                            <div class="col-xl-4 col-md-6 col-sm-12">
+                                <div class="form-group">
+                                    <label asp-for="@Model.LicencesVM.LicNo">رقم الترخيص</label>
+                                    <input asp-for="@Model.LicencesVM.LicNo" class="form-control" readonly />
+                                </div>
+                            </div>
+                            @if (Model.LicencesVM.IssueDate != null)
+                            {
+                                <div class="col-xl-4 col-md-6 col-sm-12">
+                                    <div class="form-group">
+                                        <label asp-for="@Model.LicencesVM.IssueDate">تاريخ إصدار الترخيص</label>
+                                        <input asp-for="@Model.LicencesVM.IssueDate" class="form-control" readonly />
+                                    </div>
+                                </div>
+                            }
+                            @if (Model.PreApprovementVM != null)
+                            {
+                                @if (Model.PreApprovementVM.LicenseIssueDate != null)
+                                {
+                                    <div class="col-xl-4 col-md-6 col-sm-12">
+                                        <div class="form-group">
+                                            <label asp-for="@Model.PreApprovementVM.LicenseIssueDate">تاريخ إصدار الترخيص</label>
+                                            <input asp-for="@Model.PreApprovementVM.LicenseIssueDate" class="form-control" readonly />
+                                        </div>
+                                    </div>
+                                }
+                            }
+                            @if (Model.LicencesVM.ExpireDate != null)
+                            {
+                                <div class="col-xl-4 col-md-6 col-sm-12">
+                                    <div class="form-group">
+                                        <label asp-for="@Model.LicencesVM.ExpireDate">تاريخ إنتهاء الترخيص</label>
+                                        <input asp-for="@Model.LicencesVM.ExpireDate" class="form-control" readonly />
+                                    </div>
+                                </div>
+                            }
+                            <div class="col-xl-4 col-md-6 col-sm-12">
+                                <div class="form-group">
+                                    <label asp-for="@Model.LicencesVM.LicName">اسم الترخيص</label>
+                                    <input asp-for="@Model.LicencesVM.LicName" class="form-control" readonly />
+                                </div>
+                            </div>
+
+                            <div class="col-xl-4 col-md-6 col-sm-12">
+                                <div class="form-group">
+                                    <label asp-for="@Model.PersonApplicantVM.Name1">اسم المالك</label>
+                                    <input asp-for="@Model.PersonApplicantVM.Name1" class="form-control" readonly />
+                                </div>
+                            </div>
+
+                            <div class="col-xl-4 col-md-6 col-sm-12">
+                                <div class="form-group">
+                                    <label asp-for="@Model.PersonApplicantVM.CivilId">الرقم المدني للمالك</label>
+                                    <input asp-for="@Model.PersonApplicantVM.CivilId" class="form-control" readonly />
+                                </div>
+                            </div>
+
+                            <div class="col-xl-4 col-md-6 col-sm-12">
+                                <div class="form-group">
+                                    <label asp-for="@Model.LicencesVM.ActivityTypeName">نوع النشاط</label>
+                                    <input asp-for="@Model.LicencesVM.ActivityTypeName" class="form-control" readonly />
+                                </div>
+                            </div>
+
+                            <div class="col-xl-4 col-md-6 col-sm-12">
+                                <div class="form-group">
+                                    <label asp-for="@Model.LicencesVM.Company.OwnerCompanyAr">الشركة المالكة</label>
+                                    <input asp-for="@Model.LicencesVM.Company.OwnerCompanyAr" class="form-control" readonly />
+                                </div>
+                            </div>
+                            
+                                <div class="col-xl-4 col-md-6 col-sm-12">
+                                    <div class="form-group">
+                                        <label asp-for="@Model.LicencesVM.Company.CompanyCivilId">رقم المدني للجهة</label>
+                                        <input asp-for="@Model.LicencesVM.Company.CompanyCivilId" class="form-control" readonly />
+                                    </div>
+                                </div>
+
+                                <div class="col-xl-4 col-md-6 col-sm-12">
+                                    <div class="form-group">
+                                        <label asp-for="@Model.LicencesVM.LicName">أسم المنشأة الفندقية</label>
+                                        <input asp-for="@Model.LicencesVM.LicName" class="form-control" readonly />
+                                    </div>
+                                </div>
+
+                                <div class="col-xl-4 col-md-6 col-sm-12">
+                                    <div class="form-group">
+                                        <label asp-for="@Model.LicencesVM.Company.AddressNavigation.AreaSize">مساحة الارض</label>
+                                        <input asp-for="@Model.LicencesVM.Company.AddressNavigation.AreaSize" class="form-control" readonly />
+                                    </div>
+                                </div>
+
+                                <div class="col-xl-4 col-md-6 col-sm-12">
+                                    <div class="form-group">
+                                        <label asp-for="@Model.LicencesVM.Company.AddressNavigation.AreaChartNo">رقم المخطط المساحي</label>
+                                        <input asp-for="@Model.LicencesVM.Company.AddressNavigation.AreaChartNo" class="form-control" readonly />
+                                    </div>
+                                </div>
+
+                                <div class="col-xl-4 col-md-6 col-sm-12">
+                                    <div class="form-group">
+                                        <label asp-for="@Model.LicencesVM.PreApprovalNo">رقم الموافقة المبدئية</label>
+                                        <input asp-for="@Model.LicencesVM.PreApprovalNo" class="form-control" readonly />
+                                    </div>
+                                </div>
+
+                                <div class="col-xl-4 col-md-6 col-sm-12">
+                                    <div class="form-group">
+                                        <label asp-for="@Model.LicencesVM.Company.AddressNavigation.AalliNo">الرقم الالي</label>
+                                        <input asp-for="@Model.LicencesVM.Company.AddressNavigation.AalliNo" class="form-control" readonly />
+                                    </div>
+                                </div>
+
+                                <div class="col-xl-4 col-md-6 col-sm-12">
+                                    <div class="form-group">
+                                        <label asp-for="@Model.LicencesVM.Company.AddressNavigation.GovernorateArabic">المحافظة</label>
+                                        <input asp-for="@Model.LicencesVM.Company.AddressNavigation.GovernorateArabic" class="form-control" readonly />
+                                    </div>
+                                </div>
+
+                                <div class="col-xl-4 col-md-6 col-sm-12">
+                                    <div class="form-group">
+                                        <label asp-for="@Model.LicencesVM.Company.AddressNavigation.Area">المنطقة</label>
+                                        <input asp-for="@Model.LicencesVM.Company.AddressNavigation.Area" class="form-control" readonly />
+                                    </div>
+                                </div>
+
+                                <div class="col-xl-4 col-md-6 col-sm-12">
+                                    <div class="form-group">
+                                        <label asp-for="@Model.LicencesVM.Company.AddressNavigation.BlockArabic">القطعة</label>
+                                        <input asp-for="@Model.LicencesVM.Company.AddressNavigation.BlockArabic" class="form-control" readonly />
+                                    </div>
+                                </div>
+
+                                <div class="col-xl-4 col-md-6 col-sm-12">
+                                    <div class="form-group">
+                                        <label asp-for="@Model.LicencesVM.Company.AddressNavigation.StreetArabic">الشارع</label>
+                                        <input asp-for="@Model.LicencesVM.Company.AddressNavigation.StreetArabic" class="form-control" readonly />
+                                    </div>
+                                </div>
+
+                                <div class="col-xl-4 col-md-6 col-sm-12">
+                                    <div class="form-group">
+                                        <label asp-for="@Model.LicencesVM.Company.AddressNavigation.BuildingName">المبنى</label>
+                                        <input asp-for="@Model.LicencesVM.Company.AddressNavigation.BuildingName" class="form-control" readonly />
+                                    </div>
+                                </div>
+
+                                <div class="col-xl-4 col-md-6 col-sm-12">
+                                    <div class="form-group">
+                                        <label asp-for="@Model.LicencesVM.Company.AddressNavigation.UnitNo">رقم القسيمة</label>
+                                        <input asp-for="@Model.LicencesVM.Company.AddressNavigation.UnitNo" class="form-control" readonly />
+                                    </div>
+                                </div>
+
+
+                                <div class="col-xl-4 col-md-6 col-sm-12">
+                                    <div class="form-group">
+                                        <label asp-for="@Model.LicencesVM.Classification.ClassifiyName">التصنيف</label>
+                                        <input asp-for="@Model.LicencesVM.Classification.ClassifiyName" class="form-control" readonly />
+                                    </div>
+                                </div>
+
+                            <div class="col-xl-4 col-md-6 col-sm-12">
+                                <div class="form-group">
+                                    <label asp-for="@Model.LicencesVM.Company.CommercialLicNo">رقم الترخيص التجاري</label>
+                                    <input asp-for="@Model.LicencesVM.Company.CommercialLicNo" class="form-control" readonly />
+                                </div>
+                            </div>
+                            <div class="col-xl-4 col-md-6 col-sm-12">
+                                <div class="form-group">
+                                    <label asp-for="@Model.LicencesVM.Company.RecordNo">رقم السجل التجاري</label>
+                                    <input asp-for="@Model.LicencesVM.Company.RecordNo" class="form-control" readonly />
+                                </div>
+                            </div>
+
+
+
+
+                            <div class="card p-4 shadow-sm">
+                                <div class="row mb-3 align-items-center">
+                                    <div class="col-md-4">
+                                        <h4 class="fw-bold">طلبات التعديل:</h4>
+                                    </div>
+                                    
+                                </div>
+
+                                <!-- Only transaction types (checkboxes) will toggle -->
+                                <div id="transactionTypesContainer" class="collapse-transition">
+                                    <div class="mb-3">
+                                        <div class="border rounded p-3 bg-light">
+                                            <h5 class="mb-3">اختر نوع التعديل:</h5>
+                                            @foreach (var item in Model.TransactionTypeOptions)
+                                            {
+                                                <div class="form-check mb-2">
+                                                    <input type="checkbox" name="SelectedTransactionTypeIds" value="@item.Value" class="form-check-input" />
+                                                    <label class="form-check-label">@item.Text</label>
+                                                </div>
+                                            }
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="text-end">
+                                    <button type="button" id="proceedButton" onclick="goToRequestPage()" class="btn btn-primary" style="display: none;">
+                                        المتابعة
+                                    </button>
+                                </div>
+                            </div>
+
+
+                        </div>
+                    </div>
+                }
+                @if (Model.PreApprovementVM != null)
+                {
+                    <div class="tab-pane fade show active" id="ReqDetails" role="tabpanel" aria-labelledby="ReqDetails-tab">
+                        <div class="row align-items-center">
+                            <div class="col-xl-12 col-lg-12 col-md-12">
+                                <div class="form-group">
+                                </div>
+                            </div>
+
+                            <div class="col-xl-4 col-md-6 col-sm-12">
+                                <div class="form-group">
+                                    <label asp-for="@Model.PreApprovementVM.LicenseNo">رقم الترخيص</label>
+                                    <input asp-for="@Model.PreApprovementVM.LicenseNo" class="form-control" readonly />
+                                </div>
+                            </div>
+
+
+
+
+                            @if (Model.PreApprovementVM.LicenseIssueDate != null)
+                            {
+                                <div class="col-xl-4 col-md-6 col-sm-12">
+                                    <div class="form-group">
+                                        <label asp-for="@Model.PreApprovementVM.LicenseIssueDate">تاريخ إصدار الترخيص</label>
+                                        <input asp-for="@Model.PreApprovementVM.LicenseIssueDate" class="form-control" readonly />
+                                    </div>
+                                </div>
+                            }
+
+
+                            <div class="col-xl-4 col-md-6 col-sm-12">
+                                <div class="form-group">
+                                    <label asp-for="@Model.PreApprovementVM.LicenseName">اسم الترخيص</label>
+                                    <input asp-for="@Model.PreApprovementVM.LicenseName" class="form-control" readonly />
+                                </div>
+                            </div>
+
+                            <div class="col-xl-4 col-md-6 col-sm-12">
+                                <div class="form-group">
+                                    <label asp-for="@Model.PersonApplicantVM.Name1">اسم المالك</label>
+                                    <input asp-for="@Model.PersonApplicantVM.Name1" class="form-control" readonly />
+                                </div>
+                            </div>
+
+                            <div class="col-xl-4 col-md-6 col-sm-12">
+                                <div class="form-group">
+                                    <label asp-for="@Model.PreApprovementVM.ApplicantCivilId">الرقم المدني للمالك</label>
+                                    <input asp-for="@Model.PreApprovementVM.ApplicantCivilId" class="form-control" readonly />
+                                </div>
+                            </div>
+
+                            <div class="col-xl-4 col-md-6 col-sm-12">
+                                <div class="form-group">
+                                    <label asp-for="@Model.PreApprovementVM.ActivityTypesLookup.NameAr">نوع النشاط</label>
+                                    <input asp-for="@Model.PreApprovementVM.ActivityTypesLookup.NameAr" class="form-control" readonly />
+                                </div>
+                            </div>
+
+                            <div class="col-xl-4 col-md-6 col-sm-12">
+                                <div class="form-group">
+                                    <label asp-for="@Model.PreApprovementVM.Company.OwnerCompanyAr">الشركة المالكة</label>
+                                    <input asp-for="@Model.PreApprovementVM.Company.OwnerCompanyAr" class="form-control" readonly />
+                                </div>
+                            </div>
+                            @if (Model.PreApprovementVM.ActivityTypeId == (int)ActivityTypeEnum.ApartmentHotel || Model.PreApprovementVM.ActivityTypeId == (int)ActivityTypeEnum.Resorts || Model.PreApprovementVM.ActivityTypeId == (int)ActivityTypeEnum.Hotel)
+                            {
+                                <div class="col-xl-4 col-md-6 col-sm-12">
+                                    <div class="form-group">
+                                        <label asp-for="@Model.PreApprovementVM.Company.CompanyCivilId">رقم المدني للجهة</label>
+                                        <input asp-for="@Model.PreApprovementVM.Company.CompanyCivilId" class="form-control" readonly />
+                                    </div>
+                                </div>
+
+                                <div class="col-xl-4 col-md-6 col-sm-12">
+                                    <div class="form-group">
+                                        <label asp-for="@Model.PreApprovementVM.LicenseName">أسم المنشأة الفندقية</label>
+                                        <input asp-for="@Model.PreApprovementVM.LicenseName" class="form-control" readonly />
+                                    </div>
+                                </div>
+
+                                <div class="col-xl-4 col-md-6 col-sm-12">
+                                    <div class="form-group">
+                                        <label asp-for="@Model.PreApprovementVM.Company.AddressNavigation.AreaSize">مساحة الارض</label>
+                                        <input asp-for="@Model.PreApprovementVM.Company.AddressNavigation.AreaSize" class="form-control" readonly />
+                                    </div>
+                                </div>
+
+                                <div class="col-xl-4 col-md-6 col-sm-12">
+                                    <div class="form-group">
+                                        <label asp-for="@Model.PreApprovementVM.Company.AddressNavigation.AreaChartNo">رقم المخطط المساحي</label>
+                                        <input asp-for="@Model.PreApprovementVM.Company.AddressNavigation.AreaChartNo" class="form-control" readonly />
+                                    </div>
+                                </div>
+
+                                <div class="col-xl-4 col-md-6 col-sm-12">
+                                    <div class="form-group">
+                                        <label asp-for="@Model.PreApprovementVM.LicenseNo">رقم الموافقة المبدئية</label>
+                                        <input asp-for="@Model.PreApprovementVM.LicenseNo" class="form-control" readonly />
+                                    </div>
+                                </div>
+
+                                <div class="col-xl-4 col-md-6 col-sm-12">
+                                    <div class="form-group">
+                                        <label asp-for="@Model.PreApprovementVM.Company.AddressNavigation.AalliNo">الرقم الالي</label>
+                                        <input asp-for="@Model.PreApprovementVM.Company.AddressNavigation.AalliNo" class="form-control" readonly />
+                                    </div>
+                                </div>
+
+                                <div class="col-xl-4 col-md-6 col-sm-12">
+                                    <div class="form-group">
+                                        <label asp-for="@Model.PreApprovementVM.Company.AddressNavigation.GovernorateArabic">المحافظة</label>
+                                        <input asp-for="@Model.PreApprovementVM.Company.AddressNavigation.GovernorateArabic" class="form-control" readonly />
+                                    </div>
+                                </div>
+
+                                <div class="col-xl-4 col-md-6 col-sm-12">
+                                    <div class="form-group">
+                                        <label asp-for="@Model.PreApprovementVM.Company.AddressNavigation.Area">المنطقة</label>
+                                        <input asp-for="@Model.PreApprovementVM.Company.AddressNavigation.Area" class="form-control" readonly />
+                                    </div>
+                                </div>
+
+                                <div class="col-xl-4 col-md-6 col-sm-12">
+                                    <div class="form-group">
+                                        <label asp-for="@Model.PreApprovementVM.Company.AddressNavigation.BlockArabic">القطعة</label>
+                                        <input asp-for="@Model.PreApprovementVM.Company.AddressNavigation.BlockArabic" class="form-control" readonly />
+                                    </div>
+                                </div>
+
+                                <div class="col-xl-4 col-md-6 col-sm-12">
+                                    <div class="form-group">
+                                        <label asp-for="@Model.PreApprovementVM.Company.AddressNavigation.StreetArabic">الشارع</label>
+                                        <input asp-for="@Model.PreApprovementVM.Company.AddressNavigation.StreetArabic" class="form-control" readonly />
+                                    </div>
+                                </div>
+
+                                <div class="col-xl-4 col-md-6 col-sm-12">
+                                    <div class="form-group">
+                                        <label asp-for="@Model.PreApprovementVM.Company.AddressNavigation.BuildingName">المبنى</label>
+                                        <input asp-for="@Model.PreApprovementVM.Company.AddressNavigation.BuildingName" class="form-control" readonly />
+                                    </div>
+                                </div>
+
+                                <div class="col-xl-4 col-md-6 col-sm-12">
+                                    <div class="form-group">
+                                        <label asp-for="@Model.PreApprovementVM.Company.AddressNavigation.UnitNo">رقم القسيمة</label>
+                                        <input asp-for="@Model.PreApprovementVM.Company.AddressNavigation.UnitNo" class="form-control" readonly />
+                                    </div>
+                                </div>
+
+
+                                <div class="col-xl-4 col-md-6 col-sm-12">
+                                    <div class="form-group">
+                                        <label asp-for="@Model.LicencesVM.Classification.ClassifiyName">التصنيف</label>
+                                        <input asp-for="@Model.LicencesVM.Classification.ClassifiyName" class="form-control" readonly />
+                                    </div>
+                                </div>
+
+                            }
+                            else if (Model.PreApprovementVM.ActivityTypeId == (int)ActivityTypeEnum.Parks || Model.PreApprovementVM.ActivityTypeId == (int)ActivityTypeEnum.Sailing)
+                            {
+                                <div class="col-xl-4 col-md-6 col-sm-12">
+                                    <div class="form-group">
+                                        <label asp-for="@Model.PreApprovementVM.Company.CompanyCivilId">رقم المدني للجهة</label>
+                                        <input asp-for="@Model.PreApprovementVM.Company.CompanyCivilId" class="form-control" readonly />
+                                    </div>
+                                </div>
+
+
+                                <div class="col-xl-4 col-md-6 col-sm-12">
+                                    <div class="form-group">
+                                        <label asp-for="@Model.PreApprovementVM.Company.AddressNavigation.AalliNo">الرقم الالي</label>
+                                        <input asp-for="@Model.PreApprovementVM.Company.AddressNavigation.AalliNo" class="form-control" readonly />
+                                    </div>
+                                </div>
+
+                                <div class="col-xl-4 col-md-6 col-sm-12">
+                                    <div class="form-group">
+                                        <label asp-for="@Model.PreApprovementVM.Company.AddressNavigation.GovernorateArabic">المحافظة</label>
+                                        <input asp-for="@Model.PreApprovementVM.Company.AddressNavigation.GovernorateArabic" class="form-control" readonly />
+                                    </div>
+                                </div>
+
+                                <div class="col-xl-4 col-md-6 col-sm-12">
+                                    <div class="form-group">
+                                        <label asp-for="@Model.PreApprovementVM.Company.AddressNavigation.Area">المنطقة</label>
+                                        <input asp-for="@Model.PreApprovementVM.Company.AddressNavigation.Area" class="form-control" readonly />
+                                    </div>
+                                </div>
+
+                                <div class="col-xl-4 col-md-6 col-sm-12">
+                                    <div class="form-group">
+                                        <label asp-for="@Model.PreApprovementVM.Company.AddressNavigation.BlockArabic">القطعة</label>
+                                        <input asp-for="@Model.PreApprovementVM.Company.AddressNavigation.BlockArabic" class="form-control" readonly />
+                                    </div>
+                                </div>
+
+                                <div class="col-xl-4 col-md-6 col-sm-12">
+                                    <div class="form-group">
+                                        <label asp-for="@Model.PreApprovementVM.Company.AddressNavigation.StreetArabic">الشارع</label>
+                                        <input asp-for="@Model.PreApprovementVM.Company.AddressNavigation.StreetArabic" class="form-control" readonly />
+                                    </div>
+                                </div>
+
+                                <div class="col-xl-4 col-md-6 col-sm-12">
+                                    <div class="form-group">
+                                        <label asp-for="@Model.PreApprovementVM.Company.AddressNavigation.BuildingName">المبنى</label>
+                                        <input asp-for="@Model.PreApprovementVM.Company.AddressNavigation.BuildingName" class="form-control" readonly />
+                                    </div>
+                                </div>
+
+                                <div class="col-xl-4 col-md-6 col-sm-12">
+                                    <div class="form-group">
+                                        <label asp-for="@Model.PreApprovementVM.Company.AddressNavigation.UnitNo">رقم القسيمة</label>
+                                        <input asp-for="@Model.PreApprovementVM.Company.AddressNavigation.UnitNo" class="form-control" readonly />
+                                    </div>
+                                </div>
+
+
+
+                            }
+                            <div class="col-xl-4 col-md-6 col-sm-12">
+                                <div class="form-group">
+                                    <label asp-for="@Model.PreApprovementVM.Company.CommercialLicNo">رقم الترخيص التجاري</label>
+                                    <input asp-for="@Model.PreApprovementVM.Company.CommercialLicNo" class="form-control" readonly />
+                                </div>
+                            </div>
+                            <div class="col-xl-4 col-md-6 col-sm-12">
+                                <div class="form-group">
+                                    <label asp-for="@Model.PreApprovementVM.Company.RecordNo">رقم السجل التجاري</label>
+                                    <input asp-for="@Model.PreApprovementVM.Company.RecordNo" class="form-control" readonly />
+                                </div>
+                            </div>
+
+                        </div>
+                    </div>
+                }
+                <div class="tab-pane fade" id="Attachements" role="tabpanel" aria-labelledby="Attachements-tab">
+                    <div class="row job-alerts-area">
+                        <div class="job-alerts-table table-responsive" style="box-shadow: none !important;">
+                            <table class="table table-responsive">
+                                <thead>
+                                    <tr>
+                                        <th width="85%">اسم المرفق</th>
+                                        <th width="15%" class="text-center">عرض المرفق</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    @foreach (var item in Model.attachmentVM)
+                                    {
+                                        <tr>
+                                            <td>@item.AttachName</td>
+                                            <td class="text-center">
+                                                <ul class="option-list">
+                                                    <li>
+                                                        <button class="option-btn d-inline-block"
+                                                                data-bs-toggle="tooltip"
+                                                                data-bs-placement="top"
+                                                                title="عـــرض"
+                                                                type="button"
+                                                                onclick="window.open('@Url.Content($"~/{ViewBag.PathAttachment}{item.AttachPath}")', '_blank')">
+                                                            <i class="ri-eye-line"></i>
+                                                        </button>
+                                                    </li>
+                                                </ul>
+                                            </td>
+                                        </tr>
+                                    }
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+
+
+            </div>
+
+        </div>
+    </form>
+</div>
+
+
+@section Scripts {
+    <script type="text/javascript">
+        let selectedActionUrl = "";
+
+        function handleActionChange(select) {
+            const url = select.value;
+            const transactionBox = document.getElementById("transactionTypesContainer");
+            const proceedBtn = document.getElementById("proceedButton");
+
+            selectedActionUrl = url;
+
+            if (!url) {
+                transactionBox.classList.remove("show");
+                proceedBtn.style.display = "none";
+                return;
+            }
+
+            try {
+                const urlObj = new URL(url, window.location.origin);
+                const requestTypeId = urlObj.searchParams.get("requestTypeId");
+
+                // Show transaction types only for تعديل بيانات
+                if (requestTypeId === '@((int)RequestTypeEnum.ChangeData)') {
+                    transactionBox.classList.add("show");
+                } else {
+                    transactionBox.classList.remove("show");
+                }
+
+                // ✅ Show the button now
+                proceedBtn.style.display = "inline-block";
+            } catch (err) {
+                transactionBox.classList.remove("show");
+                proceedBtn.style.display = "none";
+                console.warn("Invalid dropdown option selected.", err);
+            }
+        }
+
+        function goToRequestPage() {
+            if (!selectedActionUrl) return;
+
+            const selectedIds = Array.from(document.querySelectorAll("input[name='SelectedTransactionTypeIds']:checked"))
+                .map(el => el.value);
+
+            const url = new URL(selectedActionUrl, window.location.origin);
+            selectedIds.forEach(id => url.searchParams.append("selectedTransactionTypeIds", id));
+            window.location.href = url.href;
+        }
+    </script>
+
+
+}
+

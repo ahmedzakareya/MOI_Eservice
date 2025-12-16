@@ -1,0 +1,62 @@
+﻿@model WorkFlowButtonRoleAdmin
+
+@{
+    ViewBag.Title = "تحديث صلاحية زر";
+    Layout = "~/Areas/Admin/Views/Shared/_LayoutEserviceTourism.cshtml";
+}
+
+<div class="d-flex flex-column flex-column-fluid">
+    <!--begin::Toolbar-->
+    <div class="app-toolbar pt-6 pb-2">
+        <div class="app-container container-fluid d-flex align-items-stretch">
+            <div class="d-flex flex-stack flex-wrap gap-4 w-100">
+                <div class="page-title d-flex flex-column justify-content-center gap-1 me-3">
+                    <h1 class="text-gray-900 fw-bold fs-3 m-0">تحديث صلاحية زر</h1>
+                    <ul class="breadcrumb fw-semibold fs-7 my-0">
+                        <li class="breadcrumb-item text-muted">
+                            <a asp-action="Index" asp-controller="Home" class="text-hover-primary">الرئيسية</a>
+                        </li>
+                        <li class="breadcrumb-item">
+                            <span class="bullet bg-gray-500"></span>
+                        </li>
+                        <li class="breadcrumb-item text-muted">تحديث صلاحية زر</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!--begin::Content-->
+    <div class="app-content flex-column-fluid">
+        <div class="app-container container-fluid">
+            <div class="card">
+                <div class="card-body p-lg-10">
+                    <form asp-action="UpdateWorkFlowButtonRoleAdmin" method="post">
+                        <input type="hidden" asp-for="Id" />
+
+                        <div class="row mb-7">
+                            <div class="col-md-6">
+                                <label class="form-label required">الزر</label>
+                                <select asp-for="WorkFlowActionButtonId" class="form-select form-select-solid" asp-items="ViewBag.Buttons">
+                                    <option value="">-- اختر الزر --</option>
+                                </select>
+                            </div>
+
+                            <div class="col-md-6">
+                                <label class="form-label required">الدور</label>
+                                <select asp-for="RoleAdminId" class="form-select form-select-solid" asp-items="ViewBag.Roles">
+                                    <option value="">-- اختر الدور --</option>
+                                </select>
+                            </div>
+                        </div>
+
+                        <div class="d-flex justify-content-start gap-3">
+                            <button type="submit" class="btn btn-primary">تحديث</button>
+                            <a asp-action="GetAllWorkFlowButtonRoleAdmins" class="btn btn-secondary">رجوع</a>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

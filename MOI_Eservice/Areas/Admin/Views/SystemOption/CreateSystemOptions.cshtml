@@ -1,0 +1,187 @@
+﻿@model SystemOptionVM
+
+@{
+    ViewBag.Title = "Add System Option";
+    Layout = "~/Areas/Admin/Views/Shared/_LayoutEserviceTourism.cshtml";
+}
+
+<!--begin::Content wrapper-->
+<div class="d-flex flex-column flex-column-fluid">
+    <!--begin::Toolbar-->
+    <div id="kt_app_toolbar" class="app-toolbar pt-6 pb-2">
+        <div id="kt_app_toolbar_container" class="app-container container-fluid d-flex align-items-stretch">
+            <div class="app-toolbar-wrapper d-flex flex-stack flex-wrap gap-4 w-100">
+                <div class="page-title d-flex flex-column justify-content-center gap-1 me-3">
+                    <h1 class="page-heading d-flex flex-column justify-content-center text-gray-900 fw-bold fs-3 m-0">Add System Option</h1>
+                    <ul class="breadcrumb breadcrumb-separatorless fw-semibold fs-7 my-0">
+                        <li class="breadcrumb-item text-muted">
+                            <a asp-action="Index" asp-controller="Home" class="text-muted text-hover-primary">Home</a>
+                        </li>
+                        <li class="breadcrumb-item">
+                            <span class="bullet bg-gray-500 w-5px h-2px"></span>
+                        </li>
+                        <li class="breadcrumb-item text-muted">Add System Option</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!--end::Toolbar-->
+
+    <div id="kt_app_content" class="app-content flex-column-fluid">
+        <div id="kt_app_content_container" class="app-container container-fluid">
+            <div class="card">
+                <div class="card-body p-lg-10">
+                    <div class="d-flex flex-column flex-lg-row mb-17">
+                        <div class="flex-lg-row-fluid me-0">
+                            <form class="form" id="createSystemOptionForm" asp-area="Admin" method="post" asp-action="CreateSystemOptions" enctype="multipart/form-data">
+                                <div class="row">
+                                    <!-- Arabic Name -->
+                                    <div class="col-md-6 mb-7 fv-row">
+                                        <label class="fs-6 fw-semibold mb-2">
+                                            <span class="required">Name (Arabic)</span>
+                                        </label>
+                                        <input type="text" class="form-control form-control-solid" asp-for="NameArabic" required />
+                                    </div>
+
+                                    <!-- English Name -->
+                                    <div class="col-md-6 mb-7 fv-row">
+                                        <label class="fs-6 fw-semibold mb-2">
+                                            <span class="required">Name (English)</span>
+                                        </label>
+                                        <input type="text" class="form-control form-control-solid" asp-for="NameEnglish" required />
+                                    </div>
+                                </div>
+
+                                <div class="row">
+                                    <!-- Category Name Arabic -->
+                                    <div class="col-md-6 mb-7 fv-row">
+                                        <label class="fs-6 fw-semibold mb-2">
+                                            <span class="required">Category (Arabic)</span>
+                                        </label>
+                                        <input type="text" class="form-control form-control-solid" asp-for="CategoryNameAr" required />
+                                    </div>
+
+                                    <!-- Category Name English -->
+                                    <div class="col-md-6 mb-7 fv-row">
+                                        <label class="fs-6 fw-semibold mb-2">
+                                            <span class="required">Category (English)</span>
+                                        </label>
+                                        <input type="text" class="form-control form-control-solid" asp-for="CategoryNameEn" required />
+                                    </div>
+                                </div>
+
+                                <div class="row">
+                                    <div class="form-group">
+                                        <label for="ControlType">Control Type</label>
+                                        <select id="ControlType" name="ControlType" class="form-control" onchange="toggleFileUpload(this.value)">
+                                            <option value="Text">Text</option>
+                                            <option value="Link">Link</option>
+                                            <option value="Image">Image</option>
+                                        </select>
+                                    </div>
+
+                                    <!-- Dropdown Options -->
+                                    <div class="col-md-6 mb-7 fv-row">
+                                        <label class="fs-6 fw-semibold mb-2">
+                                            <span class="required">Dropdown Options</span>
+                                        </label>
+                                        <input type="text" class="form-control form-control-solid" asp-for="DropdownOptions" />
+                                    </div>
+                                </div>
+
+                                <div class="row">
+                                    <!-- Default Value -->
+                                    <div class="col-md-6 mb-7 fv-row">
+                                        <label class="fs-6 fw-semibold mb-2">
+                                            <span class="required">Default Value</span>
+                                        </label>
+                                        <input type="text" class="form-control form-control-solid" asp-for="DefaultValue" />
+                                    </div>
+
+                                    <!-- Value -->
+                                    <div class="col-md-6 mb-7 fv-row">
+                                        <label class="fs-6 fw-semibold mb-2">
+                                            <span class="required">Value</span>
+                                        </label>
+                                        <input type="text" class="form-control form-control-solid" asp-for="Value" />
+                                    </div>
+                                    <div class="form-group d-none" id="valueFileGroup">
+                                        <label for="FileUpload">Upload Image</label>
+                                        <input type="file" class="form-control" id="FileUpload" name="FileUpload" accept="image/*" />
+                                    </div>
+                                </div>
+                                <div class="row">
+                                    <!-- Default Value -->
+                                    <div class="col-md-6 mb-7 fv-row">
+                                        <label class="fs-6 fw-semibold mb-2">
+                                            <span class="required">Code</span>
+                                        </label>
+                                        <input type="text" class="form-control form-control-solid" asp-for="Code" />
+                                    </div>
+
+                                    
+                                </div>
+                                <div class="row">
+                                    <!-- Is Active -->
+                                    <div class="col-md-6 mb-7 fv-row">
+                                        <label class="fs-6 fw-semibold mb-2">Is Active</label>
+                                        <input type="checkbox" class="form-check-input" asp-for="IsActive" />
+                                    </div>
+
+                                    <!-- Is Read Only -->
+                                    <div class="col-md-6 mb-7 fv-row">
+                                        <label class="fs-6 fw-semibold mb-2">Is Read Only</label>
+                                        <input type="checkbox" class="form-check-input" asp-for="IsReadOnly" />
+                                    </div>
+                                </div>
+
+                                <div class="row">
+                                    <!-- Is Hidden -->
+                                    <div class="col-md-6 mb-7 fv-row">
+                                        <label class="fs-6 fw-semibold mb-2">Is Hidden</label>
+                                        <input type="checkbox" class="form-check-input" asp-for="IsHidden" />
+                                    </div>
+
+                                    <!-- Display Order -->
+                                    <div class="col-md-6 mb-7 fv-row">
+                                        <label class="fs-6 fw-semibold mb-2">Display Order</label>
+                                        <input type="number" class="form-control form-control-solid" asp-for="DisplayOrder" required />
+                                    </div>
+                                </div>
+
+                                <div class="col-md-6 fv-row">
+                                    <button type="submit" class="btn btn-primary">Save</button>
+                                    <a asp-action="Index" class="btn btn-secondary">Back</a>
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<!--end::Content wrapper-->
+@section Scripts {
+<script>
+        function toggleFileUpload() {
+            const fileUpload = document.getElementById("valueFileGroup");
+            const controlType = document.getElementById("ControlType");
+
+            if (!fileUpload || !controlType) return;
+
+            if (controlType.value === "Image") {
+                fileUpload.classList.remove("d-none");
+                fileUpload.classList.add("d-block");
+            } else {
+                fileUpload.classList.remove("d-block");
+                fileUpload.classList.add("d-none");
+            }
+        }
+    // Call on page load if needed to auto-switch
+    document.addEventListener("DOMContentLoaded", function () {
+        toggleFileUpload(document.getElementById("ControlType").value);
+    });
+</script>
+}

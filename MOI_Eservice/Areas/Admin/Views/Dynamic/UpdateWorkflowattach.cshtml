@@ -1,0 +1,179 @@
+﻿@model AddWorkflowWithAttachmentsVM
+@{
+    ViewBag.Title = "Edit Attachment Rule";
+    Layout = "~/Areas/Admin/Views/Shared/_LayoutEserviceTourism.cshtml";
+}
+
+<div class="d-flex flex-column flex-column-fluid">
+    <div id="kt_app_toolbar" class="app-toolbar pt-6 pb-2">
+        <div id="kt_app_toolbar_container" class="app-container container-fluid d-flex align-items-stretch">
+            <div class="app-toolbar-wrapper d-flex flex-stack flex-wrap gap-4 w-100">
+                <div class="page-title d-flex flex-column justify-content-center gap-1 me-3">
+                    <h1 class="page-heading d-flex flex-column justify-content-center text-gray-900 fw-bold fs-3 m-0">
+                        Edit Attachment Rule
+                    </h1>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div id="kt_app_content" class="app-content flex-column-fluid">
+        <div id="kt_app_content_container" class="app-container container-fluid">
+            <div class="card">
+                <div class="card-body p-lg-10">
+                    <form id="editAttachmentForm" method="post" asp-action="UpdateWorkflowAttach">
+                        <input type="hidden" asp-for="Id" />
+                        <div class="row">
+                            <div class="col-md-6 mb-7">
+                                <label class="fs-6 fw-semibold mb-2">Service</label>
+                                <select asp-for="ServiceId" asp-items="Model.Services" class="form-select form-select-solid" required>
+                                    <option value="">-- Select Service --</option>
+                                </select>
+                            </div>
+
+                             <div class="col-md-6 mb-7">
+                                <label class="fs-6 fw-semibold mb-2">Activity Type</label>
+                                <select id="activityDropdown" name="ActivityTypeId" class="form-select form-select-solid">
+                                    <option value="">-- Select Activity Type --</option>
+                                </select>
+                            </div> 
+                        </div>
+
+                        <div class="row">
+                            <div class="col-md-6 mb-7">
+                                <label class="fs-6 fw-semibold mb-2">Request Type</label>
+                                <select asp-for="RequestTypeId" asp-items="Model.RequestTypes" class="form-select form-select-solid" >
+                                    <option value="">-- Select Request Type --</option>
+                                </select>
+                            </div>
+
+                            <div class="col-md-6 mb-7">
+                                <label class="fs-6 fw-semibold mb-2">Request Status</label>
+                                <select asp-for="RequestStatusId" asp-items="Model.RequestStatus" class="form-select form-select-solid" >
+                                    <option value="">-- Select Request Status --</option>
+                                </select>
+                            </div>
+                        </div>
+
+                        <div class="row">
+                            <div class="col-md-6 mb-7">
+                                <label class="fs-6 fw-semibold mb-2">Transaction Type</label>
+                                <select asp-for="TransactionTypeId" asp-items="Model.TransactionTypes" class="form-select form-select-solid">
+                                    <option value="">-- Select Transaction Type --</option>
+                                </select>
+                            </div>
+
+                            <div class="col-md-6 mb-7">
+                                <label class="fs-6 fw-semibold mb-2">Attachment Name</label>
+                                <input asp-for="AttachName" class="form-control"  />
+                            </div>
+
+                            <div class="col-md-6 mb-7">
+                                <label class="fs-6 fw-semibold mb-2">Is Required</label>
+                                <input type="checkbox" asp-for="IsMandatory" class="form-check-input" />
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-md-6 mb-7">
+                                <label class="fs-6 fw-semibold mb-2">View Type</label>
+                                <input type="text" asp-for="ViewTypeForAttach" id="ViewTypeForAttach" class="form-control"  />
+                            </div>
+                            <div class="col-md-6 mb-7">
+                                <label class="fs-6 fw-semibold mb-2">Flag View</label>
+                                <input type="text" asp-for="FlagView" id="FlagView" class="form-control"  />
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-md-6 mb-7 fv-row">
+                                <label class="fs-6 fw-semibold mb-2">Max File Size (MB)</label>
+                                <input type="number" class="form-control form-control-solid" id="MaxFileSize" asp-for="MaxFileSize" />
+                            </div>
+
+                            <div class="col-md-6 mb-7 fv-row">
+                                <label class="fs-6 fw-semibold mb-2">Allowed File Types</label>
+                                <input type="text" class="form-control form-control-solid" id="AllowedFileTypes" asp-for="AllowedFileTypes" />
+                            </div>
+                        </div>
+                        <div class="row">
+
+                            <div class="col-md-6 mb-7 fv-row">
+                                <label class="fs-6 fw-semibold mb-2">FieldName</label>
+                                <input type="text" class="form-control form-control-solid" id="FieldName" asp-for="@Model.FieldName" />
+                            </div>
+                            <div class="col-md-6 mb-7 fv-row">
+                                <label class="fs-6 fw-semibold mb-2">Description</label>
+                                <input type="text" class="form-control form-control-solid" id="Description" asp-for="Description" />
+                            </div>
+                        </div>
+                        <div class="d-flex justify-content-end mt-5">
+                            <button type="submit" class="btn btn-primary">Update Rule</button>
+                            <a asp-action="GetAllAttachmentDynamic" class="btn btn-secondary ms-2">Cancel</a>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+@section Scripts {
+    <script>
+        const apiBaseUrl = '@ViewBag.ApiBaseUrl';
+
+        // // Auto-load Activity Types on Service change (same as Add)
+ 
+
+        // Submit form via JavaScript to Update API
+        document.getElementById('editAttachmentForm').addEventListener('submit', async function (e) {
+            e.preventDefault();
+
+            const model = {
+                Id: @Model.Id,
+                ServiceId: document.getElementById('ServiceId').value,
+                RequestTypeId: document.getElementById('RequestTypeId').value,
+                RequestStatusId: document.getElementById('RequestStatusId').value || null,
+                ActivityTypeId: document.getElementById('ActivityTypeId').value || null,
+
+                TransactionTypeId: document.getElementById('TransactionTypeId').value || null,
+                AttachName: document.getElementById('AttachName').value,
+                IsMandatory: document.getElementById('IsMandatory').checked,
+               
+                ViewTypeForAttach: document.getElementById('ViewTypeForAttach').value,
+                FlagView: document.getElementById('FlagView').value,
+                MaxFileSize: document.getElementById('MaxFileSize').value ? parseInt(document.getElementById('MaxFileSize').value) : null,
+                AllowedFileTypes: document.getElementById('AllowedFileTypes').value,
+                FieldName: document.getElementById('FieldName').value,
+                Description: document.getElementById('Description').value
+            };
+
+            try {
+                const response = await fetch(`${apiBaseUrl}UpdateWorkFlowAttach`, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify(model)
+                });
+
+                if (response.ok) {
+                    alert('Attachment rule updated successfully!');
+                    window.location.href = '@Url.Action("GetAllAttachmentDynamic")';
+                } else {
+                    const error = await response.text();
+                    console.error('Update error:', error);
+                    alert('Failed to update rule.');
+                }
+            } catch (err) {
+                console.error('Submit error:', err);
+                alert('Error while updating rule.');
+            }
+        });
+
+        // Auto-trigger activity loading if editing existing data
+        document.addEventListener('DOMContentLoaded', () => {
+            if (document.getElementById('ServiceId').value) {
+                const event = new Event('change');
+                document.getElementById('ServiceId').dispatchEvent(event);
+            }
+        });
+    </script>
+}

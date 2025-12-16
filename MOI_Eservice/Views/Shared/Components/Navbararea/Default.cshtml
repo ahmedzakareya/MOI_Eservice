@@ -1,0 +1,154 @@
+﻿@model List<SystemOptionVM>
+
+@{
+
+    var userName = Context.User.FindFirst(System.Security.Claims.ClaimTypes.Name)?.Value;
+    var userId = Context.User.FindFirst(System.Security.Claims.ClaimTypes.NameIdentifier)?.Value;
+    var civilId = Context.User.FindFirst("CivilId")?.Value;  // Custom claim
+    var fullName = Context.User.FindFirst("FullName")?.Value;
+    var isApplicant = Context.Session.GetString("UserIsApplicant");
+    var isDelegate = Context.Session.GetString("UserIsDelegate");
+    var accountTypeId = Convert.ToInt32(Context.Session.GetString("UserAccouuntTypeId"));
+    var logoWhite = Model.FirstOrDefault(x => x.Code == "SiteLogoWhite")?.Value ?? "/assets/images/MOI_Logo_W.png";
+    var logoBlack = Model.FirstOrDefault(x => x.Code == "SiteLogo")?.Value ?? "/assets/images/MOI_Logo.png";
+    var socialLinks = Model.Where(x => x.CategoryNameEn == "SocialLinks").ToList();
+    var NavLinksReset = Model.Where(x => x.CategoryNameEn == "NavLinksReset").FirstOrDefault();
+    var NavLinksRegister = Model.Where(x => x.CategoryNameEn == "NavLinksRegister").FirstOrDefault();
+    var NavLinksLogin = Model.Where(x => x.CategoryNameEn == "NavLinksLogin").FirstOrDefault();
+    var NavLinksContact = Model.Where(x => x.CategoryNameEn == "NavLinksContact").FirstOrDefault();
+    var NavLinksHome = Model.Where(x => x.CategoryNameEn == "NavLinksHome").FirstOrDefault();
+
+
+}
+
+
+    <!-- Navbar -->
+    <div class="navbar-area">
+        <div class="main-responsive-nav">
+            <div class="container">
+                <div class="main-responsive-menu">
+                    @* <div class="logo">
+                        <a href="@NavLinksHome.Value">
+                            <img src="@logoWhite" width="200" class="white-logo" alt="logo">
+                            <img src="@logoBlack" width="200" class="black-logo" alt="logo">
+                        </a>
+                    </div> *@
+                </div>
+            </div>
+        </div>
+
+        <div class="main-navbar">
+            <div class="container-fluid">
+                <nav class="navbar navbar-expand-md navbar-light">
+                    <a class="navbar-brand" href="@NavLinksHome.Value">
+                        @* <img src="@logoWhite" width="200" class="white-logo" alt="logo"> *@
+                        @* <img src="@logoBlack" width="200" class="black-logo" alt="logo"> *@
+                    </a>
+
+                    <div class="collapse navbar-collapse mean-menu" id="navbarSupportedContent">
+                        <ul class="navbar-nav m-auto">
+                            <li class="nav-item">
+                                <a href="@NavLinksHome.Value" class="nav-link active">
+                                    الرئيسيه
+                                </a>
+                            </li>
+                            <li class="nav-item">
+                                <a href="@NavLinksContact.Value" class="nav-link">اتصل بنا</a>
+                            </li>
+                        </ul>
+                    <div class="others-options d-flex align-items-center">
+                        <div class="option-item">
+                            <div class="dropdown profile-nav-item">
+                                <a href="#" class="dropdown-bs-toggle" role="button" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                    <div class="menu-profile">
+                                        <img src="~/assets/images/dashboard/photo.jpg" class="rounded-circle" alt="image">
+                                        <span class="name">@Context.Session.GetString("UserFullName")</span>
+                                    </div>
+                                </a>
+
+                                <div class="dropdown-menu">
+                                    <div class="dropdown-header d-flex flex-column align-items-center">
+                                        <div class="figure mb-3">
+                                            <img src="~/assets/images/dashboard/photo.jpg" class="rounded-circle" alt="image">
+                                        </div>
+                                        <div class="info text-center">
+                                            <span class="name">@Context.Session.GetString("UserFullName")</span>
+                                        </div>
+                                    </div>
+
+                                    <div class="dropdown-body">
+                                        <ul class="profile-nav p-0 pt-3">
+                                            <li class="nav-item">
+                                                <a href="@Url.Action("MyAccount", "Home")" class="nav-link">
+                                                    <span class="icon"><i class="ri-home-line"></i></span>
+                                                    <span class="menu-title">حسابي</span>
+                                                </a>
+                                            </li>
+                                            <li class="nav-item">
+                                                <a href="@Url.Action("MyProfile", "Home")" class="nav-link">
+                                                    <span class="icon"><i class="ri-user-line"></i></span>
+                                                    <span class="menu-title">الملف الشخصي</span>
+                                                </a>
+                                            </li>
+                                            <li class="nav-item">
+                                                <a href="@Url.Action("GetAllRequest", "Home")" class="nav-link">
+                                                    <span class="icon"><i class="ri-file-list-line"></i></span>
+                                                    <span class="menu-title">متابعة الطلبات</span>
+                                                </a>
+                                            </li>
+
+                                            @if (Context.Session.GetString("UserIsApplicant") == "True")
+                                            {
+                                                <li class="nav-item">
+                                                    <a href="@Url.Action("GetAllLicences", "Home")" class="nav-link">
+                                                        <span class="icon"><i class="ri-briefcase-line"></i></span>
+                                                        <span class="menu-title">تراخيصي</span>
+                                                    </a>
+                                                </li>
+                                                <li class="nav-item">
+                                                    <a href="@Url.Action("GetAllDelegatUser", "Home")" class="nav-link">
+                                                        <span class="icon"><i class="ri-user-shared-line"></i></span>
+                                                        <span class="menu-title">قائمة المفوضين</span>
+                                                    </a>
+                                                </li>
+                                            }
+
+                                            @if (Context.Session.GetString("UserIsDelegate") == "True")
+                                            {
+                                                <li class="nav-item">
+                                                    <a href="@Url.Action("GetLicencesDelegateFor", "Home")" class="nav-link">
+                                                        <span class="icon"><i class="ri-user-shared-line"></i></span>
+                                                        <span class="menu-title">التراخيص المفوض بها</span>
+                                                    </a>
+                                                </li>
+                                            }
+                                        </ul>
+                                    </div>
+
+                                    <div class="dropdown-footer">
+                                        <ul class="profile-nav">
+                                            @if (Context.Session.GetString("UserToken") != null)
+                                            {
+                                                using (Html.BeginForm("LogOff", "Account", FormMethod.Post, new { id = "logoutForm" }))
+                                                {
+                                                    @Html.AntiForgeryToken()
+                                                    <li class="nav-item">
+                                                        <a href="javascript:document.getElementById('logoutForm').submit()" class="nav-link">
+                                                            <i class="ri-logout-box-r-line"></i> <span>تسجيل الخروج</span>
+                                                        </a>
+                                                    </li>
+                                                }
+                                            }
+                                        </ul>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    </div>
+                </nav>
+            </div>
+        </div>
+    </div>
+

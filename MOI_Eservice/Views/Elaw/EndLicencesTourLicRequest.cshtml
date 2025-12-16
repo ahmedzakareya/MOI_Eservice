@@ -1,0 +1,636 @@
+﻿@model RequestElawBaseVM
+
+@{
+    ViewBag.Title = "EndLicencesTourLicRequest";
+    Layout = "~/Views/Shared/_LayoutEservice.cshtml";
+    var token = Context.Session.GetString("UserToken");
+    var userId = Context.Session.GetString("UserId");
+    var userName = Context.Session.GetString("UserUserName");
+    var civilId = Context.Session.GetString("UserCivilId");
+    var fullName = Context.Session.GetString("UserFullName");
+    var accountTypeId = Context.Session.GetString("UserAccouuntTypeId");
+}
+
+
+
+
+
+<div class="my-profile-box">
+    <h3>طلب إنهاء رقم : @Model.LicencesVM.LicNo </h3>
+ 
+  
+       
+    <form id="RequestForm" enctype="multipart/form-data">
+        @Html.AntiForgeryToken()
+        @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+        <div class="row align-items-center">
+
+            <div class="col-xl-4 col-md-6 col-sm-12">
+                <div class="form-group">
+                    <label asp-for="LicencesVM.LicNo"></label>
+                    <input asp-for="LicencesVM.LicNo" class="form-control" readonly />
+                    <span asp-validation-for="LicencesVM.LicNo" class="text-danger"></span>
+                </div>
+            </div>
+            <input type="hidden" asp-for="LicencesVM.LicId" />
+            <input type="hidden" asp-for="ReqtypeId" />
+            <div class="col-xl-4 col-md-6 col-sm-12">
+                <div class="form-group">
+                    <label asp-for="LicencesVM.IssueDate"></label>
+                    <input asp-for="LicencesVM.IssueDate" class="form-control" readonly />
+                    <span asp-validation-for="LicencesVM.IssueDate" class="text-danger"></span>
+                </div>
+            </div>
+
+            <div class="col-xl-4 col-md-6 col-sm-12">
+                <div class="form-group">
+                    <label asp-for="LicencesVM.ExpireDate"></label>
+                    <input asp-for="LicencesVM.ExpireDate" class="form-control txtDate" readonly />
+                    <span asp-validation-for="LicencesVM.ExpireDate" class="text-danger"></span>
+                </div>
+            </div>
+
+            @if (Model.LicencesVM.LicTypeId == (int)LicTypeEnum.Media_Organization_Individuals)
+            {
+                <div class="col-xl-4 col-md-6 col-sm-12">
+                    <div class="form-group">
+                        <label asp-for="@Model.LicencesVM.Applicant.Name1">اسم المالك</label>
+                        <input asp-for="@Model.LicencesVM.Applicant.Name1" class="form-control" readonly />
+                    </div>
+                </div>
+
+                <div class="col-xl-4 col-md-6 col-sm-12">
+                    <div class="form-group">
+                        <label asp-for="@Model.LicencesVM.Applicant.CivilId">الرقم المدني للمالك</label>
+                        <input asp-for="@Model.LicencesVM.Applicant.CivilId" class="form-control" readonly />
+                    </div>
+                </div>
+                <div class="col-xl-4 col-md-6 col-sm-12">
+                    <div class="form-group">
+                        <label asp-for="@Model.LicencesVM.Applicant.AddressNavigation.AalliNo">الرقم الالي</label>
+                        <input asp-for="@Model.LicencesVM.Applicant.AddressNavigation.AalliNo" class="form-control" readonly />
+                    </div>
+                </div>
+
+                <div class="col-xl-4 col-md-6 col-sm-12">
+                    <div class="form-group">
+                        <label asp-for="@Model.LicencesVM.Applicant.AddressNavigation.GovernorateArabic">المحافظة</label>
+                        <input asp-for="@Model.LicencesVM.Applicant.AddressNavigation.GovernorateArabic" class="form-control" readonly />
+                    </div>
+                </div>
+
+                <div class="col-xl-4 col-md-6 col-sm-12">
+                    <div class="form-group">
+                        <label asp-for="@Model.LicencesVM.Applicant.AddressNavigation.Area">المنطقة</label>
+                        <input asp-for="@Model.LicencesVM.Applicant.AddressNavigation.Area" class="form-control" readonly />
+                    </div>
+                </div>
+
+                <div class="col-xl-4 col-md-6 col-sm-12">
+                    <div class="form-group">
+                        <label asp-for="@Model.LicencesVM.Applicant.AddressNavigation.BlockArabic">القطعة</label>
+                        <input asp-for="@Model.LicencesVM.Applicant.AddressNavigation.BlockArabic" class="form-control" readonly />
+                    </div>
+                </div>
+
+                <div class="col-xl-4 col-md-6 col-sm-12">
+                    <div class="form-group">
+                        <label asp-for="@Model.LicencesVM.Applicant.AddressNavigation.StreetArabic">الشارع</label>
+                        <input asp-for="@Model.LicencesVM.Applicant.AddressNavigation.StreetArabic" class="form-control" readonly />
+                    </div>
+                </div>
+
+                <div class="col-xl-4 col-md-6 col-sm-12">
+                    <div class="form-group">
+                        <label asp-for="@Model.LicencesVM.Applicant.AddressNavigation.BuildingName">المبنى</label>
+                        <input asp-for="@Model.LicencesVM.Applicant.AddressNavigation.BuildingName" class="form-control" readonly />
+                    </div>
+                </div>
+
+                <div class="col-xl-4 col-md-6 col-sm-12">
+                    <div class="form-group">
+                        <label asp-for="@Model.LicencesVM.Applicant.AddressNavigation.BuildingNo">رقم القسيمة</label>
+                        <input asp-for="@Model.LicencesVM.Applicant.AddressNavigation.BuildingNo" class="form-control" readonly />
+                    </div>
+                </div>
+            }
+            else
+            {
+                <div class="col-xl-4 col-md-6 col-sm-12">
+                    <div class="form-group">
+                        <label asp-for="@Model.LicencesVM.Company.Name">أسم المرخص له</label>
+                        <input asp-for="@Model.LicencesVM.Company.Name" class="form-control" readonly />
+                    </div>
+                </div>
+
+                <div class="col-xl-4 col-md-6 col-sm-12">
+                    <div class="form-group">
+                        <label asp-for="@Model.LicencesVM.Company.CompanyCivilId">رقم المدني للجهة</label>
+                        <input asp-for="@Model.LicencesVM.Company.CompanyCivilId" class="form-control" readonly />
+                    </div>
+                </div>
+
+                <div class="col-xl-4 col-md-6 col-sm-12">
+                    <div class="form-group">
+                        <label asp-for="@Model.LicencesVM.Company.AddressNavigation.AalliNo">الرقم الالي</label>
+                        <input asp-for="@Model.LicencesVM.Company.AddressNavigation.AalliNo" class="form-control" readonly />
+                    </div>
+                </div>
+
+                <div class="col-xl-4 col-md-6 col-sm-12">
+                    <div class="form-group">
+                        <label asp-for="@Model.LicencesVM.Company.AddressNavigation.GovernorateArabic">المحافظة</label>
+                        <input asp-for="@Model.LicencesVM.Company.AddressNavigation.GovernorateArabic" class="form-control" readonly />
+                    </div>
+                </div>
+
+                <div class="col-xl-4 col-md-6 col-sm-12">
+                    <div class="form-group">
+                        <label asp-for="@Model.LicencesVM.Company.AddressNavigation.Area">المنطقة</label>
+                        <input asp-for="@Model.LicencesVM.Company.AddressNavigation.Area" class="form-control" readonly />
+                    </div>
+                </div>
+
+                <div class="col-xl-4 col-md-6 col-sm-12">
+                    <div class="form-group">
+                        <label asp-for="@Model.LicencesVM.Company.AddressNavigation.BlockArabic">القطعة</label>
+                        <input asp-for="@Model.LicencesVM.Company.AddressNavigation.BlockArabic" class="form-control" readonly />
+                    </div>
+                </div>
+
+                <div class="col-xl-4 col-md-6 col-sm-12">
+                    <div class="form-group">
+                        <label asp-for="@Model.LicencesVM.Company.AddressNavigation.StreetArabic">الشارع</label>
+                        <input asp-for="@Model.LicencesVM.Company.AddressNavigation.StreetArabic" class="form-control" readonly />
+                    </div>
+                </div>
+
+                <div class="col-xl-4 col-md-6 col-sm-12">
+                    <div class="form-group">
+                        <label asp-for="@Model.LicencesVM.Company.AddressNavigation.BuildingName">المبنى</label>
+                        <input asp-for="@Model.LicencesVM.Company.AddressNavigation.BuildingName" class="form-control" readonly />
+                    </div>
+                </div>
+
+                <div class="col-xl-4 col-md-6 col-sm-12">
+                    <div class="form-group">
+                        <label asp-for="@Model.LicencesVM.Company.AddressNavigation.BuildingNo">رقم القسيمة</label>
+                        <input asp-for="@Model.LicencesVM.Company.AddressNavigation.BuildingNo" class="form-control" readonly />
+                    </div>
+                </div>
+
+
+
+
+            }
+            <div class="col-xl-12 col-lg-12 col-md-12">
+                <div class="form-group">
+                    <h3>بيانات المدير</h3>
+                </div>
+            </div>
+
+
+            <div class="col-xl-4 col-md-6 col-sm-12">
+                <div class="form-group">
+                    <label asp-for="@Model.LicencesVM.Manager.CivilId" class="Required"></label>
+                    <input asp-for="@Model.LicencesVM.Manager.CivilId" class="form-control" required="required" id="CivilIdManager" placeholder="الرقم المدني للمدير" />
+                    <span asp-validation-for="@Model.LicencesVM.Manager.CivilId" class="text-danger"></span>
+                    <span id="CivilIdManagerValidation" class="text-danger" style="display: none;"></span>
+
+                </div>
+            </div>
+            <div class="col-xl-4 col-md-6 col-sm-12">
+                <div class="form-group">
+                    <label asp-for="@Model.LicencesVM.Manager.Name1" class="Required"></label>
+                    <input asp-for="@Model.LicencesVM.Manager.Name1" class="form-control" required="required" id="Name1Manager" placeholder="الإسم الأول" />
+                    <span asp-validation-for="@Model.LicencesVM.Manager.Name1" class="text-danger"></span>
+                </div>
+            </div>
+            <div class="col-xl-4 col-md-6 col-sm-12">
+                <div class="form-group">
+                    <label asp-for="@Model.LicencesVM.Manager.Name2" class="Required"></label>
+                    <input asp-for="@Model.LicencesVM.Manager.Name2" class="form-control" required="required" id="Name2Manager" placeholder="الإسم الثاني" />
+                    <span asp-validation-for="@Model.LicencesVM.Manager.Name2" class="text-danger"></span>
+                </div>
+            </div>
+            <div class="col-xl-4 col-md-6 col-sm-12">
+                <div class="form-group">
+                    <label asp-for="@Model.LicencesVM.Manager.Name3" class="Required"></label>
+                    <input asp-for="@Model.LicencesVM.Manager.Name3" class="form-control" required="required" id="Name3Manager" placeholder="الإسم الثالث" />
+                    <span asp-validation-for="@Model.LicencesVM.Manager.Name3" class="text-danger"></span>
+                </div>
+            </div>
+            <div class="col-xl-4 col-md-6 col-sm-12">
+                <div class="form-group">
+                    <label asp-for="@Model.LicencesVM.Manager.Name4" class="Required"></label>
+                    <input asp-for="@Model.LicencesVM.Manager.Name4" class="form-control" required="required" id="Name4Manager" placeholder="الإسم الرابع" />
+                    <span asp-validation-for="@Model.LicencesVM.Manager.Name4" class="text-danger"></span>
+                </div>
+            </div>
+
+            <div class="col-xl-4 col-md-6 col-sm-12">
+                <div class="form-group">
+                    <label asp-for="@Model.LicencesVM.Manager.NationaliyName" class="Required"></label>
+                    <input asp-for="@Model.LicencesVM.Manager.NationaliyName" class="form-control" required="required" id="NationaliyNameManager" placeholder="الجنسية للمدير" />
+                    <span asp-validation-for="@Model.LicencesVM.Manager.NationaliyName" class="text-danger"></span>
+                </div>
+            </div>
+            <div class="col-xl-4 col-md-6 col-sm-12">
+                <div class="form-group">
+                    <label asp-for="@Model.LicencesVM.Manager.Phone" class="Required"></label>
+                    <input asp-for="@Model.LicencesVM.Manager.Phone" class="form-control" required="required" id="PhoneManager" placeholder="رقم الهاتف للمدير" />
+                    <span asp-validation-for="@Model.LicencesVM.Manager.Phone" class="text-danger"></span>
+                </div>
+            </div>
+            <div class="col-xl-4 col-md-6 col-sm-12">
+                <div class="form-group">
+                    <label asp-for="@Model.LicencesVM.Manager.Email" class="Required"></label>
+                    <input asp-for="@Model.LicencesVM.Manager.Email" class="form-control" required="required" id="EmailManager" placeholder="البريد الإلكتروني للمدير" />
+                    <span asp-validation-for="@Model.LicencesVM.Manager.Email" class="text-danger"></span>
+                </div>
+            </div>
+            <div class="col-xl-4 col-md-6 col-sm-12">
+                <div class="form-group">
+                    <label for="@Model.LicencesVM.Manager.QualificationsLookup.Name" class="Required">المؤهل للمدير</label>
+                    <input asp-for="@Model.LicencesVM.Manager.QualificationsLookup.Name" class="form-control" required="required" id="EmailManager" placeholder="البريد الإلكتروني للمدير" />
+
+                    <span class="text-danger"></span> <!-- Validation message will go here -->
+                </div>
+            </div>
+            <!--Address by Aali For Applicant  -->
+            <div class="col-xl-4 col-md-6 col-sm-12">
+                <div class="form-group">
+                    <label asp-for="@Model.LicencesVM.Manager.AddressNavigation.AalliNo" class="Required"></label>
+                    <input asp-for="@Model.LicencesVM.Manager.AddressNavigation.AalliNo" class="form-control" placeholder="رقم الآلي" maxlength="10" id="AaliNumberManager" required />
+                    <span asp-validation-for="@Model.LicencesVM.Manager.AddressNavigation.AalliNo" class="text-danger"></span>
+                </div>
+            </div>
+
+            <div class="col-xl-4 col-md-6 col-sm-12">
+                <div class="form-group">
+                    <label asp-for="@Model.LicencesVM.Manager.AddressNavigation.GovernorateArabic" class="Required"></label>
+                    <input asp-for="@Model.LicencesVM.Manager.AddressNavigation.GovernorateArabic" class="form-control" placeholder="المحافظة" id="GovernrateManager" readonly />
+                    <span asp-validation-for="@Model.LicencesVM.Manager.AddressNavigation.GovernorateArabic" class="text-danger"></span>
+                </div>
+            </div>
+
+            <div class="col-xl-4 col-md-6 col-sm-12">
+                <div class="form-group">
+                    <label asp-for="@Model.LicencesVM.Manager.AddressNavigation.Area" class="Required"></label>
+                    <input asp-for="@Model.LicencesVM.Manager.AddressNavigation.Area" class="form-control" placeholder="المنطقة" id="AreaManager" readonly />
+                    <span asp-validation-for="@Model.LicencesVM.Manager.AddressNavigation.Area" class="text-danger"></span>
+                </div>
+            </div>
+
+            <div class="col-xl-4 col-md-6 col-sm-12">
+                <div class="form-group">
+                    <label asp-for="@Model.LicencesVM.Manager.AddressNavigation.BlockArabic" class="Required"></label>
+                    <input asp-for="@Model.LicencesVM.Manager.AddressNavigation.BlockArabic" class="form-control" placeholder="رقم البلوك" id="BlockNoManager" readonly />
+                    <span asp-validation-for="@Model.LicencesVM.Manager.AddressNavigation.BlockArabic" class="text-danger"></span>
+                </div>
+            </div>
+
+            <div class="col-xl-4 col-md-6 col-sm-12">
+                <div class="form-group">
+                    <label asp-for="@Model.LicencesVM.Manager.AddressNavigation.StreetArabic" class="Required"></label>
+                    <input asp-for="@Model.LicencesVM.Manager.AddressNavigation.StreetArabic" class="form-control" placeholder="الشارع" id="StreetManager" readonly />
+                    <span asp-validation-for="@Model.LicencesVM.Manager.AddressNavigation.StreetArabic" class="text-danger"></span>
+                </div>
+            </div>
+
+            <div class="col-xl-4 col-md-6 col-sm-12">
+                <div class="form-group">
+                    <label asp-for="@Model.LicencesVM.Manager.AddressNavigation.BuildingNo" class="Required"></label>
+                    <input asp-for="@Model.LicencesVM.Manager.AddressNavigation.BuildingNo" class="form-control" placeholder="رقم المبنى" id="BuildingNoManager" readonly />
+                    <span asp-validation-for="@Model.LicencesVM.Manager.AddressNavigation.BuildingNo" class="text-danger"></span>
+                </div>
+            </div>
+
+            <div class="col-xl-4 col-md-6 col-sm-12">
+                <div class="form-group">
+                    <label asp-for="@Model.LicencesVM.Manager.AddressNavigation.BuildingName" class="Required"></label>
+                    <input asp-for="@Model.LicencesVM.Manager.AddressNavigation.BuildingName" class="form-control" placeholder="اسم المبنى" id="BuildingNameManager" readonly />
+                    <span asp-validation-for="@Model.LicencesVM.Manager.AddressNavigation.BuildingName" class="text-danger"></span>
+                </div>
+            </div>
+
+            <div class="col-xl-4 col-md-6 col-sm-12">
+                <div class="form-group">
+                    <label asp-for="@Model.LicencesVM.Manager.AddressNavigation.UnitNo" class="Required"></label>
+                    <input asp-for="@Model.LicencesVM.Manager.AddressNavigation.UnitNo" class="form-control" placeholder="رقم الوحدة" id="UnitNoManager" readonly />
+                    <span asp-validation-for="@Model.LicencesVM.Manager.AddressNavigation.UnitNo" class="text-danger"></span>
+                </div>
+            </div>
+
+            <div class="col-xl-4 col-md-6 col-sm-12">
+                <div class="form-group">
+                    <label asp-for="@Model.LicencesVM.Manager.AddressNavigation.FloorNo" class="Required"></label>
+                    <input asp-for="@Model.LicencesVM.Manager.AddressNavigation.FloorNo" class="form-control" placeholder="الدور" id="FloorNoManager" readonly />
+                    <span asp-validation-for="@Model.LicencesVM.Manager.AddressNavigation.FloorNo" class="text-danger"></span>
+                </div>
+            </div>
+            <div class="form-group">
+                <label for="EndingReasonId">سبب إنهاء الرخصة</label>
+                <select id="EndingReasonId" name="EndingReasonId" class="form-control">
+                    <option value="">-- اختر السبب --</option>
+                    @foreach (var reason in Model.EndingReasons)
+                    {
+                        <option value="@reason.Value">@reason.Text</option>
+                    }
+                </select>
+            </div>
+            
+
+          
+
+           
+
+            <div class="col-xl-4 col-md-6 col-sm-12 d-none">
+                <div class="form-group">
+                    <label asp-for="LicencesVM.LicId"></label>
+                    <input asp-for="LicencesVM.LicId" class="form-control" readonly />
+                    <span asp-validation-for="LicencesVM.LicId" class="text-danger"></span>
+                </div>
+            </div>
+
+            <div class="col-xl-4 col-md-6 col-sm-12 d-none">
+                <div class="form-group">
+                    <label asp-for="LicencesVM.MandoobId"></label>
+                    <input asp-for="LicencesVM.MandoobId" class="form-control" readonly />
+                    <span asp-validation-for="LicencesVM.MandoobId" class="text-danger"></span>
+                </div>
+            </div>
+
+            <div class="col-xl-4 col-md-6 col-sm-12 d-none">
+                <div class="form-group">
+                    <label asp-for="LicencesVM.CompanyId"></label>
+                    <input asp-for="LicencesVM.CompanyId" class="form-control" readonly />
+                    <span asp-validation-for="LicencesVM.CompanyId" class="text-danger"></span>
+                </div>
+            </div>
+            <div class="col-xl-4 col-md-6 col-sm-12 d-none">
+                <div class="form-group">
+                    <label asp-for="LicencesVM.BuildingId"></label>
+                    <input asp-for="LicencesVM.BuildingId" class="form-control" readonly />
+                    <span asp-validation-for="LicencesVM.BuildingId" class="text-danger"></span>
+                </div>
+            </div>
+            <div class="col-xl-4 col-md-6 col-sm-12 d-none">
+                <div class="form-group">
+                    <label asp-for="LicencesVM.ActiivityTypeId"></label>
+                    <input asp-for="LicencesVM.ActiivityTypeId" class="form-control" readonly />
+                    <span asp-validation-for="LicencesVM.ActiivityTypeId" class="text-danger"></span>
+                </div>
+            </div>
+
+            <div class="col-xl-4 col-md-6 col-sm-12 d-none">
+                <div class="form-group">
+                    <label asp-for="LicencesVM.ApplicantId"></label>
+                    <input asp-for="LicencesVM.ApplicantId" class="form-control" readonly />
+                    <span asp-validation-for="LicencesVM.ApplicantId" class="text-danger"></span>
+                </div>
+            </div>
+
+       
+            <div class="col-xl-4 col-md-6 col-sm-12 d-none">
+                <div class="form-group">
+                    <label asp-for="LicencesVM.LicTypeId"></label>
+                    <input asp-for="LicencesVM.LicTypeId" class="form-control" readonly />
+                    <span asp-validation-for="LicencesVM.LicTypeId" class="text-danger"></span>
+                </div>
+            </div>
+            <div class="col-xl-4 col-md-6 col-sm-12 d-none">
+                <div class="form-group">
+                    <label asp-for="LicencesVM.ManagerId"></label>
+                    <input asp-for="LicencesVM.ManagerId" class="form-control" readonly />
+                    <span asp-validation-for="LicencesVM.ManagerId" class="text-danger"></span>
+                </div>
+            </div>
+            <div class="col-xl-4 col-md-6 col-sm-12 d-none">
+                <div class="form-group">
+                    <label asp-for="LicencesVM.Company.AddressId"></label>
+                    <input asp-for="LicencesVM.Company.AddressId" class="form-control" readonly />
+                    <span asp-validation-for="LicencesVM.Company.AddressId" class="text-danger"></span>
+                </div>
+            </div>
+            <div class="col-xl-4 col-md-6 col-sm-12 d-none">
+                <div class="form-group">
+                    <label asp-for="LicencesVM.Building.AddressId"></label>
+                    <input asp-for="LicencesVM.Building.AddressId" class="form-control" readonly />
+                    <span asp-validation-for="LicencesVM.Building.AddressId" class="text-danger"></span>
+                </div>
+            </div>
+            <input type="hidden" asp-for="LicencesVM.ActivityTypesLookup.ActivityCode" />
+            <input type="hidden" asp-for="LicencesVM.ActivityTypesLookup.NameAr" />
+            <input type="hidden" asp-for="LicencesVM.LicName" />
+            <input type="hidden" asp-for="LicencesVM.ManagerCivilId" />
+            <input type="hidden" asp-for="@Model.ReqtypeId" />
+            <input type="hidden" asp-for="LicencesVM.BuildingId" />
+            <input type="hidden" asp-for="LicencesVM.CompanyId" />
+            <input type="hidden" asp-for="LicencesVM.ApplicantId" />
+            <input type="hidden" asp-for="LicencesVM.PreApprovalNo" />
+            <input type="hidden" asp-for="LicencesVM.PreApprovalId" />
+
+
+    @* <div class="col-xl-4 col-md-6 col-sm-12">
+        <div class="form-group">
+            @Html.LabelFor(model => model.ServiceAmount)
+            @Html.EditorFor(model => model.ServiceAmount, new { htmlAttributes = new { @class = "form-control", placeholder = Html.DisplayNameFor(model => model.ServiceAmount), @Required = "true", @Readonly = "Readonly" } })
+            @Html.ValidationMessageFor(model => model.ServiceAmount, "", new { @class = "text-danger" })
+        </div>
+    </div> *@
+
+    <div class="col-xl-12 col-lg-12 col-md-12">
+        <div class="form-group">
+            <h3>المرفقات</h3>
+        </div>
+        <div class="form-group">
+            <h6 class="text-danger" style="padding-right: 10px;">
+                ## حجم الملف يجب ان لا يتجاوز 2 ميجا
+                <br />## (المخطط الإنشائي, دراسة الجدوي الاقتصادية) حجم الملف لايزيد عن 5 ميجا
+            </h6>
+        </div>
+    </div>
+
+
+            @foreach (var config in Model.FileUploadConfigs)
+            {
+                //var fieldName = $"ContractDocuments[{config.FieldName}]";
+
+                <div class="col-xl-4 col-md-6 col-sm-12">
+                    <div class="form-group">
+                        <label for="@config.FieldName" class="@((config.IsMandatory) ? "Required" : "")">
+                            @config.AttachName
+                            @if (config.IsMandatory)
+                            {
+                                <span style="color: red;">*</span> <!-- Only add one red star if required -->
+                            }
+                        </label>
+
+
+
+                        <input type="file" name="NamedFile[0].File" class="form-control custom-file-input" required="@config.IsMandatory" accept="@config.AllowedFileTypes" />
+                        <input type="hidden" name="NamedFile[0].FieldName" value="@config.FieldName" />
+                        <input type="hidden" class="field-label" value="@config.AttachName" /> <!-- 👈 add this -->
+
+
+                    </div>
+                </div>
+            }
+
+            <script src="~/Content/assets/js/jquery-1.4.1.min.js"></script>
+
+    <script type="text/javascript">
+        jQuery(document).ready(function () {
+            //alert("tetet");
+
+            //get_sbu();
+
+            loadImage();
+            Swal.fire({
+                icon: 'warning',
+                title: 'تنويه ،،،!',
+                text: 'يرجى التأكد من صحة بيانات المنشأة بالكامل وتحديث المرفقات في حال انتهاء صلاحيتها.',
+            });
+        });
+        $(document).ready(function () {
+            $('form').submit(function () {
+                // Disable the submit button
+                $(':submit', this).prop('disabled', true);
+                $(this).append('<div class="preloader-area"> ' +
+                    '<div class="spinner">' +
+                    '   <div class="inner">' +
+                    '      <div class="disc"></div>' +
+                    '   <div class="disc"></div>' +
+                    '     <div class="disc"></div>' +
+                    '  </div>' +
+                    ' </div>' +
+                    '</div>');
+                // Optionally, you can show a loading spinner or perform other actions
+                $('.preloader-area').fadeOut(15000);
+                // Continue with form submission
+                return true;
+            });
+        });
+       
+
+    $(function loadImage() {
+
+                var errorMsg = '@ViewBag.test'
+                var msg = '@ViewBag.Message'
+                var id = '@ViewBag.id'
+
+
+                if (msg == 'Success') {
+                    Swal.fire({
+                        icon: 'success',
+                        title: 'تأكـيد',
+                        text: 'تم حفظ البيانات بنجاح',
+                        confirmButtonColor: '#7FB3D5',
+                        confirmButtonText: 'الانتقال لقائمة الطلبات !'
+                    }).then(function () { window.location = '../../TourismHome/RequestsList'; });
+
+                }
+                else if (msg == 'error') {
+                    Swal.fire({
+                        icon: 'error',
+                        title: 'تأكـيد',
+                        text: errorMsg,
+                        confirmButtonColor: '#7FB3D5'
+                        //confirmButtonText: 'الانتقال لقائمة الطلبات !'
+                    }).then(function () { window.location = '../../TourismHome/LicenseDetails/' + id; });
+                };
+
+
+            });
+
+    </script>
+
+
+    <div class="col-xl-12 col-lg-12 col-md-12">
+        <div class="form-group">
+            <h3></h3>
+        </div>
+    </div>
+
+    <div class="col-lg-12 col-md-12">
+                <button type="button" onclick="submitFormViaAjax()" class="default-btn" > إرسال الطلب  <i class="flaticon-plus"></i></button>
+    </div>
+</div>
+    </form>
+    }
+</div>
+
+
+@section Scripts {
+<script>
+    async function submitFormViaAjax() {
+        const uploadedFiles = new FormData();
+
+        // 🟢 1. Add all normal text inputs (non-file)
+        $('#RequestForm').serializeArray().forEach(function (input) {
+            uploadedFiles.append(input.name, input.value);
+        });
+        var ActivityTypeId = $('#ActivitiList').val();  // Get selected value from the dropdown
+        uploadedFiles.append('ActivityTypeId', ActivityTypeId);
+        console.log('Selected Activity Value:', ActivityTypeId);
+        var ReasonId = $('#EndReasonId').val();
+        console.log('Selected Activity Value:', ReasonId);
+
+        uploadedFiles.append("EndReasonId", $('#EndReasonId').val());
+
+        let fileIndex = 0;
+
+        // 🟢 2. Add file inputs with dynamic names like ContractDocuments[FieldName]
+        const dynamicFileInputs = document.querySelectorAll('#RequestForm input[type="file"]');
+
+        dynamicFileInputs.forEach((input) => {
+            const files = input.files;
+
+            const formGroup = input.closest('.form-group');
+            const hiddenInput = formGroup.querySelector('input[type="hidden"][name$=".FieldName"]');
+            const labelInput = formGroup.querySelector('input.field-label');
+
+            const fieldName = hiddenInput ? hiddenInput.value : `UnknownField_${fileIndex}`;
+            const labelName = labelInput ? labelInput.value : '';
+            const isRequired = input.hasAttribute('required');
+
+            if (files.length > 0) {
+                for (let i = 0; i < files.length; i++) {
+                    uploadedFiles.append(`NamedFile[${fileIndex}].FieldName`, fieldName);
+                    uploadedFiles.append(`NamedFile[${fileIndex}].LabelName`, labelName); // ✅ here
+                    uploadedFiles.append(`NamedFile[${fileIndex}].File`, files[i]);
+                    uploadedFiles.append(`NamedFile[${fileIndex}].IsRequired`, isRequired ? "true" : "false");
+                    fileIndex++;
+                }
+            } else {
+                console.warn(`⚠️ No file selected for field: ${fieldName}`);
+            }
+        });
+
+        // 🟡 Optional: Debug output
+        for (let [key, value] of uploadedFiles.entries()) {
+            console.log(`${key}:`, value);
+        }
+
+        // 🔵 3. Submit using fetch
+        try {
+                const response = await fetch('/Tourism/HandleRequest', {
+                method: 'POST',
+                body: uploadedFiles
+            });
+
+            if (response.ok) {
+                 Swal.fire('تم بنجاح', 'تم إرسال البيانات', 'success').then(() => {
+                        window.location.href = '/Home/GetAllRequest';  // Redirect to the 'GetAllRequest' page
+                    });
+            } else {
+                Swal.fire('خطأ', 'حدث خطأ في المعالجة', 'error');
+            }
+        } catch (error) {
+            console.error('Upload error:', error);
+            Swal.fire('خطأ', 'فشل الإرسال: ' + error.message, 'error');
+        }
+    }
+</script>
+}

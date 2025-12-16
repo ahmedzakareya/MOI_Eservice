@@ -1,0 +1,82 @@
+﻿@model List<LicenseAssignmentVM>
+
+@{
+    ViewBag.Title = "التراخيص المفوض بها";
+    var token = Context.Session.GetString("UserToken");
+    var userId = Context.Session.GetString("UserId");
+    var userName = Context.Session.GetString("UserUserName");
+    var civilId = Context.Session.GetString("UserCivilId");
+    var fullName = Context.Session.GetString("UserFullName");
+    var accountTypeId = Context.Session.GetString("UserAccouuntTypeId");
+    var counter = 1;
+}
+
+<div class="manage-jobs-box">
+    <div class="manage-jobs-table table-responsive">
+        <h4 class="mb-3">التراخيص المفوض بها</h4>
+        <table class="display nowrap myTable" style="width:100%;">
+            <thead class="ThemeCol">
+                <tr>
+                    <th></th>
+                    <th>م</th>
+                    <th>رقم الترخيص</th>
+                    <th>اسم الترخيص</th>
+                    <th>الخدمة</th>
+                    <th>تفاصيل الترخيص</th>
+                    <th>مرفقات التفويض</th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var item in Model)
+                {
+                    <tr>
+                        <td></td>
+                        <td>@counter</td>
+                        <td>@item.LicNo</td>
+                        <td>@item.LicName</td>
+                        <td>@item.ServiceName</td>
+                        <td class="text-center">
+                            @if (item.ServiceId == (int)ServiceEnum.Tourism)
+                            {
+                                <ul class="option-list">
+                                    <li>
+                                        <button type="button" class="option-btn d-inline-block"
+                                                title="عرض"
+                                                onclick="location.href='@Url.Action("LicencesDetails", "Tourism", new { id = MyCrypto.Encode(item.Id.ToString()) })'">
+                                            <i class="ri-eye-line"></i>
+                                        </button>
+                                    </li>
+                                </ul>
+                            }
+                            else if (item.ServiceId == (int)ServiceEnum.Elaw)
+                            {
+                                <ul class="option-list">
+                                    <li>
+                                        <button type="button" class="option-btn d-inline-block"
+                                                title="عرض"
+                                                onclick="location.href='@Url.Action("LicencesDetails", "Elaw", new { id = MyCrypto.Encode(item.Id.ToString()) })'">
+                                            <i class="ri-eye-line"></i>
+                                        </button>
+                                    </li>
+                                </ul>
+                            }
+                        </td>
+                        <td class="text-center">
+                            @if (!string.IsNullOrEmpty(item.AttachmentUrl))
+                            {
+                                <a class="btn btn-sm btn-outline-primary"
+                                   href="@item.AttachmentUrl"
+                                   target="_blank">عرض</a>
+                            }
+                            else
+                            {
+                                <span class="text-muted">لا يوجد</span>
+                            }
+                        </td>
+                    </tr>
+                    counter++;
+                }
+            </tbody>
+        </table>
+    </div>
+</div>

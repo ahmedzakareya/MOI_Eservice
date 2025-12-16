@@ -1,0 +1,114 @@
+﻿@model LicenceDetailsForUserVM
+
+
+@{
+    ViewBag.Title = "LicencesList";
+    var token = Context.Session.GetString("UserToken");
+    var userId = Context.Session.GetString("UserId");
+    var userName = Context.Session.GetString("UserUserName");
+    var civilId = Context.Session.GetString("UserCivilId");
+    var fullName = Context.Session.GetString("UserFullName");
+    var accountTypeId = Context.Session.GetString("UserAccouuntTypeId");
+    var counter = 1;
+}
+
+<div class="manage-jobs-box">
+    <div class="manage-jobs-table table-responsive">
+        <table class="display nowrap myTable" style="width:100%;">
+            <thead class="ThemeCol">
+                <tr>
+                    <th></th>
+                    <th>م</th>
+                    <th>رقم الترخيص</th>
+                    <th>اسم صاحب الترخيص</th>
+                    <th>الشركة المالكة</th>
+                    <th>تاريخ بداية الترخيص</th>
+                    <th>تاريخ نهاية الترخيص</th>
+                    <th>نشاط الشركة</th>
+                    <th>تفاصيل الترخيص</th>
+                    <th>سجل الحركات</th>
+                </tr>
+            </thead>
+            <tbody id="tblCom">
+                @foreach (var item in Model.LicencesVM)
+                {
+                    <tr>
+                        <td></td>
+                        <td>@counter</td>
+                        <td>@item.LicNo</td>
+                        <td>@item.LicName</td>
+                        <td>@item.Company.OwnerCompanyAr</td>
+                        <td>@item.IssueDate?.ToString("yyyy-MM-dd")</td>
+                        <td>@item.ExpireDate?.ToString("yyyy-MM-dd")</td>
+                        <td>@item.ActivityTypeName</td>
+                        <td class="text-center">
+                            <ul class="option-list">
+                                <li>
+                                    <button type="button" class="option-btn d-inline-block" data-bs-toggle="tooltip" data-bs-placement="top" title="عرض"
+                                            onclick="location.href='@Url.Action("LicencesDetails", "Tourism", new { id = MyCrypto.Encode(item.LicId.ToString()) })'">
+                                       
+                                        <i class="ri-eye-line"></i>
+                                    </button>
+                                </li>
+                            </ul>
+                        </td>
+                       
+                    </tr>
+                    counter++;
+                }
+            </tbody>
+        </table>
+    </div>
+</div>
+
+<!-- Pre-Approvement Table -->
+<div class="manage-jobs-box">
+    <div class="manage-jobs-table table-responsive">
+        <h4>تراخيص الموافقات المبدئية</h4>
+        <table class="display nowrap myTable" style="width:100%;">
+            <thead class="ThemeCol">
+                <tr>
+                    <th></th>
+                    <th>م</th>
+                    <th>رقم الموافقة</th>
+                    <th>اسم صاحب الترخيص</th>
+                    <th>الشركة المالكة</th>
+                    <th>تاريخ بداية الترخيص</th>
+                    <th>تفاصيل الموافقة</th>
+                    <th>نشاط الشركة</th>
+                    <th>تفاصيل الترخيص</th>
+                    <th>سجل الحركات</th>
+                </tr>
+            </thead>
+            <tbody id="tblPreAprove">
+                @foreach (var item in Model.PreApprovementVM)
+                {
+                    <tr>
+                        <td></td>
+                        <td>@counter</td>
+                        <td>@item.LicenseNo</td>
+                        <td>@fullName</td>
+                        <td>@item.Company.OwnerCompanyAr</td>
+                        <td>@item.LicenseIssueDate?.ToString("yyyy-MM-dd")</td>
+                      
+                        <td>@item.Flag</td>
+                        <td>@item.ActivityTypesLookup.NameAr</td>
+                        <td class="text-center">
+                            <ul class="option-list">
+                                <li>
+                                    <button type="button" class="option-btn d-inline-block" data-bs-toggle="tooltip" data-bs-placement="top" title="عرض"
+                                            onclick="location.href='@Url.Action("PreApprovalDetails", "Tourism", new { id = MyCrypto.Encode(item.PreAppId.ToString()) })'">
+
+                                        <i class="ri-eye-line"></i>
+                                    </button>
+                                </li>
+                            </ul>
+                        </td>
+                    </tr>
+                    counter++;
+                }
+            </tbody>
+        </table>
+    </div>
+</div>
+

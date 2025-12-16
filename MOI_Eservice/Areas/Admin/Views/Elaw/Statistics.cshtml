@@ -1,0 +1,81 @@
+﻿@model StatisticsViewModel
+
+@{
+    Layout = "~/Areas/Admin/Views/Shared/_LayoutEserviceTourism.cshtml";
+}
+
+
+<div class="container mt-4">
+    <div class="row">
+        <!-- Chart 1: All Requests -->
+        <div class="col-md-6">
+            <h4 class="text-right">الحالة</h4>
+            <canvas id="statusChart"></canvas>
+        </div>
+        <!-- Chart 2: All Licences -->
+        <div class="col-md-6">
+            <h4 class="text-right">نوع الترخيص</h4>
+            <canvas id="licenceTypeChart"></canvas>
+        </div>
+    </div>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+<script>
+    // Data for "الحالة" chart
+    const statusChartData = {
+        labels: [
+            "طلبات جديدة", "طلبات تغيير", "تغيير شريك", "تغيير العنوان",
+            "تغيير المالك", "انهاء الترخيص", "تجديد", "تغيير المدير"
+        ],
+        datasets: [{
+            label: 'عدد الطلبات',
+            data: [
+    @Model.NewRequests, @Model.ChangeRequest, @Model.ChangePartner,
+    @Model.ChangeAddress, @Model.ChangeOwnerRequest,
+    @Model.EndLicenseRequests, @Model.RenewRequests, @Model.ChangeManagerRequests
+            ],
+            backgroundColor: ['#ff6384', '#36a2eb', '#ffce56', '#4caf50', '#ff9800', '#9c27b0', '#03a9f4', '#e91e63']
+        }]
+    };
+
+    // Data for "نوع الترخيص" chart
+    const licenceTypeChartData = {
+        labels: [
+            "نوع الترخيص 1", "نوع الترخيص 2", "نوع الترخيص 3", "نوع الترخيص 4"
+        ],
+        datasets: [{
+            label: 'عدد التراخيص',
+            data: [
+    @Model.ChangeSocialMedia, @Model.ChangeEmail, @Model.ChangeLicencesType, @Model.ChangeLicencesName
+            ],
+            backgroundColor: ['#36a2eb', '#4caf50', '#ff6384', '#ff9800']
+        }]
+    };
+
+    // Initialize the "الحالة" chart
+    new Chart(document.getElementById('statusChart'), {
+        type: 'bar',
+        data: statusChartData,
+        options: {
+            responsive: true,
+            plugins: {
+                legend: { display: false },
+                tooltip: { enabled: true }
+            }
+        }
+    });
+
+    // Initialize the "نوع الترخيص" chart
+    new Chart(document.getElementById('licenceTypeChart'), {
+        type: 'bar',
+        data: licenceTypeChartData,
+        options: {
+            responsive: true,
+            plugins: {
+                legend: { display: false },
+                tooltip: { enabled: true }
+            }
+        }
+    });
+</script>

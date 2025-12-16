@@ -1,0 +1,571 @@
+﻿@model UserVM
+@{
+    ViewBag.Title = "CreateUser";
+    Layout = "~/Areas/Admin/Views/Shared/_LayoutEserviceTourism.cshtml";
+}
+
+
+
+<!--begin::Content wrapper-->
+<div class="d-flex flex-column flex-column-fluid">
+    <!--begin::Toolbar-->
+    <div id="kt_app_toolbar" class="app-toolbar pt-6 pb-2">
+        <!--begin::Toolbar container-->
+        <div id="kt_app_toolbar_container" class="app-container container-fluid d-flex align-items-stretch">
+            <!--begin::Toolbar wrapper-->
+            <div class="app-toolbar-wrapper d-flex flex-stack flex-wrap gap-4 w-100">
+                <!--begin::Page title-->
+                <div class="page-title d-flex flex-column justify-content-center gap-1 me-3">
+                    <!--begin::Title-->
+                    <h1 class="page-heading d-flex flex-column justify-content-center text-gray-900 fw-bold fs-3 m-0">المستخدمين</h1>
+                    <!--end::Title-->
+                    <!--begin::Breadcrumb-->
+                    <ul class="breadcrumb breadcrumb-separatorless fw-semibold fs-7 my-0">
+                        <!--begin::Item-->
+                        <li class="breadcrumb-item text-muted">
+                            <a asp-action="Index" asp-controller="Home" class="text-muted text-hover-primary">الرئيسية</a>
+                        </li>
+                        <!--end::Item-->
+                        <!--begin::Item-->
+                        <li class="breadcrumb-item">
+                            <span class="bullet bg-gray-500 w-5px h-2px"></span>
+                        </li>
+                        <!--end::Item-->
+                        <!--begin::Item-->
+                        <li class="breadcrumb-item text-muted">إضافة مستخدم جدبد</li>
+                        <!--end::Item-->
+                    </ul>
+                    <!--end::Breadcrumb-->
+                </div>
+                <!--end::Page title-->
+            </div>
+            <!--end::Toolbar wrapper-->
+        </div>
+        <!--end::Toolbar container-->
+    </div>
+    <!--end::Toolbar-->
+    <!--begin::Content-->
+    <div id="kt_app_content" class="app-content flex-column-fluid">
+        <!--begin::Content container-->
+        <div id="kt_app_content_container" class="app-container container-fluid">
+            <!--begin::Careers - Apply-->
+            <div class="card">
+                <!--begin::Body-->
+                <div class="card-body p-lg-10">
+                    <!--begin::Layout-->
+                    <div class="d-flex flex-column flex-lg-row mb-17">
+                        <!--begin::Content-->
+                        <div class="flex-lg-row-fluid me-0">
+                            <!--begin::Form-->
+                            <form class="form" id="createUserForm" method="post">
+                                <!--begin::Input group-->
+                                <div class="row">
+                                    <div class="col-md-6 mb-7 fv-row">
+
+                                        <!--begin::Label-->
+                                        <label class="fs-6 fw-semibold mb-2">
+                                            <span class="required">القطاع</span>
+                                            <span class="ms-1" data-bs-toggle="tooltip" title="القطاع">
+                                                <i class="ki-outline ki-information fs-7"></i>
+                                            </span>
+                                        </label>
+                                        <!--end::Label-->
+                                        <!--begin::Input-->
+                                        <select id="sectorId" name="sectorId" aria-label="Select a Country" data-control="select2"
+                                                data-placeholder="إختر القطاع ..."
+                                                class="form-select form-select-solid fw-bold" asp-items="Model.Sectors" onchange="SectorId_OnChange()" required>
+                                            <option value="" disabled selected="selected">--إختر القطاع--</option>
+                                        </select>
+                                        @*  @foreach (var item in Model.Sectors)
+                                        {
+                                        <p>@item.Value - @item.Text</p>
+                                        } *@
+                                        <!--end::Input-->
+                                    </div>
+                                    <div class="col-md-6 mb-7 fv-row">
+                                        <!--begin::Label-->
+                                        <label class="fs-6 fw-semibold mb-2">
+                                            <span class="required">الإدارة</span>
+                                        </label>
+                                        <!--end::Label-->
+                                        <!--begin::Input-->
+                                        <select id="departId" asp-for="User.DepId" data-control="select2"
+                                                data-placeholder="إختر الإدارة ..." onchange="DepartId_OnChange()"
+                                                class="form-select form-select-solid fw-bold" asp-items="Model.Departments" required>
+                                            <option value="" disabled selected="selected">--إختر الإدارة--</option>
+                                        </select>
+                                        <!--end::Input-->
+                                    </div>
+                                </div>
+                                <!--end::Input group-->
+                                <!--begin::Input group-->
+                                <div class="row">
+                                   
+                                    <!--end::Input group-->
+                                    <!--begin::Input group-->
+                                    <div class="col-md-6 mb-7 fv-row">
+                                        <!--begin::Label-->
+                                        <label class="fs-6 fw-semibold mb-2">
+                                            <span>المراقبة</span>
+                                        </label>
+                                        <!--end::Label-->
+                                        <!--begin::Input-->
+                                        <select id="muraqabaId" asp-for="User.MuraqabaId" data-control="select2"
+                                                data-placeholder="إختر المراقبة ..." onchange="MuraqabaId_OnChange()"
+                                                class="form-select form-select-solid fw-bold" asp-items="Model.Muraqabas">
+                                            <option value="" disabled selected="selected">--إختر المراقبة--</option>
+                                        </select>
+                                        <!--end::Input-->
+                                    </div>
+                                    <div class="col-md-6 mb-7 fv-row">
+                                        <!--begin::Label-->
+                                        <label class="fs-6 fw-semibold mb-2">
+                                            <span>القسم</span>
+                                        </label>
+                                        <!--end::Label-->
+                                        <!--begin::Input-->
+                                        <select id="qismId" asp-for="User.QismId" aria-label="Select a Country" data-control="select2"
+                                                data-placeholder="إختر القسم ..."
+                                                class="form-select form-select-solid fw-bold">
+                                            <option value="" disabled selected="selected">--إختر القسم--</option>
+                                        </select>
+                                        <!--end::Input-->
+                                    </div>
+                                    <!--end::Input group-->
+                                </div>
+                                @* <div class="row">
+                                    <!--begin::Input group-->
+                                   
+                                    <!--end::Input group-->
+
+                                </div> *@
+                                <!--begin::Billing toggle-->
+                                <div class="fw-bold fs-3 rotate collapsible mb-7" data-bs-toggle="collapse" href="#kt_modal_add_customer_billing_info" role="button" aria-expanded="false" aria-controls="kt_customer_view_details">
+                                    بيانات الموظف
+                                    <span class="ms-2 rotate-180">
+                                        <i class="ki-outline ki-down fs-3"></i>
+                                    </span>
+                                </div>
+                                <!--end::Billing toggle-->
+                                <!--begin::Billing form-->
+                                <div id="kt_modal_add_customer_billing_info" class="collapse show">
+                                    <!--begin::Input group-->
+                                    <div class="row g-9 mb-7">
+                                        <!--begin::Col-->
+                                        <div class="col-md-6 fv-row">
+                                            <!--begin::Label-->
+                                            <label class="required fs-6 fw-semibold mb-2">الرقم المدني</label>
+                                            <!--end::Label-->
+                                            <!--begin::Input-->
+                                            <input class="form-control form-control-solid" placeholder="" asp-for="User.CivilId" id="civilIdInput" value="" required />
+                                            <!--end::Input-->
+                                        </div>
+                                        <!--end::Col-->
+                                        <!--begin::Col-->
+                                        <div class="col-md-6 fv-row">
+                                            <!--begin::Label-->
+                                            <label class="fs-6 fw-semibold mb-2">الإسم بالكامل</label>
+                                            <!--end::Label-->
+                                            <!--begin::Input readonly-->
+                                            <input type="text" style="direction:rtl" class="form-control form-control-solid" id="fullName" asp-for="User.Name" autocomplete="off" value="" />
+                                            <!--end::Input-->
+                                        </div>
+                                        <!--end::Col-->
+
+                                    </div>
+                                    <!--end::Input group-->
+                                    <!--begin::Input group-->
+                                    <div class="row g-9 mb-7">
+                                        <!--begin::Col-->
+                                        <div class="col-md-6 fv-row">
+                                            <!--begin::Label-->
+                                            <label class="fs-6 fw-semibold mb-2">رقم الهاتف</label>
+                                            <!--end::Label-->
+                                            <span asp-validation-for="User.Mobile" class="text-danger"></span>
+                                            <!--begin::Input-->
+                                            <input type="number" id="mobile" style="direction:rtl" class="form-control form-control-solid" asp-for="User.Mobile" placeholder="" maxlength="8" value="" />
+                                            <!--end::Input-->
+                                        </div>
+                                        <!--end::Col-->
+                                        <!--begin::Col-->
+                                        <div class="col-md-6 fv-row">
+                                            <!--begin::Label-->
+                                            <label class="fs-6 fw-semibold mb-2">البريد الإلكتروني</label>
+                                            <!--end::Label-->
+                                            <!--begin::Input-->
+                                            <input type="email" class="form-control form-control-solid" id="email" asp-for="User.Email" autocomplete="off" value="" />
+                                            <!--end::Input-->
+                                        </div>
+                                        <!--end::Col-->
+
+                                    </div>
+                                    <div class="row g-9 mb-7">
+                                        <!--begin::Col-->
+                                        <div class="col-md-6 fv-row">
+                                            <!--begin::Label-->
+                                            <label class="fs-6 fw-semibold mb-2">الحالة</label>
+                                            <div class="form-check">
+                                                <input class="form-check-input" type="radio" asp-for="User.Status" id="statusTrue" value="true">
+                                                <label class="form-check-label" for="statusTrue">Active</label>
+                                            </div>
+                                            <div class="form-check">
+                                                <input class="form-check-input" type="radio" asp-for="User.Status" id="statusFalse" value="false">
+                                                <label class="form-check-label" for="statusFalse">Inactive</label>
+                                            </div>
+                                            <!--end::Input-->
+                                        </div>
+                                        <!--end::Col-->
+                                       
+                                    </div>
+
+                                    <!--end::Input group-->
+                                    <!--begin::Input group-->
+                                    <div class=" row g-9 mb-7">
+                                        <!--begin::Col-->
+                                        <div class="col-md-6 fv-row">
+                                            <!--begin::Label-->
+                                            <label class="required fs-6 fw-semibold mb-2">كلمة المرور</label>
+                                            <!--end::Label-->
+                                            <span asp-validation-for="User.UserPasswordEncrypted" class="text-danger"></span>
+                                            <!--begin::Input-->
+                                            <input type="password" class="form-control form-control-solid" asp-for="User.UserPasswordEncrypted" autocomplete="off" placeholder="" required />
+                                            <!--end::Input-->
+                                        </div>
+                                        <!--end::Col-->
+                                         <!--begin::Col-->
+                                       @*  <div class="col-md-6 fv-row">
+                                        <!--begin::Label-->
+                                        <label class="required fs-6 fw-semibold mb-2">تأكيد كلمة المرور</label>
+                                        <!--end::Label-->
+                                        <span asp-validation-for="User." class="text-danger"></span>
+                                        <!--begin::Input-->
+                                        <input type="password" class="form-control form-control-solid" asp-for="User.ConfirmPassword" autocomplete="off" placeholder="" required />
+                                        <!--end::Input-->
+                                        </div> *@
+                                        <!--end::Col--> 
+                                    </div>
+                                    <!--end::Input group-->
+                                </div>
+                                <div class="mb-7">
+                                    <label class="fs-6 fw-semibold mb-2">اختر الخدمة</label>
+
+                                    <!-- Radio button group for ServiceId -->
+                                    <div class="form-check">
+                                        <input class="form-check-input" type="radio" asp-for="User.ServiceId" id="serviceTourism" value="6" >
+                                        <label class="form-check-label" for="serviceTourism">السياحة</label>
+                                    </div>
+                                    <div class="form-check">
+                                        <input class="form-check-input" type="radio" asp-for="User.ServiceId" id="serviceCinematography" value="5">
+                                        <label class="form-check-label" for="serviceCinematography">المصنفات</label>
+                                    </div>
+                                    <div class="form-check">
+                                        <input class="form-check-input" type="radio" asp-for="User.ServiceId" id="serviceEPublishing" value="4">
+                                        <label class="form-check-label" for="serviceEPublishing">النشر الالكتروني</label>
+                                    </div>
+                                    <div class="form-check">
+                                        <input class="form-check-input" type="radio" asp-for="User.ServiceId" id="serviceEPublishing" value="5">
+                                        <label class="form-check-label" for="serviceEPublishing">المطبوعات والنشر</label>
+                                    </div>
+                                </div>
+                                <!--end::Billing form-->
+                                <h4 class="m-5 p-5">الأدوار</h4>
+                                <div id="RolesContainer">
+                                    <!-- Checkboxes will be populated here -->
+                                </div>
+                               
+
+                                <div class="col-md-6 fv-row">
+                                    <!--begin::Button-->
+                                    <button type="submit" id="kt_modal_add_customer_submit" class="btn btn-primary">
+                                        <span class="indicator-label">حفظ</span>
+                                        <span class="indicator-progress">
+                                            Please wait...
+                                            <span class="spinner-border spinner-border-sm align-middle ms-2"></span>
+                                        </span>
+                                    </button>
+                                    <!--end::Button-->
+                                    <!--begin::Button-->
+                                    <a asp-action="Index" class="btn btn-secondary">عودة </a>
+                                    <!--end::Button-->
+                                </div>
+                            </form>
+                            <!--end::Form-->
+                        </div>
+                        <!--end::Content-->
+                    </div>
+                    <!--end::Layout-->
+                </div>
+                <!--end::Body-->
+            </div>
+            <!--end::Careers - Apply-->
+        </div>
+        <!--end::Content container-->
+    </div>
+    <!--end::Content-->
+</div>
+<!--end::Content wrapper-->
+@section Scripts {
+
+    <script>
+
+        $(document).ready(function () {
+            var apiBaseUrl = '@ViewBag.ApiBaseUrl'; // Get the dynamic base URL
+
+            $('#sectorId').change(function () {
+                var sectorId = $(this).val();
+                $.ajax({
+                    url: apiBaseUrl + 'GetDepartments/' + sectorId, // Construct the URL
+                    type: 'GET',
+                    success: function (data) {
+                        $('#departId').empty().append('<option value="">Select Department</option>'); // Clear the dropdown
+                        console.log(data);
+                        // Log data to console
+
+
+                        if (data && Array.isArray(data.$values)) {
+                            $.each(data.$values, function (i, item) {
+                                console.log("Adding option:", item.value, item.text); // Log for debugging
+                                $('#departId').append('<option value="' + item.value + '">' + item.text + '</option>');
+                            });
+                        }
+                    },
+                    error: function (xhr, status, error) {
+                        console.error("Failed to fetch departments:", error);
+                        $('#departId').empty().append('<option value="">Error fetching departments</option>');
+                    }
+                });
+            });
+
+            $('#departId').change(function () {
+                var departmentId = $(this).val();
+                $.get(apiBaseUrl + 'getMoraqaba/' + departmentId, function (data) {
+                    $('#muraqabaId').empty().append('<option value="">Select Moraqaba</option>');
+
+                    if (data.$values && data.$values.length > 0) {
+                        // Populate options and show the dropdown if data exists
+                        $.each(data.$values, function (i, item) {
+                            $('#muraqabaId').append('<option value="' + item.value + '">' + item.text + '</option>');
+                        });
+                        $('#muraqabaId').show(); // Show the dropdown
+                    } else {
+                        $('#muraqabaId').hide(); // Hide the dropdown if no data
+                    }
+                });
+            });
+
+            $('#muraqabaId').change(function () {
+                var moraqabaId = $(this).val();
+                $.get(apiBaseUrl + 'getQism/' + moraqabaId, function (data) {
+                    $('#qismId').empty().append('<option value="">Select Qism</option>');
+
+                    if (data.$values && data.$values.length > 0) {
+                        // Populate options and show the dropdown if data exists
+                        $.each(data.$values, function (i, item) {
+                            $('#qismId').append('<option value="' + item.value + '">' + item.text + '</option>');
+                        });
+                        $('#qismId').show(); // Show the dropdown
+                    } else {
+                        $('#qismId').hide(); // Hide the dropdown if no data
+                    }
+                });
+            });
+
+        });
+        //Call Paci By Civilid
+
+        $(document).ready(function () {
+            $('#civilIdInput').on('change', function () {
+                var civilId = $(this).val(); // Get the Civil ID input value
+
+                if (civilId) {
+                    $.ajax({
+                        url: '/GetUserDataPACI1/' + civilId,
+                        // This URL is correct
+                        type: 'GET',
+
+                        success: function (data) {
+                            console.log(data);
+
+                            // Process the returned data
+                            if (data && data.statusCode === "900") {
+                                $('#fullName').val(data.arFullName);
+                                console.log(data.arFullName);
+                                $('#email').val(data.email);
+                                console.log(data.email);
+
+                                $('#mobile').val(data.mobile);
+                                console.log(data.mobile);
+
+
+                            } else {
+                                console.error("Error retrieving user data:", data.message);
+                            }
+                        },
+                        error: function (jqXHR, textStatus, errorThrown) {
+                            console.log(url);
+                            console.error("AJAX error:", textStatus, errorThrown);
+                        }
+                    });
+                } else {
+                    console.warn("Civil ID input is empty.");
+                }
+            });
+        });
+
+
+    </script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/crypto-js/4.1.1/crypto-js.min.js"></script>
+
+    <script>
+        $(document).ready(function () {
+            $('#createUserForm').submit(function (e) {
+                e.preventDefault(); // Prevent the default form submission
+
+                // Encryption example
+                var password = $('#passwordInput').val();
+                var secretKey = 'MySecretKey12345'; // Example secret key
+                var encryptedPassword = CryptoJS.AES.encrypt(password, secretKey).toString();
+                var serviceId = $('input[name="User.ServiceId"]:checked').val();
+                //var status = $('input[name="User.Status""]:checked').val();
+                var statusValue = document.querySelector('input[name="User.Status"]:checked').value;
+
+                // Convert the string to a boolean value
+                var status = (statusValue === 'true');
+
+
+                // Collect user data
+                var userData = {
+                    User: {
+                        CivilId: $('#civilIdInput').val(),
+                        Username: $('#civilIdInput').val(),
+                        Name: $('#fullName').val(),
+                        Mobile: $('#mobile').val(),
+                        Email: $('#email').val(),
+                        Password: $('#passwordInput').val(),
+                        UserPasswordEncrypted: encryptedPassword,
+                        SectorId: $('#sectorId').val(),
+                        DepId: $('#departId').val(),
+                        MuraqabaId: $('#muraqabaId').val() || null,
+                        QismId: $('#qismId').val() || null,
+                        ServiceId: parseInt(serviceId) ||null,
+                        status:status,
+                    }
+                };
+
+                // API Base URL from server-side ViewBag
+                var apiBaseUrl = '@ViewBag.ApiBaseUrl';
+
+                // Create User
+                $.ajax({
+                    url: apiBaseUrl + 'Create/',
+                    type: 'POST',
+                    contentType: 'application/json',
+                    data: JSON.stringify(userData),
+                    success: function (response) {
+                        alert(response.message);
+
+                        // After user is successfully created, get UserId to assign roles and permissions
+                        var userId = response.userId; // Assuming response contains userId
+
+                        // Call the function to assign permissions and roles sequentially
+                        assignRoles(userId)
+                            
+                            .then(() => {
+                                // Redirect to User List Page after everything is done
+                                window.location.href = '@Url.Action("Index", "User", new { area = "Admin" })';
+                            })
+                            .catch((error) => {
+                                console.log("An error occurred while assigning permissions or roles:", error);
+                            });
+                    },
+                    error: function (xhr, status, error) {
+                        console.log(xhr.responseText);
+                        alert("Failed to create user: " + xhr.responseText);
+                    }
+                });
+
+                
+
+                // Assign Roles to User
+                function assignRoles(userId) {
+                    return new Promise((resolve, reject) => {
+                        // Collect all selected role IDs into an array
+                        var selectedRoleIds = [];
+                        $('input[name="SelectedRoleIds"]:checked').each(function () {
+                            selectedRoleIds.push($(this).val());
+                        });
+
+                        // Send the array of role IDs in a single AJAX request
+                        $.ajax({
+                            url: apiBaseUrl + 'AssignRoles/',
+                            type: 'POST',
+                            contentType: 'application/json',
+                            data: JSON.stringify({ UserId: userId, RoleIds: selectedRoleIds }),
+                            success: function () {
+                                console.log("Roles assigned successfully.");
+                                resolve(); // Resolve the promise
+                            },
+                            error: function (xhr, status, error) {
+                                console.log("Failed to assign roles: " + xhr.responseText);
+                                reject(xhr.responseText); // Reject the promise on error
+                            }
+                        });
+                    });
+                }
+            });
+        });
+    </script>
+
+
+  
+
+
+    <script>
+        $(document).ready(function () {
+            loadRoles();
+
+            function loadRoles() {
+                var apiBaseUrl = '@ViewBag.ApiBaseUrl';
+                $.ajax({
+                    url: apiBaseUrl + 'GetAllRoles/',
+                    method: 'GET',
+                    success: function (data) {
+                        // Ensure to use the correct function to populate roles
+                        populateRoles(data.$values);
+                    },
+                    error: function (xhr, status, error) {
+                        console.error("Error fetching Roles:", error);
+                    }
+                });
+            }
+
+            function populateRoles(roles) {
+                const RolesContainer = $('#RolesContainer');
+                RolesContainer.empty();  // Clear any existing roles
+
+                let row;
+                $.each(roles, function (index, role) {
+                    if (index % 3 === 0) {
+                        row = $('<div class="row mb-2"></div>'); // Create a new row for every 3 roles
+                        RolesContainer.append(row);
+                    }
+
+                    const checkbox = `
+                                    <div class="col-md-4">
+                                        <div class="form-check">
+                                                            <input class="form-check-input" type="checkbox" name="SelectedRoleIds" value="${role.roleId}" id="role-${index}">
+                                            <label class="form-check-label text-dark fs-5" for="role-${index}">
+                                                        ${role.roleName}
+                                            </label>
+                                        </div>
+                                    </div>`;
+
+                    row.append(checkbox); // Append the checkbox to the current row
+                });
+            }
+        });
+    </script>
+
+
+}
+

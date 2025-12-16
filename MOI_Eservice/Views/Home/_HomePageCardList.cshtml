@@ -1,0 +1,25 @@
+﻿@* @model IEnumerable<MoiEserviceLicenseInfo>
+
+
+@{
+    
+    string urlInitials = "";
+    // string urlInitials = "/Eservices/";
+
+    string RootSub = System.Configuration.ConfigurationManager.AppSettings["rootCheck"].ToString();
+
+    string urlTourism = Url.Action("Index", "UserLicenses");
+    urlTourism = urlTourism + "#Tourism";
+}
+
+
+<style>
+
+    .featured-candidates-hire, .featured-candidates-box {
+        text-align: right !important;
+    }
+</style>
+
+
+
+ *@

@@ -1,0 +1,139 @@
+﻿@model LicencesInfoVM
+
+@{
+    ViewBag.Title = Model.Name;
+    Layout = "~/Views/Shared/_LoginLayout.cshtml";
+    var userId = Context.Session.GetString("UserId");
+    var userName = Context.Session.GetString("UserUserName");
+    var civilId = Context.Session.GetString("UserCivilId");
+    var fullName = Context.Session.GetString("UserFullName");
+    var accountTypeId = Context.Session.GetString("UserAccouuntTypeId");
+
+}
+
+
+@* if (Model.id == 77)
+{
+    Html.RenderPartial("~/Views/Home/_LPServiceInfo.cshtml");
+}
+else
+{ *@
+<div class="container py-5 px-lg-5 mb-5" style="direction: rtl;">
+    <div class="card shadow-sm border-0 rounded-3">
+        <div class="card-body">
+            <h3 class="text-primary mb-4">تفاصيل الخدمة</h3>
+
+            <div class="row g-4">
+                <div class="col-md-12">
+                    <div class="bg-light p-3 rounded border">
+                        <h5 class="fw-bold text-dark mb-2"><i class="bi bi-bookmark-fill text-primary me-2"></i> اسم الخدمة</h5>
+                        <p class="text-muted mb-0">@Html.Raw(Model.Name)</p>
+                    </div>
+                </div>
+                <input type="hidden" asp-for="LicId" />
+                <input type="hidden" asp-for="ReqTypeId" />
+                <div class="col-md-12">
+                    <div class="bg-light p-3 rounded border">
+                        <h5 class="fw-bold text-dark mb-2"><i class="bi bi-info-circle-fill text-primary me-2"></i> وصف الخدمة</h5>
+                        <p class="text-muted mb-0">@Html.Raw(Model.Description)</p>
+                    </div>
+                </div>
+
+                <div class="col-md-12">
+                    <div class="bg-light p-3 rounded border">
+                        <h5 class="fw-bold text-dark mb-2"><i class="bi bi-check2-circle text-primary me-2"></i> الشروط الواجبة للحصول على الخدمة</h5>
+                        <p class="text-muted mb-0">@Html.Raw(Model.Conditions)</p>
+                    </div>
+                </div>
+
+                <div class="col-md-12">
+                    <div class="bg-light p-3 rounded border">
+                        <h5 class="fw-bold text-dark mb-2"><i class="bi bi-check2-circle text-primary me-2"></i> المستندات المطلوبة</h5>
+                        <p class="text-muted m-3 ">@Html.Raw(Model.RequiredDocuments)</p>
+                    </div>
+                </div>
+
+                <div class="col-md-12">
+                    <div class="bg-light p-3 rounded border">
+                        <h5 class="fw-bold text-dark mb-2"><i class="bi bi-gear-fill text-primary me-2"></i> الإجراءات</h5>
+                        <p class="text-muted mb-0">@Html.Raw(Model.Measures)</p>
+                    </div>
+                </div>
+
+                <div class="col-md-12">
+                    <div class="bg-light p-3 rounded border">
+                        <h5 class="fw-bold text-dark mb-2"><i class="bi bi-cash-coin text-primary me-2"></i> الرسوم</h5>
+                        <p class="text-muted mb-0">
+                            <strong>ثابتة:</strong> @Html.Raw(Model.FixedFees)<br />
+                            <strong>متغيرة:</strong> @Html.Raw(Model.VariableFees)
+                        </p>
+                    </div>
+                </div>
+            </div>
+            @{
+                // Ensure the URL starts with "/"
+                var safeUrl = Model.Url.StartsWith("/") ? Model.Url : "/" + Model.Url;
+
+                // Build the full absolute URL
+                var fullUrl = $"{Context.Request.Scheme}://{Context.Request.Host}{safeUrl}?id={Model.Id}";
+            }
+
+
+
+            <div class="mt-5 text-center">
+                <a href="@fullUrl"  class="btn btn-primary btn-lg px-5">
+                    <i class="bi bi-play-circle-fill me-2"></i> إبدأ الخدمة
+                </a>
+             @*    <form id="hiddenRedirectForm" method="get" asp-controller="@Model.Controller" asp-action="@Model.Action">
+                    @Html.AntiForgeryToken()
+                    <input type="hidden" name="activityId" value="@Model.ActvityTypeId" />
+                    <input type="hidden" name="ReqTypeId" value="@Model.ReqTypeId" />
+                    <input type="hidden" name="ServiceId" value="@Model.ServiceId" />
+                    <input type="hidden" name="LicTypeId" value="@Model.LicTypeId" />
+         
+
+                
+
+                <a href="javascript:void(0);" onclick="document.getElementById('hiddenRedirectForm').submit();" class="btn btn-primary btn-lg px-5">
+                    <i class="bi bi-play-circle-fill me-2"></i> إبدأ الخدمة
+                </a>
+                </form> *@
+                @* <a href="@fullUrl" class="btn btn-primary btn-lg px-5">
+                    <i class="bi bi-play-circle-fill me-2"></i> إبدأ الخدمة
+                </a> *@
+            </div>
+        </div>
+    </div>
+</div>
+
+@* }
+
+<div class="my-profile-box py-5 px-5">
+    <h3 class="mb-3">تفاصيل الخدمة </h3>
+
+
+    <div class="container p-4">
+
+        <div class="row">
+
+            <div class="candidates-details-desc">
+                @Html.Raw(Model.Description)
+            </div>
+
+            <div class="col-xl-12 col-lg-12 col-md-12 mb-3">
+                <div class="form-group">
+                    <h3></h3>
+                </div>
+            </div>
+        </div>
+        @if (userName != null)
+        {
+            <a href="@Model.Controller/@Model.Action" class="btn default-btn col-md-2 mx-3" style="text-decoration: none; color: white;">إبدأ الخدمة <i class="flaticon-plus"></i></a>
+        }
+        else
+        {
+    <a href="Account/Login?returnUrl=@Model.Controller/@Model.Action" class="default-btn">ابدأ الخدمة <i class="flaticon-list-1"></i></a>
+        }
+        
+    </div>
+</div> *@

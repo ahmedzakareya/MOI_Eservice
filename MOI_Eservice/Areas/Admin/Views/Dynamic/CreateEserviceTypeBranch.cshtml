@@ -1,0 +1,100 @@
+﻿@model EserviceTypeBranch
+
+@{
+    ViewBag.Title = "Create Eservice Type Branch";
+    Layout = "~/Areas/Admin/Views/Shared/_LayoutEserviceTourism.cshtml";
+}
+
+<div class="container-fluid mt-5">
+    <div class="card">
+        <div class="card-header">
+            <h3 class="card-title">Add Eservice Type Branch</h3>
+        </div>
+        <div class="card-body">
+            <form id="eserviceTypeBranchForm">
+                <div class="mb-4">
+                    <label for="EserviceTypeBranchAr" class="form-label">Name (Arabic)</label>
+                    <input type="text" class="form-control" id="EserviceTypeBranchAr" />
+                </div>
+
+                <div class="mb-4">
+                    <label for="EserviceTypeBranchEn" class="form-label">Name (English)</label>
+                    <input type="text" class="form-control" id="EserviceTypeBranchEn" />
+                </div>
+
+                <div class="mb-4">
+                    <label for="Url" class="form-label">URL</label>
+                    <input type="text" class="form-control" id="Url" />
+                </div>
+
+                <div class="mb-4">
+                    <label for="Fees" class="form-label">Fees</label>
+                    <input type="number" step="0.001" class="form-control" id="Fees" />
+                </div>
+
+                <div class="mb-4">
+                    <label for="ActivityTypesId" class="form-label">Activity Type</label>
+                    @Html.DropDownList("ActivityTypesId", ViewBag.ActivityTypes as List<SelectListItem>, "-- Select --", new { @class = "form-select" })
+                </div>
+
+                <div class="mb-4">
+                    <label for="RequestTypeId" class="form-label">Request Type</label>
+                    @Html.DropDownList("RequestTypeId", ViewBag.RequestTypes as List<SelectListItem>, "-- Select --", new { @class = "form-select" })
+                </div>
+
+                <div class="mb-4">
+                    <label for="Sort" class="form-label">Sort</label>
+                    <input type="number" class="form-control" id="Sort" />
+                </div>
+
+                <div class="mb-4">
+                    <label for="Status" class="form-label">Status</label>
+                    <select id="Status" class="form-select">
+                        <option value="true" selected>Active</option>
+                        <option value="false">Inactive</option>
+                    </select>
+                </div>
+
+                <div class="text-end">
+                    <button type="submit" class="btn btn-success">Create</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    <script>
+        const apiBaseUrl = '@ViewBag.ApiBaseUrl';
+
+        document.getElementById('eserviceTypeBranchForm').addEventListener('submit', async function (e) {
+            e.preventDefault();
+
+            const data = {
+                EserviceTypeBranchAr: document.getElementById("EserviceTypeBranchAr").value,
+                EserviceTypeBranchEn: document.getElementById("EserviceTypeBranchEn").value,
+                Url: document.getElementById("Url").value,
+                Fees: parseFloat(document.getElementById("Fees").value) || 0,
+                ActivityTypesId: parseInt(document.getElementById("ActivityTypesId").value),
+                RequestTypeId: parseInt(document.getElementById("RequestTypeId").value),
+                Sort: parseInt(document.getElementById("Sort").value) || 0,
+                Status: document.getElementById("Status").value === "true",
+                IsDeleted: false,
+                CreatedOn: new Date().toISOString()
+            };
+
+            const response = await fetch(apiBaseUrl + "CreateTypeBranch", {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify(data)
+            });
+
+            if (response.ok) {
+                alert("Created successfully!");
+                window.location.href = '/Admin/dynamic/GetEserviceTypeBranch';
+            } else {
+                alert("Failed to create Eservice Type Branch.");
+            }
+        });
+    </script>
+}

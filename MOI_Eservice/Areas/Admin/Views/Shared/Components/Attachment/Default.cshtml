@@ -1,0 +1,213 @@
+﻿<div class="card">
+    <div class="card-header">
+        <h5 class="card-title">إضافة مرفق</h5>
+    </div>
+    <div class="card-body">
+        <form id="attachmentUploadForm" method="post" enctype="multipart/form-data">
+            <input type="hidden" name="RequestId" value="@ViewBag.RequestId" />
+            <input type="hidden" name="ReqNo" value="@ViewBag.ReqNo" />
+            <input type="hidden" id="uploadUrl" value="@ViewBag.UploadUrl" />
+
+            <div id="attachmentFields">
+                @if (ViewBag.AttachmentRules != null)
+                {
+                  int fileIndex = 0; 
+@foreach (var rule in ViewBag.AttachmentRules)
+{
+    <div class="row mb-3">
+        <div class="col-md-10">
+            <label>
+                @rule.AttachName
+                @if (rule.IsMandatory)
+                {
+                    <span class="text-danger">* (إجباري)</span>
+                }
+            </label>
+            <input type="file"
+                   name="AttachmentFiles-@fileIndex"
+                   class="form-control"
+                   data-mandatory="@rule.IsMandatory"
+                   data-filename="@rule.AttachName"
+                    data-fieldname="@rule.FieldName"
+                   @(rule.IsMandatory ? "required" : "") />
+        </div>
+        @* <div class="col-md-2">
+            <button type="button" class="btn btn-danger removeField">إزالة</button>
+        </div> *@
+    </div>
+    fileIndex++;
+}
+                }
+            </div>
+            <button type="button" class="btn btn-success"  data-bs-toggle="modal" data-bs-target="#attachmentModal">
+                + إضافة مرفقات أخري
+            </button>
+@*             <button type="button" class="btn btn-success"  id="addAttachmentField"  data-bs-toggle="modal" data-bs-target="#addAttachmentField">+  إضافة مرفقات أخري</button>
+ *@@*             <button type="button" class="btn btn-primary submitAttachmentButton"  id="submitAttachmentButton">إرسال</button>
+ *@        </form>
+    </div>
+</div>
+
+
+
+<div class="modal fade" id="attachmentModal" tabindex="-1" aria-labelledby="attachmentModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered mw-650px">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2 class="fw-bold">إضافة مرفق</h2>
+                <div class="btn btn-icon btn-sm btn-active-icon-primary" data-bs-dismiss="modal">
+                    <i class="ki-outline ki-cross fs-1"></i>
+                </div>
+            </div>
+            <div class="modal-body scroll-y mx-5 my-7">
+                <form id="attachmentUploadForm" method="post" enctype="multipart/form-data">
+                    <div id="attachmentFieldsModal">
+                        <!-- Dynamic file inputs will be added here -->
+                    </div>
+                    <button type="button" class="btn btn-success" id="addMoreFields">إضافة مرفق جديد</button>
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">إغلاق</button>
+                <button type="button" class="btn btn-primary" id="submitAttachmentButton">إرسال</button>
+            </div>
+        </div>
+    </div>
+</div>
+<script>
+    // document.addEventListener("DOMContentLoaded", function () {
+    //     // Get the modal element
+    //     const modalElement = document.getElementById('attachmentModal');
+
+    //     // Ensure Bootstrap modal instance is correctly assigned
+    //     const modal = new bootstrap.Modal(modalElement);
+
+    //     // Attach event listener to the close buttons
+    //     document.querySelectorAll('.btn-clo').forEach(button => {
+    //         button.addEventListener('click', function () {
+    //             modal.hide(); // Hide the modal properly
+    //         });
+    //     });
+
+    //     // Ensure that the backdrop is removed after the modal is hidden
+    //     modalElement.addEventListener('hidden.bs.modal', function () {
+    //         document.querySelectorAll('.modal-backdrop').forEach(backdrop => backdrop.remove());
+    //     });
+    // });
+</script>
+<!-- Original card for the form (hidden behind the modal logic) -->
+@* <div class="card">
+    <div class="card-header">
+        <h5 class="card-title">إضافة مرفق</h5>
+    </div>
+    <div class="card-body">
+        <form id="attachmentUploadForm" method="post" enctype="multipart/form-data">
+            <div id="attachmentFields">
+                @if (ViewBag.AttachmentRules != null)
+                {
+                    int fileIndex = 0;
+                    @foreach (var rule in ViewBag.AttachmentRules)
+                    {
+                        <div class="row mb-3">
+                            <div class="col-md-10">
+                                <label>
+                                    @rule.AttachName
+                                    @if (rule.IsMandatory)
+                                    {
+                                        <span class="text-danger">* (إجباري)</span>
+                                    }
+                                </label>
+                                <input type="file"
+                                       name="AttachmentFiles-@fileIndex"
+                                       class="form-control"
+                                       data-mandatory="@rule.IsMandatory"
+                                       data-filename="@rule.AttachName"
+                                @(rule.IsMandatory ? "required" : "") />
+                            </div>
+                        </div>
+                        fileIndex++;
+                    }
+                }
+            </div>
+            <button type="button" class="btn btn-success" id="addAttachmentField">+ إضافة مرفقات أخري</button>
+            <button type="button" class="btn btn-primary submitAttachmentButton" id="submitAttachmentButton">إرسال</button>
+        </form>
+    </div>
+</div>
+ *@
+
+@* @section Scripts {
+    <script>
+        document.querySelector("#attachmentComponentContainer").addEventListener("DOMNodeInserted", function () {
+            initializeAttachmentUpload();
+        });
+        // Call it immediately for direct rendering
+        if (typeof initializeAttachmentUpload === "function") {
+            initializeAttachmentUpload();
+        }
+        function initializeAttachmentUpload() {
+            document.querySelector("#submitAttachmentButton").addEventListener("click", async function () {
+                const mandatoryFiles = document.querySelectorAll('input[data-mandatory="true"]');
+                let allMandatoryUploaded = true;
+                let missingFiles = [];
+
+                // Check mandatory files
+                mandatoryFiles.forEach(fileInput => {
+                    if (!fileInput.value) {
+                        allMandatoryUploaded = false;
+                        missingFiles.push(fileInput.getAttribute("data-filename"));
+                    }
+                });
+
+                if (!allMandatoryUploaded) {
+                    alert(`يرجى رفع الملفات الإلزامية المطلوبة: \n - ${missingFiles.join("\n - ")}`);
+                    return;
+                }
+
+                const form = document.querySelector("#attachmentUploadForm");
+                const formData = new FormData(form);
+
+                const attachmentsSection = document.querySelector("#attachmentsSection");
+
+                formData.forEach((file, key) => {
+                    if (key === "AttachmentFiles[]") {
+                        const fileReader = new FileReader();
+                        fileReader.onload = function (event) {
+                            const fileUrl = event.target.result;
+                            const targetStr = `kt_docs_card_collapsible${attachmentsSection.children.length + 1}`;
+                            const attachmentHtml = `
+                                    <div class="card shadow-sm pt-4 mb-6 mb-xl-9">
+                                        <div class="card-header collapsible cursor-pointer rotate" data-bs-toggle="collapse" data-bs-target="#${targetStr}">
+                                            <div class="card-title flex-column">
+                                                <div class="d-inline-flex align-items-center">
+                                                    <label class="mb-1 text-muted">${file.name}</label>
+                                                </div>
+                                            </div>
+                                            <div class="card-toolbar rotate-180">
+                                                <i class="ki-duotone ki-down fs-1"></i>
+                                            </div>
+                                        </div>
+                                        <div id="${targetStr}" class="collapse">
+                                            <div class="card-body">
+                                                <iframe src="${fileUrl}" style="width: 100%; height: 500px;"></iframe>
+                                            </div>
+                                        </div>
+                                    </div>
+                                `;
+                            attachmentsSection.insertAdjacentHTML("beforeend", attachmentHtml);
+                        };
+                        fileReader.readAsDataURL(file);
+                    }
+                });
+
+                alert("تم رفع الملفات وعرضها بنجاح.");
+            });
+        }
+
+        // Call this function after your component is rendered
+        initializeAttachmentUpload();
+
+    </script>
+
+}
+ *@

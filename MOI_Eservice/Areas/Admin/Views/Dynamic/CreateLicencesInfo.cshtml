@@ -1,0 +1,169 @@
+﻿@model MoiEserviceLicenseInfo
+
+@{
+    ViewBag.Title = "Create License Info";
+    Layout = "~/Areas/Admin/Views/Shared/_LayoutEserviceTourism.cshtml";
+}
+
+<div class="container-fluid mt-5">
+    <div class="card">
+        <div class="card-header">
+            <h3 class="card-title">Add New License Info</h3>
+        </div>
+        <div class="card-body">
+            <form id="licenseInfoForm">
+                <div class="mb-4">
+                    <label for="Name" class="form-label">Name</label>
+                    <input type="text" class="form-control" id="Name" />
+                </div>
+
+                <div class="mb-4">
+                    <label for="ActvityTypeId" class="form-label">Activity Type</label>
+                    @Html.DropDownList("ActvityTypeId", ViewBag.ActivityTypes as List<SelectListItem>, "-- Select --", new { @class = "form-select" })
+                </div>
+
+                <div class="mb-4">
+                    <label for="EserviceTypeBranchId" class="form-label">Eservice Type Branch</label>
+                    @Html.DropDownList("EserviceTypeBranchId", ViewBag.TypeBranches as List<SelectListItem>, "-- Select --", new { @class = "form-select" })
+                </div>
+
+                <div class="mb-4">
+                    <label for="ServiceId" class="form-label">Service</label>
+                    @Html.DropDownList("ServiceId", ViewBag.Services as List<SelectListItem>, "-- Select --", new { @class = "form-select" })
+                </div>
+
+                <div class="mb-4">
+                    <label for="ReqTypeId" class="form-label">Request Type</label>
+                    @Html.DropDownList("ReqTypeId", ViewBag.RequestTypes as List<SelectListItem>, "-- Select --", new { @class = "form-select" })
+                </div>
+
+                <div class="mb-4">
+                    <label for="TransTypeId" class="form-label">Transaction Type</label>
+                    @Html.DropDownList("TransTypeId", ViewBag.TransactionTypes as List<SelectListItem>, "-- Select --", new { @class = "form-select" })
+                </div>
+                <div class="mb-4">
+                    <label for="LicTypeId" class="form-label">Licence Type</label>
+                    @Html.DropDownList("LicTypeId", ViewBag.LicenceTypes as List<SelectListItem>, "-- Select --", new { @class = "form-select" })
+                </div>
+                <div class="mb-4">
+                    <label for="RequiredDocuments" class="form-label">Required Documents</label>
+                    <textarea id="RequiredDocuments" name="RequiredDocuments"></textarea>
+                </div>
+
+                <div class="mb-4">
+                    <label for="Conditions" class="form-label">Conditions</label>
+                    <textarea id="Conditions" name="Conditions"></textarea>
+                </div>
+
+                <div class="mb-4">
+                    <label for="Measures" class="form-label">Measures</label>
+                    <textarea id="Measures" name="Measures"></textarea>
+                </div>
+
+                <div class="mb-4">
+                    <label for="Description" class="form-label">Description</label>
+                    <textarea class="form-control" id="Description" name="Description"></textarea>
+                </div>
+
+                <div class="mb-4">
+                    <label for="VariableFees" class="form-label">Variable Fees</label>
+                    <input type="number" step="0.001" class="form-control" id="VariableFees" name="VariableFees" />
+                </div>
+
+                <div class="mb-4">
+                    <label for="FixedFees" class="form-label">Fixed Fees</label>
+                    <input type="number" step="0.001" class="form-control" id="FixedFees" name="FixedFees" />
+                </div>
+
+                <div class="mb-4">
+                    <label for="Sort" class="form-label">Sort</label>
+                    <input type="number" class="form-control" id="Sort" name="Sort" />
+                </div>
+
+                <div class="mb-4">
+                    <label for="Branch" class="form-label">Branch</label>
+                    <input type="text" class="form-control" id="Branch" name="Branch" />
+                </div>
+
+                <div class="mb-4">
+                    <label for="Controller" class="form-label">Controller</label>
+                    <input type="text" class="form-control" id="Controller" name="Controller" />
+                </div>
+
+                <div class="mb-4">
+                    <label for="Action" class="form-label">Action</label>
+                    <input type="text" class="form-control" id="Action" name="Action" />
+                </div>
+
+                <div class="mb-4">
+                    <label for="Url" class="form-label">Url</label>
+                    <input type="text" class="form-control" id="Url" name="Url" />
+                </div>
+
+                <div class="mb-4">
+                    <label for="Status" class="form-label">Status</label>
+                    <select id="Status" class="form-select">
+                        <option value="true" selected>Active</option>
+                        <option value="false">Inactive</option>
+                    </select>
+                </div>
+
+                <div class="text-end">
+                    <button type="submit" class="btn btn-success">Create</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    <script src="https://cdn.ckeditor.com/4.21.0/standard/ckeditor.js"></script>
+    <script>
+        const apiBaseUrl = '@ViewBag.ApiBaseUrl';
+
+        CKEDITOR.replace('RequiredDocuments', { contentsLangDirection: 'rtl' });
+        CKEDITOR.replace('Conditions', { contentsLangDirection: 'rtl' });
+        CKEDITOR.replace('Measures', { contentsLangDirection: 'rtl' });
+        CKEDITOR.replace('Description', { contentsLangDirection: 'rtl' });
+
+        document.getElementById('licenseInfoForm').addEventListener('submit', async function (e) {
+            e.preventDefault();
+
+            const data = {
+                Name: document.getElementById("Name").value,
+                RequiredDocuments: CKEDITOR.instances["RequiredDocuments"].getData(),
+                Conditions: CKEDITOR.instances["Conditions"].getData(),
+                Measures: CKEDITOR.instances["Measures"].getData(),
+                Description: CKEDITOR.instances["Description"].getData(),
+                VariableFees: parseFloat(document.getElementById("VariableFees").value) || 0,
+                FixedFees: parseFloat(document.getElementById("FixedFees").value) || 0,
+                Sort: parseInt(document.getElementById("Sort").value) || 0,
+                Branch: document.getElementById("Branch").value,
+                Controller: document.getElementById("Controller").value,
+                Action: document.getElementById("Action").value,
+                Url: document.getElementById("Url").value,
+                ActvityTypeId: parseInt(document.getElementById("ActvityTypeId").value),
+                EserviceTypeBranchId: parseInt(document.getElementById("EserviceTypeBranchId").value),
+                ServiceId: parseInt(document.getElementById("ServiceId").value),
+                ReqTypeId: parseInt(document.getElementById("ReqTypeId").value),
+                TransTypeId: parseInt(document.getElementById("TransTypeId").value),
+                LicTypeId: parseInt(document.getElementById("LicTypeId").value),
+
+                Status: document.getElementById("Status").value === "true"
+            };
+
+            const response = await fetch(apiBaseUrl + "AddLicenseInfo", {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify(data)
+            });
+
+            if (response.ok) {
+                alert("Created successfully!");
+                window.location.href = '/Admin/dynamic/GetLicencesInfo';
+            } else {
+                alert("Failed to create license info.");
+            }
+        });
+    </script>
+}

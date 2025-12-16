@@ -1,0 +1,159 @@
+﻿@model LicencesWithRequestForUser
+
+@{
+    ViewBag.Title = "RequestsList";
+    var token = Context.Session.GetString("UserToken");
+    var userId = Context.Session.GetString("UserId");
+    var userName = Context.Session.GetString("UserUserName");
+    var civilId = Context.Session.GetString("UserCivilId");
+    var fullName = Context.Session.GetString("UserFullName");
+    var accountTypeId = Context.Session.GetString("UserAccouuntTypeId");
+    var counter = 1;
+}
+
+<link href="https://fonts.googleapis.com/css2?family=Cairo&display=swap" rel="stylesheet">
+<link href="https://cdn.datatables.net/1.13.6/css/jquery.dataTables.min.css" rel="stylesheet">
+<link href="https://cdn.datatables.net/responsive/2.5.0/css/responsive.dataTables.min.css" rel="stylesheet">
+
+@if (TempData["SuccessMessage"] != null)
+{
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    <script>
+        document.addEventListener("DOMContentLoaded", function () {
+            Swal.fire({
+                icon: 'success',
+                title: '<span style="font-size: 22px; color: #198754;">تم إرسال الطلب بنجاح</span>',
+                html: `<div style="text-align: right; padding: 10px 20px;"><hr style="margin: 10px 0;" /><p class="text-muted small mb-0">يمكنك متابعة الطلب من صفحة الطلبات.</p></div>`,
+                confirmButtonText: 'موافق',
+                confirmButtonColor: '#198754',
+                width: '600px',
+                heightAuto: false
+            });
+        });
+    </script>
+}
+<link href="~/assets/css/pagesdatatable.css" rel="stylesheet" />
+
+<link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
+
+<div class="container-fluid p-0">
+    <div class="modern-card">
+        <div class="modern-card-header">
+            <div class="d-flex align-items-center">
+                <div class="rounded-circle bg-white d-flex align-items-center justify-content-center me-3" style="width: 36px; height: 36px;">
+                    <i class="fas fa-list-alt " style="color:#3a5795"></i>
+                </div>
+                <span>قائمة الطلبات</span>
+            </div>
+        </div>
+
+        <div class="modern-card-body">
+            <div class="table-responsive mt-3">
+                <table id="kt_requests_table" class="table table-bordered table-hover nowrap" style="width:100%" dir="rtl">
+                    <thead>
+                        <tr>
+                            
+                            <th>م</th>
+                            <th>تاريخ الطلب</th>
+                            <th>رقم الطلب</th>
+                            <th>نوع الخدمة</th>
+                            <th>صاحب الترخيص</th>
+                            <th>نوع الطلب</th>
+                            <th>حالة الطلب</th>
+                            <th>نوع الرخصة</th>
+                            <th>تفاصيل</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @foreach (var item in Model.RequestVM)
+                        {
+                            <tr>
+                                
+                                <td>@counter</td>
+                                <td>@item.Licreqtime?.ToString("yyyy-MM-dd")</td>
+                                <td>@item.Reqno</td>
+                                <td>@item.ServiceName</td>
+                                <td>@item.Licname</td>
+                                <td>@item.ReqTypeName</td>
+                                @{
+                                    string statusClass = item.RequestStatusId switch
+                                    {
+                                        1 => "status-processing",
+                                        2 => "status-processing",
+                                        3 => "status-pending",
+                                        4 => "status-processing",
+                                        7 => "status-approved",
+                                        12 => "status-pending",
+                                        9 => "status-rejected",
+                                        _ => "status-badge"        
+                                    };
+                                }
+                                <td><span class="status-badge @statusClass">@item.ReqStatusName</span></td>
+                                <td>@item.LicTypeName</td>
+                                <td>
+                                    <div class="d-flex justify-content-center gap-2">
+                                        @{
+                                            string actionUrl = "";
+                                            if (item.ReqtypeId == (int)RequestTypeEnum.PreApprovementConvert || item.ReqtypeId == (int)RequestTypeEnum.PreApprovementNew)
+                                                actionUrl = Url.Action("PreApprovalDetails", "Tourism", new { id = MyCrypto.Encode(item.RequestId.ToString()) });
+                                            else if (item.ReqtypeId == (int)RequestTypeEnum.AddMoIC || item.ReqtypeId == (int)RequestTypeEnum.RenewOrChangeMOIC ||
+                                            item.ReqtypeId == (int)RequestTypeEnum.RenewMOIC || item.ReqtypeId == (int)RequestTypeEnum.ChangeAddressMOIC ||
+                                            item.ReqtypeId == (int)RequestTypeEnum.DeleteMOIC)
+                                                actionUrl = Url.Action("MOCIReqlDetails", "Tourism", new { id = MyCrypto.Encode(item.RequestId.ToString()) });
+                                            else if (item.ServiceId == (int)ServiceEnum.Tourism)
+                                                actionUrl = Url.Action("RequestDetails", "Tourism", new { id = MyCrypto.Encode(item.RequestId.ToString()) });
+                                            else if (item.ServiceId == (int)ServiceEnum.Elaw || item.ServiceId == (int)ServiceEnum.Mosanafat)
+                                                actionUrl = Url.Action("RequestDetails", "Mosanafat", new { id = MyCrypto.Encode(item.RequestId.ToString()) });
+                                        }
+                                        <button class="btn-view-details" title="عرض التفاصيل" onclick="location.href='@actionUrl'"><i class="ri-eye-line"></i></button>
+
+                                        @if ((item.RequestStatusId == (int)RequestStatusEnum.WaitingForPayment && item.Licpaystatus != "1") ||
+                                       (item.RequestStatusId == (int)RequestStatusEnum.WaitingBankGuarantee && item.Licpaystatus != "1"))
+                                        {
+                                            <a href="@Url.Action("TourismPay", "Tourism", new { id = MyCrypto.Encode(item.RequestId.ToString()) })" title="دفع الرسوم">
+                                                <img src="~/assets/images/credit2.png" width="32" alt="logo" />
+                                            </a>
+                                        }
+                                    </div>
+                                </td>
+                            </tr>
+                            counter++;
+                        }
+                    </tbody>
+                </table>
+            </div>
+        </div>
+        
+    </div>
+</div>
+
+@section Scripts {
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script src="https://cdn.datatables.net/1.13.6/js/jquery.dataTables.min.js"></script>
+    <script src="https://cdn.datatables.net/responsive/2.5.0/js/dataTables.responsive.min.js"></script>
+    <script>
+        $(document).ready(function () {
+            $('#kt_requests_table').DataTable({
+                responsive: true,
+                scrollX: true,
+                language: {
+                    url: '//cdn.datatables.net/plug-ins/1.13.4/i18n/ar.json'
+                },
+                pageLength: 10,
+                lengthMenu: [10, 25, 50, 100],
+                ordering: true, 
+                autoWidth: false,
+                columnDefs: [
+                    { targets: [0, -1], orderable: false } 
+                ],
+                initComplete: function () {
+                    $('.dataTables_filter input')
+                        .attr('placeholder', 'ابحث هنا...')
+                        .css('direction', 'rtl');
+                }
+            });
+        });
+    </script>
+
+
+}

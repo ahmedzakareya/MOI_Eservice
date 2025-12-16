@@ -1,0 +1,959 @@
+﻿@model Business.ViewModel.MoiEserviceLicensesRequestVM
+
+@{
+    Layout = "~/Views/Shared/_LayoutEservice.cshtml";
+}
+
+
+
+<link href="~/assets/css/requeststyle.css" rel="stylesheet" />
+
+
+<div id="loadingSpinner" style="display:none; position:absolute; top:50%; left:50%; transform: translate(-50%, -50%); z-index: 9999;">
+    <div class="spinner-border text-primary" role="status">
+        <span class="visually-hidden">Loading...</span>
+    </div>
+</div>
+
+<!-- Breadcrumb Area -->
+<div class="breadcrumb-area">
+    <!--<h1>الملف الشخصي</h1>-->
+    <ol class="breadcrumb">
+        <li class="item"><a href="MyAccount.html">الرئيسيه</a></li>
+        <li class="item"><a href="MyAccount.html">حسابي</a></li>
+        <li class="item">الملف الشخصي</li>
+    </ol>
+</div>
+<!-- End Breadcrumb Area -->
+<!-- Start Company Profile Area -->
+
+<div class="my-profile-box">
+    <div class="gov-head gov-head--flat" dir="rtl">
+        <div class="gov-head__title">
+            <!-- Beautiful, crisp icon (Remix Icon) -->
+            <i class="ri-award-line gov-head__icon" aria-hidden="true"></i>
+            <span class="gov-head__heading">طلب  شهادة لمن يهمة الأمر </span>
+        </div>
+
+        <img class="gov-head__seal"
+             src="~/assets/images/MOI-ORIGINAL.png"
+             alt="ترخيص" />
+    </div>
+
+
+    <form id="myform" method="post" enctype="multipart/form-data" action="@Url.Action("CreateNewDailyRequest", "LocalPress")">
+
+        @Html.AntiForgeryToken()
+        <div class="row align-items-center">
+
+            <!-- Flat License Card -->
+            <div class="card lic-flat-card shadow-sm p-0 mb-5 rounded-4" dir="rtl">
+
+                <!-- Header -->
+                <div class="lic-header d-flex justify-content-between align-items-center px-4 py-3">
+                    <div class="d-flex align-items-center">
+                        <div class="lic-header__icon bg-white rounded-circle d-flex align-items-center justify-content-center me-3">
+                            <i class="ri-book-3-line text-primary"></i>
+                        </div>
+                        <h5 class="mb-0 fw-bold text-white">البيانات الأساسية للترخيص</h5>
+                    </div>
+                    <div class="d-flex align-items-center gap-1">
+                        <i class="ri-bookmark-line text-white fs-5 toggle-bookmark" role="button" aria-label="bookmark"></i>
+                        <i class="ri-bookmark-fill text-white fs-5 d-none toggle-bookmark" role="button" aria-label="bookmarked"></i>
+                    </div>
+                </div>
+
+
+                <!-- Form Content -->
+                <div class="p-4">
+                    <div class="row row-cols-1 row-cols-md-2 gy-4">
+
+
+
+                        <div class="col">
+                            <label class="form-label lic-label">اسم الصحيفة <span class="required">*</span></label>
+                            <input type="text" class="form-control lic-control" placeholder="اسم الصحيفة" asp-for="Licname" name="Licname">
+                        </div>
+
+                        <div class="col">
+                            <label class="form-label lic-label">اسم رئيس التحرير <span class="required">*</span></label>
+                            <input type="text" class="form-control lic-control" placeholder="اسم رئيس التحرير" asp-for="Licname" name="Licname">
+                        </div>
+                        <div class="col">
+                            <label class="form-label lic-label">نوع الترخيص <span class="required">*</span></label>
+                            <select class="form-control select2 lic-control" id="ActivityTypeId" name="ActivityTypeId">
+                                <option value="">اختر النشاط</option>
+                                @if (Model.ActivityTypes != null)
+                                {
+                                    foreach (var item in Model.ActivityTypes)
+                                    {
+                                        <option value="@item.Id">@item.NameAr</option>
+                                    }
+                                }
+                            </select>
+                        </div>
+
+                        <div class="col">
+                            <label class="form-label lic-label">نوع صاحب الإمتياز <span class="required">*</span></label>
+                            <select class="form-control select2 lic-control" id="ActivityTypeId" name="ActivityTypeId">
+                                <option value="">اختر صاحب الإمتياز</option>
+                                @if (Model.licenceTypesLookupVMs != null)
+                                {
+                                    foreach (var item in Model.licenceTypesLookupVMs)
+                                    {
+                                        <option value="@item.Id">@item.NameAr</option>
+                                    }
+                                }
+                            </select>
+                        </div>
+
+                        <div class="col">
+                            <label class="form-label lic-label">إسم المرخص له <span class="required">*</span></label>
+                            <input asp-for="ActivityCode" name="ActivityCode" type="text" class="form-control lic-control" placeholder="إسم المرخص له">
+                        </div>
+
+                        <div class="col">
+                            <label class="form-label lic-label">البريد الالكتروني <span class="required">*</span></label>
+                            <input asp-for="CentralNoMoci" name="CentralNoMoci" type="text" class="form-control lic-control" placeholder="البريد الالكتروني">
+                        </div>
+
+
+
+
+
+
+                    </div>
+                </div>
+
+            </div>
+
+
+
+
+
+
+
+
+
+
+            <div class="row mb-4" dir="rtl">
+                <div class="col-lg-12 col-md-12">
+                    <div class="card border-0">
+                        <div class="card-body">
+
+                            <div class="row g-4">
+                                <!-- keep layout, improved gutters -->
+                                <!-- Sidebar (Search and Info) -->
+                                <div class="col-lg-4">
+                                    <div class="bg-white p-4 h-100 rounded-16 border" style="border-color: var(--border);">
+
+                                        <!-- Header -->
+                                        <div class="section-head d-flex align-items-center gap-3 rounded-12">
+                                            <div class="icon-chip">
+                                                <i class="ri-map-pin-line fs-5"></i>
+                                            </div>
+                                            <div class="min-w-0">
+                                                <h6 class="mb-0 fw-bold text-white text-truncate">البحث بالرقم الآلي</h6>
+                                                <small class="text-white-50">عنوان داخل الكويت</small>
+                                            </div>
+                                        </div>
+
+                                        <!-- Search Box -->
+                                        <div class="search-wrap w-100 mt-3 mb-4">
+                                            <input type="text"
+                                                   class="form-control text-center"
+                                                   id="AddressAutoNo"
+                                                   placeholder="ابحث بالرقم الآلي"
+                                                   autocomplete="off"
+                                                   onkeyup="autoSuggest()" />
+                                            <button type="button"
+                                                    class="btn search-btn"
+                                                    onclick="return get_Amount($('#AddressAutoNo').val())"
+                                                    aria-label="بحث">
+                                                <i class="ri-search-line fs-6"></i>
+                                            </button>
+                                            <ul id="suggestionList"
+                                                class="autocomplete-suggestions list-unstyled position-absolute w-100 bg-white shadow mt-1 z-3 d-none">
+                                            </ul>
+                                        </div>
+
+                                        <!-- Address Fields -->
+                                        <div id="address-section">
+                                            <div class="addr-card shadow-sm mb-4" id="address-fields">
+                                                <div class="card-body">
+                                                    <div class="row g-3">
+
+                                                        <div class="col-md-6 addr-field">
+                                                            <div class="header">
+                                                                <i class="ri-barcode-box-line"></i>
+                                                                <span>الرقم الآلي للعنوان</span>
+                                                            </div>
+                                                            <div class="content">
+                                                                @Html.TextBoxFor(m => m.address.AalliNo, new { @class = "form-control", @readonly = "readonly", @id = "RequestNewAddressAutoNo" })
+                                                            </div>
+                                                        </div>
+
+                                                        <div class="col-md-6 addr-field">
+                                                            <div class="header">
+                                                                <i class="ri-government-line"></i>
+                                                                <span>المحافظة</span>
+                                                            </div>
+                                                            <div class="content">
+                                                                <input type="text" readonly id="RequestNewAddressGovName" class="form-control" />
+                                                                @Html.TextBoxFor(m => m.address.GovernateId, new { @class = "d-none", @id = "CompanyGovId", @readonly = "readonly" })
+                                                            </div>
+                                                        </div>
+
+                                                        <div class="col-md-6 addr-field">
+                                                            <div class="header">
+                                                                <i class="ri-community-line"></i>
+                                                                <span>المنطقة</span>
+                                                            </div>
+                                                            <div class="content">
+                                                                <input type="text" readonly id="RequestNewAreaName" class="form-control" />
+                                                                @Html.TextBoxFor(m => m.address.AreaId, new { @class = "d-none", @id = "CompanyAreaId", @readonly = "readonly" })
+                                                            </div>
+                                                        </div>
+
+                                                        <div class="col-md-6 addr-field">
+                                                            <div class="header">
+                                                                <i class="ri-grid-line"></i>
+                                                                <span>القطعة</span>
+                                                            </div>
+                                                            <div class="content">
+                                                                @Html.TextBoxFor(m => m.address.BlockArabic, new { @class = "form-control", @readonly = "readonly", @id = "RequestNewBlookName" })
+                                                            </div>
+                                                        </div>
+
+                                                        <div class="col-md-12 addr-field">
+                                                            <div class="header">
+                                                                <i class="ri-building-4-line"></i>
+                                                                <span>المبنى</span>
+                                                            </div>
+                                                            <div class="content">
+                                                                @Html.TextBoxFor(m => m.address.BuildingNo, new { @class = "form-control", @readonly = "readonly", @id = "RequestNewBulding" })
+                                                            </div>
+                                                        </div>
+
+                                                        <div class="col-md-12 addr-field">
+                                                            <div class="header">
+                                                                <i class="ri-road-map-line"></i>
+                                                                <span>الشارع</span>
+                                                            </div>
+                                                            <div class="content">
+                                                                @Html.TextBoxFor(m => m.address.StreetArabic, new { @class = "form-control", @readonly = "readonly", @id = "RequestNewStreetName" })
+                                                            </div>
+                                                        </div>
+
+                                                        <div class="col-md-12 addr-field">
+                                                            <div class="header">
+                                                                <i class="ri-user-3-line"></i>
+                                                                <span>المالك</span>
+                                                            </div>
+                                                            <div class="content">
+                                                                @Html.TextBoxFor(m => m.address.BuildingName, new { @class = "form-control", @readonly = "readonly", @id = "RequestLicowner" })
+                                                            </div>
+                                                        </div>
+
+                                                        <div class="col-md-12 addr-field">
+                                                            <div class="header">
+                                                                <i class="ri-store-3-line"></i>
+                                                                <span>الدور - المحل</span>
+                                                            </div>
+                                                            <div class="content">
+                                                                @Html.TextBoxFor(m => m.address.FloorNo, new { @class = "form-control", @readonly = "readonly", @id = "RequestNewParcelOrFloor" })
+                                                            </div>
+                                                        </div>
+
+                                                        <div class="col-md-12">
+                                                            <label for="PhoneNo" class="form-label fw-semibold">تليفون <span class="text-danger">*</span></label>
+                                                            @Html.TextBoxFor(m => m.Company.PhoneNo, new { @class = "form-control", @id = "PhoneNo" })
+                                                        </div>
+
+                                                        <div class="col-md-12">
+                                                            <label for="FaxNo" class="form-label fw-semibold">فاكس</label>
+                                                            @Html.TextBoxFor(m => m.Company.FaxNo, new { @class = "form-control", @id = "FaxNo" })
+                                                        </div>
+
+                                                    </div>
+                                                </div>
+                                            </div>
+
+                                            <!-- No-address state (unchanged IDs) -->
+                                            <div id="no-address-icon" class="d-none mt-5">
+                                                <div class="wrapper-notebook">
+                                                    <div class="notebook-page text-center">
+                                                        <div class="icon-container">
+                                                            <i class="ri-error-warning-line" style="font-size: 36px;"></i>
+                                                        </div>
+                                                        <div class="note-text">
+                                                            <h5 class="fw-bold text-danger">لم يتم العثور على بيانات</h5>
+                                                            <p class="text-muted mb-0">الرقم الآلي المدخل غير صحيح</p>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+
+                                        </div><!-- /address-section -->
+                                    </div>
+                                </div>
+
+                                <!-- Map Section -->
+                                <div class="col-lg-8">
+                                    <div class="map-card p-4 h-100 d-flex flex-column">
+
+                                        <!-- Header -->
+                                        <div class="section-head d-flex align-items-center gap-3 rounded-12">
+                                            <div class="icon-chip">
+                                                <i class="ri-road-map-line fs-5"></i>
+                                            </div>
+                                            <div class="min-w-0">
+                                                <h6 class="mb-0 fw-bold text-white text-truncate">الموقع على الخريطة</h6>
+                                            </div>
+                                        </div>
+
+                                        <!-- Map -->
+                                        <div id="map"></div>
+                                    </div>
+                                </div>
+
+                            </div><!-- /row -->
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+
+
+
+
+
+
+
+
+            <!-- ESRI ArcGIS CSS -->
+            <link rel="stylesheet" href="https://js.arcgis.com/4.11/esri/css/main.css">
+
+
+
+        </div>
+        <div id="partnersHiddenInputs"></div>
+
+        <div class="row mb-4">
+            <div class="col-lg-12 col-md-12">
+                <div class="card border border-1">
+                    <div class="card-body">
+                        <div class="d-flex align-items-center justify-content-between mb-3">
+                            <div class="d-flex align-items-center">
+                                <div class="icon bg-light text-danger rounded-circle d-flex align-items-center justify-content-center me-3" style="width: 50px; height: 50px;">
+                                    <i class="ri-attachment-line" style="font-size: 24px;"></i>
+                                </div>
+                                <div>
+                                    <h5 class="mb-1 fw-bold text-primary">مرفقات الطلب</h5>
+                                    <span class="text-danger small fw-bold">الملفات بصيغه PDF بحد أقصى 2MB</span>
+                                </div>
+                            </div>
+                            <div>
+                                <i class="ri-bookmark-line text-danger fs-5 me-2 hover-opacity" style="cursor: pointer;"></i>
+                                <i class="ri-bookmark-fill text-danger fs-5 d-none hover-opacity" style="cursor: pointer;"></i>
+                            </div>
+                        </div>
+
+                        <hr class="mt-2 mb-3 border-danger opacity-25">
+
+                        <div class="row">
+                            @foreach (var item in Model.attachRules)
+                            {
+                                var inputId = $"file-{item.Id}";
+                                var fileNameId = $"file-name-{item.Id}";
+                                var previewDivId = $"pdf-preview-{item.Id}";
+                                var iframeId = $"pdf-iframe-{item.Id}";
+                                var errorId = $"error-{item.Id}";
+                                var hiddenFileNameId = $"file-name-hidden-{item.Id}";
+
+                                var isMandatory = item.IsMandatory ? true : false;
+
+                                var cardStyle = isMandatory ? "background-color:#fdf8f8;" : "";
+                                var labelClass = isMandatory ? "text-muted" : "text-muted";
+                                var requiredStar = isMandatory ? "<span class='text-danger'>*</span>" : "";
+
+                                <div class="col-md-6">
+                                    <div class="pdf-card position-relative border rounded shadow-sm p-3 mb-4 bg-white" style="@cardStyle">
+                                        <div class="d-flex align-items-center mb-3">
+                                            <img src="~/Files/pdf.png" alt="upload icon" width="20" height="20" class="me-2" />
+
+                                            <div class="flex-grow-1">
+                                                <label class="form-label fw-bold mb-0 @labelClass">
+                                                    @Html.Raw(item.AttachName) @Html.Raw(requiredStar)
+                                                </label>
+                                                <div id="@fileNameId" class="small text-muted mt-1"></div>
+                                            </div>
+
+                                            <label for="@inputId" class="btn btn-sm btn-outline-primary ms-2">
+                                                <i class="ri-upload-cloud-line me-1"></i> اختر PDF
+                                            </label>
+
+                                            <input type="file"
+                                                   id="@inputId"
+                                                   name="UploadedFiles"
+                                                   class="d-none"
+                                                   accept=".pdf"
+                                                   onchange="handleFileUpload(this, '@previewDivId', '@iframeId', '@fileNameId', '@errorId', '@item.Id', @(item.IsMandatory.ToString().ToLower()))" />
+                                        </div>
+
+                                        <div id="@errorId" class="text-danger small mb-2" style="display:none;">خطأ في الملف</div>
+
+                                        <div id="@previewDivId" class="pdf-preview-wrapper border rounded" style="display:none;">
+                                            <div class="d-flex justify-content-between align-items-center p-2 border-bottom">
+                                                <span class="fw-bold text-secondary">معاينة الملف</span>
+                                                <div>
+                                                    <button type="button" class="btn btn-sm btn-outline-danger"
+                                                            onclick="clearPdfPreview('@previewDivId', '@inputId', '@fileNameId', '@iframeId', '@hiddenFileNameId')">
+                                                        <i class="ri-close-line"></i>
+                                                    </button>
+                                                </div>
+                                            </div>
+                                            <iframe id="@iframeId" class="w-100" style="height: 300px;" frameborder="0"></iframe>
+                                        </div>
+
+                                        <input type="hidden"
+                                               name="AttachInfo"
+                                               id="@hiddenFileNameId"
+                                               data-required="@item.IsMandatory.ToString().ToLower()"
+                                               data-label="@item.AttachName" />
+
+                                    </div>
+                                </div>
+                            }
+                        </div>
+
+
+
+
+                    </div>
+                </div>
+            </div>
+        </div>
+
+
+
+
+
+
+        @section Scripts {
+            <script>
+
+                function handleFileUpload(input, previewDivId, iframeId, fileNameId, errorId, itemId, isMandatory) {
+                    const file = input.files[0];
+
+                    const errorEl = document.getElementById(errorId);
+                    const fileNameEl = document.getElementById(fileNameId);
+                    const previewDiv = document.getElementById(previewDivId);
+                    const iframe = document.getElementById(iframeId);
+                    const hiddenInput = document.getElementById("file-name-hidden-" + itemId);
+
+                    const maxSize = 2 * 1024 * 1024; // 2MB
+
+                    // Reset preview and values
+                    previewDiv.style.display = "none";
+                    iframe.removeAttribute("src");
+                    fileNameEl.innerText = "";
+                    hiddenInput.value = "";
+                    errorEl.style.display = "none";
+
+                    // No file selected
+                    if (!file) {
+                        if (isMandatory) {
+                            errorEl.textContent = "هذا الملف مطلوب";
+                            errorEl.style.display = "block";
+                        }
+                        input.value = "";
+                        return;
+                    }
+
+                    // Invalid file type
+                    if (file.type !== "application/pdf") {
+                        errorEl.textContent = "يجب اختيار ملف بصيغة PDF فقط";
+                        errorEl.style.display = "block";
+                        input.value = "";
+                        return;
+                    }
+
+                    // File size exceeds limit
+                    if (file.size > maxSize) {
+                        errorEl.textContent = "حجم الملف يجب ألا يتجاوز 2 ميجابايت";
+                        errorEl.style.display = "block";
+                        input.value = "";
+                        return;
+                    }
+
+                    // Set file name and attach ID and label for server
+                    fileNameEl.innerText = file.name;
+                    hiddenInput.value = itemId + "|" + file.name + "|" + hiddenInput.dataset.label;
+
+                    // Preview PDF
+                    const reader = new FileReader();
+                    reader.onload = function (e) {
+                        iframe.src = e.target.result;
+                        previewDiv.style.display = "block";
+                    };
+                    reader.readAsDataURL(file);
+                }
+
+
+
+                function clearPdfPreview(previewDivId, inputId, fileNameId, iframeId, hiddenInputId) {
+                    document.getElementById(previewDivId).style.display = "none";
+                    document.getElementById(fileNameId).innerText = "";
+                    document.getElementById(iframeId).removeAttribute("src");
+                    document.getElementById(hiddenInputId).value = "";
+                    document.getElementById(inputId).value = "";
+                }
+
+
+                function clearPdfPreview(previewDivId, inputId, fileNameId, iframeId, hiddenInputId) {
+                    document.getElementById(previewDivId).style.display = "none";
+                    document.getElementById(fileNameId).innerText = "";
+                    document.getElementById(iframeId).removeAttribute("src");
+                    document.getElementById(hiddenInputId).value = "";
+                    document.getElementById(inputId).value = "";
+                }
+
+
+
+                function clearPdfPreview(previewDivId, inputId, fileNameId, iframeId, hiddenInputId) {
+                    document.getElementById(previewDivId).style.display = "none";
+                    document.getElementById(fileNameId).innerText = "";
+                    document.getElementById(iframeId).src = "";
+                    document.getElementById(hiddenInputId).value = "";
+                    document.getElementById(inputId).value = "";
+                }
+
+
+
+                // function handleFileUpload(input, previewDivId, iframeId, fileNameId, errorId, itemId) {
+                //     const file = input.files[0];
+                //     const errorEl = document.getElementById(errorId);
+                //     const fileNameEl = document.getElementById(fileNameId);
+                //     const previewDiv = document.getElementById(previewDivId);
+                //     const iframe = document.getElementById(iframeId);
+                //     const hiddenInput = document.getElementById("file-name-hidden-" + itemId);
+
+                //     if (!file || file.type !== "application/pdf") {
+                //         errorEl.style.display = "block";
+                //         fileNameEl.innerText = "";
+                //         previewDiv.style.display = "none";
+                //         iframe.src = "";
+                //         hiddenInput.value = "";
+                //         return;
+                //     }
+
+                //     errorEl.style.display = "none";
+                //     fileNameEl.innerText = file.name;
+                //     hiddenInput.value = file.name;
+
+                //     const reader = new FileReader();
+                //     reader.onload = function (e) {
+                //         iframe.src = e.target.result;
+                //         previewDiv.style.display = "block";
+                //     };
+                //     reader.readAsDataURL(file);
+                // }
+
+                function clearPdfPreview(previewDivId, inputId, fileNameId, iframeId, hiddenInputId) {
+                    document.getElementById(previewDivId).style.display = "none";
+                    document.getElementById(fileNameId).innerText = "";
+                    document.getElementById(iframeId).src = "";
+                    document.getElementById(hiddenInputId).value = "";
+                    document.getElementById(inputId).value = "";
+                }
+            </script>
+        }
+        <input type="hidden" id="RequestUnit_no" asp-for="address.UnitNo" />
+        <input type="hidden" id="Requestfloor_no" asp-for="address.FloorNo" />
+
+        <div class="col-lg-12 col-md-12">
+            <button type="submit" class="default-btn"> إرسال الطلب  <i class="ri-edit-box-line"></i></button>
+        </div>
+
+    </form>
+</div>
+
+<div class="modal fade" id="pdfModal" tabindex="-1" aria-labelledby="pdfModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-xl modal-dialog-scrollable">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="pdfModalLabel"></h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="إغلاق"></button>
+            </div>
+            <div class="modal-body">
+                <iframe id="modalPdfViewer" width="100%" height="600px" frameborder="0"></iframe>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+
+<script>
+    function get_Amount(ID) {
+        var address = $("#AddressAutoNo").val();
+
+            Swal.fire({
+                title: '<span style="font-size: 20px; color: #2471a3;">جاري تحميل البيانات</span>',
+                html: `
+            <div class="transfer-container">
+              <div class="transfer-wrapper">
+                <!-- صورة المصدر -->
+                <img src="../Files/KuwaitFinderLogo.png" alt="من" class="transfer-icon from" />
+
+                <!-- مسار السهام: من → إلى -->
+                <div class="transfer-arrows">
+                  <span class="chev">›</span>
+                  <span class="chev">›</span>
+                  <span class="chev">›</span>
+                  <span class="chev">›</span>
+                  <span class="chev">›</span>
+                  <span class="chev">›</span>
+                </div>
+
+                <!-- صورة الوجهة -->
+                <img src="../assets/images/moinfo_building_blueline.png" alt="إلى" class="transfer-icon to" />
+              </div>
+
+              <span class="wait-text">يرجى الانتظار قليلاً...</span>
+            </div>
+          `,
+                allowOutsideClick: false,
+                showConfirmButton: false,
+                width: 600
+            });
+
+
+
+
+        $.ajax({
+            type: 'GET',
+            dataType: 'json',
+            url: '@Url.Action("GetAddressDataFromPaci", "Account", new { area = "Admin" })',
+            data: { id: ID },
+            success: function (data) {
+                Swal.close();
+
+                if (data) {
+                    $('#RequestNewAddressGovName').val(data.governoratearabic || '');
+                    $('#RequestNewBlookName').val(data.blockarabic || '');
+                    $('#RequestNewAreaName').val(data.neighborhoodarabic || '');
+                    $('#CompanyAreaId').val(data.neighborhoodid || '');
+                    $('#CompanyGovId').val(data.governorateid || '');
+                    $('#RequestNewParcelOrFloor').val("وحدة : " + (data.unit_no || '') + " الدور : " + (data.floor_no || ''));
+                    $('#RequestUnit_no').val(data.unit_no || '');
+
+                    $('#RequestNewStreetName').val(data.floor_no || '');
+                    $('#Requestfloor_no').val(data.streetarabic || '');
+                    $('#RequestNewBulding').val(data.parcelarabic || '');
+                    $('#RequestLicowner').val(data.buildingnamearabic || '');
+                    $('#RequestNewAddressAutoNo').val(address);
+                    $('#latitude').val(data.latitude || '');
+                    $('#longitude').val(data.longitude || '');
+
+                    retrieveCoordinates(data.lon, data.lat, "map");
+
+                    $("#no-address-icon").fadeOut(200, function () {
+                        $("#address-fields").fadeIn(200).removeClass('d-none');
+                    });
+
+                    $("#AddressAutoNo").val('');
+                } else {
+                    showError();
+                }
+            },
+            error: function () {
+                Swal.close();
+                showError();
+            }
+        });
+
+        function showError() {
+            $("#address-fields").fadeOut(200, function () {
+                $("#no-address-icon").fadeIn(300).removeClass('d-none');
+            });
+
+            // تفريغ الحقول
+            $('#RequestNewAddressAutoNo').val('');
+            $('#RequestNewAddressGovName').val('');
+            $('#RequestNewAreaName').val('');
+            $('#RequestNewBlookName').val('');
+            $('#RequestNewStreetName').val('');
+            $('#RequestNewBulding').val('');
+            $('#RequestLicowner').val('');
+            $('#RequestNewParcelOrFloor').val('');
+            $('#AddressAutoNo').val('');
+            $("#map").empty();
+        }
+
+        return false;
+    }
+
+    function retrieveCoordinates(longitude, latitude, mapContainerId) {
+        require([
+            "esri/tasks/Locator",
+            "esri/Map",
+            "esri/views/MapView",
+            "esri/Graphic"
+        ], function (Locator, Map, MapView, Graphic) {
+            var map = new Map({
+                basemap: "topo-vector"
+            });
+            var view = new MapView({
+                container: mapContainerId,
+                map: map,
+                center: [longitude, latitude],
+                zoom: 17
+            });
+            var point = {
+                type: "point",
+                longitude: longitude,
+                latitude: latitude
+            };
+            var simpleMarkerSymbol = {
+                type: "simple-marker",
+                color: [226, 119, 40],
+                outline: {
+                    color: [255, 255, 255],
+                    width: 1
+                }
+            };
+            var pointGraphic = new Graphic({
+                geometry: point,
+                symbol: simpleMarkerSymbol
+            });
+            view.graphics.removeAll();
+            view.graphics.add(pointGraphic);
+        });
+    }
+</script>
+
+
+<script>
+    $('#AddressAutoNo').on('keydown', function (e) {
+        if (e.key === 'Enter' || e.keyCode === 13) {
+            e.preventDefault();
+            get_Amount($('#AddressAutoNo').val());
+        }
+    });
+</script>
+
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+
+
+<script src="https://cdn.jsdelivr.net/npm/jquery-validation@1.19.5/dist/jquery.validate.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/jquery-validation@1.19.5/dist/localization/messages_ar.js"></script>
+<script>
+        $(document).ready(function () {
+            $("#myform").validate({
+                ignore: "",
+                rules: {
+                    Licname: { required: true, maxlength: 100 },
+                    LicLocation: { required: true, maxlength: 100 },
+                    LicNationality: { required: true, min: 1 },
+                    LicLanguage: { required: true, maxlength: 50 },
+                    RequestNewAddressAutoNo: { required: true },
+                    MociBookDate: { required: true },
+                    ActivityTypeId: { required: true },
+                    ActivityCode: { required: true },
+                    CentralNoMoci: { required: true },
+                    "Company.PhoneNo": { required: true },
+                    testablishContract: { required: true },
+                    "person.CivilId": { required: true, digits: true, minlength: 12, maxlength: 12 },
+                    "person.personName": { required: true, maxlength: 100 },
+                    "person.NationalityId": { required: true, min: 1 },
+                    "person.BirthDate": { required: true },
+                    "person.PersonTypeId": { required: true },
+                     "person.QualificationId": { required: true },
+
+                    "person.QualificationCountryId": { required: true },
+                    "person.QualificationDate": { required: true },
+                    "manager.CivilId": { required: true },
+                    "manager.personName": { required: true },
+                    "manager.NationalityId": { required: true },
+                    "manager.BirthDate": { required: true },
+                    "manager.QualificationCountryId": { required: true } ,
+                    "manager.QualificationDate": { required: true },
+                    "manager.QualificationId": { required: true },
+
+                    },
+                messages: {
+                    Licname: { required: "حقل مطلوب", maxlength: "يجب ألا يتجاوز الاسم 100 حرف" },
+                    LicLocation: { required: "حقل مطلوب", maxlength: "يجب ألا يتجاوز العنوان 100 حرف" },
+                    LicNationality: { required: "حقل مطلوب", min: "يجب اختيار جنسية" },
+                    LicLanguage: { required: "حقل مطلوب", maxlength: "يجب ألا يتجاوز النص 50 حرف" },
+                    RequestNewAddressAutoNo: { required: "حقل مطلوب" },
+                    MociBookDate: { required: "حقل مطلوب" },
+                    ActivityTypeId: { required: "حقل مطلوب" },
+                    ActivityCode: { required: "حقل مطلوب" },
+                    CentralNoMoci: { required: "حقل مطلوب" },
+                    testablishContract: { required: "حقل مطلوب" },
+                    "Company.PhoneNo": { required: "حقل مطلوب" },
+                    "person.CivilId": {
+                        required: "حقل مطلوب",
+                        digits: "يجب أن يحتوي على أرقام فقط",
+                        minlength: "يجب أن يتكون الرقم المدني من 12 رقمًا",
+                        maxlength: "يجب أن يتكون الرقم المدني من 12 رقمًا"
+                    },
+                    "person.personName": { required: "حقل مطلوب", maxlength: "يجب ألا يتجاوز الاسم 100 حرف" },
+                    "person.NationalityId": { required: "حقل مطلوب", min: "يجب اختيار جنسية" },
+                    "person.BirthDate": { required: "حقل مطلوب" },
+                    "person.PersonTypeId": { required: "حقل مطلوب" },
+                    "person.QualificationCountryId": { required: "حقل مطلوب" },
+                    "person.QualificationId": { required: "حقل مطلوب" },
+                    "person.QualificationDate": { required: "حقل مطلوب" },
+                    "manager.CivilId": { required: "حقل مطلوب" },
+                    "manager.personName": { required: "حقل مطلوب" },
+                    "manager.NationalityId": { required: "حقل مطلوب" },
+                    "manager.BirthDate": { required: "حقل مطلوب" },
+                    "manager.QualificationCountryId": { required: "حقل مطلوب" } ,
+                    "manager.QualificationDate": { required: "حقل مطلوب" },
+                    "manager.QualificationId": { required: "حقل مطلوب" }
+                },
+                errorClass: "text-danger",
+                errorElement: "div",
+                highlight: function (element) {
+                    $(element).addClass("is-invalid");
+                },
+                unhighlight: function (element) {
+                    $(element).removeClass("is-invalid");
+                },
+                submitHandler: function (form) {
+                    const partners = document.querySelectorAll("#partnersList li");
+                    if (partners.length === 0) {
+                        Swal.fire({
+                            icon: 'warning',
+                            title: 'تنبيه',
+                            text: 'يرجى إضافة الشركاء.'
+                        });
+                        return false;
+                    }
+
+                    const partnerList = [];
+                    partners.forEach(function (item) {
+                        const name = item.dataset.name;
+                        if (name) {
+                            partnerList.push({ Name: name });
+                        }
+                    });
+
+                    $('<input>').attr({
+                        type: 'hidden',
+                        name: 'PartnersJson',
+                        value: JSON.stringify(partnerList)
+                    }).appendTo(form);
+
+                    let allValid = true;
+                    let attachmentsHtml = "";
+
+                    $("[data-label]").each(function () {
+                        const value = $(this).val().trim();
+                        const label = $(this).data("label");
+                        const isRequired = $(this).data("required") === true || $(this).data("required") === "true";
+                        const isValid = value !== "";
+
+                        const icon = isValid
+                            ? '<i class="ri-check-double-line text-success"></i>'
+                            : '<i class="ri-close-circle-line text-danger"></i>';
+
+                        const className = isValid ? "success" : "danger";
+
+                        const badge = !isValid
+                            ? (isRequired
+                                ? '<span class="badge bg-danger text-white ms-2" style="font-size: 10px;">مطلوب</span>'
+                                : '<span class="badge bg-primary text-white ms-2" style="font-size: 10px;">اختياري</span>')
+                            : '';
+
+                        attachmentsHtml += `
+                                <div class="attachment-item ${className}">
+                                    ${icon}
+                                    <span>${label} ${badge}</span>
+                                </div>
+                            `;
+
+                        if (isRequired && !isValid) allValid = false;
+                    });
+
+                        if (!allValid) {
+                            Swal.fire({
+                                icon: 'warning',
+                                showConfirmButton: true,
+                                confirmButtonText: 'موافق',
+                                width: 820,
+                                heightAuto: false,
+                                customClass: { popup: 'ultra-paper' },
+                                html: `
+                  <div class="holes"><span></span><span></span><span></span></div>
+
+                  <div class="ultra-head">
+                    <i class="ri-file-warning-line"></i>
+                    <div class="title">تفاصيل حالة المرفقات المطلوبة</div>
+                  </div>
+
+                  <div class="ultra-body">
+                    <div class="ultra-sheet">
+                      <div class="ultra-attachments">
+                        ${attachmentsHtml}
+                      </div>
+                    </div>
+                  </div>
+
+                  <div class="ultra-foot">
+                    يرجى التأكد من رفع جميع المرفقات المطلوبة قبل الاستمرار.
+                  </div>
+                `
+                            });
+
+                            return false;
+                        }
+
+
+                    const isAddressFilled = $('#RequestNewAddressAutoNo').val().trim() !== '';
+                    const isErrorVisible = !$("#no-address-icon").hasClass("d-none");
+
+                    if (!isAddressFilled || isErrorVisible) {
+                        Swal.fire({
+                            icon: 'warning',
+                            title: 'تنبيه',
+                            text: 'يرجى التأكد من إدخال رقم آلي صحيح واكتمال بيانات العنوان.',
+                            confirmButtonText: 'موافق'
+                        });
+                        return false;
+                    }
+
+                    Swal.fire({
+        title: '<span style="font-size: 20px; color: #2471a3;">جاري إرسال الطلب</span>',
+        html: `
+            <div style="margin-top: 20px; display: flex; flex-direction: column; align-items: center;">
+                    <img src="../assets/images/moinfo_building_blueline.png" alt="تحميل" style="width: 50px; height: 50px; margin-bottom: 20px;" />
+                <span class="wait-text mb-3">يرجى الانتظار قليلاً...</span>
+                <div class="dot-loader">
+                    <span></span><span></span><span></span>
+                </div>
+            </div>
+        `,
+        allowOutsideClick: false,
+        showConfirmButton: false,
+        didOpen: () => {
+            Swal.showLoading();
+            // Submit the form AFTER showing the loading alert
+            form.submit();
+        }
+    });
+
+                }
+            });
+        });
+</script>
+
+
+
+
+
+

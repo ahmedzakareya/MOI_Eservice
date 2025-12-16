@@ -1,0 +1,90 @@
+﻿@model WorkFlowActionButtonVM
+@{
+    ViewBag.Title = "Add Workflow Action Button";
+    Layout = "~/Areas/Admin/Views/Shared/_LayoutEserviceTourism.cshtml";
+}
+
+<div class="d-flex flex-column flex-column-fluid">
+    <div class="app-toolbar pt-6 pb-2">
+        <div class="app-container container-fluid d-flex align-items-stretch">
+            <h1 class="page-heading fw-bold">Add Workflow Action Button</h1>
+        </div>
+    </div>
+
+    <div class="app-content flex-column-fluid">
+        <div class="app-container container-fluid">
+            <div class="card">
+                <div class="card-body p-lg-10">
+                    <form id="addActionButtonForm">
+                        <div class="row">
+                            <div class="col-md-6 mb-7">
+                                <label class="required fw-semibold mb-2">Workflow</label>
+                                <select name="WorkFlowId" asp-items="Model.WorkFlows" class="form-select form-select-solid" required>
+                                    <option value="" disabled selected>-- Select Workflow --</option>
+                                    @foreach (var wf in Model.WorkFlows)
+                                    {
+                                        <option value="@wf.Value">@wf.Text</option>
+                                    }
+                                </select>
+                            </div>
+
+                            <div class="col-md-6 mb-7">
+                                <label class="required fw-semibold mb-2">Button Text</label>
+                                <input name="ButtonText" asp-for="ButtonText" class="form-control form-control-solid" required />
+                            </div>
+
+                            <div class="col-md-6 mb-7">
+                                <label class="fw-semibold mb-2">Permission Key</label>
+                                <input name="PermissionKey" asp-for="PermissionKey" class="form-control form-control-solid" />
+                            </div>
+
+                            <div class="col-md-6 mb-7">
+                                <label class="fw-semibold mb-2">Action Key</label>
+                                <input name="ActionKey" asp-for="ActionKey" class="form-control form-control-solid" />
+                            </div>
+                        </div>
+
+                        <div class="d-flex justify-content-start mt-4">
+                            <button type="button" class="btn btn-primary" onclick="submitWorkFlowActionButton()">Submit</button>
+                            <a asp-action="GetAllWorkFlowActionButtons" class="btn btn-secondary ms-2">Back</a>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    <script>
+        const apiBaseUrl = '@ViewBag.ApiBaseUrl';
+
+        async function submitWorkFlowActionButton() {
+            const form = document.getElementById("addActionButtonForm");
+            const formData = new FormData(form);
+            console.log(form);
+            console.log(formData);
+
+            console.log(formData.entries());
+            const data = Object.fromEntries(formData.entries());
+            console.log(data);
+
+
+            try {
+                const response = await fetch(`${apiBaseUrl}AddWorkFlowActionButton`, {
+                    method: "POST",
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify(data)
+                });
+
+                if (!response.ok) throw new Error("Failed to save");
+
+                alert("Action Button Saved Successfully");
+                window.location.href = '@Url.Action("GetAllWorkFlowActionButtons", "Dynamic", new { area = "Admin" })';
+            } catch (error) {
+                console.error(error);
+                alert("Error occurred while saving.");
+            }
+        }
+    </script>
+}

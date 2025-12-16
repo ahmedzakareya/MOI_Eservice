@@ -1,0 +1,7 @@
+﻿@* @model IEnumerable<EserviceViewModel>
+
+<option value="0">أختر فئة التراخيص </option>
+@foreach (var item in Model)
+{
+    <option value="@item.Id">@item.EserviceNameAr</option>
+} *@

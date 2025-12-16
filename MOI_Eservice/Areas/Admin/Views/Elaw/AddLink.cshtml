@@ -1,0 +1,103 @@
+﻿@model LinksVM
+@{
+    ViewData["Title"] = "الروابط";
+    Layout = "~/Areas/Admin/Views/Shared/_LayoutEserviceTourism.cshtml";
+
+}
+<div class="container mt-5">
+    <h2>Manage Links</h2>
+    <form asp-action="AddLink" method="post" asp-area="Admin" asp-controller="Elaw">
+        <div class="row mb-3">
+            <input type="hidden" id="linkId" asp-for="Id" value="0" />
+            <div class="col-md-4">
+                <label for="name" class="form-label">Name</label>
+                <input type="text" id="name" asp-for="Name" class="form-control" placeholder="Enter name" required />
+            </div>
+            <div class="col-md-4">
+                <label for="url" class="form-label">URL</label>
+                <input type="text" id="url" asp-for="Link" class="form-control" placeholder="Enter URL" required />
+            </div>
+            <div class="col-md-2">
+                <label for="priority" class="form-label">Priority</label>
+                <input type="number" id="priority" asp-for="Sort" class="form-control" value="0" />
+            </div>
+            <div class="col-md-2 d-flex align-items-end">
+                <div class="form-check">
+                    <input type="checkbox" id="status" asp-for="Status" name="Status" class="form-check-input"  />
+                    <label asp-for="Status" class="form-check-label">Active</label>
+                </div>
+            </div>
+        </div>
+        <button type="submit" id="submitButton" class="btn btn-primary">Add</button>
+    </form>
+
+    <hr />
+
+    <h3>Links List</h3>
+    <table class="table table-bordered">
+        <thead>
+            <tr>
+                <th>Name</th>
+                <th>URL</th>
+                <th>Priority</th>
+                <th>Status</th>
+                <th>Edit</th>
+                <th>Delete</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var link in Model.LinksList)
+            {
+                <tr>
+                    <td>@link.Name</td>
+                    <td><a href="@link.Link" target="_blank">@link.Link</a></td>
+                    <td>@link.Sort</td>
+                    <td>
+                        <input type="checkbox" disabled @(link.Status ? "checked" : "") />
+                    </td>
+                    <td>
+                        <button class="btn btn-success btn-edit"
+                                data-id="@link.Id"
+                                data-name="@link.Name"
+                                data-link="@link.Link"
+                                data-sort="@link.Sort"
+                                data-status="@link.Status"
+                                onclick="editLink(this)">
+                            تعديل
+                        </button>
+                    </td>
+                    <td>
+                        <form asp-action="DeleteLink" method="post" class="d-inline">
+                            <input type="hidden" asp-for="Id" value="@link.Id" />
+                            <button type="submit" class="btn btn-danger">Delete</button>
+                        </form>
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+</div>
+
+@section Scripts
+{
+
+    <script>
+        function editLink(button) {
+            // Get data attributes from the button
+            const id = button.getAttribute("data-id");
+            const name = button.getAttribute("data-name");
+            const link = button.getAttribute("data-link");
+            const sort = button.getAttribute("data-sort");
+          
+            const status = button.getAttribute("data-status") === "True";
+            document.getElementById("linkId").value = id;
+            document.getElementById("name").value = name;
+            document.getElementById("url").value = link;
+            document.getElementById("priority").value = sort;
+            document.getElementById("status").checked = status;
+
+
+            document.getElementById("submitButton").innerText = "Update";
+        }
+    </script>
+}

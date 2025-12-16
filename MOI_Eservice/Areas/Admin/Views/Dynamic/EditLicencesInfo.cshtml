@@ -1,0 +1,170 @@
+﻿@model MoiEserviceLicenseInfo
+
+@{
+    ViewBag.Title = "Edit License Info";
+    Layout = "~/Areas/Admin/Views/Shared/_LayoutEserviceTourism.cshtml";
+}
+
+<div class="container-fluid mt-5">
+    <div class="card">
+        <div class="card-header">
+            <h3 class="card-title">Edit License Info</h3>
+        </div>
+        <div class="card-body">
+            <form id="licenseInfoForm">
+                <input type="hidden" id="Id" value="@Model.Id" />
+
+                <div class="mb-4">
+                    <label for="Name" class="form-label">Name</label>
+                    <input type="text" class="form-control" id="Name" value="@Model.Name" />
+                </div>
+
+                <div class="mb-4">
+                    <label for="ActvityTypeId" class="form-label">Activity Type</label>
+                    @Html.DropDownList("ActvityTypeId", ViewBag.ActivityTypes as List<SelectListItem>, Model.ActivityTypesLookup?.NameAr, new { @class = "form-select" })
+                </div>
+
+                <div class="mb-4">
+                    <label for="EserviceTypeBranchId" class="form-label">Eservice Type Branch</label>
+                    @Html.DropDownList("EserviceTypeBranchId", ViewBag.TypeBranches as List<SelectListItem>, Model.EserviceTypeBranch?.EserviceTypeBranchAr, new { @class = "form-select" })
+                </div>
+
+                <div class="mb-4">
+                    <label for="ServiceId" class="form-label">Service</label>
+                    @Html.DropDownList("ServiceId", ViewBag.Services as List<SelectListItem>, Model.ActivityTypesLookup?.NameAr, new { @class = "form-select" })
+                </div>
+
+                <div class="mb-4">
+                    <label for="ReqTypeId" class="form-label">Request Type</label>
+                    @Html.DropDownList("ReqTypeId", ViewBag.RequestTypes as List<SelectListItem>, Model.RequestsTypesLookup?.NameAr, new { @class = "form-select" })
+                </div>
+
+                <div class="mb-4">
+                    <label for="TransTypeId" class="form-label">Transaction Type</label>
+                    @Html.DropDownList("TransTypeId", ViewBag.TransactionTypes as List<SelectListItem>, Model.TransactionTypesLookup?.NameAr, new { @class = "form-select" })
+                </div>
+                <div class="mb-4">
+                    <label for="LicTypeId" class="form-label">Licence Type</label>
+                    @Html.DropDownList("LicTypeId", ViewBag.LicenceTypes as List<SelectListItem>, Model.LicenceTypesLookup?.NameAr, new { @class = "form-select" })
+                </div>
+                <div class="mb-4">
+                    <label for="RequiredDocuments" class="form-label">Required Documents</label>
+                    <textarea id="RequiredDocuments" name="RequiredDocuments">@Html.Raw(Model?.RequiredDocuments)</textarea>
+                </div>
+
+                <div class="mb-4">
+                    <label for="Conditions" class="form-label">Conditions</label>
+                    <textarea id="Conditions" name="Conditions">@Html.Raw(Model?.Conditions)</textarea>
+                </div>
+
+                <div class="mb-4">
+                    <label for="Measures" class="form-label">Measures</label>
+                    <textarea id="Measures" name="Measures">@Html.Raw(Model?.Measures)</textarea>
+                </div>
+
+                <div class="mb-4">
+                    <label for="Description" class="form-label">Description</label>
+                    <textarea class="form-control" id="Description" name="Description">@Html.Raw(Model?.Description)</textarea>
+                </div>
+
+                <div class="mb-4">
+                    <label for="VariableFees" class="form-label">Variable Fees</label>
+                    <input type="number" step="0.001" class="form-control" id="VariableFees" name="VariableFees" value="@Model?.VariableFees" />
+                </div>
+
+                <div class="mb-4">
+                    <label for="FixedFees" class="form-label">Fixed Fees</label>
+                    <input type="number" step="0.001" class="form-control" id="FixedFees" name="FixedFees" value="@Model?.FixedFees" />
+                </div>
+
+                <div class="mb-4">
+                    <label for="Sort" class="form-label">Sort</label>
+                    <input type="number" class="form-control" id="Sort" name="Sort" value="@Model?.Sort" />
+                </div>
+
+                <div class="mb-4">
+                    <label for="Branch" class="form-label">Branch</label>
+                    <input type="text" class="form-control" id="Branch" name="Branch" value="@Model?.Branch" />
+                </div>
+
+                <div class="mb-4">
+                    <label for="Controller" class="form-label">Controller</label>
+                    <input type="text" class="form-control" id="Controller" name="Controller" value="@Model?.Controller" />
+                </div>
+
+                <div class="mb-4">
+                    <label for="Action" class="form-label">Action</label>
+                    <input type="text" class="form-control" id="Action" name="Action" value="@Model?.Action" />
+                </div>
+
+                <div class="mb-4">
+                    <label for="Url" class="form-label">Url</label>
+                    <input type="text" class="form-control" id="Url" name="Url" value="@Model?.Url" />
+                </div>
+
+                <div class="mb-4">
+                    <label for="Status" class="form-label">Status</label>
+                    @Html.DropDownList("Status", new List<SelectListItem> {
+                    new SelectListItem { Text = "Active", Value = "true", Selected = Model.Status },
+                    new SelectListItem { Text = "Inactive", Value = "false", Selected = !Model.Status }
+                    }, new { @class = "form-select" })
+                </div>
+
+                <div class="text-end">
+                    <button type="submit" class="btn btn-primary">Save</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    <script src="https://cdn.ckeditor.com/4.21.0/standard/ckeditor.js"></script>
+    <script>
+        CKEDITOR.replace('RequiredDocuments', { contentsLangDirection: 'rtl' });
+        CKEDITOR.replace('Conditions', { contentsLangDirection: 'rtl' });
+        CKEDITOR.replace('Measures', { contentsLangDirection: 'rtl' });
+        CKEDITOR.replace('Description', { contentsLangDirection: 'rtl' });
+
+        document.getElementById('licenseInfoForm').addEventListener('submit', async function (e) {
+            e.preventDefault();
+
+            const data = {
+                Id: document.getElementById("Id").value,
+                Name: document.getElementById("Name").value,
+                RequiredDocuments: CKEDITOR.instances["RequiredDocuments"].getData(),
+                Conditions: CKEDITOR.instances["Conditions"].getData(),
+                Measures: CKEDITOR.instances["Measures"].getData(),
+                Description: CKEDITOR.instances["Description"].getData(),
+                VariableFees: parseFloat(document.getElementById("VariableFees").value) || 0,
+                FixedFees: parseFloat(document.getElementById("FixedFees").value) || 0,
+                Sort: parseInt(document.getElementById("Sort").value) || 0,
+                Branch: document.getElementById("Branch").value,
+                Controller: document.getElementById("Controller").value,
+                Action: document.getElementById("Action").value,
+                Url: document.getElementById("Url").value,
+                ActvityTypeId: parseInt(document.getElementById("ActvityTypeId").value),
+                EserviceTypeBranchId: parseInt(document.getElementById("EserviceTypeBranchId").value),
+                ServiceId: parseInt(document.getElementById("ServiceId").value),
+                ReqTypeId: parseInt(document.getElementById("ReqTypeId").value),
+                TransTypeId: parseInt(document.getElementById("TransTypeId").value),
+                LicTypeId: parseInt(document.getElementById("LicTypeId").value),
+
+                Status: document.getElementById("Status").value === "true"
+            };
+
+            const response = await fetch('@ViewBag.ApiBaseUrl' + "UpdateLicenseInfo?id=" + data.Id, {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify(data)
+            });
+
+            if (response.ok) {
+                alert("Updated successfully!");
+                window.location.href = '/Admin/dynamic/GetLicencesInfo';
+            } else {
+                alert("Failed to update.");
+            }
+        });
+    </script>
+}

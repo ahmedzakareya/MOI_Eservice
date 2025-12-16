@@ -1,0 +1,109 @@
+﻿@model List<SystemOptionVM>
+
+@{
+    var logoWhite = Model.FirstOrDefault(x => x.Code == "SiteLogoWhite")?.Value ?? "/assets/images/MOI_Logo_W.png";
+    var logoBlack = Model.FirstOrDefault(x => x.Code == "SiteLogo")?.Value ?? "/assets/images/MOI_Logo.png";
+    var socialLinks = Model.Where(x => x.CategoryNameEn == "SocialLinks").ToList();
+    var NavLinksReset = Model.Where(x => x.CategoryNameEn == "NavLinksReset").FirstOrDefault();
+    var NavLinksRegister = Model.Where(x => x.CategoryNameEn == "NavLinksRegister").FirstOrDefault();
+    var NavLinksLogin = Model.Where(x => x.CategoryNameEn == "NavLinksLogin").FirstOrDefault();
+    var NavLinksContact = Model.Where(x => x.CategoryNameEn == "NavLinksContact").FirstOrDefault();
+    var NavLinksHome = Model.Where(x => x.CategoryNameEn == "NavLinksHome").FirstOrDefault();
+
+
+}
+
+<header class="main-header-area">
+    <!-- Topbar -->
+    <div class="topbar-area d-none">
+        <div class="container-fluid">
+            <div class="row align-items-center">
+                <div class="col-lg-5 col-md-6">
+                    <ul class="topbar-social-list">
+                        @foreach (var item in socialLinks)
+                        {
+                            <li>
+                                <a href="@item.Value" target="_blank">
+                                    <i class="@item.DefaultValue"></i>
+                                </a>
+                            </li>
+                        }
+                    </ul>
+                </div>
+
+                <div class="col-lg-7 col-md-6">
+                    <ul class="topbar-action">
+                        @if (Context.Session != null)
+                        {
+                            using (Html.BeginForm("LogOff", "Account", FormMethod.Post, new { id = "logoutForm" }))
+                            {
+                                @Html.AntiForgeryToken()
+                                <li>
+                                    <a href="javascript:document.getElementById('logoutForm').submit()"><i class="ri-logout-box-r-line"></i> تسجيل الخروج</a>
+                                </li>
+                            }
+                        }
+                        else
+                        {
+                            if (NavLinksLogin != null)
+                            {
+                                <li>
+                                    <a href="@Url.Content(NavLinksLogin.Value)"><i class="flaticon-padlock"></i> @NavLinksLogin.NameArabic</a>
+                                </li>
+                            }
+                            if (NavLinksRegister != null)
+                            {
+                                <li>
+                                    <a href="@Url.Content(NavLinksRegister.Value)"><i class="flaticon-user"></i> @NavLinksRegister.NameArabic</a>
+                                </li>
+                            }
+                        }
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Navbar -->
+    <div class="navbar-area">
+        <div class="main-responsive-nav">
+            <div class="container">
+                <div class="main-responsive-menu">
+                    <div class="logo">
+                        <a href="@NavLinksHome.Value">
+                            <img src="@logoWhite" width="200" class="white-logo" alt="logo">
+                            <img src="@logoBlack" width="200" class="black-logo" alt="logo">
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="main-navbar">
+            <div class="container-fluid">
+                <nav class="navbar navbar-expand-md navbar-light">
+                    <a class="navbar-brand" href="@NavLinksHome.Value">
+                        <img src="@logoWhite" width="200" class="white-logo" alt="logo">
+                        <img src="@logoBlack" width="200" class="black-logo" alt="logo">
+                    </a>
+
+                    <div class="collapse navbar-collapse mean-menu" id="navbarSupportedContent">
+                        <ul class="navbar-nav m-auto">
+                            <li class="nav-item">
+                                <a href="@NavLinksHome.Value" class="nav-link active">
+                                    الرئيسيه
+                                </a>
+                            </li>
+                            <li class="nav-item">
+                                <a href="@NavLinksContact.Value" class="nav-link">اتصل بنا</a>
+                            </li>
+                        </ul>
+                        <div class="others-options d-flex align-items-center">
+                            <div class="option-item" style="width:200px;"></div>
+                        </div>
+                    </div>
+                </nav>
+            </div>
+        </div>
+    </div>
+</header>

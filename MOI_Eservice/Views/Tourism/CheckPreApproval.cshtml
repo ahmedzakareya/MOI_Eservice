@@ -1,0 +1,101 @@
+﻿@model CheckPreAprroval
+
+@{
+    ViewBag.Title = "CheckPreApproval";
+    Layout = "~/Views/Shared/_LayoutEservice.cshtml";
+}
+
+<style>
+    .copyrights-area {
+        position: fixed;
+        right: 310px;
+        bottom: 0;
+        left: 300px;
+        width: 100%;
+    }
+</style>
+
+<div class="my-profile-box">
+    <h3>التحقق من رقم الموافقة المبدئية</h3>
+    <div class="container-fluid">
+        @using (Html.BeginForm())
+        {
+            @Html.AntiForgeryToken()
+
+            <div class="form-horizontal py-3">
+                @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+
+                <div class="row align-items-center">
+                    <div class="col-xl-4 col-md-6 col-sm-12">
+                        <div class="form-group">
+                            <input type="hidden" asp-for="id" />
+                            <label class="control-label" for="PreApprove">يرجي إدخال رقم الموافقة المبدئية</label>
+                            <input type="text" class="form-control" id="PreApprove" name="PreApprove" value="@Model.PreApprove" required placeholder="رقم الموافقة المبدئية" />
+                            <span class="text-danger" asp-validation-for="PreApprove"></span> <!-- Validation message will go here -->
+                            @Html.ValidationMessageFor(model => model.PreApprove, "", new { @class = "text-danger" })
+                        </div>
+                    </div>
+
+                    <div class="col-lg-12 col-md-12">
+                        <button type="submit" class="default-btn" value="Create">
+                            التحقق من الرقم <i class="flaticon-plus"></i>
+                        </button>
+                    </div>
+                </div>
+            </div>
+        }
+        @if (ViewBag.Message != null)
+        {
+            <div class="alert alert-success">
+                @ViewBag.test
+            </div>
+        }
+    </div>
+</div>
+@section Scripts{
+<script type="text/javascript">
+    jQuery(document).ready(function () {
+        loadImage();
+        Swal.fire({
+            icon: 'warning',
+            title: 'تنويه ،،،!',
+            text: 'يرجى التأكد من صحة بيانات المنشأة بالكامل وتحديث المرفقات في حال انتهاء صلاحيتها.',
+        });
+    });
+
+    //---------- sweet alert ------------
+        $(function loadImage() {
+            var errorMsg = '@ViewBag.test';
+            var msg = '@ViewBag.Message';
+
+            if (msg == 'Success') {
+                Swal.fire({
+                    icon: 'success',
+                    title: 'تأكـيد',
+                    text: 'تم التحقق من رقم الموافقة',
+                    confirmButtonColor: '#7FB3D5',
+                    confirmButtonText: 'الانتقال إلى طلب اصدار الترخيص!'
+                }).then(function () { window.location = '../TourismRequests/TourLicRequest'; });
+            }
+            else if (msg == 'Error' && errorMsg == "هذه الموافقة مستخدمة من قبل") {
+                Swal.fire({
+                    icon: 'error',
+                    title: 'تأكـيد',
+                    text: errorMsg,
+                    confirmButtonColor: '#7FB3D5',
+                    confirmButtonText: 'الاستعلام برقم آخر'
+                }).then(function () { window.location = 'CheckPreApproval'; });
+            }
+            else if (msg == 'Error') {
+                Swal.fire({
+                    icon: 'error',
+                    title: 'تأكـيد',
+                    text: errorMsg,
+                    confirmButtonColor: '#7FB3D5',
+                    confirmButtonText: 'الاستعلام برقم آخر'
+                }).then(function () { window.location = 'CheckPreApproval'; });
+            }
+        });
+
+</script>
+}

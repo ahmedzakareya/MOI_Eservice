@@ -1,0 +1,975 @@
+﻿@model LicenceDetailsVM
+
+@{
+    ViewBag.Title = "LicenceDetails";
+    Layout = "~/Areas/Admin/Views/Shared/_LayoutEserviceTourism.cshtml";
+    // var LoggedInUser = ViewBag.LoggedInUser;
+    // dynamic userData = JsonSerializer.Deserialize<dynamic>(LoggedInUser);
+    // int serviceId = userData.GetProperty("ServiceId").GetInt32();
+    string _baseUrl;
+
+    var user = User.Identity.IsAuthenticated ? User.Identity.Name : "Guest";
+
+}
+<style>
+    button.disappear[disabled] {
+        background-color: #ddd;
+        color: #999;
+        cursor: not-allowed;
+    }
+
+    button.disappearrefuse[disabled] {
+        background-color: #ddd;
+        color: #999;
+        cursor: not-allowed;
+    }
+
+</style>
+
+<!--begin::Content wrapper-->
+<div class="d-flex flex-column flex-column-fluid">
+    <!--begin::Toolbar-->
+    <div id="kt_app_toolbar" class="app-toolbar pt-6 pb-2">
+        <!--begin::Toolbar container-->
+        <div id="kt_app_toolbar_container" class="app-container container-fluid d-flex align-items-stretch">
+            <!--begin::Toolbar wrapper-->
+            <div class="app-toolbar-wrapper d-flex flex-stack flex-wrap gap-4 w-100">
+                <!--begin::Page title-->
+                <div class="page-title d-flex flex-column justify-content-center gap-1 me-3">
+                    <!--begin::Title-->
+                    <h1 class="page-heading d-flex flex-column justify-content-center text-gray-900 fw-bold fs-3 m-0">بيانات الطلب</h1>
+                    <!--end::Title-->
+                    <!--begin::Breadcrumb-->
+                    <ul class="breadcrumb breadcrumb-separatorless fw-semibold fs-7 my-0">
+                        <!--begin::Item-->
+                        <li class="breadcrumb-item text-muted">
+                            <a href="/Index" class="text-muted text-hover-primary">الرئيسية</a>
+                        </li>
+                        <!--end::Item-->
+                        <!--begin::Item-->
+                        <li class="breadcrumb-item">
+                            <span class="bullet bg-gray-500 w-5px h-2px"></span>
+                        </li>
+                        <li class="breadcrumb-item text-muted">
+                            <a href="Admin/Tourism/AllRequest" class="text-muted text-hover-primary">قائمة التراخيص</a>
+                        </li>
+                        <!--end::Item-->
+                        <!--begin::Item-->
+                        <li class="breadcrumb-item">
+                            <span class="bullet bg-gray-500 w-5px h-2px"></span>
+                        </li>
+                        <!--end::Item-->
+                        <!--begin::Item-->
+                        <li class="breadcrumb-item text-muted">بيانات الترخيص</li>
+                        <!--end::Item-->
+                    </ul>
+                    <!--end::Breadcrumb-->
+                </div>
+                <!--end::Page title-->
+
+            </div>
+            <!--end::Toolbar wrapper-->
+        </div>
+        <!--end::Toolbar container-->
+    </div>
+    <!--end::Toolbar-->
+    <!--begin::Content-->
+    <form id="loginForm" asp-area="Admin" asp-controller="Tourism" method="post" asp-action="EditLicencesDetails" enctype="multipart/form-data">
+        <div id="kt_app_content" class="app-content flex-column-fluid">
+            <!--begin::Content container-->
+            <div id="kt_app_content_container" class="app-container container-fluid">
+                <!--begin::Layout-->
+                <div class=" flex-lg-row">
+                    <!--begin::Sidebar-->
+                    <div class="flex-column flex-lg-row-auto  mb-10">
+                        <!--begin::Card-->
+                        <div class="card mb-5 mb-xl-8">
+                            <!--begin::Card body-->
+                            <div class="card-body">
+                                <!--begin::Summary-->
+                                <!--begin::User Info-->
+                                <div class="d-flex flex-center flex-column py-5">
+
+                                    <!--begin::Name-->
+                                    <a href="#" class="fs-3 text-gray-800 text-hover-primary fw-bold mb-3">بيانات الرخصة الأساسية</a>
+                                    <!--end::Name-->
+                                    <!--begin::Position-->
+
+                                    <div class="mb-9">
+
+
+
+                                        <!--begin::Badge-->
+                                        <!--begin::Badge-->
+                                    </div>
+                                    <!--end::Position-->
+                                    <!--begin::Info-->
+                                    <!--begin::Info heading-->
+                                    <div class="fw-bolder  mb-3   badge  py-3 px-4 fs-7  badge-light-danger">
+                                        @Model.LicencesVM?.LicNo
+                                        <span class="ms-2" ddata-bs-toggle="popover" data-bs-trigger="hover" data-bs-html="true" data-bs-content="Number of support tickets assigned, closed and pending this week.">
+                                            <i class="ki-outline ki-information fs-7"></i>
+                                        </span>
+                                    </div>
+
+                                </div>
+                                <!--end::User Info-->
+                                <input type="hidden" asp-for="LicencesVM.PreApprovalId" />
+                                <input type="hidden" asp-for="LicencesVM.ApplicantId" />
+                                <input type="hidden" asp-for="LicencesVM.BuildingId" />
+                                <input type="hidden" asp-for="LicencesVM.CompanyId" />
+                                <input type="hidden" asp-for="LicencesVM.ManagerId" />
+                                <input type="hidden" asp-for="LicencesVM.MarketingManagerId" />
+                                <input type="hidden" asp-for="LicencesVM.SalesManagerId" />
+                                <input type="hidden" asp-for="LicencesVM.OperationsManagerId" />
+                                <input type="hidden" asp-for="LicencesVM.ActiivityTypeId" />
+                                <input type="hidden" asp-for="LicencesVM.LicId" />
+                                <input type="hidden" asp-for="LicencesVM.SequenceNo" />
+
+                                <!--end::Summary-->
+                                <!--begin::Details toggle-->
+                                <div class="d-flex flex-stack fs-4 py-3">
+                                    <div class="fw-bold rotate collapsible" data-bs-toggle="collapse" href="#kt_user_view_details" role="button" aria-expanded="false" aria-controls="kt_user_view_details">
+                                        التفاصيل
+                                        <span class="ms-2 rotate-180">
+                                            <i class="ki-outline ki-down fs-3"></i>
+                                        </span>
+                                    </div>
+
+                                </div>
+                                <!--end::Details toggle-->
+                                <div class="separator"></div>
+                                <!--begin::Details content-->
+                                <div id="kt_user_view_details" class="collapse show">
+                                    <div class="pb-5 fs-6">
+                                        <div class="row mt-9">
+                                            <div class="col-6 d-flex align-items-center">
+                                                <div class="fw-bold fs-5 px-2">رقم الرخصة:</div>
+                                                <div class="text-gray-600 ms-2 fs-5 px-2">@Model.LicencesVM?.LicNo</div>
+                                            </div>
+                                            <div class="col-6 d-flex align-items-center">
+                                                <div class="fw-bold fs-5 px-2">تاريخ الإصدار:</div>
+                                                <div class="text-gray-600 ms-1 fs-5 px-2">
+                                                    <a href="#" class="text-gray-600 text-hover-primary">
+                                                        @Model.LicencesVM?.IssueDate.Value.ToString("dd - MM - yyyy")
+                                                    </a>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="row mt-9">
+                                            <div class="col-6 d-flex align-items-center">
+                                                <div class="fw-bold fs-5 px-2">تاريخ الإنتهاء:</div>
+                                                <div class="text-gray-600 ms-2 fs-5 px-2">
+                                                    <a href="#" class="text-gray-600 text-hover-primary">
+
+                                                        @Model.LicencesVM?.ExpireDate.Value.ToString("dd - MM - yyyy")
+                                                    </a>
+                                                </div>
+                                            </div>
+                                            <div class="col-6 d-flex align-items-center">
+                                                <div class="fw-bold fs-5 px-2">إسم المرخص له:</div>
+                                                <div class="text-gray-600 ms-2 fs-5 px-2">
+
+
+                                                    @Model.LicencesVM?.Applicant?.Name1
+
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="row mt-9">
+                                            <div class="col-6 d-flex align-items-center">
+                                                <div class="fw-bold fs-5 px-2">نوع الترخيص:</div>
+                                                <div class="text-gray-600 ms-2 fs-5 px-2">
+
+
+                                                    @Model.LicencesVM?.LicTypeName
+
+                                                </div>
+                                            </div>
+                                            <div class="col-6 d-flex align-items-center">
+                                                <div class="fw-bold fs-5 px-2">إسم الترخيص   :</div>
+                                                <div class="text-gray-600 ms-1 fs-5 px-2">
+                                                    @Model.LicencesVM?.LicName
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="row mt-9">
+
+                                            <div class="col-6 d-flex align-items-center">
+                                                <div class="fw-bold fs-5 px-2">حالة الترخيص :</div>
+                                                <div class="text-gray-600 ms-1 fs-5 px-2">
+                                                    @Model.LicencesVM?.LicStatusName
+                                                </div>
+                                            </div>
+                                        </div>
+
+                                    </div>
+                                    <!--begin::Notice-->
+                                    <div class="notice d-flex bg-light-primary rounded border-primary border border-dashed mb-9 p-6">
+                                        <!--begin::Icon-->
+                                        <i class="ki-outline ki-design-1 fs-2tx text-primary me-4"></i>
+                                        <!--end::Icon-->
+                                        <!--begin::Wrapper-->
+                                        <div class="d-flex flex-stack flex-grow-1">
+                                            <!--begin::Content-->
+                                            <div class="fw-semibold">
+                                                <div class="fs-6 text-gray-700">
+                                                    <a href="#" class="me-1">ملاحظات : </a>
+                                                    @Model.LicencesVM.Notes
+                                                </div>
+                                            </div>
+                                            <!--end::Content-->
+                                        </div>
+                                        <!--end::Wrapper-->
+                                    </div>
+                                    <!--end::Notice-->
+                                </div>
+                                <div class="text-center my-10">
+                                    <button type="submit" class="btn btn-primary px-10">
+                                        <i class="ki-outline ki-save fs-2"></i> حفظ التعديلات
+                                    </button>
+                                </div>
+                            </div>
+                            <!--end::Card body-->
+                        </div>
+                        <!--end::Card-->
+
+                    </div>
+                    <!--end::Sidebar-->
+                    <!--begin::Content-->
+                    <div class="flex-lg-row-fluid ms-lg-15">
+                        <!--begin:::Tabs-->
+                        <ul class="nav nav-custom nav-tabs nav-line-tabs nav-line-tabs-2x border-0 fs-4 fw-semibold mb-8">
+                           
+                            <!--begin:::Tab item-->
+                            <!--begin:::Tab item-->
+                            <li class="nav-item">
+                                <a class="nav-link text-active-primary pb-4 " data-bs-toggle="tab" href="#kt_user_view_Mianlicences_tab">معلومات الترخيص</a>
+                            </li>
+                            <!--end:::Tab item-->
+                            @if (Model.LicencesVM.ActiivityTypeId == (int)ActivityTypeEnum.Hotel ||
+       Model.LicencesVM.ActiivityTypeId == (int)ActivityTypeEnum.ApartmentHotel ||
+       Model.LicencesVM.ActiivityTypeId == (int)ActivityTypeEnum.Resorts)
+                            {
+                                <!--begin:::Tab item-->
+                                <li class="nav-item">
+                                    <a class="nav-link text-active-primary pb-4 " data-bs-toggle="tab" href="#kt_user_view_overview_BuildingDetails">بيانات المنشأة </a>
+                                </li>
+                                <!--end:::Tab item-->
+                            }
+                            <!--begin:::Tab item-->
+                            <li class="nav-item">
+                                <a class="nav-link text-active-primary pb-4 " data-bs-toggle="tab" href="#kt_user_view_overview_CompanyDetails">بيانات الشركة </a>
+                            </li>
+                            <!--end:::Tab item-->
+                            <!--begin:::Tab item-->
+                            <li class="nav-item">
+                                <a class="nav-link text-active-primary pb-4 " data-bs-toggle="tab" href="#kt_user_view_overview_ApplicantDetails">بيانات المالك والمدير المسئول  </a>
+                            </li>
+                            <!--end:::Tab item-->
+                            <!--begin:::Tab item-->
+                            <li class="nav-item">
+                                <a class="nav-link text-active-primary pb-4 " data-bs-toggle="tab" href="#kt_user_view_overview_ManagersDetails">بيانات المديرين   </a>
+                            </li>
+                            <!--end:::Tab item-->
+                            <!--begin:::Tab item-->
+                            <li class="nav-item">
+                                <a class="nav-link text-active-primary pb-4" data-kt-countup-tabs="true" data-bs-toggle="tab" href="#kt_user_view_overview_attachment">مرفقات الطلب</a>
+                            </li>
+                            <!--end:::Tab item-->
+                          
+                            <!--begin:::Tab item-->
+                            <!--end:::Tab item-->
+                        </ul>
+                        <!--end:::Tabs-->
+                        <!--begin:::Tab content-->
+
+                      
+                        <div class="tab-content" id="myTabContent">
+                           <input type="hidden" asp-for="LicencesVM.LicId" />
+                            <!--begin:::Tab Licences pane-->
+                            <div class="tab-pane fade show active" id="kt_user_view_Mianlicences_tab" role="tabpanel">
+
+                                <!--begin::Card-->
+                                <div class="card card-flush pt-3 mb-5 mb-xl-10">
+                                    <!--begin::Card header-->
+                                    <div class="card-header">
+                                        <div class="card-title flex-column mb-11">
+                                            <span class="d-inline-block position-relative ms-2">
+                                                <span class="d-inline-block mb-2 fs-1 fw-bold">معلومات الترخيص</span>
+                                                <span class="d-inline-block position-absolute h-3px bottom-0 end-0 start-0 bg-primary translate rounded"></span>
+                                            </span>
+                                        </div>
+                                    </div>
+                                    <!--end::Card header-->
+                                    <!--begin::Card body-->
+                                    <div class="card-body pt-3">
+                                        <div class="mb-10">
+                                            <!--begin::Title-->
+                                            <div class="card-title flex-column">
+                                                <span class="d-inline-block position-relative ms-2">
+                                                    <span class="d-inline-block mb-2 fw-bold">تعديل البيانات الاساسية للترخيص</span>
+                                                    <span class="d-inline-block position-absolute h-3px bottom-0 end-0 start-0 bg-danger translate rounded"></span>
+                                                </span>
+                                            </div>
+
+                                            <div class="d-flex flex-wrap py-5">
+                                                <!-- Left Column -->
+                                                <div class="flex-equal me-5">
+                                                    <table class="table fs-6 fw-semibold gs-0 gy-2 gx-2 m-0">
+                                                        <tr>
+                                                            <td class="text-gray-500 min-w-175px w-175px">رقم الترخيص :</td>
+                                                            <td>
+                                                                <input asp-for="LicencesVM.LicNo" class="form-control form-control-sm" />
+                                                            </td>
+                                                        </tr>
+                                                        <tr>
+                                                            <td class="text-gray-500">نوع النشاط :</td>
+                                                            <td>
+                                                                <input asp-for="LicencesVM.ActivityTypeName" class="form-control form-control-sm" />
+                                                            </td>
+                                                        </tr>
+                                                        <tr>
+                                                            <td class="text-gray-500">تاريخ الإصدار :</td>
+                                                            <td>
+                                                                <input asp-for="LicencesVM.IssueDate" class="form-control form-control-sm" type="date" />
+                                                            </td>
+                                                        </tr>
+                                                        <tr>
+                                                            <td class="text-gray-500">تاريخ الإنتهاء :</td>
+                                                            <td>
+                                                                <input asp-for="LicencesVM.ExpireDate" class="form-control form-control-sm" type="date" />
+                                                            </td>
+                                                        </tr>
+                                                    </table>
+                                                </div>
+
+                                                <!-- Right Column -->
+                                                <div class="flex-equal">
+                                                    <table class="table fs-6 fw-semibold gs-0 gy-2 gx-2 m-0">
+                                                        <tr>
+                                                            <td class="text-gray-500">اسم الترخيص :</td>
+                                                            <td>
+                                                                <input asp-for="LicencesVM.LicName" class="form-control form-control-sm" />
+                                                            </td>
+                                                        </tr>
+                                                        <tr>
+                                                            <td class="text-gray-500">رقم الترخيص التجاري :</td>
+                                                            <td>
+                                                                <input asp-for="LicencesVM.CommercialLicNo" class="form-control form-control-sm" />
+                                                            </td>
+                                                        </tr>
+                                                        <tr>
+                                                            <td class="text-gray-500">ملاحظات :</td>
+                                                            <td>
+                                                                <textarea asp-for="LicencesVM.Notes" class="form-control form-control-sm" rows="2"></textarea>
+                                                            </td>
+                                                        </tr>
+                                                    </table>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <!--end::Card body-->
+                                </div>
+
+                                <!--end::Card-->
+                                
+
+                            </div>
+                            <!--end:::Tab Licences pane-->
+                            @if (Model.LicencesVM.ActiivityTypeId == (int)ActivityTypeEnum.Hotel||
+                            Model.LicencesVM.ActiivityTypeId == (int)ActivityTypeEnum.ApartmentHotel ||
+                            Model.LicencesVM.ActiivityTypeId == (int)ActivityTypeEnum.Resorts)
+                            {
+                            <!--begin:::Tab Building pane-->
+                            <div class="tab-pane fade " id="kt_user_view_overview_BuildingDetails" role="tabpanel">
+                                <!--begin::Card-->
+                                <div class="card card-flush pt-3 mb-5 mb-xl-10">
+                                    <!--begin::Card header-->
+                                    <div class="card-header">
+                                        <div class="card-title flex-column mb-11">
+                                            <span class="d-inline-block position-relative ms-2">
+                                                <span class="d-inline-block mb-2 fs-1 fw-bold">
+                                                    بيانات المنشأة
+                                                </span>
+                                                <span class="d-inline-block position-absolute h-3px bottom-0 end-0 start-0 bg-primary translate rounded"></span>
+                                            </span>
+                                        </div>
+                                    </div>
+                                    <!--end::Card header-->
+                                    <!--begin::Card body-->
+                                    <div class="card-body pt-3">
+                                        <div class="mb-10">
+                                            <!--begin::Card title-->
+                                            <div class="card-title flex-column">
+                                                <span class="d-inline-block position-relative ms-2">
+                                                    <span class="d-inline-block mb-2 fw-bold">
+                                                        تفاصيل بيانات المنشأة
+                                                    </span>
+                                                    <span class="d-inline-block position-absolute h-3px bottom-0 end-0 start-0 bg-danger translate rounded"></span>
+                                                </span>
+                                            </div>
+                                            <!--end::Card title-->
+                                            <!--begin::Details-->
+                                            <div class="d-flex flex-wrap py-5">
+                                                <div class="flex-equal me-5">
+                                                    <table class="table fs-6 fw-semibold gs-0 gy-2 gx-2 m-0">
+                                                      
+                                                            <tr>
+                                                                <td class="text-gray-500">اسم المنشأة الفندقية:</td>
+                                                                <td><input class="form-control form-control-sm" asp-for="LicencesVM.LicName" value="@Model.LicencesVM?.LicName" /></td>
+                                                            </tr>
+                                                            <tr>
+                                                                <td class="text-gray-500">الرقم المدني للجهة:</td>
+                                                                <td><input class="form-control form-control-sm" asp-for="LicencesVM.Company.CompanyCivilId" value="@Model.LicencesVM?.Company?.CompanyCivilId" /></td>
+                                                            </tr>
+                                                            <tr>
+                                                                <td class="text-gray-500">الرقم الآلي:</td>
+                                                                <td><input class="form-control form-control-sm aali-input" id="AaliNumber" asp-for="LicencesVM.Company.AddressNavigation.AalliNo" value="@Model.LicencesVM?.Company?.AddressNavigation?.AalliNo" /></td>
+                                                            </tr>
+                                                            <tr>
+                                                                <td class="text-gray-500">المنطقة:</td>
+                                                                <td><input class="form-control form-control-sm" id="Area" asp-for="LicencesVM.Company.AddressNavigation.Area" value="@Model.LicencesVM?.Company?.AddressNavigation?.Area" /></td>
+                                                            </tr>
+                                                            <tr>
+                                                                <td class="text-gray-500">المحافظة:</td>
+                                                                <td><input class="form-control form-control-sm" id="Governrate" asp-for="LicencesVM.Company.AddressNavigation.GovernorateArabic" value="@Model.LicencesVM?.Company?.AddressNavigation?.GovernorateArabic" /></td>
+                                                            </tr>
+                                                            <tr>
+                                                                <td class="text-gray-500">القطعة:</td>
+                                                                <td><input class="form-control form-control-sm" id="BlockNo" asp-for="LicencesVM.Company.AddressNavigation.BlockArabic" value="@Model.LicencesVM?.Company?.AddressNavigation?.BlockArabic" /></td>
+                                                            </tr>
+                                                            <tr>
+                                                                <td class="text-gray-500">الشارع:</td>
+                                                                <td><input class="form-control form-control-sm" id="Street" asp-for="LicencesVM.Company.AddressNavigation.StreetArabic" value="@Model.LicencesVM?.Company?.AddressNavigation?.StreetArabic" /></td>
+                                                            </tr>
+                                                        
+                                                    </table>
+                                                </div>
+
+                                                <div class="flex-equal">
+                                                    <table class="table fs-6 fw-semibold gs-0 gy-2 gx-2 m-0">
+                                                 
+                                                            <tr>
+                                                                <td class="text-gray-500">المبني:</td>
+                                                                <td><input class="form-control form-control-sm" id="BuildingName" asp-for="LicencesVM.Company.AddressNavigation.BuildingName" value="@Model.LicencesVM?.Company?.AddressNavigation?.BuildingName" /></td>
+                                                            </tr>
+                                                            <tr>
+                                                                <td class="text-gray-500">رقم المبني:</td>
+                                                                <td><input class="form-control form-control-sm" id="BuildingNo" asp-for="LicencesVM.Company.AddressNavigation.BuildingNo" value="@Model.LicencesVM?.Company?.AddressNavigation?.BuildingNo" /></td>
+                                                            </tr>
+                                                            <tr>
+                                                                <td class="text-gray-500">الدور:</td>
+                                                                <td><input class="form-control form-control-sm" id="FloorNo" asp-for="LicencesVM.Company.AddressNavigation.FloorNo" value="@Model.LicencesVM?.Company?.AddressNavigation?.FloorNo" /></td>
+                                                            </tr>
+                                                            <tr>
+                                                                <td class="text-gray-500">رقم الوحدة:</td>
+                                                                <td><input class="form-control form-control-sm" id="UnitNo" asp-for="LicencesVM.Company.AddressNavigation.UnitNo" value="@Model.LicencesVM?.Company?.AddressNavigation?.UnitNo" /></td>
+                                                            </tr>
+                                                            <tr>
+                                                                <td class="text-gray-500">رقم المخطط المساحي:</td>
+                                                                <td><input class="form-control form-control-sm" asp-for="LicencesVM.Company.AddressNavigation.AreaChartNo" value="@Model.LicencesVM?.Company?.AddressNavigation?.AreaChartNo" /></td>
+                                                            </tr>
+                                                        
+                                                    </table>
+                                                </div>
+                                            </div>
+                                            <!--end::Details-->
+                                        </div>
+                                    </div>
+                                    <!--end::Card body-->
+                                </div>
+
+
+                                <!--end::Card-->
+                            </div>
+                            <!--end:::Tab Building pane-->
+                            }
+                            <!--begin:::Tab Company pane-->
+                            <div class="tab-pane fade " id="kt_user_view_overview_CompanyDetails" role="tabpanel">
+                                <!--begin::Card-->
+                                <div class="card card-flush pt-3 mb-5 mb-xl-10">
+                                    <div class="card-body pt-3">
+                                        <div class="mb-10">
+                                            <div class="card-title flex-column">
+                                                <span class="d-inline-block position-relative ms-2">
+                                                    <span class="d-inline-block mb-2 fw-bold">بيانات الشركة</span>
+                                                    <span class="d-inline-block position-absolute h-3px bottom-0 end-0 start-0 bg-danger translate rounded"></span>
+                                                </span>
+                                            </div>
+
+                                            <div class="d-flex flex-wrap py-5">
+                                                <div class="flex-equal me-5">
+                                                    <table class="table fs-6 fw-semibold gs-0 gy-2 gx-2 m-0">
+                                                        <tr>
+                                                            <td class="text-gray-500 min-w-175px w-175px">الشركة المديرة بالعربي:</td>
+                                                            <td class="text-gray-800 min-w-200px">
+                                                                <input type="text" asp-for="LicencesVM.Company.DirCompanyAr" value="@Model.LicencesVM.Company?.DirCompanyAr" class="form-control form-control-sm" />
+                                                            </td>
+                                                        </tr>
+                                                        <tr>
+                                                            <td class="text-gray-500">الشركة المالكة بالعربي:</td>
+                                                            <td class="text-gray-800">
+                                                                <input type="text" asp-for="LicencesVM.Company.OwnerCompanyAr" value="@Model.LicencesVM.Company?.OwnerCompanyAr" class="form-control form-control-sm" />
+                                                            </td>
+                                                        </tr>
+                                                        <tr>
+                                                            <td class="text-gray-500">السجل التجاري للشركة:</td>
+                                                            <td class="text-gray-800">
+                                                                <input type="text" asp-for="LicencesVM.RecordNo" value="@Model.LicencesVM?.RecordNo" class="form-control form-control-sm" />
+                                                            </td>
+                                                        </tr>
+                                                        <tr>
+                                                            <td class="text-gray-500">رقم الترخيص التجاري:</td>
+                                                            <td class="text-gray-800">
+                                                                <input type="text" asp-for="LicencesVM.CommercialLicNo" value="@Model.LicencesVM.CommercialLicNo" class="form-control form-control-sm" />
+                                                            </td>
+                                                        </tr>
+                                                        @if (Model.LicencesVM.ActiivityTypeId == (int)ActivityTypeEnum.Parks
+           || Model.LicencesVM.ActiivityTypeId == (int)ActivityTypeEnum.Sailing)
+                                                        {
+                                                            <tr>
+                                                                <td class="text-gray-500">الرقم الآلي:</td>
+                                                                <td><input class="form-control form-control-sm aali-input" id="AaliNumber" name="LicencesVM.Company.AddressNavigation.AalliNo" value="@Model.LicencesVM?.Company?.AddressNavigation?.AalliNo" /></td>
+                                                            </tr>
+                                                            <tr>
+                                                                <td class="text-gray-500">المنطقة:</td>
+                                                                <td><input class="form-control form-control-sm" id="Area" name="LicencesVM.Company.AddressNavigation.Area" value="@Model.LicencesVM?.Company?.AddressNavigation?.Area" /></td>
+                                                            </tr>
+                                                            <tr>
+                                                                <td class="text-gray-500">المحافظة:</td>
+                                                                <td><input class="form-control form-control-sm" id="Governrate" name="LicencesVM.Company.AddressNavigation.GovernorateArabic" value="@Model.LicencesVM?.Company?.AddressNavigation?.GovernorateArabic" /></td>
+                                                            </tr>
+                                                            <tr>
+                                                                <td class="text-gray-500">القطعة:</td>
+                                                                <td><input class="form-control form-control-sm" id="BlockNo" name="LicencesVM.Company.AddressNavigation.BlockArabic" value="@Model.LicencesVM?.Company?.AddressNavigation?.BlockArabic" /></td>
+                                                            </tr>
+                                                            <tr>
+                                                                <td class="text-gray-500">الشارع:</td>
+                                                                <td><input class="form-control form-control-sm" id="Street" name="LicencesVM.Company.AddressNavigation.StreetArabic" value="@Model.LicencesVM?.Company?.AddressNavigation?.StreetArabic" /></td>
+                                                            </tr>
+                                                            <tr>
+                                                                <td class="text-gray-500">المبني:</td>
+                                                                <td><input class="form-control form-control-sm" id="Street" name="LicencesVM.Company.AddressNavigation.BuildingName" value="@Model.LicencesVM?.Company?.AddressNavigation?.BuildingName" /></td>
+                                                            </tr>
+                                                            <tr>
+                                                                <td class="text-gray-500">رقم المبني:</td>
+                                                                <td><input class="form-control form-control-sm" id="Street" name="LicencesVM.Company.AddressNavigation.BuildingNo" value="@Model.LicencesVM?.Company?.AddressNavigation?.BuildingNo" /></td>
+                                                            </tr>
+                                                            <tr>
+                                                                <td class="text-gray-500">رقم الوحدة:</td>
+                                                                <td><input class="form-control form-control-sm" id="Street" name="LicencesVM.Company.AddressNavigation.UnitNo" value="@Model.LicencesVM?.Company?.AddressNavigation?.UnitNo" /></td>
+                                                            </tr>
+                                                            <tr>
+                                                                <td class="text-gray-500">الدور:</td>
+                                                                <td><input class="form-control form-control-sm" id="FloorNo" name="LicencesVM.Company.AddressNavigation.FloorNo" value="@Model.LicencesVM?.Company?.AddressNavigation?.FloorNo" /></td>
+                                                            </tr>
+                                                        }
+                                                    </table>
+                                                </div>
+                                                
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                </div>
+                                <!--end::Card-->
+                            </div>
+                            <!--end:::Tab Company pane-->
+                            <!--begin:::Tab Applicant pane-->
+                            <div class="tab-pane fade " id="kt_user_view_overview_ApplicantDetails" role="tabpanel">
+                                <!--begin::Card-->
+                                <div class="card card-flush pt-3 mb-5 mb-xl-10">
+                                    <div class="card-body pt-3">
+                                        <div class="mb-10">
+                                            <div class="card-title flex-column">
+                                                <span class="d-inline-block position-relative ms-2">
+                                                    <span class="d-inline-block mb-2 fw-bold">بيانات صاحب الترخيص</span>
+                                                    <span class="d-inline-block position-absolute h-3px bottom-0 end-0 start-0 bg-danger translate rounded"></span>
+                                                </span>
+                                            </div>
+
+                                            <div class="d-flex flex-wrap py-5">
+                                                <div class="flex-equal me-5">
+                                                    <table class="table fs-6 fw-semibold gs-0 gy-2 gx-2 m-0">
+                                                        <tr>
+                                                            <td class="text-gray-500 min-w-175px w-175px">إسم صاحب الترخيص:</td>
+                                                            <td class="text-gray-800 min-w-200px">
+                                                                <input type="text" asp-for="LicencesVM.Applicant.Name1" value="@Model.LicencesVM.Applicant?.Name1" class="form-control form-control-sm" />
+                                                            </td>
+                                                        </tr>
+                                                        <tr>
+                                                            <td class="text-gray-500">الرقم المدني:</td>
+                                                            <td class="text-gray-800">
+                                                                <input type="text" asp-for="LicencesVM.Applicant.CivilId" value="@Model.LicencesVM?.ApplicantCivilId" class="form-control form-control-sm" />
+                                                            </td>
+                                                        </tr>
+                                                    </table>
+
+                                                    <table class="table fs-6 fw-semibold gs-0 gy-2 gx-2 m-0 mt-5">
+                                                        <tr>
+                                                            <td class="text-gray-500 min-w-175px w-175px">رقم الهاتف:</td>
+                                                            <td class="text-gray-800 min-w-200px">
+                                                                <input type="text" asp-for="LicencesVM.Applicant.Phone" value="@Model.LicencesVM.Applicant?.Phone" class="form-control form-control-sm" />
+                                                            </td>
+                                                        </tr>
+                                                        <tr>
+                                                            <td class="text-gray-500">البريد الإلكتروني:</td>
+                                                            <td class="text-gray-800">
+                                                                <input type="email" asp-for="LicencesVM.Applicant.Email" value="@Model.LicencesVM.Applicant?.Email" class="form-control form-control-sm" />
+                                                            </td>
+                                                        </tr>
+                                                    </table>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <!--begin::Card body-->
+                                    <div class="card-body pt-3">
+                                        <div class="mb-10">
+                                            <div class="card-title flex-column">
+                                                <span class="d-inline-block position-relative ms-2">
+                                                    <span class="d-inline-block mb-2 fw-bold">بيانات المدير المسئول</span>
+                                                    <span class="d-inline-block position-absolute h-3px bottom-0 end-0 start-0 bg-danger translate rounded"></span>
+                                                </span>
+                                            </div>
+
+                                            <div class="d-flex flex-wrap py-5">
+                                                <div class="flex-equal me-5">
+                                                    <table class="table fs-6 fw-semibold gs-0 gy-2 gx-2 m-0">
+                                                        <tr>
+                                                            <td class="text-gray-500 min-w-175px w-175px">إسم المدير المسئول:</td>
+                                                            <td class="text-gray-800 min-w-200px">
+                                                                <input type="text" asp-for="LicencesVM.Manager.Name1" value="@Model.LicencesVM.Manager?.Name1" class="form-control form-control-sm" />
+                                                            </td>
+                                                        </tr>
+                                                        <tr>
+                                                            <td class="text-gray-500">الرقم المدني للمدير المسئول:</td>
+                                                            <td class="text-gray-800">
+                                                                <input type="text" asp-for="LicencesVM.Manager.CivilId" value="@Model.LicencesVM.Manager?.CivilId" class="form-control form-control-sm" />
+                                                            </td>
+                                                        </tr>
+                                                        
+                                                        
+                                                        <tr>
+                                                            <td class="text-gray-500">البريد الإلكتروني للمدير:</td>
+                                                            <td class="text-gray-800">
+                                                                <input type="email" asp-for="LicencesVM.Manager.Email" value="@Model.LicencesVM.Manager?.Email" class="form-control form-control-sm" />
+                                                            </td>
+                                                        </tr>
+                                                        <tr>
+                                                            <td class="text-gray-500">رقم الهاتف للمدير:</td>
+                                                            <td class="text-gray-800">
+                                                                <input type="text" asp-for="LicencesVM.Manager.Phone" value="@Model.LicencesVM.Manager?.Phone" class="form-control form-control-sm" />
+                                                            </td>
+                                                        </tr>
+                                                        <!--end::Row-->
+                                                    </table>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <!--end::Card body-->
+                                    <!--begin::Card body-->
+                                    <div class="card-body pt-3">
+                                        <div class="mb-10">
+                                            <div class="card-title flex-column">
+                                                <span class="d-inline-block position-relative ms-2">
+                                                    <span class="d-inline-block mb-2 fw-bold">بيانات المفوض بالتوقيع</span>
+                                                    <span class="d-inline-block position-absolute h-3px bottom-0 end-0 start-0 bg-danger translate rounded"></span>
+                                                </span>
+                                            </div>
+
+                                            <div class="d-flex flex-wrap py-5">
+                                                <div class="flex-equal me-5">
+                                                    <table class="table fs-6 fw-semibold gs-0 gy-2 gx-2 m-0">
+                                                        <tr>
+                                                            <td class="text-gray-500 min-w-175px w-175px">إسم المفوض:</td>
+                                                            <td class="text-gray-800 min-w-200px">
+                                                                <input type="text" asp-for="Mandoob.UserName" value="@Model.Mandoob?.UserName" class="form-control form-control-sm" />
+                                                            </td>
+                                                        </tr>
+                                                        <tr>
+                                                            <td class="text-gray-500">الرقم المدني للمفوض بالتوقيع:</td>
+                                                            <td class="text-gray-800">
+                                                                <input type="text" asp-for="Mandoob.CivilId" value="@Model.Mandoob?.CivilId" class="form-control form-control-sm" />
+                                                            </td>
+                                                        </tr>
+                                                        <tr>
+                                                            <td class="text-gray-500">البريد الإلكتروني للمفوض:</td>
+                                                            <td class="text-gray-800">
+                                                                <input type="email" asp-for="Mandoob.Email" value="@Model.Mandoob?.Email" class="form-control form-control-sm" />
+                                                            </td>
+                                                        </tr>
+                                                        <tr>
+                                                            <td class="text-gray-500">رقم الهاتف المفوض:</td>
+                                                            <td class="text-gray-800">
+                                                                <input type="text" asp-for="Mandoob.Mobile" value="@Model.Mandoob?.Mobile" class="form-control form-control-sm" />
+                                                            </td>
+                                                        </tr>
+                                                    </table>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <!--end::Card body-->
+                                </div>
+                                <!--end::Card-->
+                            </div>
+                            <!--end:::Tab Applicant pane-->
+                            <!--begin:::Tab Managers pane-->
+                            <div class="tab-pane fade " id="kt_user_view_overview_ManagersDetails" role="tabpanel">
+                                <!--begin::Card-->
+                                <div class="card card-flush pt-3 mb-5 mb-xl-10">
+                                    <div class="card-body pt-3">
+                                        <div class="mb-10">
+                                            <div class="card-title flex-column">
+                                                <span class="d-inline-block position-relative ms-2">
+                                                    <span class="d-inline-block mb-2 fw-bold">بيانات مدير المبيعات </span>
+                                                    <span class="d-inline-block position-absolute h-3px bottom-0 end-0 start-0 bg-danger translate rounded"></span>
+                                                </span>
+                                            </div>
+
+                                            <div class="d-flex flex-wrap py-5">
+                                                <div class="flex-equal me-5">
+                                                    <table class="table fs-6 fw-semibold gs-0 gy-2 gx-2 m-0">
+                                                        <tr>
+                                                            <td class="text-gray-500">إسم مدير المبيعات :</td>
+                                                            <td class="text-gray-800"><input asp-for="LicencesVM.SalesManager.Name1" class="form-control form-control-sm" /></td>
+                                                        </tr>
+                                                        <tr>
+                                                            <td class="text-gray-500"> الرقم المدني لمدير المبيعات :</td>
+                                                            <td class="text-gray-800"><input asp-for="LicencesVM.SalesManager.CivilId" class="form-control form-control-sm" /></td>
+                                                        </tr>
+                                                        <tr>
+                                                            <td class="text-gray-500">رقم الهاتف لمدير المبيعات :</td>
+                                                            <td class="text-gray-800"><input asp-for="LicencesVM.SalesManager.Phone" class="form-control form-control-sm" /></td>
+                                                        </tr>
+                                                        <tr>
+                                                            <td class="text-gray-500">البريد الإلكتروني لمدير المبيعات :</td>
+                                                            <td class="text-gray-800"><input asp-for="LicencesVM.SalesManager.Email" class="form-control form-control-sm" /></td>
+                                                        </tr>
+                                                    </table>
+                                                </div>
+                                            </div>
+                                        </div>
+
+                                        <div class="mb-10">
+                                            <div class="card-title flex-column">
+                                                <span class="d-inline-block position-relative ms-2">
+                                                    <span class="d-inline-block mb-2 fw-bold">بيانات مدير التسويق</span>
+                                                    <span class="d-inline-block position-absolute h-3px bottom-0 end-0 start-0 bg-danger translate rounded"></span>
+                                                </span>
+                                            </div>
+
+                                            <div class="d-flex flex-wrap py-5">
+                                                <div class="flex-equal me-5">
+                                                    <table class="table fs-6 fw-semibold gs-0 gy-2 gx-2 m-0">
+                                                        <tr>
+                                                            <td class="text-gray-500">إسم مدير التسويق  :</td>
+                                                            <td class="text-gray-800"><input asp-for="LicencesVM.MarketingManager.Name1" class="form-control form-control-sm" /></td>
+                                                        </tr>
+                                                        <tr>
+                                                            <td class="text-gray-500">الرقم المدني لمدير التسويق :</td>
+                                                            <td class="text-gray-800"><input asp-for="LicencesVM.MarketingManager.CivilId" class="form-control form-control-sm" /></td>
+                                                        </tr>
+                                                        <tr>
+                                                            <td class="text-gray-500">البريد الإلكتروني لمدير التسويق :</td>
+                                                            <td class="text-gray-800"><input asp-for="LicencesVM.MarketingManager.Email" class="form-control form-control-sm" /></td>
+                                                        </tr>
+                                                        <tr>
+                                                            <td class="text-gray-500">رقم الهاتف لمدير التسويق :</td>
+                                                            <td class="text-gray-800"><input asp-for="LicencesVM.MarketingManager.Phone" class="form-control form-control-sm" /></td>
+                                                        </tr>
+                                                    </table>
+                                                </div>
+                                            </div>
+                                        </div>
+
+                                        <div class="mb-10">
+                                            <div class="card-title flex-column">
+                                                <span class="d-inline-block position-relative ms-2">
+                                                    <span class="d-inline-block mb-2 fw-bold">بيانات مدير العمليات</span>
+                                                    <span class="d-inline-block position-absolute h-3px bottom-0 end-0 start-0 bg-danger translate rounded"></span>
+                                                </span>
+                                            </div>
+
+                                            <div class="d-flex flex-wrap py-5">
+                                                <div class="flex-equal me-5">
+                                                    <table class="table fs-6 fw-semibold gs-0 gy-2 gx-2 m-0">
+                                                        <tr>
+                                                            <td class="text-gray-500">إسم مدير العمليات  :</td>
+                                                            <td class="text-gray-800"><input asp-for="LicencesVM.OperationsManager.Name1" class="form-control form-control-sm" /></td>
+                                                        </tr>
+                                                        <tr>
+                                                            <td class="text-gray-500">الرقم المدني لمدير العمليات :</td>
+                                                            <td class="text-gray-800"><input asp-for="LicencesVM.OperationsManager.CivilId" class="form-control form-control-sm" /></td>
+                                                        </tr>
+                                                        <tr>
+                                                            <td class="text-gray-500">البريد الإلكتروني لمدير العمليات :</td>
+                                                            <td class="text-gray-800"><input asp-for="LicencesVM.OperationsManager.Email" class="form-control form-control-sm" /></td>
+                                                        </tr>
+                                                        <tr>
+                                                            <td class="text-gray-500">رقم الهاتف لمدير العمليات :</td>
+                                                            <td class="text-gray-800"><input asp-for="LicencesVM.OperationsManager.Phone" class="form-control form-control-sm" /></td>
+                                                        </tr>
+                                                    </table>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <!--end::Card-->
+                            </div>
+                            <!--end:::Tab Managers pane-->
+                            <!--begin:::Tab pane Attachment-->
+                            <div class="tab-pane fade" id="kt_user_view_overview_attachment" role="tabpanel">
+                                @{
+                                    int targetID = 0;
+                                    string tergetStr = "kt_docs_card_collapsible" + targetID.ToString();
+                                }
+
+                                @foreach (var item in Model.attachmentVM)
+                                {
+                                    targetID++;
+                                    string targetStr = "kt_docs_card_collapsible" + targetID.ToString();
+                                    <!--begin::Card-->
+                                    <div class="card shadow-sm pt-4 mb-6 mb-xl-9">
+                                        <div class="card-header collapsible cursor-pointer rotate" data-bs-toggle="collapse" data-bs-target="#@targetStr">
+                                            <div class="card-title flex-column">
+                                                <!-- Display the attachment name -->
+                                                @* <h2 class="mb-1 text-muted">@item.AttachName</h2> *@
+                                                <div class="d-inline-flex align-items-center">
+                                                    <!-- Checkbox for the attachment -->
+                                                    <input type="checkbox" data-id="@item.AttachId" name="attachmentsToUpload" value="@item.AttachPath" id="checkbox_@targetID" @if (item.IsApproved)
+                                                    {
+                                                        @:checked
+                                                    } class="form-check-input me-2">
+                                                    <label for="checkbox_@targetID" class="mb-1 text-muted">@item.AttachName</label>
+                                                </div>
+                                                <div class="card-title flex-column">
+                                                    <!--begin::Underline-->
+                                                    <span class="d-inline-block position-relative ms-2">
+                                                        <!--begin::Label-->
+                                                        <span class="d-inline-block mb-2 fw-bold">
+                                                            @item.AttachName
+                                                        </span>
+                                                        <!--end::Label-->
+                                                        <!--begin::Line-->
+                                                        <span class="d-inline-block position-absolute h-3px bottom-0 end-0 start-0 bg-primary translate rounded"></span>
+                                                        <!--end::Line-->
+                                                    </span>
+                                                </div>
+
+                                            </div>
+                                            <div class="card-toolbar rotate-180">
+                                                <i class="ki-duotone ki-down fs-1"></i>
+                                            </div>
+                                        </div>
+                                        <div id="@targetStr" class="collapse">
+                                            <div class="card-body">
+                                                <div>
+                                                    <!-- Ensure the path is correct for iframe -->
+                                                    <iframe src="@Url.Content("~/Admin/Files/Request_Documents/Tourism/" + item.AttachPath)" style="width: 100%; height: 500px;"></iframe>
+                                                </div>
+                                            </div>
+                                            <div class="card-footer">
+                                                <!-- Ensure the link to open in a new tab is correct -->
+                                                <a href="@Url.Content("~/Admin/Files/Request_Documents/Tourism/" + item.AttachPath)" class="btn btn-light-primary btn-sm" target="_blank">
+                                                    <i class="ki-outline ki-book-open fs-3"></i>
+                                                    فتح في شاشة منفصلة
+                                                </a>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div id="attachmentsSection">
+                                    </div>
+                                    <!--end::Card-->
+                                }
+
+                            </div>
+                            <!--end:::Tab pane-->
+                           
+                            <!--end:::Tab content-->
+                        </div>
+                        
+                        <!--end::Content-->
+                    </div>
+                    <!--end::Layout-->
+
+
+
+                </div>
+                <!--end::Content container-->
+            </div>
+            <!--end::Content-->
+
+
+    </form>
+</div>
+<!--end::Content wrapper-->
+
+@section Scripts
+{
+<script>
+        $(function () {
+            $(".aali-input").on('change', function () {
+                var value = $(this).val();
+                var regex = /^[0-9]+$/;
+
+                if (!regex.test(value)) {
+                    $(this).val("");
+                    Swal.fire({
+                        icon: 'error',
+                        title: 'خطأ',
+                        text: 'الرقم الآلي يجب أن يكون أرقام فقط',
+                        confirmButtonText: 'موافق'
+                    });
+                    return;
+                }
+
+                // get the context to update only the related fields
+                var container = $(this).closest('.card-body'); // or other parent if needed
+
+                get_Amount(value, container);
+            });
+        });
+        const getAddressUrl = '@Url.Action("getAddressDataFromPaci", "Account", new { area = "Admin" })';
+        async function get_Amount(ID, container) {
+            try {
+                const response = await $.ajax({
+                    type: "POST",
+                    url: getAddressUrl,
+                    data: { ID: ID },
+                    dataType: "json"
+                });
+
+                container.find('#Governrate').val(response.governoratearabic || "");
+                container.find('#Area').val(response.neighborhoodarabic || "");
+                container.find('#BlockNo').val(response.blockarabic || "");
+                container.find('#Street').val(response.streetarabic || "");
+                container.find('#BuildingName').val(response.buildingnamearabic || "");
+                container.find('#UnitNo').val(response.unit_no || "");
+                container.find('#FloorNo').val(response.floor_no || "");
+                container.find('#BuildingNo').val(response.parcelarabic || "");
+
+            } catch (error) {
+                container.find('.aali-input').val("");
+                container.find('#Governrate, #Area, #BlockNo, #Street, #BuildingNo, #UnitNo, #FloorNo, #BuildingName').val("");
+
+                Swal.fire({
+                    icon: 'error',
+                    title: 'خطأ...',
+                    text: 'عفوا , الرقم الآلي غير صحيح!',
+                });
+            }
+        }
+
+</script>
+
+}

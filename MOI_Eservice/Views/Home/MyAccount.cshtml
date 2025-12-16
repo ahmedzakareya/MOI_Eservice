@@ -1,0 +1,190 @@
+﻿ @model LicencesWithRequestForUser
+
+
+@{
+    ViewBag.Title = "حسابي";
+   
+}
+
+
+
+
+<!-- Breadcrumb Area -->
+<div class="breadcrumb-area">
+    <ol class="breadcrumb">
+        <li class="item"><a href="@Url.Action("MyAccount", "Home")">الرئيسيه</a></li>
+        <li class="item">حسابي</li>
+    </ol>
+</div>
+
+<!-- Start Dashboard Fun Fact Area -->
+<div class="dashboard-fun-fact-area">
+    <div class="row">
+        <div class="col-lg-3 col-md-6 col-sm-6">
+            <div class="stats-fun-fact-box">
+                <div class="icon-box">
+                    <i class="ri-briefcase-line"></i>
+                </div>
+                <span class="sub-title">مجموع الترخيص</span>
+                @* <h3>@Model.LicStatistics.AllLicenses</h3> *@
+            </div>
+        </div>
+
+        <div class="col-lg-3 col-md-6 col-sm-6">
+            <div class="stats-fun-fact-box">
+                <div class="icon-box">
+                    <i class="ri-briefcase-line"></i>
+                </div>
+                <span class="sub-title">التراخيص النشطة</span>
+                @* <h3>@Model.LicStatistics.ActivLic</h3> *@
+            </div>
+        </div>
+
+        <div class="col-lg-3 col-md-6 col-sm-6">
+            <div class="stats-fun-fact-box">
+                <div class="icon-box">
+                    <i class="ri-briefcase-line"></i>
+                </div>
+                <span class="sub-title">التراخيص سوف تنتهي</span>
+                @* <h3>@Model.LicStatistics.WillExpireLic</h3> *@
+            </div>
+        </div>
+
+        <div class="col-lg-3 col-md-6 col-sm-6">
+            <div class="stats-fun-fact-box">
+                <div class="icon-box">
+                    <i class="ri-briefcase-line"></i>
+                </div>
+                <span class="sub-title">التراخيص المنتهية</span>
+                @* <h3>@Model.LicStatistics.ExpiredLic</h3> *@
+            </div>
+        </div>
+    </div>
+</div>
+<!-- End Dashboard Fun Fact Area -->
+
+<!-- Latest Requests -->
+<div class="manage-jobs-box">
+    <h3>آخر  الطلبات</h3>
+    <div class="manage-jobs-table table-responsive">
+        <table class="table table-bordered">
+            <thead>
+                <tr>
+                    <th>رقم الطلب</th>
+                    <th>نوع الطلب</th>
+                    <th>تاريخ الطلب</th>
+                    <th>حالة الطلب</th>
+                    <th>الفئة</th>
+                    @* <th>التفاصيل</th> *@
+                </tr>
+            </thead>
+            <tbody>
+                @if (Model.RequestVM != null @* && Model.LatestRequests.Count > 0 *@)
+                {
+                    foreach (var item in Model.RequestVM)
+                    {
+                        <tr>
+                             <td>
+                                @item.Reqno
+                            </td> 
+                            <td>@item.ReqTypeName</td>
+                            <td>@item.Licreqtime</td>
+                            <td>@item.ReqStatusName</td>
+                            <td>@item.ServiceName</td>
+                            @* <td>
+                                <button class="option-btn" onclick="location.href='@Url.Action("RequestDetails", "TourismHome", new { id = item.RequestId })'">
+                                    <i class="ri-eye-line"></i>
+                                </button>
+                            </td> *@
+                        </tr>
+                    }
+                }
+            </tbody>
+        </table>
+    </div>
+</div>
+
+<!-- Latest Licenses -->
+<div class="manage-jobs-box">
+    <h3>أخر  التراخيص</h3>
+    <div class="manage-jobs-table table-responsive">
+        <table class="table table-bordered">
+            <thead>
+                <tr>
+                    <th>رقم الترخيص</th>
+                    <th>تاريخ البداية</th>
+                    <th>تاريخ النهاية</th>
+                    <th>صاحب الترخيص</th>
+                    <th>نوع النشاط</th>
+                    <th>الفئة</th>
+                    @* <th>التفاصيل</th> *@
+                </tr>
+            </thead>
+            <tbody>
+                @if (Model.RequestVM != null @* && Model.LatestLicenses.Count > 0 *@)
+                {
+
+                    foreach (var item in Model.RequestVM)
+                    {
+                        if(item.LicenceNavigation !=null)
+                        {
+                        <tr>
+                            <td>
+                                @item.Licno
+                            </td>
+                            <td>@item.LicenceNavigation.IssueDate</td>
+                            <td>@item.LicenceNavigation.ExpireDate</td>
+                            <td>@item.Licname</td>
+                            <td>@item.ActivityName</td>
+                            <td>@item.ServiceName</td>
+                            @* <td>
+                                <button class="option-btn" onclick="location.href='@Url.Action("LicenseDetails", "TourismHome", new { id = item.LicenseId })'">
+                                    <i class="ri-eye-line"></i>
+                                </button>
+                            </td> *@
+                        </tr>
+                        }
+                    }
+                }
+            </tbody>
+        </table>
+    </div>
+</div>
+
+<!-- Delegated Licenses -->
+@* <div class="manage-jobs-box">
+    <h3>التراخيص المفوض بها</h3>
+    <div class="manage-jobs-table table-responsive">
+        <table class="table table-bordered">
+            <thead>
+                <tr>
+                    <th>رقم الترخيص</th>
+                    <th>تاريخ البداية</th>
+                    <th>تاريخ النهاية</th>
+                    <th>اسم الترخيص</th>
+                    <th>صاحب الترخيص</th>
+                    <th>نوع النشاط</th>
+                    <th>الفئة</th>
+                </tr>
+            </thead>
+            <tbody>
+                @if (Model.MandoobLicensesViews != null && Model.MandoobLicensesViews.Count > 0)
+                {
+                    foreach (var item in Model.MandoobLicensesViews)
+                    {
+                        <tr>
+                            <td>@item.LicenseNo</td>
+                            <td>@item.LicenseIssueDate</td>
+                            <td>@item.LicenseExpireDate</td>
+                            <td>@item.LicenseName</td>
+                            <td>@item.LicenseOwner</td>
+                            <td>@item.ActivityType</td>
+                            <td>@item.LicenseCategory</td>
+                        </tr>
+                    }
+                }
+            </tbody>
+        </table>
+    </div>
+</div> *@
+

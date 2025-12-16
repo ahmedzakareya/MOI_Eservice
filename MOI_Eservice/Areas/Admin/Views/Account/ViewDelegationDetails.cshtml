@@ -1,0 +1,57 @@
+﻿@model PendingDelegationVM
+
+@{
+    ViewBag.Title = "تفاصيل طلب التفويض";
+    Layout = "~/Areas/Admin/Views/Shared/_LayoutEserviceTourism.cshtml";
+}
+
+<div class="card card-flush shadow-sm py-5 px-8">
+    <div class="card-header border-bottom">
+        <h2 class="card-title fw-bold text-dark">تفاصيل طلب التفويض</h2>
+    </div>
+
+    <div class="card-body">
+        <div class="row mb-5">
+            <div class="col-md-4">
+                <label class="form-label fw-semibold">الترخيص:</label>
+                <input type="text" class="form-control form-control-solid" value="@Model.LicenseName" readonly />
+            </div>
+            <div class="col-md-4">
+                <label class="form-label fw-semibold">اسم المفوض:</label>
+                <input type="text" class="form-control form-control-solid" value="@Model.DelegateName" readonly />
+            </div>
+            <div class="col-md-4">
+                <label class="form-label fw-semibold">المستخدم الأساسي:</label>
+                <input type="text" class="form-control form-control-solid" value="@Model.MainUserName" readonly />
+            </div>
+        </div>
+
+        @if (!string.IsNullOrEmpty(Model.AttachmentUrl))
+        {
+            <a href="@Model.AttachmentUrl" class="btn btn-sm btn-light-primary fs-4" target="_blank">عرض المرفق </a>
+        }
+        else
+        {
+            <span class="badge badge-light">لا يوجد</span>
+        }
+
+        <form asp-action="ApproveMandoobDelegation" asp-controller="Account" asp-area="Admin" method="post" class="mt-5">
+            @Html.AntiForgeryToken()
+            @Html.HiddenFor(m => m.Id)
+
+            <div class="mb-5">
+                <label class="form-label fw-bold">ملاحظات (في حالة الرفض)</label>
+                <textarea name="note" class="form-control form-control-solid" rows="5" placeholder="اكتب الملاحظات هنا إن وجدت..."></textarea>
+            </div>
+
+            <div class="d-flex justify-content-end gap-3">
+                <button type="submit" name="approve" value="true" class="btn btn-success">
+                    <i class="ki-outline ki-check fs-5"></i> الموافقة على التفويض
+                </button>
+                <button type="submit" name="approve" value="false" class="btn btn-danger">
+                    <i class="ki-outline ki-cross fs-5"></i> رفض التفويض
+                </button>
+            </div>
+        </form>
+    </div>
+</div>

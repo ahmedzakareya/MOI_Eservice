@@ -1,0 +1,221 @@
+﻿@model RegisterViewModel
+
+
+@{
+    ViewBag.Title = "منصة التراخيص الالكترونية";
+    Layout = "~/Views/Shared/_LoginLayout.cshtml";
+    //string RootSub = System.Configuration.ConfigurationManager.AppSettings["rootCheck"].ToString();
+}
+
+<!-- Start Profile Authentication Area -->
+<div class="profile-authentication-area ptb-100">
+    <div class="container">
+        <div class="profile-authentication-tabs" style="max-width: 1050px">
+            <div class="authentication-tabs-list">
+                <ul class="nav nav-tabs" id="myTab" role="tablist">
+                    <!--<li class="nav-item">
+                        <a class="nav-link active" id="login-tab" data-bs-toggle="tab" href="#login" role="tab" aria-controls="login">انشاء حساب جديد</a>
+                    </li>-->
+
+                    <li class="nav-item">
+                        <a class="nav-link active" id="register-tab" data-bs-toggle="tab" href="#register" role="tab" aria-controls="register">انشاء حساب جديد</a>
+                    </li>
+
+                    <!--   <li class="nav-item">
+                        <a class="nav-link" id="reset-password-tab" data-bs-toggle="tab" href="#reset-password" role="tab" aria-controls="reset-password">Reset Password</a>
+                    </li>-->
+                </ul>
+            </div>
+
+            <div class="tab-content" id="myTabContent">                
+                <div class="tab-pane fade show active" id="register" role="tabpanel">
+                    <div class="eeza-authentication-form">
+
+                        @using (Html.BeginForm("Register", "Account", FormMethod.Post))
+                        {
+                            @Html.AntiForgeryToken()
+                            @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+
+                        <div class="row justify-content-center">
+                                <div id="error-message" class="text-danger m-4" style="display:none; padding-top: 10px;"></div>
+                                @if (TempData["ErrorMessage"] != null)
+                                {
+                                    <div class="alert alert-danger">
+                                        @TempData["ErrorMessage"]
+                                    </div>
+                                }
+                            <div class="form-group col-md-6">
+                                @Html.LabelFor(model => model.CivilID, new { @class = "control-label col-md-12" })
+                                <div class="col-md-12">
+                                    @Html.EditorFor(model => model.CivilID, new { htmlAttributes = new { @class = "form-control", placeholder = "الرقم المدني", @ID = "CivilID" } })
+                                    @Html.ValidationMessageFor(model => model.CivilID, "", new { @class = "text-danger" })
+                                </div>
+                            </div>
+                            <div class="form-group col-md-6">
+                                @Html.LabelFor(model => model.Mobile, new { @class = "control-label col-md-12" })
+                                <div class="col-md-12">
+                                        @Html.EditorFor(model => model.Mobile, new { htmlAttributes = new { @class = "form-control", placeholder = "رقم الجوال", @ID = "Mobile"/* , @readonly = "readonly"  */} })
+                                    @Html.ValidationMessageFor(model => model.Mobile, "", new { @class = "text-danger" })
+                                </div>
+                            </div>
+                            <div class="form-group col-md-6">
+                                @Html.LabelFor(model => model.FullNameAr, new { @class = "control-label col-md-12" })
+                                <div class="col-md-12">
+                                        @Html.EditorFor(model => model.FullNameAr, new { htmlAttributes = new { @class = "form-control", placeholder = "الاسم بالعربي", @ID = "FullNameAr", @readonly = "readonly" } })
+                                    @Html.ValidationMessageFor(model => model.FullNameAr, "", new { @class = "text-danger" })
+                                </div>
+                            </div>
+                            <div class="form-group col-md-6">
+                                @Html.LabelFor(model => model.Email, new { @class = "control-label col-md-12" })
+                                <div class="col-md-12">
+                                    @Html.EditorFor(model => model.Email, new { htmlAttributes = new { @class = "form-control", placeholder = "البريد الالكتروني", @ID= "Email" } })
+                                    @Html.ValidationMessageFor(model => model.Email, "", new { @class = "text-danger" })
+                                </div>
+                            </div>
+                            @*<div class="form-group col-md-6">
+            @Html.LabelFor(model => model.FullNameEn, new { @class = "control-label col-md-12" })
+            <div class="col-md-12">
+                @Html.EditorFor(model => model.FullNameEn, new { htmlAttributes = new { @class = "form-control" } })
+                @Html.ValidationMessageFor(model => model.FullNameEn, "", new { @class = "text-danger" })
+            </div>
+        </div>*@
+
+                            <div class="form-group col-md-6">
+                                @Html.LabelFor(model => model.Password, new { @class = "control-label col-md-12" })
+                                <div class="col-md-12">
+                                    @Html.EditorFor(model => model.Password, new { htmlAttributes = new { @class = "form-control", placeholder = "كلمة المرور" } })
+                                    @Html.ValidationMessageFor(model => model.Password, "", new { @class = "text-danger" })
+                                </div>
+                            </div>
+
+                            <div class="form-group col-md-6">
+                                @Html.LabelFor(model => model.ConfirmPassword, new { @class = "control-label col-md-12" })
+                                <div class="col-md-12">
+                                    @Html.EditorFor(model => model.ConfirmPassword, new { htmlAttributes = new { @class = "form-control", placeholder = "تأكيد كلمة المرور" } })
+                                    @Html.ValidationMessageFor(model => model.ConfirmPassword, "", new { @class = "text-danger" })
+                                </div>
+                            </div>
+
+
+
+                            <div class="row  justify-content-center">
+                                <div class="form-group col-md-12 mb-3">
+                                    <div class="row  justify-content-center">
+                                        <div class="col-lg-12 col-md-6 col-sm-6 remember-me-wrap">
+                                            <button type="submit" class="default-btn"> تسجيل حساب جديد  <i class="ri-user-add-line"></i></button>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="row justify-content-center">
+                                <div class="col-md-12">
+                                    <div class="row">
+                                        <div class="col-lg-6 col-md-6 col-sm-6 remember-me-wrap">
+                                            <a href="@Url.Action("Login","Account")" class="lost-your-password">تسجيل الدخول</a>
+                                        </div>
+
+                                        <div class="col-lg-6 col-md-6 col-sm-6 lost-your-password-wrap">
+                                            <a href="@Url.Action("ResetPassword","Account")" class="lost-your-password">نسيت كلمة السر؟</a>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                                }
+                            </div>
+                </div>
+                
+            </div>
+        </div>
+    </div>
+</div>
+<!-- Start Profile Authentication Area -->
+
+<script>
+    function ValidateRegeex(regex, value) {
+        var expre = new RegExp(regex);
+        return expre.test(value);
+    }
+    $(function () {
+        $("[id$=FullNameAr]").on('change', function () {
+
+            var regex = "^[\\u0621-\\u064A\\s]+$";
+            var value = $(this).val();
+            var status = ValidateRegeex(regex, value);
+            if (status != true) {
+                $(this).val("");
+                Swal.fire({
+                    icon: 'error',
+                    title: 'Error',
+                    text: 'برجاء كتابة  الاسم باللغة العربية',
+                    confirmButtonColor: '#7FB3D5',
+                    confirmButtonText: 'Ok'
+                });
+                // alert("برجاء كتابة اسم الصحيفة باللغة العربية");
+            }
+
+        });
+    });
+
+    $(function () {
+        $("[id$=CivilID]").on('change', function ()
+        {
+            var regex = "^[1-3][0-9][0-9]((0[13578]|[1][02])(0[1-9]|[12][0-9]|3[01])|(0[469]|(11))(0[1-9]|[12][0-9]|30)|(02)(0[1-9]|1[0-9]|2[0-8]))[0-9]{5}$|(^[1-3](04|08|[2468][048]|[13579][26])|(300))(0229)[0-9]{5}$";
+            var value = $(this).val();
+            var status = ValidateRegeex(regex, value);
+            if (status != true) {
+                $(this).val("");
+                Swal.fire({
+                    icon: 'error',
+                    title: 'Error',
+                    text: 'الرقم المدني غير صحيح',
+                    confirmButtonColor: '#7FB3D5',
+                    confirmButtonText: 'Ok'
+                });
+                // alert("برجاء كتابة اسم الصحيفة باللغة العربية");
+            }
+            // var CivilId = JSON.stringify({ CivilID: $(this).val() });
+            console.log(JSON.stringify({ CivilID: $(this).val() }));
+            $.ajax({
+                url: '/Account/GetUserDataPACI',
+                type: "POST",
+                data: { CivilID: $(this).val() }, // use JSON.stringify for proper formatting
+                // dataType: "json",
+                //contentType: "application/json; charset=utf-8",
+                success: function (response) {
+                    // Check if the response was successful
+                    if (response.success) {
+                        // Populate the fields with data from the server
+                        $('#FullNameAr').val(response.data.arFullName);
+                        $('#Email').val(response.data.email);
+                        $('#Mobile').val(response.data.mobile);
+                        $('#error-message').hide();
+
+                    } else {
+                        // Display error message if CivilID is invalid
+                        $('#error-message').text(response.message).show();
+                    }
+                },
+                error: function (xhr, status, error) {
+                    console.log("Error: " + error);
+                    
+                    console.log("Response Text: ", xhr.responseText);
+                }
+            });
+
+        });
+    });
+
+    $(document).ready(function () {
+        // Reapply readonly to specific fields
+        $('#FullNameAr').prop('readonly', true);
+       
+        //$('#Mobile').prop('readonly', true);
+    });
+    // $(document).ready(function () {
+    //     // Reapply readonly to specific fields
+    //     $('#FullNameAr').prop('disabled', true);
+
+    //     $('#Mobile').prop('disabled', true);
+    // });
+</script>

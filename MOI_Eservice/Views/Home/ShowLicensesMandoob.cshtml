@@ -1,0 +1,61 @@
+﻿@model List<LicenseAssignmentVM>
+
+@{
+    ViewData["Title"] = "التراخيص";
+
+}
+
+<style>
+    .card-title {
+        font-size: 1.1rem;
+    }
+
+    .btn-sm {
+        min-width: 100px;
+    }
+
+    .shadow {
+        box-shadow: 0 0 10px rgba(0,0,0,0.07) !important;
+    }
+</style>
+<div class="container py-4">
+    <div class="bg-white shadow rounded p-4 mx-auto" style="max-width: 1100px;">
+        <h4 class="text-center fw-bold mb-4 border-bottom pb-2">التراخيص</h4>
+
+        <div class="row justify-content-center">
+            @foreach (var lic in Model)
+            {
+                <div class="col-md-4 mb-4">
+                    <div class="card border border-light shadow-sm">
+                        <div class="card-body text-center">
+                            <h5 class="card-title fw-bold text-primary">@lic.ServiceName</h5>
+                            <p class="card-text text-muted mb-1">
+                                <strong>رقم الترخيص:</strong> @lic.LicNo
+                            </p>
+                            <p class="card-text text-muted">
+                                <strong>اسم الترخيص:</strong> @lic.LicName
+                            </p>
+
+                            <div class="d-flex justify-content-around mt-3">
+                                <a href="@Url.Content(lic.AttachmentUrl)" target="_blank" class="btn btn-sm btn-success">
+                                    عرض المرفق
+                                </a>
+
+                                <form asp-action="CancelDelegation" asp-controller="Home" method="post">
+                                    <input type="hidden" name="licenseId" value="@lic.Id" />
+                                    <button type="submit" class="btn btn-sm btn-danger">إلغاء التفويض</button>
+                                </form>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            }
+        </div>
+
+        <div class="text-center mt-4">
+            <a href="@Url.Action("Index", "Home")" class="btn btn-primary">
+                عودة للرئيسية
+            </a>
+        </div>
+    </div>
+</div>

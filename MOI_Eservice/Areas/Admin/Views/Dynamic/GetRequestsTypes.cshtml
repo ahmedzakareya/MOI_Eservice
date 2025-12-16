@@ -1,0 +1,223 @@
+﻿@model IEnumerable<RequestsTypesLookup>
+
+@{
+    ViewBag.Title = "Request Types";
+    Layout = "~/Areas/Admin/Views/Shared/_LayoutEserviceTourism.cshtml";
+}
+
+<div id="kt_app_content" class="app-content flex-column-fluid">
+    <div id="kt_app_content_container" class="app-container container-fluid">
+        <div class="card card-flush">
+            <div class="card-header mt-6">
+                <div class="card-title">
+                    <div class="d-flex align-items-center position-relative my-1 me-5">
+                        <i class="ki-outline ki-magnifier fs-3 position-absolute ms-5"></i>
+                        <input type="text" id="requestTypeSearch" class="form-control form-control-solid w-250px ps-13" placeholder="Search Request Types" />
+                    </div>
+                </div>
+                <div class="card-toolbar">
+                    <button type="button" class="btn btn-light-primary" data-bs-toggle="modal" data-bs-target="#kt_modal_add_request_type">
+                        <i class="ki-outline ki-plus-square fs-3"></i>Add Request Type
+                    </button>
+                </div>
+            </div>
+            <div class="card-body pt-0">
+                <table class="table align-middle table-row-dashed fs-6 gy-5 mb-0" id="requestTypesTable">
+                    <thead>
+                        <tr class="text-start text-gray-500 fw-bold fs-7 text-uppercase gs-0">
+                            <th>#</th>
+                            <th>Name</th>
+                            <th class="text-end">Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody class="fw-semibold text-gray-600">
+                        @if (Model != null && Model.Any())
+                        {
+                            int serial = 0;
+                            foreach (var type in Model)
+                            {
+                                serial++;
+                                <tr>
+                                    <td>@serial</td>
+                                    <td>@type.NameAr</td>
+                                    <td class="text-end">
+                                        <button class="btn btn-icon btn-active-light-primary w-30px h-30px me-3 edit-request-type" data-id="@type.Id" data-bs-toggle="modal" data-bs-target="#kt_modal_edit_request_type">
+                                            <i class="ki-outline ki-setting-3 fs-3"></i>
+                                        </button>
+                                        <button class="btn btn-icon btn-active-light-primary w-30px h-30px delete-request-type" data-id="@type.Id" data-bs-toggle="modal" data-bs-target="#kt_modal_delete_request_type">
+                                            <i class="ki-outline ki-trash fs-3"></i>
+                                        </button>
+                                    </td>
+                                </tr>
+                            }
+                        }
+                        else
+                        {
+                            <tr><td colspan="3" class="text-center text-muted">No request types available.</td></tr>
+                        }
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Add Modal -->
+<div class="modal fade" id="kt_modal_add_request_type" tabindex="-1" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered mw-650px">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2 class="fw-bold">Add Request Type</h2>
+                <div class="btn btn-icon btn-sm btn-active-icon-primary" data-bs-dismiss="modal">
+                    <i class="ki-outline ki-cross fs-1"></i>
+                </div>
+            </div>
+            <div class="modal-body scroll-y mx-5 my-7">
+                <form id="addRequestTypeForm">
+                    <div class="fv-row mb-7">
+                        <label class="fs-6 fw-semibold form-label mb-2">Name</label>
+                        <input class="form-control form-control-solid" id="RequestTypeName" placeholder="Enter request type name" required />
+                    </div>
+                    <div class="text-center pt-15">
+                        <button type="button"  class="btn btn-primary" id="submitRequestType">Submit</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+<!-- Delete Modal -->
+<div class="modal fade" id="kt_modal_delete_request_type" tabindex="-1" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered mw-650px">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2 class="fw-bold">Add Request Type</h2>
+                <div class="btn btn-icon btn-sm btn-active-icon-primary" data-bs-dismiss="modal">
+                    <i class="ki-outline ki-cross fs-1"></i>
+                </div>
+            </div>
+            <div class="modal-body scroll-y mx-5 my-7">
+                <form id="addRequestTypeForm">
+                    <div class="fv-row mb-7">
+                        <label class="fs-6 fw-semibold form-label mb-2">Name</label>
+                        <input class="form-control form-control-solid" id="RequestTypeName" placeholder="Enter request type name" required />
+                    </div>
+                    <div class="text-center pt-15">
+                        <button type="button"  class="btn btn-primary" id="submitRequestType">Submit</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+<!-- Edit Modal -->
+<div class="modal fade" id="kt_modal_edit_request_type" tabindex="-1" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered mw-650px">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2 class="fw-bold">Edit Request Type</h2>
+                <div class="btn btn-icon btn-sm btn-active-icon-primary" data-bs-dismiss="modal">
+                    <i class="ki-outline ki-cross fs-1"></i>
+                </div>
+            </div>
+            <div class="modal-body scroll-y mx-5 my-7">
+                <form id="editRequestTypeForm">
+                    <input type="hidden" id="editRequestTypeId" />
+                    <div class="fv-row mb-7">
+                        <label class="fs-6 fw-semibold form-label mb-2">Name</label>
+                        <input class="form-control form-control-solid" id="editRequestTypeName" placeholder="Enter request type name" required />
+                    </div>
+                    <div class="text-center pt-15">
+                        <button  class="btn btn-primary" id="submitEditRequestType">Save Changes</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+@section Scripts
+{
+    <script>
+        const apiBaseUrl = '@ViewBag.ApiBaseUrl';
+
+        // Add Request Type
+        document.getElementById("submitRequestType").addEventListener("click", async function () {
+            try {
+                const data = { NameAr: document.getElementById("RequestTypeName").value };
+                const response = await fetch(`${apiBaseUrl}CreateRequestsType`, {
+                    method: "POST",
+                    headers: { "Content-Type": "application/json" },
+                    body: JSON.stringify(data)
+                });
+                if (!response.ok) throw new Error("Failed to add request type");
+                alert("Request type added successfully!");
+                location.reload();
+            } catch (error) {
+                alert("Failed to add request type. Try again.");
+                console.error(error);
+            }
+        });
+
+        // Edit Request Type (fetch and populate)
+        document.querySelectorAll(".edit-request-type").forEach(button => {
+            button.addEventListener("click", async function () {
+                const id = button.getAttribute("data-id");
+                const response = await fetch(`${apiBaseUrl}EditRequestsType?id=${id}`);
+                const data = await response.json();
+                document.getElementById("editRequestTypeId").value = data.id;
+                document.getElementById("editRequestTypeName").value = data.nameAr;
+            });
+        });
+
+        // Save Edited Request Type
+        document.getElementById("submitEditRequestType").addEventListener("click", async function () {
+            try {
+                const data = {
+                    Id: document.getElementById("editRequestTypeId").value,
+                    NameAr: document.getElementById("editRequestTypeName").value
+                };
+                const response = await fetch(`${apiBaseUrl}EditRequestsType`, {
+                    method: "POST",
+                    headers: { "Content-Type": "application/json" },
+                    body: JSON.stringify(data)
+                });
+                if (!response.ok) throw new Error("Failed to update request type");
+                alert("Request type updated successfully!");
+                location.reload();
+            } catch (error) {
+                alert("Failed to update request type. Try again.");
+                console.error(error);
+            }
+        });
+
+        // Delete Request Type
+        document.querySelectorAll(".delete-request-type").forEach(button => {
+            button.addEventListener("click", async function () {
+                if (!confirm("Are you sure you want to delete this request type?")) return;
+                const id = button.getAttribute("data-id");
+                try {
+                    const response = await fetch(`${apiBaseUrl}DeleteConfirmedRequestsType?id=${id}`, {
+                        method: "POST"
+                    });
+                    if (!response.ok) throw new Error("Failed to delete request type");
+                    alert("Request type deleted successfully!");
+                    location.reload();
+                } catch (error) {
+                    alert("Failed to delete request type. Try again.");
+                    console.error(error);
+                }
+            });
+        });
+
+        // Filter Request Types
+        document.getElementById("requestTypeSearch").addEventListener("keyup", function () {
+            const searchText = this.value.toLowerCase();
+            document.querySelectorAll("#requestTypesTable tbody tr").forEach(row => {
+                row.style.display = row.textContent.toLowerCase().includes(searchText) ? "" : "none";
+            });
+        });
+    </script>
+}
+

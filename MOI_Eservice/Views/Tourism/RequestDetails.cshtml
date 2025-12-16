@@ -1,0 +1,882 @@
+﻿@model RequestFrontVM
+
+
+@{
+    ViewBag.Title = "تفاصيل الطلب رقم : " + Model.RequestVM.Reqno;
+    Layout = "~/Views/Shared/_LayoutEservice.cshtml";
+
+    var token = Context.Session.GetString("UserToken");
+    var userId = Context.Session.GetString("UserId");
+    var userName = Context.Session.GetString("UserUserName");
+    var civilId = Context.Session.GetString("UserCivilId");
+    var fullName = Context.Session.GetString("UserFullName");
+    var accountTypeId = Context.Session.GetString("UserAccouuntTypeId");
+    var counter = 1;
+    bool isEditable = (Model.RequestVM.RequestStatusId == (int)RequestStatusEnum.Received) && (Model.RequestVM.ReqtypeId == (int)RequestTypeEnum.Request);
+}
+
+<link rel="stylesheet" href="~/assets/css/rtl.css" />
+<!-- PDF.js for inline PDF display -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/2.13.279/pdf.min.js"></script>
+
+<div class="breadcrumb-area">
+    <ol class="breadcrumb">
+        <li class="item"><a href="@Url.Action("ServiceHome", "Home")">الرئيسيه</a></li>
+        <li class="item"><a href="@Url.Action("Index", "UserRequests")">متابعة الطلبات</a></li>
+        <li class="item">السياحة</li>
+    </ol>
+</div>
+
+<div class="my-profile-box">
+    <h3>تفاصيل الطلب رقم @Model.RequestVM.Reqno</h3>
+    <form asp-action="UpdateLicRequestDetails" asp-controller="Tourism" method="post" enctype="multipart/form-data">
+        <div asp-validation-summary="All" class="text-danger"></div>
+
+        <div class="profile-authentication-tabs mw-100">
+            <div class="authentication-tabs-list">
+                <ul class="nav nav-tabs w-100 mt-0" id="myTab" role="tablist">
+                    <li class="nav-item">
+                        <a class="nav-link active" id="ReqDetails-tab" data-bs-toggle="tab" href="#ReqDetails">تفاصيل الطلب</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" id="Attachements-tab" data-bs-toggle="tab" href="#Attachements">المرفقات</a>
+                    </li>
+                    @if (Model.PaymentDetailsVM != null)
+                    {
+                        <li class="nav-item">
+                            <a class="nav-link" id="PaymentInfo-tab" data-bs-toggle="tab" href="#PaymentInfo">بيانات الدفع</a>
+                        </li>
+                    }
+                </ul>
+            </div>
+            <input type="hidden" asp-for="RequestVM.RequestId" />
+            <input type="hidden" asp-for="RequestVM.Reqno" />
+            <input type="hidden" asp-for="RequestVM.PreApprovalId" />
+            <input type="hidden" asp-for="RequestVM.AppId" />
+            <input type="hidden" asp-for="RequestVM.BuildingId" />
+            <input type="hidden" asp-for="RequestVM.CompanyId" />
+            <input type="hidden" asp-for="RequestVM.ManagerId" />
+            <input type="hidden" asp-for="RequestVM.MarketingManagerId" />
+            <input type="hidden" asp-for="RequestVM.SalesManagerId" />
+            <input type="hidden" asp-for="RequestVM.OperationsManagerId" />
+            <input type="hidden" asp-for="RequestVM.ActivityTypeId" />
+
+            <input type="hidden" asp-for="RequestVM.LicenseId" />
+            <input type="hidden" asp-for="RequestVM.SequenceNo" />
+
+
+            <div class="tab-content pt-3" id="myTabContent">
+                <!-- تفاصيل الطلب -->
+                <div class="tab-pane fade show active" id="ReqDetails">
+                    <div class="row align-items-center">
+                        <div class="col-xl-4 col-md-6 col-sm-12">
+                            <div class="form-group">
+                                <asp:Label runat="server" Text="">اسم المالك</asp:Label>
+                                <input type="text"
+                                       class="form-control"
+                                       name="RequestVM.ApplicantPerson.Name1"
+                                       value="@Model.RequestVM.ApplicantPerson?.Name1"
+                                @(isEditable ? "" : "readonly") />
+                            </div>
+                        </div>
+                        <div class="col-xl-4 col-md-6 col-sm-12">
+                            <div class="form-group">
+                                <asp:Label runat="server" Text="">الرقم المدني للمالك</asp:Label>
+                                <input type="text"
+                                       class="form-control"
+                                       name="RequestVM.ApplicantPerson.CivilId"
+                                       value="@Model.RequestVM.ApplicantPerson?.CivilId"
+                                @(isEditable ? "" : "readonly") />
+                            </div>
+                        </div>
+                        <div class="col-xl-4 col-md-6 col-sm-12">
+                            <div class="form-group">
+                                <asp:Label runat="server" Text="">إسم المنشأة</asp:Label>
+                                <input type="text"
+                                       class="form-control"
+                                       name="RequestVM.RequestVM.Licname"
+                                       value="@Model.RequestVM.Licname"
+                                @(isEditable ? "" : "readonly") />
+                            </div>
+                        </div>
+                        <div class="col-xl-4 col-md-6 col-sm-12">
+                            <div class="form-group">
+                                <label class="form-label">تاريخ تقديم الطلب</label>
+                                <input type="text" class="form-control" readonly value="@Model.RequestVM.Licreqtime?.ToString("yyyy-MM-dd")" />
+                            </div>
+                        </div>
+
+                        <div class="col-xl-4 col-md-6 col-sm-12">
+                            <div class="form-group">
+                                <label class="form-label">نوع الطلب</label>
+                                <input type="text" class="form-control" readonly value="@Model.RequestVM.ReqTypeName" />
+                            </div>
+                        </div>
+                        @if (Model.RequestVM.ReqtypeId != (int)RequestTypeEnum.RenewMOIC ||
+                        Model.RequestVM.ReqtypeId != (int)RequestTypeEnum.AddMoIC ||
+                        Model.RequestVM.ReqtypeId != (int)RequestTypeEnum.ChangeAddressMOIC ||
+                        Model.RequestVM.ReqtypeId != (int)RequestTypeEnum.DeleteMOIC ||
+                        Model.RequestVM.ReqtypeId != (int)RequestTypeEnum.RenewOrChangeMOIC ||
+                        Model.RequestVM.ReqtypeId != (int)RequestTypeEnum.WhoConc)
+                        {
+                            <div class="col-xl-4 col-md-6 col-sm-12">
+                                <div class="form-group">
+                                    <label class="form-label">رقم الترخيص</label>
+                                    <input type="text" class="form-control" readonly value="@Model.RequestVM.Licno" />
+                                </div>
+                            </div>
+                        }
+                        <div class="col-xl-4 col-md-6 col-sm-12">
+                            <div class="form-group">
+                                <label class="form-label">حالة الطلب</label>
+                                <input type="text" class="form-control" readonly value="@Model.RequestVM.ReqStatusName" />
+                            </div>
+                        </div>
+                        <div class="col-xl-4 col-md-6 col-sm-12">
+                            <div class="form-group">
+                                <label class="form-label">رسوم الطلب</label>
+                                <input type="text" class="form-control" readonly value="@Model.RequestVM.Licamount" />
+                            </div>
+                        </div>
+                        <div class="col-xl-4 col-md-6 col-sm-12">
+                            <div class="form-group">
+                                <label class="form-label">النشاط</label>
+                                <input type="text" class="form-control" readonly value="@Model.RequestVM.ActivityName" />
+                            </div>
+                        </div>
+                        <div class="col-xl-4 col-md-6 col-sm-12">
+                            <div class="form-group">
+                                <label class="form-label" for="OwnerCompanyAr">الشركة المالكة</label>
+                                <input type="text"
+                                       class="form-control"
+                                       id="OwnerCompanyAr"
+                                       name="RequestVM.company.OwnerCompanyAr"
+                                       value="@Model.RequestVM.company?.OwnerCompanyAr"
+                                @(isEditable ? "" : "readonly") />
+                            </div>
+                        </div>
+                        
+                        @if (Model.RequestVM.ReqtypeId == (int)RequestTypeEnum.Request ||
+                        Model.RequestVM.ReqtypeId == (int)RequestTypeEnum.PreApprovementConvert ||
+                        Model.RequestVM.ReqtypeId == (int)RequestTypeEnum.PreApprovementNew)
+                        {
+
+                          
+                                <div class="col-xl-4 col-md-6 col-sm-12">
+                                    <div class="form-group">
+                                        <label class="form-label" for="DirCompanyAr">الشركة المديرة</label>
+                                        <input type="text"
+                                               class="form-control"
+                                               id="DirCompanyAr"
+                                           name="RequestVM.company.DirCompanyAr"
+                                               value="@Model.RequestVM.company?.DirCompanyAr"
+                                        @(isEditable ? "" : "readonly") />
+                                    </div>
+                                </div>
+
+                                <div class="col-xl-4 col-md-6 col-sm-12">
+                                    <div class="form-group">
+                                        <label for="AaliNumber">الرقم الآلي</label>
+                                        <input type="text"
+                                               class="form-control"
+                                               id="AaliNumber"
+                                           name="RequestVM.company.AddressNavigation.AalliNo"
+                                               value="@Model.RequestVM.company?.AddressNavigation?.AalliNo"
+                                               maxlength="10"
+                                        @(isEditable ? "" : "readonly") />
+                                    </div>
+                                </div>
+
+                                <!-- المحافظة -->
+                                <div class="col-xl-4 col-md-6 col-sm-12">
+                                    <div class="form-group">
+                                        <label for="Governrate">المحافظة</label>
+                                        <input type="text"
+                                               class="form-control"
+                                               id="Governrate"
+                                           name="RequestVM.company.AddressNavigation.GovernorateArabic"
+                                               value="@Model.RequestVM.company?.AddressNavigation?.GovernorateArabic"
+                                               readonly />
+                                    </div>
+                                </div>
+
+                                <!-- المنطقة -->
+                                <div class="col-xl-4 col-md-6 col-sm-12">
+                                    <div class="form-group">
+                                        <label for="Area">المنطقة</label>
+                                        <input type="text"
+                                               class="form-control"
+                                               id="Area"
+                                           name="RequestVM.company.AddressNavigation.Area"
+                                               value="@Model.RequestVM.company?.AddressNavigation?.Area"
+                                               readonly />
+                                    </div>
+                                </div>
+
+                                <!-- القطعة -->
+                                <div class="col-xl-4 col-md-6 col-sm-12">
+                                    <div class="form-group">
+                                        <label for="BlockNo">القطعة</label>
+                                        <input type="text"
+                                               class="form-control"
+                                               id="BlockNo"
+                                           name="RequestVM.company.AddressNavigation.BlockArabic"
+                                               value="@Model.RequestVM.company?.AddressNavigation?.BlockArabic"
+                                               readonly />
+                                    </div>
+                                </div>
+
+                                <!-- الشارع -->
+                                <div class="col-xl-4 col-md-6 col-sm-12">
+                                    <div class="form-group">
+                                        <label for="Street">الشارع</label>
+                                        <input type="text"
+                                               class="form-control"
+                                               id="Street"
+                                           name="RequestVM.company.AddressNavigation.StreetArabic"
+                                               value="@Model.RequestVM.company?.AddressNavigation?.StreetArabic"
+                                               readonly />
+                                    </div>
+                                </div>
+
+                                <!-- رقم المبنى -->
+                                <div class="col-xl-4 col-md-6 col-sm-12">
+                                    <div class="form-group">
+                                        <label for="BuildingNo">رقم المبنى</label>
+                                        <input type="text"
+                                               class="form-control"
+                                               id="BuildingNo"
+                                           name="RequestVM.company.AddressNavigation.BuildingNo"
+                                               value="@Model.RequestVM.company?.AddressNavigation?.BuildingNo"
+                                               readonly />
+                                    </div>
+                                </div>
+
+                                <!-- اسم المبنى -->
+                                <div class="col-xl-4 col-md-6 col-sm-12">
+                                    <div class="form-group">
+                                        <label for="BuildingName">اسم المبنى</label>
+                                        <input type="text"
+                                               class="form-control"
+                                               id="BuildingName"
+                                           name="RequestVM.company.AddressNavigation.BuildingName"
+                                               value="@Model.RequestVM.company?.AddressNavigation?.BuildingName"
+                                               readonly />
+                                    </div>
+                                </div>
+
+                                <!-- رقم الوحدة -->
+                                <div class="col-xl-4 col-md-6 col-sm-12">
+                                    <div class="form-group">
+                                        <label for="UnitNo">رقم الوحدة</label>
+                                        <input type="text"
+                                               class="form-control"
+                                               id="UnitNo"
+                                           name="RequestVM.company.AddressNavigation.UnitNo"
+                                               value="@Model.RequestVM.company?.AddressNavigation?.UnitNo"
+                                               readonly />
+                                    </div>
+                                </div>
+
+                                <!-- الدور -->
+                                <div class="col-xl-4 col-md-6 col-sm-12">
+                                    <div class="form-group">
+                                        <label for="FloorNo">الدور</label>
+                                        <input type="text"
+                                               class="form-control"
+                                               id="FloorNo"
+                                           name="RequestVM.company.AddressNavigation.FloorNo"
+                                               value="@Model.RequestVM.company?.AddressNavigation?.FloorNo"
+                                               readonly />
+                                    </div>
+                                </div>
+                           
+                            <div class="col-xl-12">
+                                <div class="form-group">
+                                    <label class="form-label">الملاحظات</label>
+                                    <textarea class="form-control" rows="2" readonly>@Model.RequestVM.RequestNote</textarea>
+                                </div>
+                            </div>
+
+                            <hr />
+                            <div class="col-xl-12 col-lg-12 col-md-12">
+                                <div class="form-group">
+                                    <h3>بيانات المدير</h3>
+                                </div>
+                            </div>
+                            <div class="row align-items-center">
+                                <div class="col-xl-4 col-md-6">
+                                    <div class="form-group">
+                                        <label class="form-label" for="ManagerName">الاسم</label>
+                                        <input type="text"
+                                               class="form-control"
+                                               id="ManagerName"
+                                               name="RequestVM.Manager.Name1"
+                                               value="@Model.RequestVM.Manager?.Name1"
+                                        @(isEditable ? "" : "readonly") />
+                                    </div>
+                                </div>
+
+                                <div class="col-xl-4 col-md-6">
+                                    <div class="form-group">
+                                        <label class="form-label" for="ManagerCivilId">الرقم المدني</label>
+                                        <input type="text"
+                                               class="form-control"
+                                               id="ManagerCivilId"
+                                               name="RequestVM.Manager.CivilId"
+                                               value="@Model.RequestVM.Manager?.CivilId"
+                                        @(isEditable ? "" : "readonly") />
+                                    </div>
+                                </div>
+
+                                <div class="col-xl-4 col-md-6">
+                                    <div class="form-group">
+                                        <label class="form-label" for="ManagerPhone">رقم الهاتف</label>
+                                        <input type="text"
+                                               class="form-control"
+                                               id="ManagerPhone"
+                                               name="RequestVM.Manager.Phone"
+                                               value="@Model.RequestVM.Manager?.Phone"
+                                        @(isEditable ? "" : "readonly") />
+                                    </div>
+                                </div>
+
+                                <div class="col-xl-4 col-md-6">
+                                    <div class="form-group">
+                                        <label class="form-label" for="ManagerEmail">البريد الالكتروني</label>
+                                        <input type="email"
+                                               class="form-control"
+                                               id="ManagerEmail"
+                                               name="RequestVM.Manager.Email"
+                                               value="@Model.RequestVM.Manager?.Email"
+                                        @(isEditable ? "" : "readonly") />
+                                    </div>
+                                </div>
+
+                                <!--بيانات مدير المبيعات-->
+
+                                <div class="col-xl-12 col-lg-12 col-md-12">
+                                    <div class="form-group">
+                                        <h3>بيانات مدير المبيعات</h3>
+                                    </div>
+                                </div>
+
+                                <div class="col-xl-4 col-md-6 col-sm-12">
+                                    <div class="form-group">
+                                        <label for="SalesManagerName">اسم مدير المبيعات</label>
+                                        <input type="text"
+                                               class="form-control"
+                                               id="SalesManagerName"
+                                               name="RequestVM.SalesManager.Name1"
+                                               value="@Model.RequestVM.SalesManager?.Name1"
+                                        @(isEditable ? "" : "readonly") />
+                                    </div>
+                                </div>
+
+                                <!-- الرقم المدني للمدير -->
+                                <div class="col-xl-4 col-md-6 col-sm-12">
+                                    <div class="form-group">
+                                        <label for="SalesManagerCivilId">الرقم المدني لمدير المبيعات</label>
+                                        <input type="text"
+                                               class="form-control"
+                                               id="SalesManagerCivilId"
+                                               name="RequestVM.SalesManager.CivilId"
+                                               value="@Model.RequestVM.SalesManager?.CivilId"
+                                        @(isEditable ? "" : "readonly") />
+                                    </div>
+                                </div>
+
+                                <!-- رقم الهاتف -->
+                                <div class="col-xl-4 col-md-6 col-sm-12">
+                                    <div class="form-group">
+                                        <label for="SalesManagerMobile">رقم الهاتف لمدير المبيعات</label>
+                                        <input type="text"
+                                               class="form-control"
+                                               id="SalesManagerMobile"
+                                               name="RequestVM.SalesManager.Phone"
+                                               value="@Model.RequestVM.SalesManager?.Phone"
+                                        @(isEditable ? "" : "readonly") />
+                                    </div>
+                                </div>
+
+                                <!-- البريد الإلكتروني -->
+                                <div class="col-xl-4 col-md-6 col-sm-12">
+                                    <div class="form-group">
+                                        <label for="SalesManagerEmail">البريد الإلكتروني لمدير المبيعات</label>
+                                        <input type="email"
+                                               class="form-control"
+                                               id="SalesManagerEmail"
+                                               name="RequestVM.SalesManager.Email"
+                                               value="@Model.RequestVM.SalesManager?.Email"
+                                        @(isEditable ? "" : "readonly") />
+                                    </div>
+                                </div>
+
+                                <!--بيانات مدير التسويق-->
+
+
+                                <div class="col-xl-12 col-lg-12 col-md-12">
+                                    <div class="form-group">
+                                        <h3>بيانات مدير التسويق</h3>
+                                    </div>
+                                </div>
+
+                                <div class="col-xl-4 col-md-6 col-sm-12">
+                                    <div class="form-group">
+                                        <label for="MarketingManagerName">اسم مدير التسويق</label>
+                                        <input type="text"
+                                               class="form-control"
+                                               id="MarketingManagerName"
+                                               name="RequestVM.MarketingManager.Name1"
+                                               value="@Model.RequestVM.MarketingManager?.Name1"
+                                        @(isEditable ? "" : "readonly") />
+                                    </div>
+                                </div>
+
+                                <!-- الرقم المدني للمدير -->
+                                <div class="col-xl-4 col-md-6 col-sm-12">
+                                    <div class="form-group">
+                                        <label for="MarketingManagerCivilId">الرقم المدني لمدير التسويق</label>
+                                        <input type="text"
+                                               class="form-control"
+                                               id="MarketingManagerCivilId"
+                                               name="RequestVM.MarketingManager.CivilId"
+                                               value="@Model.RequestVM.MarketingManager?.CivilId"
+                                        @(isEditable ? "" : "readonly") />
+                                    </div>
+                                </div>
+
+                                <!-- رقم الهاتف -->
+                                <div class="col-xl-4 col-md-6 col-sm-12">
+                                    <div class="form-group">
+                                        <label for="MarketingManagerMobile">رقم هاتف مدير التسويق</label>
+                                        <input type="text"
+                                               class="form-control"
+                                               id="MarketingManagerMobile"
+                                               name="RequestVM.MarketingManager.Phone"
+                                               value="@Model.RequestVM.MarketingManager?.Phone"
+                                        @(isEditable ? "" : "readonly") />
+                                    </div>
+                                </div>
+
+                                <!-- البريد الإلكتروني -->
+                                <div class="col-xl-4 col-md-6 col-sm-12">
+                                    <div class="form-group">
+                                        <label for="MarketingManagerEmail">البريد الإلكتروني لمدير التسويق</label>
+                                        <input type="email"
+                                               class="form-control"
+                                               id="MarketingManagerEmail"
+                                               name="RequestVM.MarketingManager.Email"
+                                               value="@Model.RequestVM.MarketingManager?.Email"
+                                        @(isEditable ? "" : "readonly") />
+                                    </div>
+                                </div>
+
+                                <!--بيانات مدير العمليات-->
+
+                                <div class="col-xl-12 col-lg-12 col-md-12">
+                                    <div class="form-group">
+                                        <h3>بيانات مدير العمليات</h3>
+                                    </div>
+                                </div>
+
+                                <div class="col-xl-4 col-md-6 col-sm-12">
+                                    <div class="form-group">
+                                        <label for="OperationManagerName">اسم مدير العمليات</label>
+                                        <input type="text"
+                                               class="form-control"
+                                               id="OperationManagerName"
+                                               name="RequestVM.OperationsManager.Name1"
+                                               value="@Model.RequestVM.OperationsManager?.Name1"
+                                        @(isEditable ? "" : "readonly") />
+                                    </div>
+                                </div>
+
+                                <!-- الرقم المدني للمدير -->
+                                <div class="col-xl-4 col-md-6 col-sm-12">
+                                    <div class="form-group">
+                                        <label for="OperationManagerCivilId">الرقم المدني لمدير العمليات</label>
+                                        <input type="text"
+                                               class="form-control"
+                                               id="OperationManagerCivilId"
+                                               name="RequestVM.OperationsManager.CivilId"
+                                               value="@Model.RequestVM.OperationsManager?.CivilId"
+                                        @(isEditable ? "" : "readonly") />
+                                    </div>
+                                </div>
+
+                                <!-- رقم الهاتف -->
+                                <div class="col-xl-4 col-md-6 col-sm-12">
+                                    <div class="form-group">
+                                        <label for="OperationManagerMobile">رقم الهاتف لمدير العمليات</label>
+                                        <input type="text"
+                                               class="form-control"
+                                               id="OperationManagerMobile"
+                                               name="RequestVM.OperationsManager.Phone"
+                                               value="@Model.RequestVM.OperationsManager?.Phone"
+                                        @(isEditable ? "" : "readonly") />
+                                    </div>
+                                </div>
+
+                                <!-- البريد الإلكتروني -->
+                                <div class="col-xl-4 col-md-6 col-sm-12">
+                                    <div class="form-group">
+                                        <label for="OperationManagerEmail">البريد الإلكتروني لمدير العمليات</label>
+                                        <input type="email"
+                                               class="form-control"
+                                               id="OperationManagerEmail"
+                                               name="RequestVM.OperationsManager.Email"
+                                               value="@Model.RequestVM.OperationsManager?.Email"
+                                        @(isEditable ? "" : "readonly") />
+                                    </div>
+                                </div>
+                            </div>
+
+                        }
+                    </div>
+
+                    @if (isEditable)
+                    {
+                        <button type="submit" class="default-btn">
+                            تحديث البيانات <i class="flaticon-plus"></i>
+                        </button>
+                    }
+
+                    @if (Model.RequestVM.RequestStatusId == (int)RequestStatusEnum.WaitingForPayment && Model.RequestVM.Licpaystatus != "1")
+                    {
+                        <div class="pt-4">
+                            <button type="button" class="btn btn-primary"
+                                    onclick="location.href='@Url.Action("TourismPay", "Tourism", new { id = MyCrypto.Encode(Model.RequestVM.RequestId.ToString()) })'">
+                                دفع الرسوم
+                            </button>
+                        </div>
+                    }
+                </div>
+
+                <!-- المرفقات -->
+                <div class="tab-pane fade" id="Attachements">
+                    <table class="table">
+                        <thead>
+                            <tr>
+                                <th>اسم المرفق</th>
+                                <th class="text-center">عرض</th>
+                                <th>تحديث</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @foreach (var attachment in Model.attachVMs)
+                            {
+                                <tr>
+                                    <td>
+                                        @attachment.AttachName
+                                        <br />
+                                        <span class="badge
+                                        @(attachment.IsApproved == true ? "bg-success"
+                                          : attachment.IsApproved == false ? "bg-danger"
+                                          : "bg-warning text-dark")">
+                                            @(attachment.IsApproved == true ? "معتمد"
+                                                : attachment.IsApproved == false ? "مرفوض"
+                                                : "قيد المراجعة")
+                                        </span>
+                                    </td>
+                                    <td class="text-center">
+                                        <button type="button" class="btn btn-outline-primary"
+                                                onclick="window.open('@Url.Content($"~/{ViewBag.PathAttachment}{attachment.AttachPath}")')">
+                                            عرض
+                                        </button>
+                                    </td>
+                                    <td>
+                                        @if (Model.RequestVM.RequestStatusId != (int)RequestStatusEnum.FinalLicenseIssued && attachment.IsApproved == false)
+                                        {
+                                            <div class="row">
+                                                <div class="col-8">
+                                                    <input type="file"
+                                                           name="NamedFile.File"
+                                                           class="form-control"
+                                                           id="fileInput_@attachment.AttachId"
+                                                           data-field="@attachment.AttachFlag"
+                                                           data-label="@attachment.AttachName"
+                                                           data-required="@attachment.IsMandatory" />
+                                                    @* <input type="hidden" name="NamedFile.FieldName" value="@item.AttachFlag" /> *@
+                                                    <input type="hidden" name="NamedFile.FieldName" value="@attachment.AttachFlag" />
+
+                                                    <input type="hidden" name="NamedFile.LabelName" value="@attachment.AttachName" />
+                                                    <input type="hidden" name="NamedFile.IsRequired" value="@attachment.IsMandatory" />
+                                                </div>
+                                                <div class="col-4">
+                                                    <button type="button"
+                                                            class="btn btn-success"
+                                                            onclick="updateAttachment(event, @attachment.AttachId, '@Model.RequestVM.Reqno', @attachment.AttachRequestid)">
+                                                        تحديث المرفق
+                                                    </button>
+                                                </div>
+                                            </div>
+                                        }
+                                    </td>
+                                </tr>
+                            }
+                        </tbody>
+                    </table>
+                    <div class="col-12 mt-4">
+                        <h5>إضافة مرفق جديد</h5>
+                        <div id="custom-attachments"></div>
+
+                        <button type="button" class="btn btn-outline-primary mt-2" onclick="addCustomAttachment()">
+                            <i class="ri-upload-cloud-line me-1"></i> أضف مرفق
+                        </button>
+                    </div>
+                </div>
+                @if (Model.PaymentDetailsVM != null)
+                {
+                    <!-- بيانات الدفع -->
+                    <div class="tab-pane fade" id="PaymentInfo">
+
+                        <div class="row g-3">
+                            <div class="col-xl-4 col-md-6">
+                                <label class="form-label">المبلغ</label>
+                                <input type="text" class="form-control" readonly value="@Model.PaymentDetailsVM.TotalAmount" />
+                            </div>
+                            <div class="col-xl-4 col-md-6">
+                                <label class="form-label">رقم الدفع</label>
+                                <input type="text" class="form-control" readonly value="@Model.PaymentDetailsVM.PaymentId" />
+                            </div>
+                            <div class="col-xl-4 col-md-6">
+                                <label class="form-label">تاريخ الدفع</label>
+                                <input type="text" class="form-control" readonly value="@Model.PaymentDetailsVM.PaymentDate?.ToString("yyyy-MM-dd")" />
+                            </div>
+                            <div class="col-xl-4 col-md-6">
+                                <label class="form-label">النتيجة</label>
+                                <input type="text" class="form-control" readonly value="@Model.PaymentDetailsVM.Status" />
+                            </div>
+                            <div class="col-xl-4 col-md-6">
+                                <label class="form-label">رقم التتبع</label>
+                                <input type="text" class="form-control" readonly value="@Model.PaymentDetailsVM?.TrackId" />
+                            </div>
+                        </div>
+
+                    </div>
+                }
+            </div>
+        </div>
+    </form>
+</div>
+
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+@section Scripts
+{
+    <script>
+        async function updateAttachment(event, attachId, reqNo, requestId) {
+            event.preventDefault();
+
+            const fileInput = document.getElementById(`fileInput_${attachId}`);
+            const file = fileInput?.files[0];
+
+            if (!file) {
+                Swal.fire("يرجى اختيار ملف قبل الإرسال", "", "warning");
+                return;
+            }
+
+            // Find associated hidden input values near the file input
+            const parent = fileInput.closest('.form-group, .row');
+            const fieldName = parent.querySelector('[name="NamedFile.FieldName"]')?.value;
+            const labelName = parent.querySelector('[name="NamedFile.LabelName"]')?.value;
+            const isRequired = parent.querySelector('[name="NamedFile.IsRequired"]')?.value === "True";
+
+            // Build FormData
+            const formData = new FormData();
+            formData.append("file.File", file);
+            formData.append("file.FieldName", fieldName);
+            formData.append("file.LabelName", labelName);
+            formData.append("file.IsRequired", isRequired);
+            formData.append("attachId", attachId);
+            formData.append("reqNo", reqNo);
+            formData.append("RequestId", requestId);
+
+            try {
+                const response = await fetch(`/Tourism/UpdateAttachment`, {
+                    method: "POST",
+                    body: formData
+                });
+
+                if (response.ok) {
+                    const result = await response.json();
+                    Swal.fire("تم التحديث بنجاح", result.message || "", "success").then(() => {
+                        location.reload(); // Refresh to reflect changes
+                    });
+                } else {
+                    const errorText = await response.text();
+                    Swal.fire("فشل التحديث", errorText, "error");
+                }
+            } catch (error) {
+                console.error("Error uploading attachment:", error);
+                Swal.fire("خطأ", "حدث خطأ أثناء رفع الملف", "error");
+            }
+        }
+    </script>
+    <script>
+
+        $(function () {
+            $("[id$=AaliNumber]").on('change', function () {
+                var regex = "^[0-9]+$";
+                var value = $(this).val();
+                var status = ValidateRegeex(regex, value);
+                if (status !== true) {
+                    $(this).val("");
+                    Swal.fire({
+                        icon: 'error',
+                        title: 'خطأ',
+                        text: 'أرقام فقط',
+                        confirmButtonColor: '#7FB3D5',
+                        confirmButtonText: 'موافق'
+                    });
+                    return;
+                }
+
+                get_Amount(value);
+            });
+        });
+
+        async function get_Amount(ID) {
+            try {
+                const response = await $.ajax({
+                    type: "POST",
+                    url: "/Tourism/getAddressDataFromPaci",
+                    data: { ID: ID },
+                    dataType: "json"
+                });
+
+                $('#Governrate').val(response.governoratearabic || "");
+                $('#Area').val(response.neighborhoodarabic || "");
+                $('#BlockNo').val(response.blockarabic || "");
+                $('#Street').val(response.streetarabic || "");
+                $('#BuildingName').val(response.buildingnamearabic || "");
+                $('#UnitNo').val(response.unit_no || "");
+                $('#FloorNo').val(response.floor_no || "");
+                $('#BuildingNo').val(response.parcelarabic || "");
+            } catch (error) {
+                $('#AaliNumber, #Governrate, #Area, #BlockNo, #Street, #BuildingNo, #UnitNo, #FloorNo, #BuildingName').val("");
+                Swal.fire({
+                    icon: 'error',
+                    title: 'خطأ...',
+                    text: 'عفوا , الرقم الآلي غير صحيح!',
+                    confirmButtonText: "موافق"
+                });
+            }
+        }
+
+        function ValidateRegeex(regex, value) {
+            var pattern = new RegExp(regex);
+            return pattern.test(value);
+        }
+    </script>
+
+    <script>
+        async function submitFormViaAjax(event) {
+            event.preventDefault();
+
+            const form = document.querySelector("form"); // or give your form an id="PreApprovalForm"
+            const formData = new FormData(form);
+
+            try {
+                const response = await fetch('/Tourism/UpdateRequest', {
+                    method: 'POST',
+                    body: formData
+                });
+
+                if (response.ok) {
+                    const result = await response.json();
+                    Swal.fire('تم الحفظ', 'تم رفع المرفق', 'success').then(() => {
+                        window.location.href = '/Home/GetAllRequest';  // Redirect to the 'GetAllRequest' page
+                    });
+                } else {
+                    const errorText = await response.text();
+                    Swal.fire("فشل التحديث", errorText, "error");
+                }
+            } catch (err) {
+                console.error("Submission error:", err);
+                Swal.fire("خطأ", "فشل إرسال البيانات إلى السيرفر", "error");
+            }
+        }
+    </script>
+
+    <script>
+        let customAttachCounter = 0;
+
+        function addCustomAttachment() {
+            customAttachCounter++;
+
+            const container = document.getElementById("custom-attachments");
+
+            const wrapper = document.createElement("div");
+            wrapper.className = "row align-items-center mb-3 border p-2 bg-light rounded";
+            wrapper.innerHTML = `
+                            <div class="col-md-5">
+                                <input type="file"
+                                       name="NamedFile.File"
+                                       class="form-control"
+                                       id="fileInput_custom_${customAttachCounter}"
+                                       data-field="CustomField_${customAttachCounter}"
+                                       data-label="مرفق مخصص ${customAttachCounter}"
+                                       data-required="false" />
+                                <input type="hidden" name="NamedFile.FieldName" value="CustomField_${customAttachCounter}" />
+                                <input type="hidden" name="NamedFile.LabelName" value="مرفق مخصص ${customAttachCounter}" />
+                                <input type="hidden" name="NamedFile.IsRequired" value="false" />
+                            </div>
+                            <div class="col-md-4">
+                                <button type="button" class="btn btn-success me-2" onclick="uploadCustomAttachment(this)">رفع</button>
+                                <button type="button" class="btn btn-danger" onclick="this.closest('.row').remove()">حذف</button>
+                            </div>
+                        `;
+
+            container.appendChild(wrapper);
+        }
+
+        async function uploadCustomAttachment(button) {
+            const parent = button.closest(".row");
+            const fileInput = parent.querySelector('input[type="file"]');
+            const file = fileInput?.files[0];
+
+            if (!file) {
+                Swal.fire("يرجى اختيار ملف قبل الإرسال", "", "warning");
+                return;
+            }
+
+            const fieldName = parent.querySelector('[name="NamedFile.FieldName"]').value;
+            const labelName = parent.querySelector('[name="NamedFile.LabelName"]').value;
+            const isRequired = parent.querySelector('[name="NamedFile.IsRequired"]').value === "True";
+
+            const reqNo = "@Model.RequestVM.Reqno";
+            const requestId = "@Model.RequestVM.RequestId";
+
+            const formData = new FormData();
+            formData.append("file.File", file);
+            formData.append("file.FieldName", fieldName);
+            formData.append("file.LabelName", labelName);
+            formData.append("file.IsRequired", isRequired);
+            formData.append("reqNo", reqNo);
+            formData.append("RequestId", requestId);
+
+            try {
+                const response = await fetch("/Tourism/UploadNewAttachment", {
+                    method: "POST",
+                    body: formData
+                });
+
+                if (response.ok) {
+                    const result = await response.json();
+              
+
+                    Swal.fire('تم الحفظ', 'تم رفع المرفق', 'success').then(() => {
+                        window.location.href = '/Home/GetAllRequest';  // Redirect to the 'GetAllRequest' page
+                    });
+                } else {
+                    const errorText = await response.text();
+                    Swal.fire("فشل", errorText, "error");
+                }
+            } catch (err) {
+                console.error(err);
+                Swal.fire("خطأ", "حدث خطأ أثناء رفع الملف", "error");
+            }
+        }
+    </script>
+}

@@ -1,0 +1,819 @@
+﻿@model TourLicRequestResponseVM
+
+
+@{
+    ViewBag.Title = "TourLicRequest";
+    Layout = "~/Views/Shared/_LayoutEservice.cshtml";
+    var token = Context.Session.GetString("UserToken");
+    var userId = Context.Session.GetString("UserId");
+    var userName = Context.Session.GetString("UserUserName");
+    var civilId = Context.Session.GetString("UserCivilId");
+    var fullName = Context.Session.GetString("UserFullName");
+    var accountTypeId = Context.Session.GetString("UserAccouuntTypeId");
+}
+
+<style>
+    #Governrate, #Area, #BlockNo, #Street, #BuildingNo {
+        cursor: not-allowed;
+    }
+</style>
+
+<div class="my-profile-box">
+    <h3>طلب اصدار ترخيص تشغيلي</h3>
+    @*@using (Html.BeginForm(new { enctype = "multipart/form-data" }))*@
+    <form id="RequestForm" enctype="multipart/form-data">
+        @Html.AntiForgeryToken()
+        @Html.AntiForgeryToken()
+        @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+
+        <div class="row align-items-center">
+
+            <div class="col-xl-4 col-md-6 col-sm-12">
+                <div class="form-group">
+                    <label>الرقم المدني للمالك </label>
+                    <input asp-for="PreApprovalDetails.Applicant.CivilId" id="UserCivilID" class="form-control" required />
+                    <span asp-validation-for="PreApprovalDetails.Applicant.CivilId" class="text-danger"></span>
+                </div>
+            </div>
+
+            <div class="col-xl-4 col-md-6 col-sm-12">
+                <div class="form-group">
+                    <label>إسم المالك</label>
+                    <input asp-for="PreApprovalDetails.Applicant.Name1" class="form-control" required />
+                    <span asp-validation-for="PreApprovalDetails.Applicant.Name1" class="text-danger"></span>
+                </div>
+            </div>
+            <input type="hidden" asp-for="PreApprovalDetails.PreAppId" />
+            <input type="hidden" asp-for="PreApprovalDetails.AppId" />
+            <input type="hidden" asp-for="PreApprovalDetails.ManagerId" />
+            <input type="hidden" asp-for="PreApprovalDetails.Request.SalesManagerId" />
+            <input type="hidden" asp-for="PreApprovalDetails.Request.CompanyId" />
+            <input type="hidden" asp-for="PreApprovalDetails.Request.OperationsManagerId" />
+            <input type="hidden" asp-for="PreApprovalDetails.Request.MarketingManagerId" />
+            <input type="hidden" asp-for="PreApprovalDetails.Company.AddressId" />
+
+
+            <div class="col-xl-4 col-md-6 col-sm-12">
+                <div class="form-group">
+                    <label  class="Required">رقم الموافقة المبدئية</label>
+                    <input asp-for="@Model.PreApprovalDetails.LicenseNo" class="form-control" placeholder="Pre Approvement No" required readonly />
+                    <span asp-validation-for="@Model.PreApprovalDetails.LicenseNo" class="text-danger"></span>
+                </div>
+            </div>
+            <div class="col-xl-4 col-md-6 col-sm-12">
+                <div class="form-group">
+                    <label asp-for="@Model.PreApprovalDetails.LicenseName" class="Required"></label>
+                    <input asp-for="@Model.PreApprovalDetails.LicenseName" class="form-control" placeholder="إسم المنشأة" required />
+                    <span asp-validation-for="@Model.LicencesName" class="text-danger"></span>
+                </div>
+            </div>
+            <div class="col-xl-4 col-md-6 col-sm-12">
+                <div class="form-group">
+                    <label asp-for="@Model.PreApprovalDetails.Company.CompanyCivilId" class="Required"></label>
+                    <input asp-for="@Model.PreApprovalDetails.Company.CompanyCivilId" class="form-control" maxlength="15" required="required" id="CompanyCivilId" placeholder="رقم مدني الشركة" />
+                    <span asp-validation-for="@Model.PreApprovalDetails.Company.CompanyCivilId" class="text-danger"></span>
+                </div>
+            </div>
+
+        
+
+            <div class="col-xl-4 col-md-6 col-sm-12">
+                <div class="form-group">
+                    <label asp-for="@Model.PreApprovalDetails.Company.DirCompanyAr"></label>
+                    <input asp-for="@Model.PreApprovalDetails.Company.DirCompanyAr" class="form-control" placeholder="مدير الشركة" />
+                    <span asp-validation-for="@Model.PreApprovalDetails.Company.DirCompanyAr" class="text-danger"></span>
+                </div>
+            </div>
+
+            <div class="col-xl-4 col-md-6 col-sm-12">
+                <div class="form-group">
+                    <label asp-for="@Model.PreApprovalDetails.Company.OwnerCompanyAr" class="Required"></label>
+                    <input asp-for="@Model.PreApprovalDetails.Company.OwnerCompanyAr" class="form-control" required="required" placeholder="مالك الشركة" />
+                    <span asp-validation-for="@Model.PreApprovalDetails.Company.OwnerCompanyAr" class="text-danger"></span>
+                </div>
+            </div>
+
+            <div class="col-xl-4 col-md-6 col-sm-12">
+                <div class="form-group">
+                    <label asp-for="@Model.PreApprovalDetails.CommercialLicNo" class="Required"></label>
+                    <input asp-for="@Model.PreApprovalDetails.CommercialLicNo" class="form-control" maxlength="10" required="required" placeholder="رقم الترخيص التجاري" />
+                    <span asp-validation-for="@Model.PreApprovalDetails.CommercialLicNo" class="text-danger"></span>
+                </div>
+            </div>
+            <div class="col-xl-4 col-md-6 col-sm-12">
+                <div class="form-group">
+                    <label asp-for="@Model.PreApprovalDetails.RecordNo" class="Required"></label>
+                    <input asp-for="@Model.PreApprovalDetails.RecordNo" class="form-control" placeholder="رقم السجل التجاري" required />
+                    <span asp-validation-for="@Model.PreApprovalDetails.RecordNo" class="text-danger"></span>
+                </div>
+            </div>
+            <!--Address by Aali -->
+            @* <div class="col-xl-4 col-md-6 col-sm-12">
+                <div class="form-group">
+                    <label asp-for="@Model.PreApprovalDetails.Building.AddressNavigation.AalliNo" class="Required"></label>
+                    <input asp-for="@Model.PreApprovalDetails.Building.AddressNavigation.AalliNo" class="form-control" placeholder="رقم الآلي" maxlength="10" id="AaliNumber" required />
+                    <span asp-validation-for="@Model.PreApprovalDetails.Building.AddressNavigation.AalliNo" class="text-danger"></span>
+                </div>
+            </div>
+
+            <div class="col-xl-4 col-md-6 col-sm-12">
+                <div class="form-group">
+                    <label asp-for="@Model.PreApprovalDetails.Building.AddressNavigation.GovernorateArabic" class="Required"></label>
+                    <input asp-for="@Model.PreApprovalDetails.Building.AddressNavigation.GovernorateArabic" class="form-control" placeholder="المحافظة" id="Governrate" readonly />
+                    <span asp-validation-for="@Model.PreApprovalDetails.Building.AddressNavigation.GovernorateArabic" class="text-danger"></span>
+                </div>
+            </div>
+
+            <div class="col-xl-4 col-md-6 col-sm-12">
+                <div class="form-group">
+                    <label asp-for="@Model.PreApprovalDetails.Building.AddressNavigation.Area" class="Required"></label>
+                    <input asp-for="@Model.PreApprovalDetails.Building.AddressNavigation.Area" class="form-control" placeholder="المنطقة" id="Area" readonly />
+                    <span asp-validation-for="@Model.PreApprovalDetails.Building.AddressNavigation.Area" class="text-danger"></span>
+                </div>
+            </div>
+
+            <div class="col-xl-4 col-md-6 col-sm-12">
+                <div class="form-group">
+                    <label asp-for="@Model.PreApprovalDetails.Building.AddressNavigation.BlockArabic" class="Required"></label>
+                    <input asp-for="@Model.PreApprovalDetails.Building.AddressNavigation.BlockArabic" class="form-control" placeholder="رقم البلوك" id="BlockNo" readonly />
+                    <span asp-validation-for="@Model.PreApprovalDetails.Building.AddressNavigation.BlockArabic" class="text-danger"></span>
+                </div>
+            </div>
+
+            <div class="col-xl-4 col-md-6 col-sm-12">
+                <div class="form-group">
+                    <label asp-for="@Model.PreApprovalDetails.Building.AddressNavigation.StreetArabic" class="Required"></label>
+                    <input asp-for="@Model.PreApprovalDetails.Building.AddressNavigation.StreetArabic" class="form-control" placeholder="الشارع" id="Street" readonly />
+                    <span asp-validation-for="@Model.PreApprovalDetails.Building.AddressNavigation.StreetArabic" class="text-danger"></span>
+                </div>
+            </div>
+
+            <div class="col-xl-4 col-md-6 col-sm-12">
+                <div class="form-group">
+                    <label asp-for="@Model.PreApprovalDetails.Building.AddressNavigation.BuildingNo" class="Required"></label>
+                    <input asp-for="@Model.PreApprovalDetails.Building.AddressNavigation.BuildingNo" class="form-control" placeholder="رقم المبنى" id="BuildingNo" readonly />
+                    <span asp-validation-for="@Model.PreApprovalDetails.Building.AddressNavigation.BuildingNo" class="text-danger"></span>
+                </div>
+            </div>
+
+            <div class="col-xl-4 col-md-6 col-sm-12">
+                <div class="form-group">
+                    <label asp-for="@Model.PreApprovalDetails.Building.AddressNavigation.BuildingName" class="Required"></label>
+                    <input asp-for="@Model.PreApprovalDetails.Building.AddressNavigation.BuildingName" class="form-control" placeholder="اسم المبنى" id="BuildingName" readonly />
+                    <span asp-validation-for="@Model.PreApprovalDetails.Building.AddressNavigation.BuildingName" class="text-danger"></span>
+                </div>
+            </div>
+
+            <div class="col-xl-4 col-md-6 col-sm-12">
+                <div class="form-group">
+                    <label asp-for="@Model.PreApprovalDetails.Building.AddressNavigation.UnitNo" class="Required"></label>
+                    <input asp-for="@Model.PreApprovalDetails.Building.AddressNavigation.UnitNo" class="form-control" placeholder="رقم الوحدة" id="UnitNo" readonly />
+                    <span asp-validation-for="@Model.PreApprovalDetails.Building.AddressNavigation.UnitNo" class="text-danger"></span>
+                </div>
+            </div>
+
+            <div class="col-xl-4 col-md-6 col-sm-12">
+                <div class="form-group">
+                    <label asp-for="@Model.PreApprovalDetails.Building.AddressNavigation.FloorNo" class="Required"></label>
+                    <input asp-for="@Model.PreApprovalDetails.Building.AddressNavigation.FloorNo" class="form-control" placeholder="الدور" id="FloorNo" readonly />
+                    <span asp-validation-for="@Model.PreApprovalDetails.Building.AddressNavigation.FloorNo" class="text-danger"></span>
+                </div>
+            </div> *@
+            <div class="col-xl-4 col-md-6 col-sm-12">
+                <div class="form-group">
+                    <label asp-for="@Model.PreApprovalDetails.Company.AddressNavigation.AalliNo" class="Required"></label>
+                    <input asp-for="@Model.PreApprovalDetails.Company.AddressNavigation.AalliNo" class="form-control" placeholder="رقم الآلي" maxlength="10" id="AaliNumber" required />
+                    <span asp-validation-for="@Model.PreApprovalDetails.Company.AddressNavigation.AalliNo" class="text-danger"></span>
+                </div>
+            </div>
+
+            <div class="col-xl-4 col-md-6 col-sm-12">
+                <div class="form-group">
+                    <label asp-for="@Model.PreApprovalDetails.Company.AddressNavigation.GovernorateArabic" class="Required"></label>
+                    <input asp-for="@Model.PreApprovalDetails.Company.AddressNavigation.GovernorateArabic" class="form-control" placeholder="المحافظة" id="Governrate" readonly />
+                    <span asp-validation-for="@Model.PreApprovalDetails.Company.AddressNavigation.GovernorateArabic" class="text-danger"></span>
+                </div>
+            </div>
+
+            <div class="col-xl-4 col-md-6 col-sm-12">
+                <div class="form-group">
+                    <label asp-for="@Model.PreApprovalDetails.Company.AddressNavigation.Area" class="Required"></label>
+                    <input asp-for="@Model.PreApprovalDetails.Company.AddressNavigation.Area" class="form-control" placeholder="المنطقة" id="Area" readonly />
+                    <span asp-validation-for="@Model.PreApprovalDetails.Company.AddressNavigation.Area" class="text-danger"></span>
+                </div>
+            </div>
+
+            <div class="col-xl-4 col-md-6 col-sm-12">
+                <div class="form-group">
+                    <label asp-for="@Model.PreApprovalDetails.Company.AddressNavigation.BlockArabic" class="Required"></label>
+                    <input asp-for="@Model.PreApprovalDetails.Company.AddressNavigation.BlockArabic" class="form-control" placeholder="رقم البلوك" id="BlockNo" readonly />
+                    <span asp-validation-for="@Model.PreApprovalDetails.Company.AddressNavigation.BlockArabic" class="text-danger"></span>
+                </div>
+            </div>
+
+            <div class="col-xl-4 col-md-6 col-sm-12">
+                <div class="form-group">
+                    <label asp-for="@Model.PreApprovalDetails.Company.AddressNavigation.StreetArabic" class="Required"></label>
+                    <input asp-for="@Model.PreApprovalDetails.Company.AddressNavigation.StreetArabic" class="form-control" placeholder="الشارع" id="Street" readonly />
+                    <span asp-validation-for="@Model.PreApprovalDetails.Company.AddressNavigation.StreetArabic" class="text-danger"></span>
+                </div>
+            </div>
+
+            <div class="col-xl-4 col-md-6 col-sm-12">
+                <div class="form-group">
+                    <label asp-for="@Model.PreApprovalDetails.Company.AddressNavigation.BuildingNo" class="Required"></label>
+                    <input asp-for="@Model.PreApprovalDetails.Company.AddressNavigation.BuildingNo" class="form-control" placeholder="رقم المبنى" id="BuildingNo" readonly />
+                    <span asp-validation-for="@Model.PreApprovalDetails.Company.AddressNavigation.BuildingNo" class="text-danger"></span>
+                </div>
+            </div>
+
+            <div class="col-xl-4 col-md-6 col-sm-12">
+                <div class="form-group">
+                    <label asp-for="@Model.PreApprovalDetails.Company.AddressNavigation.BuildingName" class="Required"></label>
+                    <input asp-for="@Model.PreApprovalDetails.Company.AddressNavigation.BuildingName" class="form-control" placeholder="اسم المبنى" id="BuildingName" readonly />
+                    <span asp-validation-for="@Model.PreApprovalDetails.Company.AddressNavigation.BuildingName" class="text-danger"></span>
+                </div>
+            </div>
+
+            <div class="col-xl-4 col-md-6 col-sm-12">
+                <div class="form-group">
+                    <label asp-for="@Model.PreApprovalDetails.Company.AddressNavigation.UnitNo" class="Required"></label>
+                    <input asp-for="@Model.PreApprovalDetails.Company.AddressNavigation.UnitNo" class="form-control" placeholder="رقم الوحدة" id="UnitNo" readonly />
+                    <span asp-validation-for="@Model.PreApprovalDetails.Company.AddressNavigation.UnitNo" class="text-danger"></span>
+                </div>
+            </div>
+
+            <div class="col-xl-4 col-md-6 col-sm-12">
+                <div class="form-group">
+                    <label asp-for="@Model.PreApprovalDetails.Company.AddressNavigation.FloorNo" class="Required"></label>
+                    <input asp-for="@Model.PreApprovalDetails.Company.AddressNavigation.FloorNo" class="form-control" placeholder="الدور" id="FloorNo" readonly />
+                    <span asp-validation-for="@Model.PreApprovalDetails.Company.AddressNavigation.FloorNo" class="text-danger"></span>
+                </div>
+            </div>
+            <!--End Address-->
+            @*<div class="col-xl-4 col-md-6 col-sm-12">
+            <div class="form-group">
+            @Html.LabelFor(model => model.Activities, new { @class = "Required" })
+            @Html.DropDownListFor(model => model.Activities, Model.Activities, htmlAttributes: new { @class = "form-control", @ID = "ActivitiList", @onchange = "get_sbu()", @Required = "true"})
+            @Html.ValidationMessageFor(model => model.Activities, "", new { @class = "text-danger" })
+            </div>
+            </div>*@
+
+            <div class="col-xl-4 col-md-6 col-sm-12">
+                <div class="form-group">
+                    <label asp-for="@Model.PreApprovalDetails.Company.CompanyActivity" class="Required"></label>
+                    <input asp-for="@Model.PreApprovalDetails.Company.CompanyActivity" class="form-control" placeholder="Company Activity" id="ActivitiName" readonly required />
+                    <span asp-validation-for="@Model.PreApprovalDetails.Company.CompanyActivity" class="text-danger"></span>
+                </div>
+            </div>
+
+            <div class="col-xl-4 col-md-6 col-sm-12">
+                <div class="form-group">
+                    <label asp-for="@Model.PreApprovalDetails.Company.ActivityCode" class="Required"></label>
+                    <input asp-for="@Model.PreApprovalDetails.Company.ActivityCode" class="form-control" placeholder="Activity Code" id="ActivitiID" readonly required />
+                    <span asp-validation-for="@Model.PreApprovalDetails.Company.ActivityCode" class="text-danger"></span>
+                    <input type="hidden" asp-for="@Model.PreApprovalDetails.Company.ActivityTypeId" />
+                </div>
+            </div>
+
+            <div class="col-xl-4 col-md-6 col-sm-12">
+                <div class="form-group">
+                    <label asp-for="@Model.PreApprovalDetails.Company.AddressNavigation.AreaSize" class="Required"></label>
+                    <input asp-for="@Model.PreApprovalDetails.Company.AddressNavigation.AreaSize" class="form-control" placeholder="Area Size" required />
+                    <span asp-validation-for="@Model.PreApprovalDetails.Company.AddressNavigation.AreaSize" class="text-danger"></span>
+                </div>
+            </div>
+
+            <div class="col-xl-4 col-md-6 col-sm-12">
+                <div class="form-group">
+                    <label asp-for="@Model.PreApprovalDetails.Company.AddressNavigation.AreaChartNo" class="Required"></label>
+                    <input asp-for="@Model.PreApprovalDetails.Company.AddressNavigation.AreaChartNo" class="form-control" placeholder="Area Chart No" required />
+                    <span asp-validation-for="@Model.PreApprovalDetails.Company.AddressNavigation.AreaChartNo" class="text-danger"></span>
+                </div>
+            </div>
+
+            
+@* 
+             <div class="col-xl-4 col-md-6 col-sm-12">
+                <div class="form-group">
+                    <label asp-for="@Model.LicencesInfoVM.FixedFees" class="Required"></label>
+                    <input asp-for="@Model.LicencesInfoVM.FixedFees" class="form-control" placeholder="Service Amount" readonly required />
+                    <span asp-validation-for="@Model.LicencesInfoVM.FixedFees" class="text-danger"></span>
+                </div>
+            </div> *@
+            <div class="col-xl-4 col-md-6 col-sm-12">
+                <div class="form-group">
+                    <label asp-for="@Model.LicencesInfoVM.FixedFees" class="form-label">رسوم الطلب</label>
+                    <input asp-for="LicencesInfoVM.FixedFees" class="form-control" readonly />
+                    <span asp-validation-for="LicencesInfoVM.FixedFees" class="text-danger"></span>
+                </div>
+            </div>
+
+
+
+            <!---------------- بيانات المدير ---------------->
+            <div class="col-xl-12 col-lg-12 col-md-12">
+                <div class="form-group">
+                    <h3>بيانات المدير</h3>
+                </div>
+            </div>
+            <div class="col-xl-4 col-md-6 col-sm-12">
+                <div class="form-group">
+                    <label asp-for="@Model.PreApprovalDetails.Manager.Name1" class="Required"></label>
+                    <input asp-for="@Model.PreApprovalDetails.Manager.Name1" class="form-control" placeholder="@Html.DisplayNameFor(model => model.PreApprovalDetails.Manager.Name1)" required />
+                    <span asp-validation-for="@Model.PreApprovalDetails.Manager.Name1" class="text-danger"></span>
+                </div>
+            </div>
+            <div class="col-xl-4 col-md-6 col-sm-12">
+                <div class="form-group">
+                    <label asp-for="@Model.PreApprovalDetails.Manager.Phone" class="Required"></label>
+                    <input asp-for="@Model.PreApprovalDetails.Manager.Phone" class="form-control" placeholder="@Html.DisplayNameFor(model => model.PreApprovalDetails.Manager.Phone)" required />
+                    <span asp-validation-for="@Model.PreApprovalDetails.Manager.Phone" class="text-danger"></span>
+                </div>
+            </div>
+            <div class="col-xl-4 col-md-6 col-sm-12">
+                <div class="form-group">
+                    <label asp-for="@Model.PreApprovalDetails.Manager.Email" class="Required"></label>
+                    <input asp-for="@Model.PreApprovalDetails.Manager.Email" class="form-control" placeholder="@Html.DisplayNameFor(model => model.PreApprovalDetails.Manager.Email)" required />
+                    <span asp-validation-for="@Model.PreApprovalDetails.Manager.Email" class="text-danger"></span>
+                </div>
+            </div>
+            <div class="col-xl-4 col-md-6 col-sm-12">
+                <div class="form-group">
+                    <label asp-for="@Model.PreApprovalDetails.Manager.CivilId" class="Required"></label>
+                    <input asp-for="@Model.PreApprovalDetails.Manager.CivilId" class="form-control" placeholder="@Html.DisplayNameFor(model => model.PreApprovalDetails.Manager.CivilId)" required />
+                    <span asp-validation-for="@Model.PreApprovalDetails.Manager.CivilId" class="text-danger"></span>
+                </div>
+            </div>
+            <!---------------- بيانات مدير المبيعات ---------------->
+            <div class="col-xl-12 col-lg-12 col-md-12">
+                <div class="form-group">
+                    <h3>بيانات مدير المبيعات</h3>
+                </div>
+            </div>
+
+            <div class="col-xl-4 col-md-6 col-sm-12">
+                <div class="form-group">
+                    <label asp-for="@Model.PreApprovalDetails.Request.SalesManager.Name1" class="Required">اسم مدير المبيعات</label>
+                    <input type="text" class="form-control" id="SalesManagerName" asp-for="@Model.PreApprovalDetails.Request.SalesManager.Name1" placeholder="اسم المدير" required />
+                    <span class="text-danger"></span> <!-- Validation message will go here -->
+                </div>
+            </div>
+
+            <div class="col-xl-4 col-md-6 col-sm-12">
+                <div class="form-group">
+                    <label asp-for="@Model.PreApprovalDetails.Request.SalesManager.Phone" class="Required">موبايل مدير المبيعات</label>
+                    <input type="text" class="form-control" id="SalesManagerMobile" asp-for="@Model.PreApprovalDetails.Request.SalesManager.Phone" placeholder="موبايل المدير" required />
+                    <span class="text-danger"></span> <!-- Validation message will go here -->
+                </div>
+            </div>
+            <div class="col-xl-4 col-md-6 col-sm-12">
+                <div class="form-group">
+                    <label asp-for="@Model.PreApprovalDetails.Request.SalesManager.CivilId" class="Required">الرقم المدني لمدير المبيعات</label>
+                    <input type="text" class="form-control" id="SalesManagerCivilId" asp-for="@Model.PreApprovalDetails.Request.SalesManager.CivilId" placeholder="الرقم المدني المدير" required />
+                    <span class="text-danger"></span> <!-- Validation message will go here -->
+                </div>
+            </div>
+
+            <div class="col-xl-4 col-md-6 col-sm-12">
+                <div class="form-group">
+                    <label asp-for="@Model.PreApprovalDetails.Request.SalesManager.Email" class="Required">البريد الإلكتروني لمدير المبيعات</label>
+                    <input type="email" class="form-control" id="SalesManagerEmail" asp-for="@Model.PreApprovalDetails.Request.SalesManager.Email" placeholder="البريد الإلكتروني للمدير" required />
+                    <span class="text-danger"></span> <!-- Validation message will go here -->
+                </div>
+            </div>
+
+
+            <!---------------- بيانات مدير التسويق ---------------->
+            <div class="col-xl-12 col-lg-12 col-md-12">
+                <div class="form-group">
+                    <h3>بيانات مدير التسويق</h3>
+                </div>
+            </div>
+
+            <div class="col-xl-4 col-md-6 col-sm-12">
+                <div class="form-group">
+                    <label asp-for="@Model.PreApprovalDetails.Request.MarketingManager.Name1" class="Required">اسم مدير التسويق</label>
+                    <input type="text" class="form-control" id="MarketingManagerName" asp-for="@Model.PreApprovalDetails.Request.MarketingManager.Name1" placeholder="اسم المدير" required />
+                    <span class="text-danger"></span> <!-- Validation message will go here -->
+                </div>
+            </div>
+
+            <div class="col-xl-4 col-md-6 col-sm-12">
+                <div class="form-group">
+                    <label asp-for="@Model.PreApprovalDetails.Request.MarketingManager.Phone" class="Required">موبايل مدير التسويق</label>
+                    <input type="text" class="form-control" id="MarketingManagerMobile" asp-for="@Model.PreApprovalDetails.Request.MarketingManager.Phone" placeholder="موبايل المدير" required />
+                    <span class="text-danger"></span> <!-- Validation message will go here -->
+                </div>
+            </div>
+            <div class="col-xl-4 col-md-6 col-sm-12">
+                <div class="form-group">
+                    <label asp-for="@Model.PreApprovalDetails.Request.MarketingManager.CivilId" class="Required">الرقم المدني لمدير التسويق</label>
+                    <input type="text" class="form-control" id="MarketingManagerCivilId" asp-for="@Model.PreApprovalDetails.Request.MarketingManager.CivilId" placeholder="الرقم المدني المدير" required />
+                    <span class="text-danger"></span> <!-- Validation message will go here -->
+                </div>
+            </div>
+
+            <div class="col-xl-4 col-md-6 col-sm-12">
+                <div class="form-group">
+                    <label asp-for="@Model.PreApprovalDetails.Request.MarketingManager.Email" class="Required">البريد الإلكتروني لمدير التسويق</label>
+                    <input type="email" class="form-control" id="MarketingManagerEmail" asp-for="@Model.PreApprovalDetails.Request.MarketingManager.Email" placeholder="البريد الإلكتروني للمدير" required />
+                    <span class="text-danger"></span> <!-- Validation message will go here -->
+                </div>
+            </div>
+
+            <!---------------- بيانات مدير العمليات ---------------->
+            <div class="col-xl-12 col-lg-12 col-md-12">
+                <div class="form-group">
+                    <h3>بيانات مدير العمليات</h3>
+                </div>
+            </div>
+
+            <div class="col-xl-4 col-md-6 col-sm-12">
+                <div class="form-group">
+                    <label asp-for="@Model.PreApprovalDetails.Request.OperationsManager.Name1" class="Required">اسم مدير العمليات</label>
+                    <input type="text" class="form-control" id="OperationManagerName" asp-for="@Model.PreApprovalDetails.Request.OperationsManager.Name1" placeholder="اسم المدير" required />
+                    <span class="text-danger"></span> <!-- Validation message will go here -->
+                </div>
+            </div>
+
+            <div class="col-xl-4 col-md-6 col-sm-12">
+                <div class="form-group">
+                    <label asp-for="@Model.PreApprovalDetails.Request.OperationsManager.Phone" class="Required">موبايل مدير العمليات</label>
+                    <input type="text" class="form-control" id="OperationManagerMobile" asp-for="@Model.PreApprovalDetails.Request.OperationsManager.Phone" placeholder="موبايل المدير" required />
+                    <span class="text-danger"></span> <!-- Validation message will go here -->
+                </div>
+            </div>
+            <div class="col-xl-4 col-md-6 col-sm-12">
+                <div class="form-group">
+                    <label asp-for="@Model.PreApprovalDetails.Request.OperationsManager.CivilId" class="Required">الرقم المدني لمدير العمليات</label>
+                    <input type="text" class="form-control" id="OperationManagerCivilId" asp-for="@Model.PreApprovalDetails.Request.OperationsManager.CivilId" placeholder="الرقم المدني المدير" required />
+                    <span class="text-danger"></span> <!-- Validation message will go here -->
+                </div>
+            </div>
+
+            <div class="col-xl-4 col-md-6 col-sm-12">
+                <div class="form-group">
+                    <label asp-for="@Model.PreApprovalDetails.Request.OperationsManager.Email" class="Required">البريد الإلكتروني لمدير العمليات</label>
+                    <input type="email" class="form-control" id="OperationManagerEmail" asp-for="@Model.PreApprovalDetails.Request.OperationsManager.Email" placeholder="البريد الإلكتروني للمدير" required />
+                    <span class="text-danger"></span> <!-- Validation message will go here -->
+                </div>
+            </div>
+            <!---------------- المرفقات -------------------->
+            <div class="col-xl-12 col-lg-12 col-md-12">
+                <div class="form-group">
+                    <h3>المرفقات</h3>
+                </div>
+                <div class="form-group">
+                    <h6 class="text-danger" style="padding-right: 10px;">
+                        ## حجم الملف يجب ان لا يتجاوز 2 ميجا
+                        <br />## (المخطط الإنشائي, دراسة الجدوي الاقتصادية) حجم الملف لايزيد عن 5 ميجا
+                    </h6>
+                </div>
+            </div>
+
+            @foreach (var config in Model.FileUploadConfigs)
+            {
+                //var fieldName = $"ContractDocuments[{config.FieldName}]";
+
+                <div class="col-xl-4 col-md-6 col-sm-12">
+                    <div class="form-group">
+                        <label for="@config.FieldName" class="@((config.IsRequired) ? "Required" : "")">
+                            @config.Label
+                            @if (config.IsRequired)
+                            {
+                                <span style="color: red;">*</span> <!-- Only add one red star if required -->
+                            }
+                        </label>
+
+               
+
+                        <input type="file" name="NamedFile[0].File" class="form-control custom-file-input" required="@config.IsRequired" accept="@config.AllowedFileTypes" />
+                        <input type="hidden" name="NamedFile[0].FieldName" value="@config.FieldName" />
+                        <input type="hidden" class="field-label" value="@config.Label" /> <!-- 👈 add this -->
+
+
+                    </div>
+                </div>
+             } 
+
+            @*<script src="~/Content/assets/js/jquery-1.4.1.min.js"></script>*@
+
+            
+
+            <div class="col-xl-12 col-lg-12 col-md-12">
+                <div class="form-group">
+                    <h3></h3>
+                </div>
+            </div>
+
+            <div class="col-lg-12 col-md-12">
+                <button type="button" onclick="submitFormViaAjax()" class="default-btn SubmitForm"> إرسال الطلب  <i class="flaticon-plus"></i></button>
+            </div>
+        </div>
+    </form>
+</div>
+
+@section Scripts{
+<script type="text/javascript">
+
+
+    jQuery(document).ready(function () {
+        //get_sbu();
+        //loadImage();
+    });
+
+    jQuery(document).ready(function () {
+        Swal.fire({
+            icon: 'warning',
+            title: 'تنويه ،،،!',
+            text: 'يرجى التأكد من صحة بيانات المنشأة بالكامل وتحديث المرفقات في حال انتهاء صلاحيتها.',
+        });
+    });
+
+    $(document).ready(function () {
+        $('form').submit(function () {
+            // Disable the submit button
+            $(':submit', this).prop('disabled', true);
+            $(this).append('<div class="preloader-area"> ' +
+                '<div class="spinner">' +
+                '   <div class="inner">' +
+                '      <div class="disc"></div>' +
+                '   <div class="disc"></div>' +
+                '     <div class="disc"></div>' +
+                '  </div>' +
+                ' </div>' +
+                '</div>');
+            // Optionally, you can show a loading spinner or perform other actions
+            $('.preloader-area').fadeOut(15000);
+            // Continue with form submission
+            return true;
+        });
+    });
+
+
+
+
+    function get_sbu() {
+        var id = $('#ActivitiList').find(":selected").attr('value');
+        $.ajax({
+            type: "POST",
+            url: "/Tourism/GetActivity",
+            data: "id=" + id,
+            success: function (data) {
+                console.log(data[1]);
+                if (id != "0") {
+                    if (data.length > 0) {
+                        $('#ActivitiID').val(data[1].value);
+                        $('#ActivitiName').val(data[1].text);
+                    } else {
+                        $('#ActivitiID').val('');
+                        $('#ActivitiName').val('');
+                    }
+                }
+
+            }
+        });
+    }
+
+    //---------- sweet alert  ------------
+
+    // $(function loadImage() {
+
+    //     var errorMsg = '@ViewBag.test'
+    //     var msg = '@ViewBag.Message'
+
+    //     if (msg == 'Success') {
+    //         Swal.fire({
+    //             icon: 'success',
+    //             title: 'تأكـيد',
+    //             text: 'تم حفظ البيانات بنجاح',
+    //             confirmButtonColor: '#7FB3D5',
+    //             confirmButtonText: 'الانتقال لقائمة الطلبات !'
+    //         }).then(function () { window.location = '../Home/RequestsList'; });
+
+    //     }
+    //     else if (msg == 'error') {
+    //         Swal.fire({
+    //             icon: 'error',
+    //             title: 'تأكـيد',
+    //             text: errorMsg,
+    //             confirmButtonColor: '#7FB3D5',
+    //             confirmButtonText: 'الانتقال لقائمة الطلبات !'
+    //         }).then(function () { window.location = 'PreApprovRequest'; });
+    //     };
+
+
+    // });
+
+    /*---------- TextBox Validation ----------*/
+
+    function ValidateRegeex(regex, value) {
+        var expre = new RegExp(regex);
+        return expre.test(value);
+    }
+
+        $(function () {
+            $("[id$=UserCivilID]").on('change', function () {
+                var regex = "^[1-3][0-9][0-9]((0[13578]|[1][02])(0[1-9]|[12][0-9]|3[01])|(0[469]|(11))(0[1-9]|[12][0-9]|30)|(02)(0[1-9]|1[0-9]|2[0-8]))[0-9]{5}$|(^[1-3](04|08|[2468][048]|[13579][26])|(300))(0229)[0-9]{5}$";
+                var value = $(this).val();
+                var status = ValidateRegeex(regex, value);
+                if (status != true) {
+                    $(this).val("");
+                    Swal.fire({
+                        icon: 'error',
+                        title: 'Error',
+                        text: 'الرقم المدني غير صحيح',
+                        confirmButtonColor: '#7FB3D5',
+                        confirmButtonText: 'Ok'
+                    });
+                    
+                }
+                // var CivilId = JSON.stringify({ CivilID: $(this).val() });
+                // console.log(JSON.stringify({ CivilID: $(this).val() }));
+                // $.ajax({
+                //     url: '/Account/GetUserDataPACI',
+                //     type: "POST",
+                //     data: { CivilID: $(this).val() }, // use JSON.stringify for proper formatting
+                //     // dataType: "json",
+                //     //contentType: "application/json; charset=utf-8",
+                //     success: function (response) {
+                //         // Check if the response was successful
+                //         if (response.success) {
+                //             // Populate the fields with data from the server
+                //             $('#FullNameAr').val(response.data.arFullName);
+                //             $('#Email').val(response.data.email);
+                //             $('#Mobile').val(response.data.mobile);
+                //             $('#error-message').hide();
+
+                //         } else {
+                //             // Display error message if CivilID is invalid
+                //             $('#error-message').text(response.message).show();
+                //         }
+                //     },
+                //     error: function (xhr, status, error) {
+                //         console.log("Error: " + error);
+
+                //         console.log("Response Text: ", xhr.responseText);
+                //     }
+                // });
+
+            });
+        });
+
+
+
+    $(function () {
+        $("[id$=AaliNumber]").on('change', function () {
+
+            var regex = "^[0-9]+$";
+            var value = $(this).val();
+            var status = ValidateRegeex(regex, value);
+            if (status != true) {
+                $(this).val("");
+                Swal.fire({
+                    icon: 'error',
+                    title: 'Error',
+                    text: 'أرقام فقط',
+                    confirmButtonColor: '#7FB3D5',
+                    confirmButtonText: 'Ok'
+                });
+            }
+
+            //alert(value);
+            get_Amount(value);
+        });
+    });
+
+    async function get_Amount(ID) {
+        try {
+            const response = await $.ajax({
+                type: "POST",
+                url: "/Tourism/getAddressDataFromPaci",
+                data: { ID: ID },
+                dataType: "json"  // Ensure the response is expected in JSON format
+            });
+
+            // Update form fields with the data returned from the server
+            $('#Governrate').val(response.governoratearabic || "");
+            $('#Area').val(response.neighborhoodarabic || "");
+            $('#BlockNo').val(response.blockarabic || "");
+            $('#Street').val(response.streetarabic || "");
+            $('#BuildingName').val(response.buildingnamearabic || "");
+            $('#UnitNo').val(response.unit_no || "");
+            $('#FloorNo').val(response.floor_no || "");
+            $('#BuildingNo').val(response.parcelarabic || "");
+
+        } catch (error) {
+            // Reset the fields if an error occurs
+            $('#AaliNumber').val("");
+            $('#Governrate').val("");
+            $('#Area').val("");
+            $('#BlockNo').val("");
+            $('#Street').val("");
+            $('#BuildingNo').val("");
+            $('#UnitNo').val("");
+            $('#FloorNo').val("");
+            $('#BuildingName').val("");
+
+            // Display error message using SweetAlert
+            Swal.fire({
+                icon: 'error',
+                title: 'خطأ...',
+                text: 'عفوا , الرقم الالي غير صحيح!',
+                cancelButtonText: "Speed Case?"
+            });
+        }
+    }
+
+
+    $(function () {
+        $("[id$=CompanyCivilId]").on('change', function () {
+
+            var regex = "^[0-9]+$";
+            var value = $(this).val();
+            var status = ValidateRegeex(regex, value);
+            if (status != true) {
+                $(this).val("");
+                Swal.fire({
+                    icon: 'error',
+                    title: 'Error',
+                    text: 'أرقام فقط',
+                    confirmButtonColor: '#7FB3D5',
+                    confirmButtonText: 'Ok'
+                });
+                // alert("برجاء كتابة اسم الصحيفة باللغة العربية");
+            }
+        });
+    });
+
+
+    async function submitFormViaAjax() {
+        const uploadedFiles = new FormData();
+
+        // 🟢 1. Add all normal text inputs (non-file)
+        $('#RequestForm').serializeArray().forEach(function (input) {
+            uploadedFiles.append(input.name, input.value);
+        });
+        var ActivityTypeId = $('#ActivitiList').val();  // Get selected value from the dropdown
+        uploadedFiles.append('ActivityTypeId', ActivityTypeId);
+        console.log('Selected Activity Value:', ActivityTypeId);
+
+        let fileIndex = 0;
+
+        // 🟢 2. Add file inputs with dynamic names like ContractDocuments[FieldName]
+        const dynamicFileInputs = document.querySelectorAll('#RequestForm input[type="file"]');
+
+        dynamicFileInputs.forEach((input) => {
+            const files = input.files;
+
+            const formGroup = input.closest('.form-group');
+            const hiddenInput = formGroup.querySelector('input[type="hidden"][name$=".FieldName"]');
+            const labelInput = formGroup.querySelector('input.field-label');
+
+            const fieldName = hiddenInput ? hiddenInput.value : `UnknownField_${fileIndex}`;
+            const labelName = labelInput ? labelInput.value : '';
+            const isRequired = input.hasAttribute('required');
+
+            if (files.length > 0) {
+                for (let i = 0; i < files.length; i++) {
+                    uploadedFiles.append(`NamedFile[${fileIndex}].FieldName`, fieldName);
+                    uploadedFiles.append(`NamedFile[${fileIndex}].LabelName`, labelName); // ✅ here
+                    uploadedFiles.append(`NamedFile[${fileIndex}].File`, files[i]);
+                    uploadedFiles.append(`NamedFile[${fileIndex}].IsRequired`, isRequired ? "true" : "false");
+                    fileIndex++;
+                }
+            } else {
+                console.warn(`⚠️ No file selected for field: ${fieldName}`);
+            }
+        });
+
+        // 🟡 Optional: Debug output
+        for (let [key, value] of uploadedFiles.entries()) {
+            console.log(`${key}:`, value);
+        }
+
+        // 🔵 3. Submit using fetch
+        try {
+            const response = await fetch('/Tourism/TourLicRequest', {
+                method: 'POST',
+                body: uploadedFiles
+            });
+
+            if (response.ok) {
+
+                    Swal.fire('تم بنجاح', 'تم إرسال البيانات', 'success').then(() => {
+                        window.location.href = '/Home/GetAllRequest';  // Redirect to the 'GetAllRequest' page
+                    });
+
+
+            } else {
+                Swal.fire('خطأ', 'حدث خطأ في المعالجة', 'error');
+            }
+        } catch (error) {
+            console.error('Upload error:', error);
+            Swal.fire('خطأ', 'فشل الإرسال: ' + error.message, 'error');
+        }
+    }
+    </script>
+}

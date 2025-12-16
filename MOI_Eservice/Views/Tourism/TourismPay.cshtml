@@ -1,0 +1,150 @@
+﻿@model RequestFrontVM
+
+@{
+    ViewBag.Title = "تفاصيل الطلب رقم : " + Model.RequestVM.Reqno;
+    Layout = "~/Views/Shared/_LayoutEservice.cshtml";
+}
+
+<!-- Breadcrumb Area -->
+<div class="breadcrumb-area">
+    <!--<h1>Manage Jobs</h1>-->
+    <ol class="breadcrumb">
+        <li class="item"><a href="@Url.Action("ServiceHome","Home")">الرئيسيه</a></li>
+        <li class="item"><a href="@Url.Action("Index","UserRequests")">متابعة الطلبات</a></li>
+        <li class="item">السياحة</li>
+    </ol>
+</div>
+<!-- End Breadcrumb Area -->
+
+<br />
+
+<style>
+    .ri-exchange-dollar-line {
+        font-weight: normal !important;
+        font-size: 18px !important;
+    }
+</style>
+<div class="my-profile-box">
+    <h3>تأكيد بيانات الدفع الطلب رقم @Model.RequestVM.Reqno</h3>
+    @*@using (Html.BeginForm(new { enctype = "multipart/form-data" }))*@
+  @*   @using (Html.BeginForm("TourismPay", "TourismHome", FormMethod.Post, new
+    {
+        enctype = "multipart/form-data"@*, @onsubmit = "return checkCheckBoxes(this);"*@ @* })) *@
+    @* {  *@
+    <form asp-controller="Tourism" asp-action="TourismPay" method="post" enctype="multipart/form-data">
+        @Html.AntiForgeryToken()
+        @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+        @Html.HiddenFor(model => model.RequestVM.RequestId)
+        @Html.HiddenFor(model => model.RequestVM.LicenseId)
+        @Html.HiddenFor(model => model.RequestVM.Reqno)
+        @Html.HiddenFor(model => model.RequestVM.AppCivilId)
+        @Html.HiddenFor(model => model.RequestVM.UserCivilId)
+        @Html.HiddenFor(model => model.AspnetUserVM.Email)
+        @Html.HiddenFor(model => model.AspnetUserVM.Id)
+
+        @Html.HiddenFor(model => model.AspnetUserVM.Mobile)
+
+
+
+
+        <div class="row align-items-center">
+            <div class="col-xl-12 col-lg-12 col-md-12">
+                <div class="form-group">
+                </div>
+            </div>
+            <div class="col-xl-12 col-lg-12 col-md-12">
+                <div class="form-group">
+                    <h6 style="color:#ff0000" dir="rtl">* الرجاء قراءة الشروط والأحكام ومراجعة البيانات قبل استكمال عملية الدفع</h6>
+                </div>
+            </div>
+
+            <div class="col-xl-4 col-md-6 col-sm-12">
+                <div class="form-group">
+                    <asp:Label runat="server" Text="">تاريخ تقديم الطلب</asp:Label>
+                    @Html.EditorFor(model => model.RequestVM.Licreqtime, new { htmlAttributes = new { @class = "form-control", @readonly = "readonly" } })
+                </div>
+            </div>
+
+            <div class="col-xl-4 col-md-6 col-sm-12">
+                <div class="form-group">
+                    <asp:Label runat="server" Text="">نوع الطلب</asp:Label>
+                    @Html.EditorFor(model => model.RequestVM.ReqTypeName, new { htmlAttributes = new { @class = "form-control", @readonly = "readonly" } })
+                </div>
+            </div>
+
+            <div class="col-xl-4 col-md-6 col-sm-12">
+                <div class="form-group">
+                    <asp:Label runat="server" Text="">حالة الطلب</asp:Label>
+                    @Html.EditorFor(model => model.RequestVM.ReqStatusName, new { htmlAttributes = new { @class = "form-control", @readonly = "readonly" } })
+                </div>
+            </div>
+            <div class="col-xl-4 col-md-6 col-sm-12">
+                <div class="form-group">
+                    <asp:Label runat="server" Text="">اسم صاحب الترخيص</asp:Label>
+                    @Html.EditorFor(model => model.AspnetUserVM.FullNameAr, new { htmlAttributes = new { @class = "form-control", @readonly = "readonly" } })
+                </div>
+            </div>
+            <div class="col-xl-4 col-md-6 col-sm-12">
+                <div class="form-group">
+                    <asp:Label runat="server" Text="">المبلغ </asp:Label>
+                     @Html.EditorFor(model => model.LicencesInfoVM.FixedFees, new { htmlAttributes = new { @class = "form-control", @readonly = "readonly" } }) 
+                </div>
+            </div>
+
+            <div class="col-xl-12 col-lg-12 col-md-12">
+                <div class="form-group">
+                </div>
+            </div>
+            <div class="col-xl-12 col-lg-12 col-md-12 px-2">
+                <p class="form-cookies-consent" style="color:#ff0000" dir="rtl">
+                    <input type="checkbox" id="test1" required>
+                    <label for="test1" class="px-2">تم مراجعة جميع البيانات والموافقة على جميع الشروط والأحكام <a href="#" onclick="confirmation()" style="color: #0d6efd">جميع الشروط والأحكام</a></label>
+                </p>
+            </div>
+            <div class="col-xl-12 col-lg-12 col-md-12">
+                <div class="form-group">
+                </div>
+            </div>
+            <div class="col-lg-12 col-md-12">
+                <button type="submit" class="default-btn" > دفع الرسوم  <i class="ri-exchange-dollar-line"></i></button>
+            </div>
+        </div>
+    </form>
+    
+</div>
+
+<script>
+    function confirmation() {
+        Swal.fire({
+            title: '<H6> <u>الشروط والاحكام</u></h6>',
+            icon: 'info',
+            html:
+                '<div class="container my-profile-box" style="text-align: right;"> ' +
+                ' <div class="candidates-details-desc">' +
+
+                '<div class="row align-items-center candidates-desc-list employers-details-desc">' +
+                '<div class="col-sm-12 list-box employers-desc-content">' +
+
+                ' <ul class="responsibilities-list">' +
+                ' <li><i class="ri-check-fill"></i>تم مراجعة جميع بيانات طلبي السابقة.</li>' +
+                ' <li><i class="ri-check-fill"></i>تم التأكد من الرسوم المقررة للطلب المقدم.</li>' +
+                '<li><i class="ri-check-fill"></i>بيانات الدفع المستخدمة من قبل المستخدم لإتمام عملية الدفع هي بيانات دفع صحيحة.</li>' +
+                '<li><i class="ri-check-fill"></i>أن يكون صاحب الطلب كويتي الجنسية وإذا كان شخصًا اعتباريًا فيجب أن يكون لدية الصلاحية القانونية لإتمام الطلب.</li>' +
+                ' </ul>' +
+
+
+                '</div>' +
+                '</div>' +
+                '</div>' +
+                '',
+            showCloseButton: true,
+            showCancelButton: false,
+            focusConfirm: false,
+            showConfirmButton: false
+            //confirmButtonText:
+            //    ' حسنا!',
+
+
+
+        })
+    }</script>

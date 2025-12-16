@@ -1,0 +1,101 @@
+﻿
+@model List<RequestVM>
+
+
+@{
+    ViewBag.Title = "RequestsList";
+    var token = Context.Session.GetString("UserToken");
+    var userId = Context.Session.GetString("UserId");
+    var userName = Context.Session.GetString("UserUserName");
+    var civilId = Context.Session.GetString("UserCivilId");
+    var fullName = Context.Session.GetString("UserFullName");
+    var accountTypeId = Context.Session.GetString("UserAccouuntTypeId");
+    var counter = 1;
+}
+
+<div class="manage-jobs-box">
+    <div class="manage-jobs-table table-responsive">
+        <table class="display nowrap myTable" style="width:100%;">
+            <thead class="ThemeCol">
+                <tr>
+                    <th></th>
+                    <th>م</th>
+                    <th>تاريخ الطلب</th>
+                    <th>رقم الطلب</th>
+                    
+                    <th>صاحب الترخيص</th>
+                    <th>نوع الطلب</th>
+                    <th>حالة الطلب</th>
+                    <th>تفاصيل الطلب</th>
+                </tr>
+            </thead>
+            <tbody id="tblCom">
+                @foreach (var item in Model)
+                {
+                   
+                    <tr>
+                        <td></td>
+                        <td>@counter</td>
+                        <td>@item.Licreqtime?.ToString("yyyy-MM-dd")</td>
+                        <td>@item.Reqno</td>
+                        
+                        <td>@item.Licname</td>
+                        <td>@item.ReqTypeName</td>
+                        <td>@item.ReqStatusName</td>
+                        <td class="text-center">
+                            <ul class="option-list">
+                                @if (item.ReqtypeId == (int)RequestTypeEnum.PreApprovementConvert || item.ReqtypeId == (int)RequestTypeEnum.PreApprovementNew)
+                                {
+                                    <li>
+                                        <button class="option-btn d-inline-block" type="button" title="عرض"
+                                                onclick="location.href='@Url.Action("PreApprovalDetails", "Tourism", new { id = MyCrypto.Encode(item.RequestId.ToString()) })'">
+                                            <i class="ri-eye-line"></i>
+                                        </button>
+                                    </li>
+                                }
+                                else if (item.ReqtypeId == (int)RequestTypeEnum.ChangeData)
+                                {
+                                    <li>
+                                        <button class="option-btn d-inline-block" type="button" title="عرض"
+                                                onclick="location.href='@Url.Action("RequestDetails", "Tourism", new { id = MyCrypto.Encode(item.RequestId.ToString()) })'">
+                                            <i class="ri-eye-line"></i>
+                                        </button>
+                                    </li>
+                                }
+                                else if (item.ReqtypeId == (int)RequestTypeEnum.AddMoIC || item.ReqtypeId == (int)RequestTypeEnum.AddMoIC | item.ReqtypeId == (int)RequestTypeEnum.RenewOrChangeMOIC
+                                || item.ReqtypeId == (int)RequestTypeEnum.RenewMOIC || item.ReqtypeId == (int)RequestTypeEnum.ChangeAddressMOIC || item.ReqtypeId == (int)RequestTypeEnum.DeleteMOIC)
+                                {
+                                    <li>
+                                        <button class="option-btn d-inline-block" type="button" title="عرض"
+                                                onclick="location.href='@Url.Action("RequestDetails", "Tourism", new { id = MyCrypto.Encode(item.RequestId.ToString()) })'">
+                                            <i class="ri-eye-line"></i>
+                                        </button>
+                                    </li>
+                                }
+                                else
+                                {
+                                    <li>
+                                        <button class="option-btn d-inline-block" type="button" title="عرض"
+                                                onclick="location.href='@Url.Action("RequestDetails", "Tourism", new { id = MyCrypto.Encode(item.RequestId.ToString()) })'">
+                                            <i class="ri-eye-line"></i>
+                                        </button>
+                                    </li>
+                                }
+
+                                @if ((item.RequestStatusId == (int)RequestStatusEnum.WaitingForPayment && item.Licpaystatus != "1") || (item.RequestStatusId == (int)RequestStatusEnum.WaitingBankGuarantee && item.Licpaystatus != "1"))
+                                {
+                                    <li>
+                                        <a href="@Url.Action("TourismPay", "Tourism", new { id = MyCrypto.Encode(item.RequestId.ToString()) })" title="دفع الرسوم">
+                                            <img src="~/assets/images/credit2.png" width="40" class="white-logo" alt="logo" />
+                                        </a>
+                                    </li>
+                                }
+                            </ul>
+                        </td>
+                    </tr>
+                    counter++;
+                }
+            </tbody>
+        </table>
+    </div>
+</div>

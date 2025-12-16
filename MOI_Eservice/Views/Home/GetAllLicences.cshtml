@@ -1,0 +1,775 @@
+﻿@model LicencesWithRequestForUser
+
+
+@{
+    ViewBag.Title = "LicencesList";
+    var token = Context.Session.GetString("UserToken");
+    var userId = Context.Session.GetString("UserId");
+    var userName = Context.Session.GetString("UserUserName");
+    var civilId = Context.Session.GetString("UserCivilId");
+    var fullName = Context.Session.GetString("UserFullName");
+    var accountTypeId = Context.Session.GetString("UserAccouuntTypeId");
+    var counter = 1;
+}
+<style>
+    input:not(:placeholder-shown) {
+        background-color: #3A5795 !important;
+        border: none !important;
+    }
+</style>
+
+<link href="https://fonts.googleapis.com/css2?family=Cairo&display=swap" rel="stylesheet">
+<link href="https://cdn.datatables.net/1.13.6/css/jquery.dataTables.min.css" rel="stylesheet">
+<link href="https://cdn.datatables.net/responsive/2.5.0/css/responsive.dataTables.min.css" rel="stylesheet">
+
+
+<link href="~/assets/css/requeststyle.css" rel="stylesheet" />
+<link href="~/assets/css/pagesdatatable.css" rel="stylesheet" />
+<link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
+
+
+
+
+<div class="container-fluid p-0">
+    <div class="modern-card">
+        <div class="modern-card-header">
+            <div class="d-flex align-items-center">
+                <div class="rounded-circle bg-white d-flex align-items-center justify-content-center me-3" style="width: 36px; height: 36px;">
+                    <i class="fas fa-list-alt " style="color:#3a5795"></i>
+                </div>
+                <span>قائمة التراخيص</span>
+            </div>
+        </div>
+
+        <div class="modern-card-body">
+            <div class="table-responsive mt-3">
+                <table id="kt_requests_table" class="table table-bordered table-hover nowrap" style="width:100%" dir="rtl">
+                    <thead>
+                        <tr>
+
+                            <th>م</th>
+                            <th>رقم الترخيص</th>
+                            <th>اسم صاحب الترخيص</th>
+                            <th>نوع الرخصة</th>
+                            <th>الشركة </th>
+                            <th>تاريخ بداية الترخيص</th>
+                            <th>تاريخ نهاية الترخيص</th>
+                            <th>نشاط الشركة</th>
+                            <th>تعديل الترخيص</th>
+                            <th>تفاصيل الترخيص</th>
+                            <th>سجل الحركات</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @foreach (var item in Model.licencesVMs)
+                        {
+                            <tr>
+
+                                <td>@counter</td>
+                                <td>@item.LicNo</td>
+                                <td>@item.ServiceName</td>
+                                <td>@item.LicName</td>
+                                <td>@item.LicTypeName</td>
+                                <td>@item.IssueDate?.ToString("yyyy-MM-dd")</td>
+                                <td>@item.ExpireDate?.ToString("yyyy-MM-dd")</td>
+                                <td>@item.ActivityTypeName</td>
+                                <td class="text-center">
+                                    @{
+                                        string apiUrl = Url.Action("LicenseModifyModelAjax", "Mosanafat");
+                                        string actionUrla = "";
+                                        if (item.ServiceId == (int)ServiceEnum.Mosanafat)
+                                            actionUrla = Url.Action("LicencesDetails", "Tourism", new { id = MyCrypto.Encode(item.LicId.ToString()) });
+                                        <button type="button"
+                                                class="btn-view-details btn-edit-license"
+                                                data-licid="@item.LicId"
+                                                data-licno="@item.LicNo"
+                                                data-licname="@item.LicName"
+                                                title="تعديل الترخيص">
+                                            <i class="ri-edit-line"></i>
+                                        </button>
+
+                                        <script>
+                                            document.addEventListener('click', function (e) {
+                                                const btn = e.target.closest('.btn-edit-license');
+                                                if (!btn) return;
+                                                openLicenseModifyModal(btn.dataset.licid, btn.dataset.licname);
+                                            });
+                                        </script>
+                                    }
+                                   
+                                </td>
+                                <td class="text-center">
+                                    @{
+                                        string actionUrl = "";
+                                        if (item.ServiceId == (int)ServiceEnum.Tourism)
+                                            actionUrl = Url.Action("LicencesDetails", "Tourism", new { id = MyCrypto.Encode(item.LicId.ToString()) });
+                                        else if (item.ServiceId == (int)ServiceEnum.Elaw)
+                                            actionUrl = Url.Action("LicencesDetails", "Elaw", new { id = MyCrypto.Encode(item.LicId.ToString()) });
+                                        else if (item.ServiceId == (int)ServiceEnum.Mosanafat)
+                                            actionUrl = Url.Action("LicencesDetails", "Tourism", new { id = MyCrypto.Encode(item.LicId.ToString()) });
+                                    }
+                                    <button class="btn-view-details" title="عرض التفاصيل" onclick="location.href='@actionUrl'">
+                                        <i class="ri-eye-line"></i>
+                                    </button>
+                                </td>
+
+                                <td class="text-center">
+                                    <button class="btn-view-details" title="سجل الحركات" disabled>
+                                        <i class="ri-history-line"></i>
+                                    </button>
+                                </td>
+                               
+                                
+                            </tr>
+                            counter++;
+                        }
+                    </tbody>
+                </table>
+            </div>
+        </div>
+
+    </div>
+</div>
+
+
+
+
+
+<!-- Pre-Approvement Table -->
+<div class="manage-jobs-box">
+    <div class="manage-jobs-table table-responsive">
+        <h4>تراخيص الموافقات المبدئية</h4>
+        <table class="display nowrap myTable" style="width:100%;">
+            <colgroup>
+                <col class="col-blank">        <!-- 1: فارغ -->
+                <col class="col-idx">          <!-- 2: م -->
+                <col class="col-licno">        <!-- 3: رقم الموافقة -->
+                <col class="col-owner">        <!-- 4: اسم صاحب الترخيص -->
+                <col class="col-company">      <!-- 5: الشركة المالكة -->
+                <col class="col-date">         <!-- 6: تاريخ بداية الترخيص -->
+                <col class="col-flag">         <!-- 7: تفاصيل الموافقة -->
+                <col class="col-activity">     <!-- 8: نشاط الشركة -->
+                <col class="col-actions">      <!-- 9: تفاصيل الترخيص (أزرار) -->
+                <col class="col-actions">      <!-- 10: سجل الحركات (أزرار) -->
+            </colgroup>
+            <thead class="ThemeCol">
+                <tr>
+                    <th></th>
+                    <th>م</th>
+                    <th>رقم الموافقة</th>
+                    <th>اسم صاحب الترخيص</th>
+                    <th>الشركة المالكة</th>
+                    <th>تاريخ بداية الترخيص</th>
+                    <th>تفاصيل الموافقة</th>
+                    <th>نشاط الشركة</th>
+                    <th>تفاصيل الترخيص</th>
+                    <th>سجل الحركات</th>
+                </tr>
+            </thead>
+            <tbody id="tblPreAprove">
+                @foreach (var item in Model.preApprovementVMs)
+                {
+                    <tr>
+                        <td></td>
+                        <td>@counter</td>
+                        <td>@item.LicenseNo</td>
+                        <td>@fullName</td>
+                        <td>@item.Company.OwnerCompanyAr</td>
+                        <td>@item.LicenseIssueDate?.ToString("yyyy-MM-dd")</td>
+
+                        <td>@item.Flag</td>
+                        <td>@item.ActivityTypesLookup.NameAr</td>
+                        <td class="text-center">
+                            <ul class="option-list">
+                                <li>
+                                    <button type="button" class="option-btn d-inline-block" data-bs-toggle="tooltip" data-bs-placement="top" title="عرض"
+                                            onclick="location.href='@Url.Action("PreApprovalLicDetails", "Tourism", new { id = MyCrypto.Encode(item.PreAppId.ToString()) })'">
+
+                                        <i class="ri-eye-line"></i>
+                                    </button>
+                                </li>
+                            </ul>
+                        </td>
+                    </tr>
+                    counter++;
+                }
+            </tbody>
+        </table>
+    </div>
+</div>
+
+
+<!-- BEGIN: License Modify Modal -->
+<div class="modal fade" id="licenseModifyModal" tabindex="-1" aria-hidden="true" dir="rtl">
+    <div class="modal-dialog modal-lg modal-dialog-centered">
+        <div class="modal-content border-0 rounded-4">
+
+            <!-- Header -->
+            <div class="modal-header border-0" style="border-bottom:1px solid #e7e9ef;">
+                <div class="w-100">
+                    <div class="gov-head gov-head--flat" dir="rtl">
+                        <div class="gov-head__title d-flex align-items-start gap-2">
+                            <i class="ri-award-line gov-head__icon" aria-hidden="true"></i>
+
+                            <!-- Title block -->
+                            <div class="d-flex flex-column">
+                                <span class="gov-head__heading">طلب تعديل الترخيص</span>
+                                <small class="text-muted mt-1 fw-bold">
+                                    ترخيص رقم: <span id="lm-licNo">—</span>
+                                    • الاسم: <span id="lm-licName">—</span>
+                                </small>
+                            </div>
+                        </div>
+
+                        <img class="gov-head__seal" src="~/assets/images/MOI-ORIGINAL.png" alt="ترخيص" />
+                    </div>
+                </div>
+            </div>
+            <!-- /Header -->
+            <!-- Body -->
+            <div class="modal-body">
+                <section class="info-sheet " dir="rtl" aria-labelledby="txTitle">
+                    <div class="dt-card__head d-flex align-items-center gap-2 mb-3">
+                        <span class="tx-icon"><i class="ri-bill-line"></i></span>
+                        <span class="dt-card__title" id="txTitle">قائمة المعاملات</span>
+                    </div>
+
+                    <!-- List container (filled by JS) -->
+                    <div class="tx-list" id="lm-list" aria-live="polite">
+                        <!-- Loader -->
+                        <div class="text-center text-muted py-4" id="lm-loader">
+                            <div class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></div>
+                            <div class="mt-2">جاري التحميل...</div>
+                        </div>
+
+                        <!-- Example item template (keep for JS cloning; hidden by default) -->
+                        <div class="tx-item card card-body py-3 px-3 d-none" data-tx-id="">
+                            <div class="d-flex align-items-center justify-content-between gap-3 flex-wrap">
+
+                                <!-- Right side: title + status chip -->
+                                <div class="d-flex align-items-center gap-2 flex-wrap min-w-0">
+                                    <span class="fw-bold text-truncate" style="max-width: 60ch;">طلب تجديد الترخيص</span>
+                                    <span class="chip chip-outline chip-info">ترخيص منتهي</span>
+                                </div>
+
+                                <!-- Left side: required chip + actions -->
+                                <div class="d-flex align-items-center gap-2">
+                                    <span class="chip chip-soft chip-required">إلزامي</span>
+
+                                    <!-- Optional action button -->
+                                    <button type="button" class="btn btn-light btn-sm d-inline-flex align-items-center justify-content-center"
+                                            style="width:32px;height:32px" title="تحديث">
+                                        <i class="ri-refresh-line"></i>
+                                    </button>
+
+                                    <!-- Select checkbox -->
+                                    <div class="form-check m-0">
+                                        <input class="form-check-input" type="checkbox">
+                                    </div>
+                                </div>
+
+                            </div>
+                        </div>
+                        <!-- /Example item template -->
+
+                    </div>
+                    <!-- /List container -->
+                </section>
+            </div>
+            <!-- /Body -->
+            <!-- Footer -->
+            <div class="modal-footer border-0 justify-content-between">
+                <small class="text-muted">اختر معاملات متعددة ثم اضغط «ابدأ الطلب»</small>
+
+                <div class="d-flex gap-2">
+                    <button type="button" class="btn btn-primary" id="lm-start" disabled>
+                        ابدأ الطلب <i class="ri-add-fill ms-1"></i>
+                    </button>
+                    <button type="button"
+                            class="btn btn-danger d-inline-flex align-items-center gap-1"
+                            data-bs-dismiss="modal" aria-label="Cancel">
+                        <i class="ri-close-line"></i>
+                        <span>إلغاء</span>
+                    </button>
+
+                   
+                </div>
+            </div>
+            <!-- /Footer -->
+
+        </div>
+    </div>
+</div>
+<!-- END: License Modify Modal -->
+@section Scripts {
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script src="https://cdn.datatables.net/1.13.6/js/jquery.dataTables.min.js"></script>
+    <script src="https://cdn.datatables.net/responsive/2.5.0/js/dataTables.responsive.min.js"></script>
+
+        <script>
+            $(function () {
+                var $table = $('#kt_requests_table');
+                if (!$table.length || !$.fn.DataTable) return;
+
+                var dt = $table.DataTable({
+                    // 💡 stop hiding columns into child rows
+                    responsive: false,
+
+                    // 💡 use horizontal scroll instead of “expand”
+                    scrollX: true,
+                    scrollCollapse: true,
+
+                    // keep your current UX
+                    autoWidth: false,
+                    language: { url: '//cdn.datatables.net/plug-ins/1.13.4/i18n/ar.json' },
+                    pageLength: 10,
+                    lengthMenu: [10, 25, 50, 100],
+                    ordering: true,
+                    columnDefs: [
+                        { targets: [0, -1], orderable: false }
+                    ],
+
+                    initComplete: function () {
+                        // Make sure widths are correct once rendered/visible
+                        var api = this.api();
+                        api.columns.adjust();
+                        setTimeout(function () { api.columns.adjust(); }, 50);
+                        setTimeout(function () { api.columns.adjust(); }, 250);
+
+                        // Optional: nicer search input (keep your RTL)
+                        $('.dataTables_filter input')
+                            .attr('placeholder', 'ابحث هنا...')
+                            .css('direction', 'rtl');
+                    }
+                });
+
+                // If the table can be shown inside tabs/collapse/modal, re-adjust on show
+                var adjust = function () { dt.columns.adjust().draw(false); };
+                $(window).on('resize.dt', adjust);
+                $(document).on('shown.bs.tab shown.bs.collapse shown.bs.modal shown.bs.offcanvas', adjust);
+            });
+    </script>
+
+
+
+
+    <script>
+        (() => {
+            const apiUrl = '@Url.Action("LicenseModifyModelAjax", "Mosanafat")';
+
+            // one-time alert guard per modal open
+            let _expiryAlertShown = false;
+
+            // ---------- Helpers ----------
+            function esc(s) {
+                return (s ?? '').toString().replace(/[&<>"']/g, m => ({
+                    '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;'
+                }[m]));
+            }
+
+            function paintRowSelection(row, checked) {
+                row && row.classList.toggle('is-selected', !!checked);
+            }
+
+            // Parse various date shapes: number ticks, ISO, dd/MM/yyyy, .NET /Date(…)/, etc.
+            function parseServerDate(val) {
+                if (!val) return null;
+                if (val instanceof Date) return isNaN(val) ? null : val;
+
+                if (typeof val === 'number') {
+                    const d = new Date(val);
+                    return isNaN(d) ? null : d;
+                }
+
+                if (typeof val === 'string') {
+                    // .NET ticks wrapper
+                    const m = /\/Date\((\d+)\)\//.exec(val);
+                    if (m) {
+                        const d = new Date(parseInt(m[1], 10));
+                        return isNaN(d) ? null : d;
+                    }
+                    // ISO first
+                    let d = new Date(val);
+                    if (!isNaN(d)) return d;
+
+                    // dd/MM/yyyy or yyyy-MM-dd with non-digit separators
+                    const parts = val.split(/[^0-9]/).filter(Boolean);
+                    if (parts.length === 3) {
+                        const [a, b, c] = parts.map(n => parseInt(n, 10));
+                        if (c >= 1000) { // dd, mm, yyyy
+                            d = new Date(c, (b - 1), a);
+                            if (!isNaN(d)) return d;
+                        } else if (a >= 1000) { // yyyy, mm, dd
+                            d = new Date(a, (b - 1), c);
+                            if (!isNaN(d)) return d;
+                        }
+                    }
+                }
+                return null;
+            }
+
+            function pickFirst(...cands) {
+                for (const c of cands) if (c !== undefined && c !== null) return c;
+                return undefined;
+            }
+
+            // ---------- Expiry date readers ----------
+            function getExpiryDate(data) {
+                if (!data) return null;
+
+                const dateVal = pickFirst(
+                    // Most likely (System.Text.Json camelCase)
+                    data.licenceDetailsVM?.expireDate,
+                    // PascalCase
+                    data.LicenceDetailsVM?.ExpireDate,
+                    // Mixed variants
+                    data.LicenceDetailsVM?.expireDate,
+                    data.licenceDetailsVM?.ExpireDate,
+
+                    // Legacy fallbacks
+                    data.licence?.ExpireDate, data.license?.ExpireDate,
+                    data.Licence?.ExpireDate, data.License?.ExpireDate,
+                    data?.ExpireDate, data?.ExpiryDate,
+                    data?.licenseExpireDate, data?.LicenseExpireDate
+                );
+
+                const d = parseServerDate(dateVal);
+                return d;
+            }
+
+            function getDaysToExpire(data, now = new Date()) {
+                const direct = pickFirst(
+                    data.DaysToExpire, data.daysToExpire, data.DaysUntilExpire, data.daysUntilExpire,
+                    data.RemainDays, data.remainDays, data.RemainingDays, data.remainingDays,
+                    data.ExpiryRemainingDays, data.expiryRemainingDays
+                );
+                if (typeof direct === 'number') return direct;
+
+                const exp = getExpiryDate(data);
+                if (!exp) return undefined;
+                const ms = exp - now;
+                return Math.floor(ms / (24 * 60 * 60 * 1000));
+            }
+
+            function isRenewalMandatory(data) {
+                // 1) Explicit flags
+                const flag = pickFirst(
+                    data.isRenewalMandatory, data.IsRenewalMandatory,
+                    data.isRenewalRequired, data.IsRenewalRequired,
+                    data.renewalMandatory, data.RenewalMandatory
+                );
+                if (flag === true) return true;
+                if (flag === false) return false;
+
+                const expiredFlag = pickFirst(
+                    data.isExpired, data.IsExpired, data.expired, data.Expired,
+                    data.licenseExpired, data.LicenseExpired, data.LicExpired
+                );
+                if (expiredFlag === true) return true;
+
+                const soonFlag = pickFirst(
+                    data.isWithin3Months, data.IsWithin3Months,
+                    data.expiringSoon, data.ExpiringSoon
+                );
+                if (soonFlag === true) return true;
+
+                // 2) From days to expire
+                const dte = getDaysToExpire(data);
+                if (typeof dte === 'number') {
+                    if (dte <= 0) return true;   // expired
+                    if (dte <= 90) return true;  // ≤ 3 months
+                    return false;
+                }
+
+                // 3) From expiry date
+                const exp = getExpiryDate(data);
+                if (!exp) return false;
+                const now = new Date();
+                if (exp <= now) return true;
+                const diffMs = exp - now;
+                return diffMs <= (90 * 24 * 60 * 60 * 1000);
+            }
+
+            // Layout tweaks for wrapping
+            function forceWrapInCards(root) {
+                if (!root) return;
+
+                root.querySelectorAll('.tx-item').forEach(el => {
+                    el.style.display = 'flex';
+                    el.style.alignItems = 'flex-start';
+                    el.style.height = 'auto';
+                    el.style.minHeight = 'unset';
+                    el.style.overflow = 'visible';
+                    el.style.gap = '10px';
+                });
+                root.querySelectorAll('.tx-leading').forEach(el => {
+                    el.style.display = 'flex';
+                    el.style.alignItems = 'flex-start';
+                    el.style.gap = '8px';
+                    el.style.flex = '1 1 auto';
+                    el.style.minWidth = '0';
+                });
+                root.querySelectorAll('.tx-leading .tx-check, .tx-leading .tx-icon').forEach(el => {
+                    el.style.flex = '0 0 auto';
+                });
+                root.querySelectorAll('.tx-name').forEach(el => {
+                    el.style.flex = '1 1 auto';
+                    el.style.minWidth = '0';
+                    el.style.whiteSpace = 'normal';
+                    el.style.wordBreak = 'break-word';
+                    el.style.overflow = 'visible';
+                    el.style.textOverflow = 'clip';
+                    el.style.display = 'block';
+                    el.style.webkitLineClamp = 'unset';
+                    el.style.lineHeight = '1.35';
+                    el.style.fontSize = '.9rem';
+                    el.style.paddingInlineEnd = '.25rem';
+                    if (!el.title) el.title = (el.textContent || '').trim();
+                });
+                root.querySelectorAll('.tx-aux').forEach(el => {
+                    el.style.flex = '0 0 auto';
+                    el.style.alignSelf = 'flex-start';
+                    el.style.marginInlineStart = '.5rem';
+                    el.style.gap = '6px';
+                    el.style.flexWrap = 'wrap';
+                });
+            }
+
+            // ---------- Modal opener ----------
+            window.openLicenseModifyModal = async function (licenseId, licenseName, licenseNo) {
+                _expiryAlertShown = false; // reset for this open
+
+                const licNoEl = document.getElementById('lm-licNo');
+                const licNameEl = document.getElementById('lm-licName');
+                if (licNoEl) licNoEl.textContent = (licenseNo ?? '—');
+                if (licNameEl) licNameEl.textContent = (licenseName ?? '—');
+
+                const modalEl = document.getElementById('licenseModifyModal');
+                if (!modalEl) return;
+
+                const existing = bootstrap.Modal.getInstance(modalEl);
+                if (existing) existing.dispose();
+                const modal = new bootstrap.Modal(modalEl, { backdrop: 'static' });
+                modal.show();
+
+                // Cleanup on close
+                const onHidden = () => {
+                    document.body.classList.remove('modal-open');
+                    document.body.style.removeProperty('padding-right');
+                    document.querySelectorAll('.modal-backdrop').forEach(el => el.remove());
+
+                    const listEl = document.getElementById('lm-list');
+                    if (listEl) {
+                        if (listEl.__rowClickHandler) {
+                            listEl.removeEventListener('click', listEl.__rowClickHandler);
+                            listEl.__rowClickHandler = null;
+                        }
+                        listEl.innerHTML = '';
+                    }
+                    const startBtn = document.getElementById('lm-start');
+                    if (startBtn) {
+                        startBtn.disabled = true;
+                        startBtn.onclick = null;
+                        startBtn.innerHTML = 'ابدأ الطلب <i class="ri-add-fill ms-1"></i>';
+                    }
+                    modalEl.removeEventListener('hidden.bs.modal', onHidden);
+                };
+                modalEl.addEventListener('hidden.bs.modal', onHidden);
+
+                const list = document.getElementById('lm-list');
+                const startBtn = document.getElementById('lm-start');
+
+                if (list) {
+                    list.innerHTML = `
+                        <div class="text-center text-muted py-4" id="lm-loader">
+                            <div class="spinner-border spinner-border-sm" role="status"></div>
+                            <div class="mt-2">جاري التحميل...</div>
+                        </div>`;
+                }
+                if (startBtn) {
+                    startBtn.disabled = true;
+                    startBtn.onclick = null;
+                    startBtn.innerHTML = 'ابدأ الطلب <i class="ri-add-fill ms-1"></i>';
+                }
+
+                try {
+                    const resp = await fetch(`${apiUrl}?licenseID=${encodeURIComponent(licenseId)}`, {
+                        headers: { 'X-Requested-With': 'XMLHttpRequest' }
+                    });
+                    if (!resp.ok) throw new Error('HTTP ' + resp.status);
+
+                    const json = await resp.json();
+                    if (!json?.success || !json?.data) {
+                        if (list) list.innerHTML = `<div class="alert alert-light border text-muted m-0">لا توجد بيانات للعرض.</div>`;
+                        return;
+                    }
+
+                    const data = json.data;
+
+                    // update header if API provided
+                    if (licNoEl) licNoEl.textContent = (licenseNo ?? data.licNo ?? data.LicNo ?? '—');
+                    if (licNameEl) licNameEl.textContent = (licenseName ?? data.licName ?? data.LicName ?? '—');
+
+                    // Build items
+                    const items = Array.isArray(data.transactionVm) ? data.transactionVm : [];
+                    if (items.length === 0) {
+                        if (list) list.innerHTML = `<div class="alert alert-light border text-muted m-0">لا توجد معاملات متاحة.</div>`;
+                        return;
+                    }
+
+                    // --- Renewal (ID 17) first, others after ---
+                    const renewalItem = items.find(t => +(t.id ?? t.Id) === 17) || null;
+                    const otherItems = items.filter(t => +(t.id ?? t.Id) !== 17); // keep original order
+
+                    const renewalMust = isRenewalMandatory(data);
+
+                    // Build a row (includes the required change: hide "إلزامي" and keep unchecked when not available)
+                    const buildRow = (t, isRenewal) => {
+                        const id = +(t.id ?? t.Id);
+                        const name = (t.nameAr ?? t.NameAr ?? '—').toString();
+                        const isAv = (t.isAvailable ?? t.IsAvailable ?? true);
+
+                        const cbAttrs = [
+                            'type="checkbox"',
+                            'class="form-check-input tx-check"',
+                            `data-type-id="${id}"`
+                        ];
+
+                        let mandatoryChip = '';
+                        let isMandatory = false;
+
+                        // Mandatory ONLY when it's renewal AND mandatory AND available.
+                        if (isRenewal && renewalMust && isAv) {
+                            isMandatory = true;
+                            cbAttrs.push('checked', 'disabled', 'data-mandatory="true"');
+                            mandatoryChip = `<span class="chip chip-soft chip-required">إلزامي</span>`;
+                        } else if (!isAv) {
+                            // Not available (e.g. previous renewal exists): disabled, NOT checked, NO "mandatory" chip
+                            cbAttrs.push('disabled', 'title="غير متاح"');
+                        }
+
+                        const iconHtml = isRenewal
+                            ? `<span class="tx-icon"><i class="ri-refresh-line"></i></span>`
+                            : `<span class="tx-icon"><i class="ri-file-add-line"></i></span>`;
+
+                        const prevNo = t.previousRequestNo ?? t.PreviousRequestNo ?? '';
+                        const prevId = t.previousRequestID ?? t.PreviousRequestID ?? null;
+                        const prevHtml = (prevNo || prevId)
+                            ? `<span class="badge bg-light text-dark border">طلب حالي: ${esc(prevNo || prevId)}</span>`
+                            : '';
+
+                        const rowCls = `tx-item${isRenewal ? ' tx-item--renewal' : ''}`;
+                        const mandatoryAttr = isMandatory ? ' data-mandatory="true"' : '';
+
+                        return `
+                            <div class="${rowCls}"${mandatoryAttr}>
+                                <div class="tx-leading">
+                                    <input ${cbAttrs.join(' ')}>
+                                    ${iconHtml}
+                                    <div class="tx-name" title="${esc(name)}">${esc(name)}</div>
+                                </div>
+                                <div class="tx-aux">${mandatoryChip} ${prevHtml}</div>
+                            </div>`;
+                    };
+
+                    const renewalHtml = renewalItem ? `<div class="tx-list">${buildRow(renewalItem, true)}</div>` : '';
+                    const gridRowsHtml = otherItems.map(t => buildRow(t, false)).join('');
+                    const gridHtml = `<div class="tx-list tx-grid">${gridRowsHtml}</div>`;
+
+                    if (list) {
+                        list.innerHTML = `${renewalHtml}${gridHtml}`;
+                        forceWrapInCards(list);
+
+                        // Optional 2-columns for the grid only
+                        const grid = list.querySelector('.tx-list.tx-grid');
+                        const applyGridMode = () => {
+                            const many = otherItems.length >= 8 && window.innerWidth >= 768;
+                            grid?.classList.toggle('two-cols', many);
+                        };
+                        applyGridMode();
+                        const onResize = () => { applyGridMode(); forceWrapInCards(list); };
+                        window.addEventListener('resize', onResize, { passive: true });
+                        modalEl.addEventListener('hidden.bs.modal', () => {
+                            window.removeEventListener('resize', onResize, { passive: true });
+                        }, { once: true });
+                    }
+
+                    // Selection logic (includes mandatory even if disabled/checked)
+                    const checks = Array.from(document.querySelectorAll('#lm-list .tx-check'));
+                    const getSelectedTypeIds = () =>
+                        checks.filter(c => c.checked).map(c => c.dataset.typeId);
+
+                    const refresh = () => {
+                        checks.forEach(c => {
+                            const row = c.closest('.tx-item');
+                            const isMandatoryRow = row?.hasAttribute('data-mandatory');
+                            paintRowSelection(row, c.checked || isMandatoryRow);
+                        });
+
+                        if (!startBtn) return;
+                        const selected = getSelectedTypeIds();
+                        startBtn.disabled = (selected.length === 0);
+
+                        if (selected.length) {
+                            startBtn.onclick = () => {
+                                const licId = (data.liceID ?? data.LiceID ?? licenseId);
+                                const qs = new URLSearchParams();
+                                qs.append('licenseID', licId);
+                                selected.forEach(id => qs.append('typeIds', id));
+                                window.location.href = `/Mosanafat/LicenseModifyRequest?${qs.toString()}`;
+                            };
+                        } else {
+                            startBtn.onclick = null;
+                        }
+                        forceWrapInCards(list);
+                    };
+
+                    // Row click toggles checkbox if enabled (cannot uncheck mandatory because it's disabled)
+                    if (list) {
+                        if (list.__rowClickHandler) {
+                            list.removeEventListener('click', list.__rowClickHandler);
+                            list.__rowClickHandler = null;
+                        }
+                        const rowClickHandler = (e) => {
+                            const row = e.target.closest('.tx-item');
+                            if (!row) return;
+                            const cb = row.querySelector('.tx-check');
+                            if (!cb || cb.disabled) return;
+                            if (e.target.closest('.tx-check')) return;
+                            cb.checked = !cb.checked;
+                            cb.dispatchEvent(new Event('change', { bubbles: true }));
+                            forceWrapInCards(list);
+                        };
+                        list.addEventListener('click', rowClickHandler);
+                        list.__rowClickHandler = rowClickHandler;
+                    }
+
+                    checks.forEach(ch => ch.addEventListener('change', refresh));
+                    refresh();
+
+                    modalEl.addEventListener('shown.bs.modal', () => {
+                        forceWrapInCards(document.getElementById('lm-list'));
+                    }, { once: true });
+
+                } catch (err) {
+                    if (list) list.innerHTML = `<div class="alert alert-danger m-0">فشل تحميل البيانات.</div>`;
+                    console.error(err);
+                }
+            };
+
+            // Trigger from table button
+            document.addEventListener('click', (e) => {
+                const btn = e.target.closest('.btn-edit-license');
+                if (!btn) return;
+                const licId = btn.dataset.licid;
+                const licNo = btn.dataset.licno;
+                const licName = btn.dataset.licname;
+                window.openLicenseModifyModal(licId, licName, licNo);
+            });
+        })();
+    </script>
+
+
+
+
+}

@@ -1,0 +1,75 @@
+﻿@model List<ContactUsVM>
+
+@{
+    ViewBag.Title = "File Upload Configurations";
+    Layout = "~/Areas/Admin/Views/Shared/_LayoutEserviceTourism.cshtml";
+}
+
+<!--begin::Toolbar-->
+<div id="kt_app_toolbar" class="app-toolbar pt-6 pb-2">
+    <div id="kt_app_toolbar_container" class="app-container container-fluid d-flex align-items-stretch">
+        <div class="app-toolbar-wrapper d-flex flex-stack flex-wrap gap-4 w-100">
+            <div class="page-title d-flex flex-column justify-content-center gap-1 me-3">
+                <h1 class="page-heading d-flex flex-column justify-content-center text-gray-900 fw-bold fs-3 m-0">إعدادات تحميل الملفات</h1>
+                <ul class="breadcrumb breadcrumb-separatorless fw-semibold fs-7 my-0">
+                    <li class="breadcrumb-item text-muted"><a href="/Admin/Index" class="text-muted text-hover-primary">الشاشة الرئيسة</a></li>
+                    <li class="breadcrumb-item"><span class="bullet bg-gray-500 w-5px h-2px"></span></li>
+                    <li class="breadcrumb-item text-muted">إعدادات تحميل الملفات</li>
+                </ul>
+            </div>
+            
+        </div>
+    </div>
+</div>
+<!--end::Toolbar-->
+<!--begin::Content-->
+<div id="kt_app_content" class="app-content flex-column-fluid">
+    <div id="kt_app_content_container" class="app-container container-fluid">
+        <div class="card">
+            <div class="card-header border-0 pt-6">
+                <div class="card-title">
+                    <div class="d-flex align-items-center position-relative my-1">
+                        <i class="ki-outline ki-magnifier fs-3 position-absolute ms-5"></i>
+                        <input type="text" class="form-control form-control-solid w-250px ps-12" placeholder="Search File Configurations" />
+                    </div>
+                </div>
+            </div>
+            <div class="card-body pt-0">
+                <!--begin::Table-->
+                <table class="table align-middle table-row-dashed fs-6 gy-5">
+                    <thead>
+                        <tr class="text-start text-muted fw-bold fs-7 text-uppercase gs-0">
+                            <th class="text-start min-w-125px">الإسم</th>
+                            <th class="text-start min-w-125px">الإيميل</th>
+                            <th class="text-start min-w-125px">رقم الهاتف</th>
+                            <th class="text-start min-w-125px">تم الرد؟</th>
+                            
+                            <th class="text-start min-w-125px">الإجراءات</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @foreach (var item in Model)
+                        {
+                            <tr>
+                                <td>@item.FullNameAr</td>
+                                <td>@item.Email</td>
+                                <td>@item.Mobile</td>
+                                <td>@(item.IsReplayed == true ? "نعم" : "لا")</td>
+
+                                <td>
+                                    <a asp-action="ContactUsUser" asp-controller="Account" asp-area="Admin" asp-route-id="@item.Id" class="btn btn-icon btn-sm btn-color-gray-500 btn-active-color-primary">
+                                        @*  <i class="ki-outline ki-edit fs-2"></i> *@
+                                        Edit
+                                    </a>
+                                   
+                                </td>
+                            </tr>
+                        }
+                    </tbody>
+                </table>
+                <!--end::Table-->
+            </div>
+        </div>
+    </div>
+</div>
+<!--end::Content-->
