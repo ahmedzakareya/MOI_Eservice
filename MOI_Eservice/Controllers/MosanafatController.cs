@@ -894,8 +894,33 @@ namespace MOI_Eservice.Controllers
 
 
 
+        //[HttpGet]
+        //[Route("LicenseModifyModelAjax")]
+        //public async Task<IActionResult> LicenseModifyModelAjax(int licenseID)
+        //{
+        //    try
+        //    {
+        //        var model = await FetchLicenseModifyModelAsync(licenseID);
+
+        //        if (model == null)
+        //            return NotFound(new { success = false, error = "لم يتم العثور على بيانات الترخيص." });
+
+        //        return Json(new
+        //        {
+        //            success = true,
+        //            data = model
+        //        });
+        //    }
+        //    catch (Exception ex)
+        //    {
+        //        _logger.LogError(ex, "Error fetching LicenseModifyModel for licenseID {LicenseID}", licenseID);
+        //        return StatusCode(500, new { success = false, error = "حدث خطأ غير متوقع أثناء جلب البيانات." });
+        //    }
+        //}
+
+
         [HttpGet]
-        [Route("LicenseModifyModelAjax")]
+        [Route("Mosanafat/LicenseModifyModelAjax")]
         public async Task<IActionResult> LicenseModifyModelAjax(int licenseID)
         {
             try
@@ -905,20 +930,23 @@ namespace MOI_Eservice.Controllers
                 if (model == null)
                     return NotFound(new { success = false, error = "لم يتم العثور على بيانات الترخيص." });
 
+                // Return minimal first (to detect serialization issues)
                 return Json(new
                 {
                     success = true,
-                    data = model
+                    data = new
+                    {
+                        LiceID = model.LiceID,
+                        transactionVm = model.transactionVm
+                    }
                 });
             }
             catch (Exception ex)
             {
                 _logger.LogError(ex, "Error fetching LicenseModifyModel for licenseID {LicenseID}", licenseID);
-                return StatusCode(500, new { success = false, error = "حدث خطأ غير متوقع أثناء جلب البيانات." });
+                return StatusCode(500, new { success = false, error = ex.Message });
             }
         }
-
-
 
 
 

@@ -89,6 +89,7 @@ namespace MOINFO_API.Controllers
         [Route("GetAllCountries")]
         [HttpGet]
         public async Task<IEnumerable<CountriesLookupVM>> GetAllCountries()
+        
         {
 
 

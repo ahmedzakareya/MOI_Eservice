@@ -31,8 +31,12 @@ namespace Business.ViewModel.Dynamic
         public int? TransactionTypeId { get; set; }
         public int? SortOrder { get; set; }
         public IEnumerable<SelectListItem>? Services { get; set; }
-        
-       // public IEnumerable<SelectListItem>? ActivityTypes { get; set; }
+
+
+        // هل  تم تسجيل بيانات الترخيص التجاري 
+        public bool? IsMOCIData { get; set; }
+
+        // public IEnumerable<SelectListItem>? ActivityTypes { get; set; }
         public IEnumerable<SelectListItem>? RequestTypes { get; set; }
         public IEnumerable<SelectListItem>? RequestStatus { get; set; }
         public IEnumerable<SelectListItem>? TransactionTypes { get; set; }

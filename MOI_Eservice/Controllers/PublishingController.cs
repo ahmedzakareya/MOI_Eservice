@@ -819,7 +819,7 @@ namespace MOI_Eservice.Controllers
 
 
         [HttpGet]
-        [Route("LicenseModifyModelAjax")]
+        [Route("Publishing/LicenseModifyModelAjax")]
         public async Task<IActionResult> LicenseModifyModelAjax(int licenseID)
         {
             try

@@ -99,6 +99,7 @@ namespace Business.Enums
     {
         Received = 1,
         WaitingForReview = 2,
+        WaitingForMOIT = 3 , 
         WaitingForPayment = 5,
         FinalLicenseIssuingProcessing = 7,
         FinalLicenseIssued = 8,

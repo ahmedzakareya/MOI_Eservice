@@ -19,6 +19,7 @@ using Business.Repository;
 using AutoMapper.QueryableExtensions;
 using TransactionEntity = Domain.Entities.Transaction;
 using Microsoft.AspNetCore.Mvc.Filters;
+using System.Transactions;
 
 namespace MOINFO_API.Controllers
 {
@@ -2444,6 +2445,66 @@ namespace MOINFO_API.Controllers
                     }).ToList();
         }
 
+
+
+
+
+        [HttpGet]
+        [Route("FetchWorkFlowVM")]
+        public async Task<ActionResult<WorkFlowVM>> FetchWorkFlowVM(int? requestID)
+        {
+            // Guard: missing requestID
+            if (!requestID.HasValue)
+                return BadRequest("requestID is required.");
+
+            // 1) Get request
+            var request = await _unitOfwork
+                .genericRepository<MoiEserviceLicensesRequest>()
+                .GetByCondition(r => r.RequestId == requestID.Value)
+                .FirstOrDefaultAsync();
+
+            if (request == null)
+                return NotFound("Request not found.");
+
+            // 2) Get workflow (guard against null request fields if needed)
+            var workflow = await _unitOfwork
+                .genericRepository<WorkFlow>()
+                .GetByCondition(w =>
+                    w.CurrentStatusId == request.RequestStatusId &&
+                    w.RequestTypeId == request.ReqtypeId)
+                .FirstOrDefaultAsync();
+
+            // If no workflow found, decide what you want:
+            // - return 404, or
+            // - return an empty VM.
+            if (workflow == null)
+                return NotFound("Workflow not found.");
+
+            // 3) Map to VM (model must be defined outside if-block)
+            var model = _mapper.Map<WorkFlow, WorkFlowVM>(workflow);
+
+            // 4) Extra logic for MOIT status
+            if (request.RequestStatusId == (int)RequestStatusEnum.WaitingForMOIT)
+            {
+                var company = await _unitOfwork
+                    .genericRepository<Company>()
+                    .GetByCondition(c => c.Id == request.CompanyId)
+                    .FirstOrDefaultAsync();
+
+                // Fix: company can be null, and your OR should probably be AND/OR depending on intent.
+                // Current meaning: if either Name OR RecordNo exists => IsMOCIData = true
+                if (company != null && (!string.IsNullOrWhiteSpace(company.Name) || !string.IsNullOrWhiteSpace(company.RecordNo)))
+                {
+                    model.IsMOCIData = true;
+                }
+                else
+                {
+                    model.IsMOCIData = false;
+                }
+            }
+
+            return Ok(model);
+        }
 
 
 
