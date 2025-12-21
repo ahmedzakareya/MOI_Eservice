@@ -645,25 +645,15 @@
                                                                             int? statusId = Model?.requestForRenew?.RequestStatusNavigation?.Id;
                                                                         }
 
-                                                                        @if (statusId == (int)RequestStatusEnum.FinalLicenseIssued
-                                                                                                                                        || statusId == (int)RequestStatusEnum.RequestDeclined
-                                                                                                                                        || statusId == (int)RequestStatusEnum.WaitingForPayment
-                                                                                                                                        || statusId == (int)RequestStatusEnum.RequestRevokedToCompleteData)
-                                                                        {
-                                                                            @* هنا: مع تحقق أي شرط من دول لا نعرض الزر *@
-                                                                        }
-                                                                        else
-                                                                        {
-                                                                            <button type="button"
-                                                                                    class="btn btn-sm btn-primary change-status-btn"
-                                                                                    data-bs-toggle="modal"
-                                                                                    data-bs-target="#kt_modal_stacked_1"
-                                                                                    data-request-type="طلب التجديد"
-                                                                                    data-request-no="@Model.RequestVM.Reqno"
-                                                                                    data-request-id="@Model.RequestVM.RequestId">
-                                                                                تغيير حالة الطلب
-                                                                            </button>
-                                                                        }
+                                                                        <button type="button"
+                                                                                class="btn btn-sm btn-primary change-status-btn"
+                                                                        @* data-bs-toggle="modal"
+                                                                        data-bs-target="#kt_modal_stacked_1" *@
+                                                                                data-request-type="طلب التجديد"
+                                                                                data-request-no="@Model.RequestVM.Reqno"
+                                                                                data-request-id="@Model.RequestVM.RequestId">
+                                                                            تغيير حالة الطلب
+                                                                        </button>
 
                                                                 </div>
                                                             </div>
@@ -3622,6 +3612,39 @@
                                                     <!--end::Item-->
                                                    
                                                 </div>
+
+                                                    <!-- License Issued Message (hidden by default) -->
+                                                    <div id="licenseIssuedBox" class="d-none">
+                                                        <div class="card border-0 shadow-sm">
+                                                            <div class="card-body text-center py-12">
+                                                                <div class="symbol symbol-70px mb-4">
+                                                                    <div class="symbol-label bg-light-success">
+                                                                        <i class="ki-outline ki-verify fs-2x text-success"></i>
+                                                                    </div>
+                                                                </div>
+
+                                                                <h2 class="fw-bold text-gray-900 mb-2">تم إصدار الترخيص بنجاح</h2>
+                                                                <div class="text-muted fw-semibold fs-6">
+                                                                    لا توجد إجراءات مطلوبة حالياً، يمكنك مراجعة المرفقات أو طباعة الترخيص من صفحة الطلب.
+                                                                </div>
+
+                                                                <div class="separator my-7"></div>
+
+                                                                <div class="d-flex flex-center flex-wrap gap-3">
+                                                                    <span class="badge badge-light-success px-4 py-3 fs-7">الترخيص صادر</span>
+                                                                    <span class="badge badge-light-primary px-4 py-3 fs-7">رقم الطلب: <span id="licenseIssuedReqNo">—</span></span>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+
+                                                    <!-- Wrap existing accept content so we can hide it -->
+                                                    <div id="acceptContentWrap">
+                                                        <!-- 👇 خلي كل المحتوى الحالي داخل قبول الطلب هنا -->
+                                                        <!-- (الموجود عندك: العناوين + الفقرات + الايقونات...) -->
+                                                    </div>
+
+
                                                 <!--end::Body-->
                                             </div>
                                             <!--end::Tab Pane-->
@@ -4168,55 +4191,6 @@
     });
 </script>
 
-@* <script>
-    $(function () {
-        // When any "change-status" button is clicked
-        $(document).on('click', '.change-status-btn', function () {
-
-            // --- read data from button ---
-            var requestNo   = $(this).data('request-no') || '';
-            var requestType = $(this).data('request-type') || '';
-            var statusId    = parseInt($(this).data('status-id') || 0, 10);
-
-            // --- fill modal header text ---
-            $('#modalRequestNoText').text(requestNo);
-            $('#modalRequestTypeText').text(requestType);
-
-            // --- get tab labels (left side radio buttons) ---
-            var $tabAccept   = $('[data-bs-target="#kt_upgrade_plan_startup"]');    // قبول الطلب
-            var $tabAdvance  = $('[data-bs-target="#kt_upgrade_plan_advanced"]');   // استكمال المرفقات
-            var $tabReject   = $('[data-bs-target="#kt_upgrade_plan_enterprise"]'); // رفض الطلب
-            var $tabCustom   = $('[data-bs-target="#kt_upgrade_plan_custom"]');     // مرفقات إضافية
-
-            // --- reset: show all tabs every time modal opens ---
-            $tabAccept.removeClass('d-none');
-            $tabAdvance.removeClass('d-none');
-            $tabReject.removeClass('d-none');
-            $tabCustom.removeClass('d-none');
-
-            // --- reset active tab to "قبول الطلب" ---
-            try {
-                var acceptTabEl = $tabAccept[0];        // tab label element
-                if (acceptTabEl && window.bootstrap && bootstrap.Tab) {
-                    var bsTab = new bootstrap.Tab(acceptTabEl); // activate tab
-                    bsTab.show();
-                }
-            } catch (e) {
-                // fallback: do nothing if bootstrap.Tab is not available
-            }
-
-            // --- special logic for Renew request only ---
-            // For "طلب التجديد": if statusId is NOT 1 and NOT 2 => hide "استكمال المرفقات" + "رفض الطلب"
-            if (requestType === 'طلب التجديد') {
-                if (statusId !== 1 && statusId !== 2) {
-                    $tabAdvance.addClass('d-none'); // hide "استكمال المرفقات"
-                    $tabReject.addClass('d-none');  // hide "رفض الطلب"
-                }
-            }
-        });
-    });
-</script>
- *@
 
 <script>
     $(document).ready(function () {
@@ -4497,11 +4471,196 @@
 
     });
 </script>
+<style>
+    /* Force hide even if Bootstrap/Metronic sets display:flex */
+    .tab-force-hide {
+        display: none !important;
+    }
+</style>
 
+<script>
+    $(function () {
 
+        var flowUrl = '@Url.Action("LoadFlowVM", "Mosanfat", new { area = "Admin" })';
+        var modalSelector = '#kt_modal_stacked_1';
 
+        var TAB_ACCEPT = 'kt_upgrade_plan_startup';
+        var TAB_ATTACH = 'kt_upgrade_plan_advanced';
+        var TAB_REJECT = 'kt_upgrade_plan_enterprise';
+        var TAB_EXTRA = 'kt_upgrade_plan_custom';
 
+        function getTabLabel(tabId) {
+            return document.querySelector(modalSelector + ' [data-bs-target="#' + tabId + '"]');
+        }
+        function getTabPane(tabId) {
+            return document.querySelector(modalSelector + ' #' + tabId);
+        }
 
+        function forceHide(el) {
+            if (!el) return;
+            el.classList.add('tab-force-hide');
+        }
 
+        function forceShow(el) {
+            if (!el) return;
+            el.classList.remove('tab-force-hide');
+        }
 
+        // ✅ Status 8: hide accept content and show "license issued" message
+        // NOTE: You must have:
+        // - #licenseIssuedBox (hidden by default)
+        // - #acceptContentWrap (wraps the normal accept tab content)
+        function showLicenseIssuedUI(show, reqNo) {
+            var box = document.getElementById('licenseIssuedBox');
+            var wrap = document.getElementById('acceptContentWrap');
+            var reqEl = document.getElementById('licenseIssuedReqNo');
 
+            if (reqEl) reqEl.textContent = (reqNo || '—');
+
+            if (show) {
+                if (wrap) wrap.style.display = 'none';
+                if (box) box.classList.remove('d-none');
+            } else {
+                if (wrap) wrap.style.display = '';
+                if (box) box.classList.add('d-none');
+            }
+        }
+
+        // ✅ Reset before each request so tabs don't stay hidden across requests
+        function resetTabs() {
+            [TAB_ACCEPT, TAB_ATTACH, TAB_REJECT, TAB_EXTRA].forEach(function (id) {
+                var label = getTabLabel(id);
+                var pane = getTabPane(id);
+
+                if (label) label.classList.remove('tab-force-hide', 'active');
+                if (pane) pane.classList.remove('tab-force-hide', 'show', 'active');
+            });
+
+            // reset accept tab message state
+            showLicenseIssuedUI(false, '');
+        }
+
+        function setTabVisible(tabId, visible) {
+            var label = getTabLabel(tabId);
+            var pane = getTabPane(tabId);
+
+            if (visible) {
+                forceShow(label);
+                forceShow(pane);
+            } else {
+                // Deactivate if currently active
+                if (label) label.classList.remove('active');
+                if (pane) pane.classList.remove('show', 'active');
+
+                forceHide(label);
+                forceHide(pane);
+            }
+        }
+
+        function activateFirstVisibleTab() {
+            var labels = document.querySelectorAll(modalSelector + ' [data-bs-toggle="tab"]');
+            for (var i = 0; i < labels.length; i++) {
+                if (labels[i].classList.contains('tab-force-hide')) continue;
+                bootstrap.Tab.getOrCreateInstance(labels[i]).show();
+                return;
+            }
+        }
+
+        function showTabs(accept, attach, reject, extra) {
+            setTabVisible(TAB_ACCEPT, !!accept);
+            setTabVisible(TAB_ATTACH, !!attach);
+            setTabVisible(TAB_REJECT, !!reject);
+            setTabVisible(TAB_EXTRA, !!extra);
+            activateFirstVisibleTab();
+        }
+
+        // ✅ Rules:
+        // 2 => all
+        // 3 => Accept + Extra
+        // 5 or 6 => Accept only
+        // 8 => Accept only + show license issued message inside accept
+        function applyTabsByStatus(currentStatusId) {
+            var st = parseInt(currentStatusId, 10);
+
+            if (st === 2) { showTabs(true, true, true, true); return; }
+            if (st === 3) { showTabs(true, false, false, true); return; }
+            if (st === 5 || st === 6) { showTabs(true, false, false, false); return; }
+
+            if (st === 8) {
+                // ✅ hide even reject tab, show only accept
+                showTabs(true, false, false, false);
+                return;
+            }
+
+            // fallback
+            showTabs(true, false, true, false);
+        }
+
+        function openModal() {
+            var el = document.querySelector(modalSelector);
+            bootstrap.Modal.getOrCreateInstance(el).show();
+        }
+
+        // ✅ prevent duplicate handlers
+        $(document).off('click', '.change-status-btn').on('click', '.change-status-btn', function (e) {
+            e.preventDefault();
+            e.stopImmediatePropagation();
+
+            var $btn = $(this);
+
+            var requestType = $btn.data('request-type') || '';
+            var requestNo = $btn.data('request-no') || '';
+            var requestId = $btn.data('request-id') || '';
+
+            // Fill modal header
+            $('#modalRequestTypeText').text(requestType);
+            $('#modalRequestNoText').text(requestNo);
+
+            // Fill modal hidden fields
+            $('#modalRequestId').val(requestId);
+            $('#modalRequestType').val(requestType);
+            $('#modalRequestNo').val(requestNo);
+
+            if (!requestId) return;
+
+            resetTabs();
+
+            $.ajax({
+                url: flowUrl,
+                type: 'GET',
+                data: { requestId: requestId },
+                success: function (res) {
+
+                    resetTabs();
+
+                    if (!res || res.success !== true || !res.data) {
+                        showTabs(true, false, true, false);
+                        openModal();
+                        return;
+                    }
+
+                    var wf = res.data;
+                    var currentStatusId = (wf.CurrentStatusId != null) ? wf.CurrentStatusId : wf.currentStatusId;
+
+                    // TEMP DEBUG
+                    alert('CurrentStatusId = ' + currentStatusId);
+
+                    // ✅ show "license issued" message only when st=8
+                    var st = parseInt(currentStatusId, 10);
+                    var reqNoText = $('#modalRequestNo').val() || $('#modalRequestNoText').text() || '';
+                    showLicenseIssuedUI(st === 8, reqNoText);
+
+                    applyTabsByStatus(currentStatusId);
+
+                    openModal();
+                },
+                error: function () {
+                    resetTabs();
+                    showTabs(true, false, true, false);
+                    openModal();
+                }
+            });
+        });
+
+    });
+</script>

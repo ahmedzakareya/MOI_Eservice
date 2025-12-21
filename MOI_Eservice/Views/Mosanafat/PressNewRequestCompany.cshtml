@@ -47,46 +47,49 @@
         <div class="row align-items-center">
 
             <!-- Flat License Card -->
-            <div class="card lic-flat-card shadow-sm p-0 mb-5 rounded-4" dir="rtl">
+            <div class="card license-section shadow-sm mb-5 rounded-4 border-0" dir="rtl">
 
-                <!-- Header -->
-                <div class="lic-header d-flex justify-content-between align-items-center px-4 py-3">
-                    <div class="d-flex align-items-center">
-                        <div class="lic-header__icon bg-white rounded-circle d-flex align-items-center justify-content-center me-3">
-                            <i class="ri-book-3-line text-primary"></i>
+                <!-- Header + Notice Combined -->
+                <div class="license-header-wrapper">
+                    <!-- Header -->
+                    <div class="license-header d-flex justify-content-between align-items-center px-4 py-4">
+                        <div class="d-flex align-items-center">
+                            <div class="header-icon rounded-circle me-3">
+                                <i class="ri-book-3-line"></i>
+                            </div>
+                            <h5 class="mb-0 fw-bold text-white fs-5">البيانات الأساسية للترخيص</h5>
                         </div>
-                        <h5 class="mb-0 fw-bold text-white">البيانات الأساسية للترخيص</h5>
+                        <div class="d-flex align-items-center gap-2">
+                            <i class="ri-bookmark-line text-white fs-5 toggle-bookmark" role="button" aria-label="bookmark"></i>
+                            <i class="ri-bookmark-fill text-white fs-5 d-none toggle-bookmark" role="button" aria-label="bookmarked"></i>
+                        </div>
                     </div>
-                    <div class="d-flex align-items-center gap-1">
-                        <i class="ri-bookmark-line text-white fs-5 toggle-bookmark" role="button" aria-label="bookmark"></i>
-                        <i class="ri-bookmark-fill text-white fs-5 d-none toggle-bookmark" role="button" aria-label="bookmarked"></i>
+
+                    <!-- Notice -->
+                    <div class="notice-alert px-4 py-3">
+                        <div class="d-flex align-items-start gap-3">
+                            <div class="notice-icon"><i class="ri-error-warning-line"></i></div>
+                            <div class="notice-content">
+                                <h6 class="fw-bold m-0">تنويه</h6>
+                                <p class="m-0 mt-1 small">
+                                    في حال الرغبة في إصدار ترخيص لأكثر من نشاط، يرجى تكرار الطلب على حسب كل نشاط.
+                                </p>
+                            </div>
+                        </div>
                     </div>
                 </div>
 
-                <!-- Notice -->
-                <div class="notice-wrapper p-4 pb-0">
-                    <div class="notice-card lic-notice d-flex align-items-start gap-3">
-                        <div class="lic-notice__icon"><i class="ri-alert-line"></i></div>
-                        <div class="lic-notice__content">
-                            <h6 class="m-0 fw-semibold">تنويه</h6>
-                            <p class="m-0 mt-1">
-                                في حال الرغبة في إصدار ترخيص لأكثر من نشاط، يرجى تكرار الطلب على حسب كل نشاط.
-                            </p>
-                        </div>
-                    </div>
-                </div>
-
-                <!-- Form Content -->
-                <div class="p-4">
+                <!-- Form Fields -->
+                <div class="px-4 py-4">
                     <div class="row row-cols-1 row-cols-md-2 gy-4">
                         <div class="col">
-                            <label class="form-label lic-label">نوع الترخيص <span class="required">*</span></label>
-                            <input asp-for="LicenTypeName" name="LicenTypeName" type="text" class="form-control lic-control" readonly>
+                            <label class="form-label fw-semibold">نوع الترخيص <span class="text-danger">*</span></label>
+                            <input asp-for="LicenTypeName" name="LicenTypeName" type="text" class="form-control" readonly>
                         </div>
 
                         <div class="col">
-                            <label class="form-label lic-label">نوع النشاط <span class="required">*</span></label>
-                            <select class="form-control select2 lic-control" id="ActivityTypeId" name="ActivityTypeId">
+                            <label class="form-label fw-semibold">نوع النشاط <span class="text-danger">*</span></label>
+                            <select class="form-control select2" id="ActivityTypeId" name="ActivityTypeId">
                                 <option value="">اختر النشاط</option>
                                 @if (Model.ActivityTypes != null)
                                 {
@@ -99,28 +102,28 @@
                         </div>
 
                         <div class="col">
-                            <label class="form-label lic-label">رمز النشاط <span class="required">*</span></label>
-                            <input asp-for="ActivityCode" name="ActivityCode" type="text" class="form-control lic-control" placeholder="رمز النشاط">
+                            <label class="form-label fw-semibold">رمز النشاط <span class="text-danger">*</span></label>
+                            <input asp-for="ActivityCode" name="ActivityCode" type="text" class="form-control" placeholder="رمز النشاط">
                         </div>
 
                         <div class="col">
-                            <label class="form-label lic-label">رقم كتاب التجارة <span class="required">*</span></label>
-                            <input asp-for="CentralNoMoci" name="CentralNoMoci" type="text" class="form-control lic-control" placeholder="رقم كتاب التجارة">
+                            <label class="form-label fw-semibold">رقم كتاب التجارة <span class="text-danger">*</span></label>
+                            <input asp-for="CentralNoMoci" name="CentralNoMoci" type="text" class="form-control" placeholder="رقم كتاب التجارة">
                         </div>
 
                         <div class="col">
-                            <label class="form-label lic-label">تاريخ الكتاب <span class="required">*</span></label>
-                            <input type="date" class="form-control lic-control" placeholder="تاريخ الكتاب" asp-for="MociBookDate" name="MociBookDate">
+                            <label class="form-label fw-semibold">تاريخ الكتاب <span class="text-danger">*</span></label>
+                            <input type="date" class="form-control" asp-for="MociBookDate" name="MociBookDate" placeholder="تاريخ الكتاب">
                         </div>
 
                         <div class="col">
-                            <label class="form-label lic-label">اسم الترخيص <span class="required">*</span></label>
-                            <input type="text" class="form-control lic-control" placeholder="اسم الترخيص" asp-for="Licname" name="Licname">
+                            <label class="form-label fw-semibold">اسم الترخيص <span class="text-danger">*</span></label>
+                            <input type="text" class="form-control" asp-for="Licname" name="Licname" placeholder="اسم الترخيص">
                         </div>
 
                         <div class="col">
-                            <label class="form-label lic-label">عقد التأسيس <span class="required">*</span></label>
-                            <select class="form-control select2 lic-control" id="testablishContract" name="testablishContract">
+                            <label class="form-label fw-semibold">عقد التأسيس <span class="text-danger">*</span></label>
+                            <select class="form-control select2" id="testablishContract" name="testablishContract">
                                 <option value="">اختر نوع عقد التأسيس</option>
                                 @if (Model.testablishContracts != null)
                                 {
@@ -145,132 +148,156 @@
 
 
 
-            <div class="row mb-4" dir="rtl">
-                <div class="col-lg-12 col-md-12">
-                    <div class="card border-0">
-                        <div class="card-body">
+
+            <!-- English comments only -->
+            <div class="row mb-4 addr-ui" dir="rtl">
+                <div class="col-12">
+                    <div class="card addr-shell border-0">
+                        <div class="card-body p-4">
 
                             <div class="row g-4">
-                                <!-- keep layout, improved gutters -->
-                                <!-- Sidebar (Search and Info) -->
-                                <div class="col-lg-4">
-                                    <div class="bg-white p-4 h-100 rounded-16 border" style="border-color: var(--border);">
 
-                                        <!-- Header -->
-                                        <div class="section-head d-flex align-items-center gap-3 rounded-12">
-                                            <div class="icon-chip">
-                                                <i class="ri-map-pin-line fs-5"></i>
+                                <!-- Search + Address Panel (RIGHT) -->
+                                <div class="col-lg-4 order-1 order-lg-1">
+                                    <div class="addr-panel h-100">
+
+                                        <div class="addr-panel-head">
+                                            <div class="head-title">
+                                                <span class="head-icon"><i class="ri-search-line"></i></span>
+                                                <div class="head-text">
+                                                    <div class="t1">البحث بالرقم الآلي</div>
+                                                    <div class="t2">عنوان داخل الكويت</div>
+                                                </div>
                                             </div>
-                                            <div class="min-w-0">
-                                                <h6 class="mb-0 fw-bold text-white text-truncate">البحث بالرقم الآلي</h6>
-                                                <small class="text-white-50">عنوان داخل الكويت</small>
-                                            </div>
+                                            <span class="head-chip"><i class="ri-map-pin-line"></i></span>
                                         </div>
 
-                                        <!-- Search Box -->
-                                        <div class="search-wrap w-100 mt-3 mb-4">
-                                            <input type="text"
-                                                   class="form-control text-center"
-                                                   id="AddressAutoNo"
-                                                   placeholder="ابحث بالرقم الآلي"
-                                                   autocomplete="off"
-                                                   onkeyup="autoSuggest()" />
-                                            <button type="button"
-                                                    class="btn search-btn"
-                                                    onclick="return get_Amount($('#AddressAutoNo').val())"
-                                                    aria-label="بحث">
-                                                <i class="ri-search-line fs-6"></i>
-                                            </button>
-                                            <ul id="suggestionList"
-                                                class="autocomplete-suggestions list-unstyled position-absolute w-100 bg-white shadow mt-1 z-3 d-none">
-                                            </ul>
-                                        </div>
+                                        <div class="addr-panel-body">
 
-                                        <!-- Address Fields -->
-                                        <div id="address-section">
-                                            <div class="addr-card shadow-sm mb-4" id="address-fields">
-                                                <div class="card-body">
+                                            <!-- Search -->
+                                            <div class="addr-search">
+                                                <div class="search-input-wrap">
+                                                    <input type="text"
+                                                           class="form-control text-center"
+                                                           id="AddressAutoNo"
+                                                           placeholder="ابحث بالرقم الآلي"
+                                                           autocomplete="off"
+                                                           onkeyup="autoSuggest()" />
+
+                                                    <button type="button"
+                                                            class="btn btn-primary search-btn"
+                                                            onclick="return get_Amount($('#AddressAutoNo').val())"
+                                                            aria-label="بحث">
+                                                        <i class="ri-search-line"></i>
+                                                    </button>
+
+                                                    <ul id="suggestionList"
+                                                        class="autocomplete-suggestions list-unstyled d-none">
+                                                    </ul>
+                                                </div>
+                                            </div>
+
+                                            <!-- Address Section -->
+                                            <div id="address-section">
+
+                                                <div class="addr-fields-card" id="address-fields">
                                                     <div class="row g-3">
 
-                                                        <div class="col-md-6 addr-field">
-                                                            <div class="header">
-                                                                <i class="ri-barcode-box-line"></i>
-                                                                <span>الرقم الآلي للعنوان</span>
-                                                            </div>
-                                                            <div class="content">
-                                                                @Html.TextBoxFor(m => m.address.AalliNo, new { @class = "form-control", @readonly = "readonly", @id = "RequestNewAddressAutoNo" })
-                                                            </div>
-                                                        </div>
-
-                                                        <div class="col-md-6 addr-field">
-                                                            <div class="header">
-                                                                <i class="ri-government-line"></i>
-                                                                <span>المحافظة</span>
-                                                            </div>
-                                                            <div class="content">
-                                                                <input type="text" readonly id="RequestNewAddressGovName" class="form-control" />
-                                                                @Html.TextBoxFor(m => m.address.GovernateId, new { @class = "d-none", @id = "CompanyGovId", @readonly = "readonly" })
+                                                        <div class="col-md-6">
+                                                            <div class="addr-item">
+                                                                <div class="addr-item-head">
+                                                                    <i class="ri-barcode-box-line"></i>
+                                                                    <span>الرقم الآلي للعنوان</span>
+                                                                </div>
+                                                                <div class="addr-item-body">
+                                                                    @Html.TextBoxFor(m => m.address.AalliNo, new { @class = "form-control", @readonly = "readonly", @id = "RequestNewAddressAutoNo" })
+                                                                </div>
                                                             </div>
                                                         </div>
 
-                                                        <div class="col-md-6 addr-field">
-                                                            <div class="header">
-                                                                <i class="ri-community-line"></i>
-                                                                <span>المنطقة</span>
-                                                            </div>
-                                                            <div class="content">
-                                                                <input type="text" readonly id="RequestNewAreaName" class="form-control" />
-                                                                @Html.TextBoxFor(m => m.address.AreaId, new { @class = "d-none", @id = "CompanyAreaId", @readonly = "readonly" })
-                                                            </div>
-                                                        </div>
-
-                                                        <div class="col-md-6 addr-field">
-                                                            <div class="header">
-                                                                <i class="ri-grid-line"></i>
-                                                                <span>القطعة</span>
-                                                            </div>
-                                                            <div class="content">
-                                                                @Html.TextBoxFor(m => m.address.BlockArabic, new { @class = "form-control", @readonly = "readonly", @id = "RequestNewBlookName" })
+                                                        <div class="col-md-6">
+                                                            <div class="addr-item">
+                                                                <div class="addr-item-head">
+                                                                    <i class="ri-government-line"></i>
+                                                                    <span>المحافظة</span>
+                                                                </div>
+                                                                <div class="addr-item-body">
+                                                                    <input type="text" readonly id="RequestNewAddressGovName" class="form-control" />
+                                                                    @Html.TextBoxFor(m => m.address.GovernateId, new { @class = "d-none", @id = "CompanyGovId", @readonly = "readonly" })
+                                                                </div>
                                                             </div>
                                                         </div>
 
-                                                        <div class="col-md-12 addr-field">
-                                                            <div class="header">
-                                                                <i class="ri-building-4-line"></i>
-                                                                <span>المبنى</span>
-                                                            </div>
-                                                            <div class="content">
-                                                                @Html.TextBoxFor(m => m.address.BuildingNo, new { @class = "form-control", @readonly = "readonly", @id = "RequestNewBulding" })
-                                                            </div>
-                                                        </div>
-
-                                                        <div class="col-md-12 addr-field">
-                                                            <div class="header">
-                                                                <i class="ri-road-map-line"></i>
-                                                                <span>الشارع</span>
-                                                            </div>
-                                                            <div class="content">
-                                                                @Html.TextBoxFor(m => m.address.StreetArabic, new { @class = "form-control", @readonly = "readonly", @id = "RequestNewStreetName" })
+                                                        <div class="col-md-6">
+                                                            <div class="addr-item">
+                                                                <div class="addr-item-head">
+                                                                    <i class="ri-community-line"></i>
+                                                                    <span>المنطقة</span>
+                                                                </div>
+                                                                <div class="addr-item-body">
+                                                                    <input type="text" readonly id="RequestNewAreaName" class="form-control" />
+                                                                    @Html.TextBoxFor(m => m.address.AreaId, new { @class = "d-none", @id = "CompanyAreaId", @readonly = "readonly" })
+                                                                </div>
                                                             </div>
                                                         </div>
 
-                                                        <div class="col-md-12 addr-field">
-                                                            <div class="header">
-                                                                <i class="ri-user-3-line"></i>
-                                                                <span>المالك</span>
-                                                            </div>
-                                                            <div class="content">
-                                                                @Html.TextBoxFor(m => m.address.BuildingName, new { @class = "form-control", @readonly = "readonly", @id = "RequestLicowner" })
+                                                        <div class="col-md-6">
+                                                            <div class="addr-item">
+                                                                <div class="addr-item-head">
+                                                                    <i class="ri-grid-line"></i>
+                                                                    <span>القطعة</span>
+                                                                </div>
+                                                                <div class="addr-item-body">
+                                                                    @Html.TextBoxFor(m => m.address.BlockArabic, new { @class = "form-control", @readonly = "readonly", @id = "RequestNewBlookName" })
+                                                                </div>
                                                             </div>
                                                         </div>
 
-                                                        <div class="col-md-12 addr-field">
-                                                            <div class="header">
-                                                                <i class="ri-store-3-line"></i>
-                                                                <span>الدور - المحل</span>
+                                                        <div class="col-md-12">
+                                                            <div class="addr-item">
+                                                                <div class="addr-item-head">
+                                                                    <i class="ri-building-4-line"></i>
+                                                                    <span>المبنى</span>
+                                                                </div>
+                                                                <div class="addr-item-body">
+                                                                    @Html.TextBoxFor(m => m.address.BuildingNo, new { @class = "form-control", @readonly = "readonly", @id = "RequestNewBulding" })
+                                                                </div>
                                                             </div>
-                                                            <div class="content">
-                                                                @Html.TextBoxFor(m => m.address.FloorNo, new { @class = "form-control", @readonly = "readonly", @id = "RequestNewParcelOrFloor" })
+                                                        </div>
+
+                                                        <div class="col-md-12">
+                                                            <div class="addr-item">
+                                                                <div class="addr-item-head">
+                                                                    <i class="ri-road-map-line"></i>
+                                                                    <span>الشارع</span>
+                                                                </div>
+                                                                <div class="addr-item-body">
+                                                                    @Html.TextBoxFor(m => m.address.StreetArabic, new { @class = "form-control", @readonly = "readonly", @id = "RequestNewStreetName" })
+                                                                </div>
+                                                            </div>
+                                                        </div>
+
+                                                        <div class="col-md-12">
+                                                            <div class="addr-item">
+                                                                <div class="addr-item-head">
+                                                                    <i class="ri-user-3-line"></i>
+                                                                    <span>المالك</span>
+                                                                </div>
+                                                                <div class="addr-item-body">
+                                                                    @Html.TextBoxFor(m => m.address.BuildingName, new { @class = "form-control", @readonly = "readonly", @id = "RequestLicowner" })
+                                                                </div>
+                                                            </div>
+                                                        </div>
+
+                                                        <div class="col-md-12">
+                                                            <div class="addr-item">
+                                                                <div class="addr-item-head">
+                                                                    <i class="ri-store-3-line"></i>
+                                                                    <span>الدور - المحل</span>
+                                                                </div>
+                                                                <div class="addr-item-body">
+                                                                    @Html.TextBoxFor(m => m.address.FloorNo, new { @class = "form-control", @readonly = "readonly", @id = "RequestNewParcelOrFloor" })
+                                                                </div>
                                                             </div>
                                                         </div>
 
@@ -286,43 +313,45 @@
 
                                                     </div>
                                                 </div>
-                                            </div>
 
-                                            <!-- No-address state (unchanged IDs) -->
-                                            <div id="no-address-icon" class="d-none mt-5">
-                                                <div class="wrapper-notebook">
-                                                    <div class="notebook-page text-center">
-                                                        <div class="icon-container">
-                                                            <i class="ri-error-warning-line" style="font-size: 36px;"></i>
+                                                <!-- No results state (IDs preserved) -->
+                                                <div id="no-address-icon" class="d-none mt-4">
+                                                    <div class="addr-empty">
+                                                        <div class="addr-empty-ic">
+                                                            <i class="ri-error-warning-line"></i>
                                                         </div>
-                                                        <div class="note-text">
-                                                            <h5 class="fw-bold text-danger">لم يتم العثور على بيانات</h5>
+                                                        <div class="addr-empty-txt">
+                                                            <h5 class="fw-bold text-danger mb-1">لم يتم العثور على بيانات</h5>
                                                             <p class="text-muted mb-0">الرقم الآلي المدخل غير صحيح</p>
                                                         </div>
                                                     </div>
                                                 </div>
-                                            </div>
 
-                                        </div><!-- /address-section -->
+                                            </div><!-- /address-section -->
+
+                                        </div><!-- /addr-panel-body -->
                                     </div>
                                 </div>
 
-                                <!-- Map Section -->
-                                <div class="col-lg-8">
-                                    <div class="map-card p-4 h-100 d-flex flex-column">
+                                <!-- Map Panel (LEFT) -->
+                                <div class="col-lg-8 order-2 order-lg-2">
+                                    <div class="addr-panel h-100">
 
-                                        <!-- Header -->
-                                        <div class="section-head d-flex align-items-center gap-3 rounded-12">
-                                            <div class="icon-chip">
-                                                <i class="ri-road-map-line fs-5"></i>
+                                        <div class="addr-panel-head">
+                                            <div class="head-title">
+                                                <span class="head-icon"><i class="ri-road-map-line"></i></span>
+                                                <div class="head-text">
+                                                    <div class="t1">الموقع على الخريطة</div>
+                                                    <div class="t2">عرض الموقع وتحديده</div>
+                                                </div>
                                             </div>
-                                            <div class="min-w-0">
-                                                <h6 class="mb-0 fw-bold text-white text-truncate">الموقع على الخريطة</h6>
-                                            </div>
+                                            <span class="head-chip"><i class="ri-map-pin-line"></i></span>
                                         </div>
 
-                                        <!-- Map -->
-                                        <div id="map"></div>
+                                        <div class="addr-panel-body">
+                                            <div id="map" class="addr-map"></div>
+                                        </div>
+
                                     </div>
                                 </div>
 
@@ -331,6 +360,7 @@
                     </div>
                 </div>
             </div>
+
 
 
 
@@ -884,38 +914,336 @@
     function get_Amount(ID) {
         var address = $("#AddressAutoNo").val();
 
-            Swal.fire({
-                title: '<span style="font-size: 20px; color: #2471a3;">جاري تحميل البيانات</span>',
-                html: `
-            <div class="transfer-container">
-              <div class="transfer-wrapper">
-                <!-- صورة المصدر -->
-                <img src="../Files/KuwaitFinderLogo.png" alt="من" class="transfer-icon from" />
+        Swal.fire({
+            title: '',
+            html: `
+    <style>
+    /* English comments only */
+    .kf-wrap{ direction: rtl; padding: 6px 4px 2px; }
 
-                <!-- مسار السهام: من → إلى -->
-                <div class="transfer-arrows">
-                  <span class="chev">›</span>
-                  <span class="chev">›</span>
-                  <span class="chev">›</span>
-                  <span class="chev">›</span>
-                  <span class="chev">›</span>
-                  <span class="chev">›</span>
-                </div>
+    .kf-card{
+      border: 1px solid rgba(15,23,42,.10);
+      border-radius: 18px;
+      background: #fff;
+      box-shadow: 0 18px 48px rgba(2,17,37,.10);
+      overflow: hidden;
+    }
 
-                <!-- صورة الوجهة -->
-                <img src="../assets/images/moinfo_building_blueline.png" alt="إلى" class="transfer-icon to" />
-              </div>
+    .kf-head{
+      padding: 14px 16px;
+      background: linear-gradient(135deg, #0a4fa2, #0d6efd);
+      color: #fff;
+      display:flex;
+      align-items:center;
+      justify-content: space-between;
+    }
 
-              <span class="wait-text">يرجى الانتظار قليلاً...</span>
+    /* Graphic loading in header */
+    .kf-load{
+      display:inline-flex;
+      align-items:center;
+      gap:10px;
+      padding: 7px 12px;
+      border-radius: 999px;
+      background: rgba(255,255,255,.16);
+      border: 1px solid rgba(255,255,255,.20);
+      font-weight: 900;
+      font-size: 13px;
+      position: relative;
+      overflow: hidden;
+    }
+    .kf-load::before{
+      content:"";
+      position:absolute;
+      inset:0;
+      background: linear-gradient(90deg,
+        rgba(255,255,255,0) 0%,
+        rgba(255,255,255,.18) 45%,
+        rgba(255,255,255,0) 100%);
+      transform: translateX(-60%);
+      animation: kfShine 1.25s linear infinite;
+    }
+    .kf-load .txt{ position: relative; z-index: 1; }
+
+    .kf-spin{
+      width: 16px;
+      height: 16px;
+      border-radius: 999px;
+      border: 3px solid rgba(255,255,255,.35);
+      border-top-color: #fff;
+      animation: kfSpin .85s linear infinite;
+      position: relative;
+      z-index: 1;
+    }
+
+    .kf-pulse{
+      width:10px;height:10px;border-radius:999px;
+      background:#22c55e;
+      box-shadow: 0 0 0 6px rgba(34,197,94,.16);
+      animation: kfPulse 1.2s ease-in-out infinite;
+      position: relative;
+      z-index: 1;
+    }
+
+    /* IMPORTANT: Razor escape */
+    @@keyframes kfSpin{ to{ transform: rotate(360deg);} }
+    @@keyframes kfPulse{
+      0%,100%{ transform: scale(1); opacity: 1; }
+      50%{ transform: scale(1.15); opacity: .75; }
+    }
+    @@keyframes kfShine{
+      0%{ transform: translateX(-60%); }
+      100%{ transform: translateX(60%); }
+    }
+
+    .kf-brand{
+      display:inline-flex;
+      align-items:center;
+      gap:8px;
+      padding: 6px 10px;
+      border-radius: 999px;
+      background: rgba(255,255,255,.12);
+      border: 1px solid rgba(255,255,255,.18);
+      font-weight: 800;
+      font-size: 12px;
+      white-space: nowrap;
+    }
+
+    .kf-body{ padding: 18px 16px 14px; }
+
+    .kf-status{
+      margin-bottom: 14px;
+      text-align:center;
+    }
+
+    /* Graphic center title */
+    .kf-status .t1{
+      display:flex;
+      align-items:center;
+      justify-content:center;
+      gap:10px;
+      margin: 0;
+    }
+
+    /* ========= OFFICIAL COLORS (ONLY THIS PART CHANGED) ========= */
+    /* Gradient + shine text (official navy/steel) */
+    .kf-textfx{
+      font-weight: 1000;
+      font-size: 18px;
+      letter-spacing: .2px;
+      background: linear-gradient(90deg, #0b2f55 0%, #64748b 50%, #0b2f55 100%);
+      background-size: 220% 100%;
+      -webkit-background-clip: text;
+      background-clip: text;
+      color: transparent;
+      position: relative;
+      animation: kfTextMove 1.4s linear infinite;
+    }
+
+    @@keyframes kfTextMove{
+      0%{ background-position: 0% 50%; }
+      100%{ background-position: 100% 50%; }
+    }
+
+    /* Animated dots (official colors) */
+    .kf-dots{
+      display:inline-flex;
+      gap:6px;
+      transform: translateY(2px);
+    }
+    .kf-dots i{
+      width: 7px;
+      height: 7px;
+      border-radius: 999px;
+      background: rgba(11,47,85,.55);
+      animation: kfDot 0.9s ease-in-out infinite;
+    }
+    .kf-dots i:nth-child(2){ animation-delay: .15s; background: rgba(100,116,139,.55); }
+    .kf-dots i:nth-child(3){ animation-delay: .30s; background: rgba(11,47,85,.55); }
+
+    @@keyframes kfDot{
+      0%,100%{ transform: translateY(0); opacity: .45; }
+      50%{ transform: translateY(-4px); opacity: 1; }
+    }
+    /* ============================================================ */
+
+    .kf-status .t2{
+      margin-top: 6px;
+      font-weight: 700;
+      color:#64748b;
+      font-size: 13px;
+    }
+
+    .kf-row{
+      display:flex;
+      align-items:center;
+      justify-content:center;
+      gap: 14px;
+    }
+
+    .kf-icon{
+      width: 56px;
+      height: 56px;
+      border-radius: 16px;
+      background: #f8fafc;
+      border: 1px solid rgba(15,23,42,.08);
+      box-shadow: 0 10px 22px rgba(2,17,37,.08);
+      display:flex;
+      align-items:center;
+      justify-content:center;
+      flex: 0 0 auto;
+    }
+
+    .kf-icon img{
+      width: 34px;
+      height: 34px;
+      object-fit: contain;
+    }
+
+    .kf-track{
+      position: relative;
+      width: 260px;
+      height: 10px;
+      border-radius: 999px;
+      background: rgba(15,23,42,.08);
+      overflow: hidden;
+      border: 1px solid rgba(15,23,42,.08);
+    }
+
+    /* OPTIONAL: keep your original colors OR make official */
+    /* If you want official here too, uncomment below and comment the current background */
+    /*
+    .kf-flow{
+      position:absolute;
+      inset:0;
+      background: linear-gradient(90deg,
+        rgba(11,47,85,.0) 0%,
+        rgba(11,47,85,.45) 35%,
+        rgba(100,116,139,.45) 65%,
+        rgba(11,47,85,.0) 100%);
+      transform: translateX(-60%);
+      animation: kfMove 1.15s linear infinite;
+    }
+    */
+    .kf-flow{
+      position:absolute;
+      inset:0;
+      background: linear-gradient(90deg,
+        rgba(13,110,253,.0) 0%,
+        rgba(13,110,253,.55) 35%,
+        rgba(239,107,107,.55) 65%,
+        rgba(239,107,107,.0) 100%);
+      transform: translateX(-60%);
+      animation: kfMove 1.15s linear infinite;
+    }
+
+    /* IMPORTANT: Razor escape */
+    @@keyframes kfMove{
+      0%{ transform: translateX(-60%); }
+      100%{ transform: translateX(60%); }
+    }
+
+    .kf-sub{
+      margin-top: 12px;
+      text-align:center;
+      color:#334155;
+      font-weight: 800;
+    }
+
+    .kf-hint{
+      margin-top: 6px;
+      text-align:center;
+      color:#64748b;
+      font-size: 13px;
+      font-weight: 700;
+    }
+
+    .kf-foot{
+      padding: 12px 16px 14px;
+      border-top: 1px solid rgba(15,23,42,.08);
+      background: #fbfdff;
+      display:flex;
+      align-items:center;
+      justify-content:center;
+      gap: 10px;
+    }
+
+    .kf-mini{
+      width: 10px;height:10px;border-radius:999px;
+      background: rgba(13,110,253,.55);
+      animation: kfBlink 1s ease-in-out infinite;
+    }
+    .kf-mini:nth-child(2){ animation-delay: .15s; }
+    .kf-mini:nth-child(3){ animation-delay: .30s; }
+
+    /* IMPORTANT: Razor escape */
+    @@keyframes kfBlink{
+      0%,100%{ transform: translateY(0); opacity: .45; }
+      50%{ transform: translateY(-3px); opacity: 1; }
+    }
+
+    /* IMPORTANT: Razor escape */
+    @@media (max-width: 520px){
+      .kf-track{ width: 180px; }
+      .kf-icon{ width: 52px; height: 52px; }
+      .kf-brand{ display:none; }
+    }
+    </style>
+
+    <div class="kf-wrap">
+      <div class="kf-card">
+
+        <div class="kf-head">
+          <div class="kf-load">
+            <span class="kf-spin"></span>
+            <span class="kf-pulse"></span>
+            <span class="txt">جاري تحميل البيانات…</span>
+          </div>
+
+          <span class="kf-brand">Kuwait Finder</span>
+        </div>
+
+        <div class="kf-body">
+          <div class="kf-status">
+            <div class="t1">
+              <span class="kf-textfx">جاري تحميل البيانات…</span>
+              <span class="kf-dots" aria-hidden="true"><i></i><i></i><i></i></span>
             </div>
-          `,
-                allowOutsideClick: false,
-                showConfirmButton: false,
-                width: 600
-            });
+            <div class="t2">يرجى الانتظار قليلًا</div>
+          </div>
 
+          <div class="kf-row">
+            <div class="kf-icon">
+              <img src="../Files/KuwaitFinderLogo.png" alt="Kuwait Finder" />
+            </div>
 
+            <div class="kf-track" aria-label="Loading">
+              <div class="kf-flow"></div>
+            </div>
 
+            <div class="kf-icon">
+              <img src="../assets/images/moinfo_building_blueline.png" alt="MOI" />
+            </div>
+          </div>
+
+          <div class="kf-sub">يتم جلب البيانات والتحقق منها</div>
+          <div class="kf-hint">قد تستغرق العملية بضع ثوانٍ حسب الاتصال</div>
+        </div>
+
+        <div class="kf-foot" aria-hidden="true">
+          <span class="kf-mini"></span>
+          <span class="kf-mini"></span>
+          <span class="kf-mini"></span>
+        </div>
+
+      </div>
+    </div>
+                `,
+            allowOutsideClick: false,
+            showConfirmButton: false,
+            width: 640,
+            padding: 0
+        });
 
         $.ajax({
             type: 'GET',
@@ -964,7 +1292,7 @@
                 $("#no-address-icon").fadeIn(300).removeClass('d-none');
             });
 
-            // تفريغ الحقول
+            // Clear fields
             $('#RequestNewAddressAutoNo').val('');
             $('#RequestNewAddressGovName').val('');
             $('#RequestNewAreaName').val('');
@@ -1018,6 +1346,9 @@
         });
     }
 </script>
+
+
+
 
 
 <script>

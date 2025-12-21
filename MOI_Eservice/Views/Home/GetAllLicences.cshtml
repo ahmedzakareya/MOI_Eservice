@@ -357,9 +357,6 @@
         (() => {
             const apiUrl = '@Url.Action("LicenseModifyModelAjax", "Mosanafat")';
 
-            // one-time alert guard per modal open
-            let _expiryAlertShown = false;
-
             // ---------- Helpers ----------
             function esc(s) {
                 return (s ?? '').toString().replace(/[&<>"']/g, m => ({
@@ -368,10 +365,16 @@
             }
 
             function paintRowSelection(row, checked) {
-                row && row.classList.toggle('is-selected', !!checked);
+                if (!row) return;
+                row.classList.toggle('is-selected', !!checked);
             }
 
-            // Parse various date shapes: number ticks, ISO, dd/MM/yyyy, .NET /Date(…)/, etc.
+            function safeSetText(el, val) {
+                if (!el) return;
+                el.textContent = (val ?? '—');
+            }
+
+            // Parse server date shapes: number ticks, ISO, dd/MM/yyyy, .NET /Date(...)/, etc.
             function parseServerDate(val) {
                 if (!val) return null;
                 if (val instanceof Date) return isNaN(val) ? null : val;
@@ -382,24 +385,22 @@
                 }
 
                 if (typeof val === 'string') {
-                    // .NET ticks wrapper
                     const m = /\/Date\((\d+)\)\//.exec(val);
                     if (m) {
                         const d = new Date(parseInt(m[1], 10));
                         return isNaN(d) ? null : d;
                     }
-                    // ISO first
+
                     let d = new Date(val);
                     if (!isNaN(d)) return d;
 
-                    // dd/MM/yyyy or yyyy-MM-dd with non-digit separators
                     const parts = val.split(/[^0-9]/).filter(Boolean);
                     if (parts.length === 3) {
                         const [a, b, c] = parts.map(n => parseInt(n, 10));
-                        if (c >= 1000) { // dd, mm, yyyy
+                        if (c >= 1000) {
                             d = new Date(c, (b - 1), a);
                             if (!isNaN(d)) return d;
-                        } else if (a >= 1000) { // yyyy, mm, dd
+                        } else if (a >= 1000) {
                             d = new Date(a, (b - 1), c);
                             if (!isNaN(d)) return d;
                         }
@@ -413,28 +414,22 @@
                 return undefined;
             }
 
-            // ---------- Expiry date readers ----------
             function getExpiryDate(data) {
                 if (!data) return null;
 
                 const dateVal = pickFirst(
-                    // Most likely (System.Text.Json camelCase)
                     data.licenceDetailsVM?.expireDate,
-                    // PascalCase
                     data.LicenceDetailsVM?.ExpireDate,
-                    // Mixed variants
                     data.LicenceDetailsVM?.expireDate,
                     data.licenceDetailsVM?.ExpireDate,
 
-                    // Legacy fallbacks
                     data.licence?.ExpireDate, data.license?.ExpireDate,
                     data.Licence?.ExpireDate, data.License?.ExpireDate,
                     data?.ExpireDate, data?.ExpiryDate,
                     data?.licenseExpireDate, data?.LicenseExpireDate
                 );
 
-                const d = parseServerDate(dateVal);
-                return d;
+                return parseServerDate(dateVal);
             }
 
             function getDaysToExpire(data, now = new Date()) {
@@ -447,12 +442,12 @@
 
                 const exp = getExpiryDate(data);
                 if (!exp) return undefined;
+
                 const ms = exp - now;
                 return Math.floor(ms / (24 * 60 * 60 * 1000));
             }
 
             function isRenewalMandatory(data) {
-                // 1) Explicit flags
                 const flag = pickFirst(
                     data.isRenewalMandatory, data.IsRenewalMandatory,
                     data.isRenewalRequired, data.IsRenewalRequired,
@@ -473,24 +468,22 @@
                 );
                 if (soonFlag === true) return true;
 
-                // 2) From days to expire
                 const dte = getDaysToExpire(data);
                 if (typeof dte === 'number') {
-                    if (dte <= 0) return true;   // expired
-                    if (dte <= 90) return true;  // ≤ 3 months
+                    if (dte <= 0) return true;
+                    if (dte <= 90) return true;
                     return false;
                 }
 
-                // 3) From expiry date
                 const exp = getExpiryDate(data);
                 if (!exp) return false;
+
                 const now = new Date();
                 if (exp <= now) return true;
-                const diffMs = exp - now;
-                return diffMs <= (90 * 24 * 60 * 60 * 1000);
+
+                return (exp - now) <= (90 * 24 * 60 * 60 * 1000);
             }
 
-            // Layout tweaks for wrapping
             function forceWrapInCards(root) {
                 if (!root) return;
 
@@ -502,6 +495,7 @@
                     el.style.overflow = 'visible';
                     el.style.gap = '10px';
                 });
+
                 root.querySelectorAll('.tx-leading').forEach(el => {
                     el.style.display = 'flex';
                     el.style.alignItems = 'flex-start';
@@ -509,9 +503,11 @@
                     el.style.flex = '1 1 auto';
                     el.style.minWidth = '0';
                 });
+
                 root.querySelectorAll('.tx-leading .tx-check, .tx-leading .tx-icon').forEach(el => {
                     el.style.flex = '0 0 auto';
                 });
+
                 root.querySelectorAll('.tx-name').forEach(el => {
                     el.style.flex = '1 1 auto';
                     el.style.minWidth = '0';
@@ -526,6 +522,7 @@
                     el.style.paddingInlineEnd = '.25rem';
                     if (!el.title) el.title = (el.textContent || '').trim();
                 });
+
                 root.querySelectorAll('.tx-aux').forEach(el => {
                     el.style.flex = '0 0 auto';
                     el.style.alignSelf = 'flex-start';
@@ -535,46 +532,41 @@
                 });
             }
 
+            async function safeFetchJson(url) {
+                // Read as text first to avoid crash on non-JSON responses
+                const resp = await fetch(url, {
+                    headers: { 'X-Requested-With': 'XMLHttpRequest' }
+                });
+
+                const raw = await resp.text();
+
+                if (!resp.ok) {
+                    // Keep the response body for debugging
+                    const err = new Error('HTTP ' + resp.status);
+                    err.status = resp.status;
+                    err.raw = raw;
+                    throw err;
+                }
+
+                try {
+                    return JSON.parse(raw);
+                } catch (e) {
+                    const err = new Error('Non-JSON response');
+                    err.status = resp.status;
+                    err.raw = raw;
+                    throw err;
+                }
+            }
+
             // ---------- Modal opener ----------
             window.openLicenseModifyModal = async function (licenseId, licenseName, licenseNo) {
-                _expiryAlertShown = false; // reset for this open
-
-                const licNoEl = document.getElementById('lm-licNo');
-                const licNameEl = document.getElementById('lm-licName');
-                if (licNoEl) licNoEl.textContent = (licenseNo ?? '—');
-                if (licNameEl) licNameEl.textContent = (licenseName ?? '—');
-
                 const modalEl = document.getElementById('licenseModifyModal');
                 if (!modalEl) return;
 
-                const existing = bootstrap.Modal.getInstance(modalEl);
-                if (existing) existing.dispose();
-                const modal = new bootstrap.Modal(modalEl, { backdrop: 'static' });
-                modal.show();
-
-                // Cleanup on close
-                const onHidden = () => {
-                    document.body.classList.remove('modal-open');
-                    document.body.style.removeProperty('padding-right');
-                    document.querySelectorAll('.modal-backdrop').forEach(el => el.remove());
-
-                    const listEl = document.getElementById('lm-list');
-                    if (listEl) {
-                        if (listEl.__rowClickHandler) {
-                            listEl.removeEventListener('click', listEl.__rowClickHandler);
-                            listEl.__rowClickHandler = null;
-                        }
-                        listEl.innerHTML = '';
-                    }
-                    const startBtn = document.getElementById('lm-start');
-                    if (startBtn) {
-                        startBtn.disabled = true;
-                        startBtn.onclick = null;
-                        startBtn.innerHTML = 'ابدأ الطلب <i class="ri-add-fill ms-1"></i>';
-                    }
-                    modalEl.removeEventListener('hidden.bs.modal', onHidden);
-                };
-                modalEl.addEventListener('hidden.bs.modal', onHidden);
+                const licNoEl = document.getElementById('lm-licNo');
+                const licNameEl = document.getElementById('lm-licName');
+                safeSetText(licNoEl, licenseNo);
+                safeSetText(licNameEl, licenseName);
 
                 const list = document.getElementById('lm-list');
                 const startBtn = document.getElementById('lm-start');
@@ -592,13 +584,35 @@
                     startBtn.innerHTML = 'ابدأ الطلب <i class="ri-add-fill ms-1"></i>';
                 }
 
-                try {
-                    const resp = await fetch(`${apiUrl}?licenseID=${encodeURIComponent(licenseId)}`, {
-                        headers: { 'X-Requested-With': 'XMLHttpRequest' }
-                    });
-                    if (!resp.ok) throw new Error('HTTP ' + resp.status);
+                // Create / reuse modal instance safely
+                let modal = bootstrap.Modal.getInstance(modalEl);
+                if (!modal) modal = new bootstrap.Modal(modalEl, { backdrop: 'static' });
 
-                    const json = await resp.json();
+                // Cleanup on close (do NOT remove backdrops manually)
+                const onHidden = () => {
+                    const listEl = document.getElementById('lm-list');
+                    if (listEl) {
+                        if (listEl.__rowClickHandler) {
+                            listEl.removeEventListener('click', listEl.__rowClickHandler);
+                            listEl.__rowClickHandler = null;
+                        }
+                        listEl.innerHTML = '';
+                    }
+                    const sb = document.getElementById('lm-start');
+                    if (sb) {
+                        sb.disabled = true;
+                        sb.onclick = null;
+                        sb.innerHTML = 'ابدأ الطلب <i class="ri-add-fill ms-1"></i>';
+                    }
+                    modalEl.removeEventListener('hidden.bs.modal', onHidden);
+                };
+                modalEl.addEventListener('hidden.bs.modal', onHidden);
+
+                modal.show();
+
+                try {
+                    const json = await safeFetchJson(`${apiUrl}?licenseID=${encodeURIComponent(licenseId)}`);
+
                     if (!json?.success || !json?.data) {
                         if (list) list.innerHTML = `<div class="alert alert-light border text-muted m-0">لا توجد بيانات للعرض.</div>`;
                         return;
@@ -606,24 +620,21 @@
 
                     const data = json.data;
 
-                    // update header if API provided
-                    if (licNoEl) licNoEl.textContent = (licenseNo ?? data.licNo ?? data.LicNo ?? '—');
-                    if (licNameEl) licNameEl.textContent = (licenseName ?? data.licName ?? data.LicName ?? '—');
+                    // Update header from API if available
+                    safeSetText(licNoEl, (licenseNo ?? data.licNo ?? data.LicNo));
+                    safeSetText(licNameEl, (licenseName ?? data.licName ?? data.LicName));
 
-                    // Build items
                     const items = Array.isArray(data.transactionVm) ? data.transactionVm : [];
                     if (items.length === 0) {
                         if (list) list.innerHTML = `<div class="alert alert-light border text-muted m-0">لا توجد معاملات متاحة.</div>`;
                         return;
                     }
 
-                    // --- Renewal (ID 17) first, others after ---
                     const renewalItem = items.find(t => +(t.id ?? t.Id) === 17) || null;
-                    const otherItems = items.filter(t => +(t.id ?? t.Id) !== 17); // keep original order
+                    const otherItems = items.filter(t => +(t.id ?? t.Id) !== 17);
 
                     const renewalMust = isRenewalMandatory(data);
 
-                    // Build a row (includes the required change: hide "إلزامي" and keep unchecked when not available)
                     const buildRow = (t, isRenewal) => {
                         const id = +(t.id ?? t.Id);
                         const name = (t.nameAr ?? t.NameAr ?? '—').toString();
@@ -638,13 +649,11 @@
                         let mandatoryChip = '';
                         let isMandatory = false;
 
-                        // Mandatory ONLY when it's renewal AND mandatory AND available.
                         if (isRenewal && renewalMust && isAv) {
                             isMandatory = true;
                             cbAttrs.push('checked', 'disabled', 'data-mandatory="true"');
                             mandatoryChip = `<span class="chip chip-soft chip-required">إلزامي</span>`;
                         } else if (!isAv) {
-                            // Not available (e.g. previous renewal exists): disabled, NOT checked, NO "mandatory" chip
                             cbAttrs.push('disabled', 'title="غير متاح"');
                         }
 
@@ -680,24 +689,23 @@
                         list.innerHTML = `${renewalHtml}${gridHtml}`;
                         forceWrapInCards(list);
 
-                        // Optional 2-columns for the grid only
                         const grid = list.querySelector('.tx-list.tx-grid');
                         const applyGridMode = () => {
                             const many = otherItems.length >= 8 && window.innerWidth >= 768;
-                            grid?.classList.toggle('two-cols', many);
+                            if (grid) grid.classList.toggle('two-cols', many);
                         };
                         applyGridMode();
+
                         const onResize = () => { applyGridMode(); forceWrapInCards(list); };
                         window.addEventListener('resize', onResize, { passive: true });
                         modalEl.addEventListener('hidden.bs.modal', () => {
-                            window.removeEventListener('resize', onResize, { passive: true });
+                            window.removeEventListener('resize', onResize);
                         }, { once: true });
                     }
 
-                    // Selection logic (includes mandatory even if disabled/checked)
                     const checks = Array.from(document.querySelectorAll('#lm-list .tx-check'));
-                    const getSelectedTypeIds = () =>
-                        checks.filter(c => c.checked).map(c => c.dataset.typeId);
+
+                    const getSelectedTypeIds = () => checks.filter(c => c.checked).map(c => c.dataset.typeId);
 
                     const refresh = () => {
                         checks.forEach(c => {
@@ -707,6 +715,7 @@
                         });
 
                         if (!startBtn) return;
+
                         const selected = getSelectedTypeIds();
                         startBtn.disabled = (selected.length === 0);
 
@@ -724,22 +733,25 @@
                         forceWrapInCards(list);
                     };
 
-                    // Row click toggles checkbox if enabled (cannot uncheck mandatory because it's disabled)
                     if (list) {
                         if (list.__rowClickHandler) {
                             list.removeEventListener('click', list.__rowClickHandler);
                             list.__rowClickHandler = null;
                         }
+
                         const rowClickHandler = (e) => {
                             const row = e.target.closest('.tx-item');
                             if (!row) return;
+
                             const cb = row.querySelector('.tx-check');
                             if (!cb || cb.disabled) return;
+
                             if (e.target.closest('.tx-check')) return;
+
                             cb.checked = !cb.checked;
                             cb.dispatchEvent(new Event('change', { bubbles: true }));
-                            forceWrapInCards(list);
                         };
+
                         list.addEventListener('click', rowClickHandler);
                         list.__rowClickHandler = rowClickHandler;
                     }
@@ -747,27 +759,33 @@
                     checks.forEach(ch => ch.addEventListener('change', refresh));
                     refresh();
 
-                    modalEl.addEventListener('shown.bs.modal', () => {
-                        forceWrapInCards(document.getElementById('lm-list'));
-                    }, { once: true });
-
                 } catch (err) {
-                    if (list) list.innerHTML = `<div class="alert alert-danger m-0">فشل تحميل البيانات.</div>`;
-                    console.error(err);
+                    // Show server error details in console only
+                    console.error('LicenseModifyModelAjax error:', err?.status, err?.message, err?.raw);
+
+                    if (list) {
+                        const msg = (err?.status === 500)
+                            ? 'حدث خطأ في الخادم أثناء جلب البيانات.'
+                            : 'فشل تحميل البيانات.';
+                        list.innerHTML = `<div class="alert alert-danger m-0">${msg}</div>`;
+                    }
                 }
             };
 
-            // Trigger from table button
+            // ---------- Single delegated click handler ----------
             document.addEventListener('click', (e) => {
                 const btn = e.target.closest('.btn-edit-license');
                 if (!btn) return;
+
                 const licId = btn.dataset.licid;
                 const licNo = btn.dataset.licno;
                 const licName = btn.dataset.licname;
+
                 window.openLicenseModifyModal(licId, licName, licNo);
             });
         })();
     </script>
+
 
 
 

@@ -16536,3 +16536,431 @@ html[dir="rtl"] .select2-container--bootstrap-5 .select2-results__option::before
         grid-template-columns: 1fr;
     }
 }
+/* =========================
+   Card Style like the sample
+   (Top bar + modern frame)
+   ========================= */
+
+/* Give both panels the same "profile card" frame */
+.address-layout .bg-white,
+.address-layout .map-card {
+    position: relative;
+    border-radius: 10px !important;
+    border: 1px solid rgba(0,0,0,.08) !important;
+    box-shadow: 0 10px 26px rgba(0,0,0,.12);
+    overflow: hidden;
+    background: #fff;
+}
+
+    /* Create the red top bar (like the image) */
+    .address-layout .bg-white::before,
+    .address-layout .map-card::before {
+        content: "";
+        position: absolute;
+        inset: 0 0 auto 0;
+        height: 42px;
+        background: #d96666; /* warm red like sample */
+        border-bottom: 1px solid rgba(0,0,0,.12);
+        z-index: 0;
+    }
+
+/* Make section header sit inside the bar */
+.address-layout .section-head {
+    position: relative;
+    z-index: 1;
+    margin: -10px -10px 14px -10px; /* pull into the bar without changing HTML */
+    padding: 10px 14px !important;
+    border-radius: 0 !important;
+    background: transparent !important;
+    box-shadow: none !important;
+}
+
+    /* Header typography on the bar */
+    .address-layout .section-head h6,
+    .address-layout .section-head small {
+        color: #fff !important;
+        margin: 0;
+    }
+
+    .address-layout .section-head small {
+        opacity: .9;
+    }
+
+    /* Icon chip on the bar: white square-ish like sample buttons */
+    .address-layout .section-head .icon-chip {
+        width: 34px;
+        height: 34px;
+        border-radius: 6px;
+        background: rgba(255,255,255,.22);
+        border: 1px solid rgba(255,255,255,.35);
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+    }
+
+/* Content padding to match sample spacing */
+.address-layout .bg-white {
+    padding-top: 52px !important; /* space below red bar */
+}
+
+.address-layout .map-card {
+    padding-top: 52px !important; /* space below red bar */
+}
+
+/* Address inner card: clean like paper block */
+.address-layout .addr-card {
+    border-radius: 10px;
+    border: 1px solid rgba(0,0,0,.07);
+    box-shadow: 0 6px 18px rgba(0,0,0,.08) !important;
+    overflow: hidden;
+}
+
+/* Field blocks: subtle separators */
+.address-layout .addr-field {
+    border: 1px solid rgba(0,0,0,.06);
+    border-radius: 10px;
+    padding: 10px 10px 12px;
+    background: #fafafa;
+}
+
+    .address-layout .addr-field .header {
+        display: flex;
+        align-items: center;
+        gap: 8px;
+        font-weight: 700;
+        color: #2b2b2b;
+        margin-bottom: 8px;
+    }
+
+        .address-layout .addr-field .header i {
+            opacity: .9;
+        }
+
+/* Map area: keep it clean, without changing your map logic */
+.address-layout #map {
+    width: 100%;
+    min-height: 460px;
+    border-radius: 10px;
+    overflow: hidden;
+    background: #e9eef3;
+    border: 1px solid rgba(0,0,0,.08);
+}
+
+/* =========================
+   Responsive only (no input styling)
+   ========================= */
+@media (max-width: 991px) {
+    .address-layout #map {
+        min-height: 320px;
+    }
+
+    .address-layout .bg-white,
+    .address-layout .map-card {
+        border-radius: 12px !important;
+    }
+}
+
+@media (max-width: 575px) {
+    .address-layout #map {
+        min-height: 260px;
+    }
+
+    .address-layout .section-head {
+        margin: -10px -10px 12px -10px;
+    }
+}
+
+/* English comments only */
+.addr-ui {
+    --c-bg: #f6f8fb;
+    --c-card: #fff;
+    --c-text: #0f172a;
+    --c-muted: #64748b;
+    --c-border: rgba(15,23,42,.10);
+    --c-shadow: 0 18px 48px rgba(2,17,37,.10);
+    --c-shadow2: 0 12px 28px rgba(2,17,37,.08);
+    --c-brand: #0a4fa2;
+    --c-radius: 18px;
+}
+
+    /* Outer shell */
+    .addr-ui .addr-shell {
+        background: transparent;
+    }
+
+        .addr-ui .addr-shell > .card-body {
+            background: var(--c-bg);
+            border: 1px solid rgba(15,23,42,.06);
+            border-radius: calc(var(--c-radius) + 8px);
+            box-shadow: var(--c-shadow);
+            padding: 18px;
+        }
+
+    /* Panels */
+    .addr-ui .addr-panel {
+        background: var(--c-card);
+        border: 1px solid var(--c-border);
+        border-radius: var(--c-radius);
+        box-shadow: var(--c-shadow2);
+        overflow: hidden;
+        display: flex;
+        flex-direction: column;
+        min-height: 100%;
+    }
+
+    /* Header */
+    .addr-ui .addr-panel-head {
+        background: var(--c-brand);
+        color: #fff;
+        padding: 14px 16px;
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        border-bottom: 1px solid rgba(255,255,255,.14);
+    }
+
+    .addr-ui .head-title {
+        display: flex;
+        align-items: center;
+        gap: 12px;
+        min-width: 0;
+    }
+
+    .addr-ui .head-icon {
+        width: 40px;
+        height: 40px;
+        border-radius: 14px;
+        background: rgba(255,255,255,.16);
+        border: 1px solid rgba(255,255,255,.18);
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 18px;
+    }
+
+    .addr-ui .head-text .t1 {
+        font-weight: 900;
+        line-height: 1.1;
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
+    }
+
+    .addr-ui .head-text .t2 {
+        font-size: 12px;
+        opacity: .85;
+    }
+
+    .addr-ui .head-chip {
+        width: 36px;
+        height: 36px;
+        border-radius: 12px;
+        background: rgba(255,255,255,.92);
+        color: var(--c-brand);
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        border: 1px solid rgba(0,0,0,.08);
+    }
+
+    /* Body */
+    .addr-ui .addr-panel-body {
+        padding: 16px;
+        flex: 1 1 auto;
+    }
+
+    /* Map */
+    .addr-ui .addr-map {
+        width: 100%;
+        min-height: 560px;
+        border-radius: 16px;
+        border: 1px solid rgba(15,23,42,.10);
+        background: #eef2f7;
+        overflow: hidden;
+    }
+
+    /* Search */
+    .addr-ui .addr-search {
+        margin-bottom: 14px;
+    }
+
+    .addr-ui .search-input-wrap {
+        position: relative;
+    }
+
+        .addr-ui .search-input-wrap .form-control {
+            border-radius: 14px;
+            border: 1px solid rgba(15,23,42,.12);
+            box-shadow: 0 10px 22px rgba(2,17,37,.06);
+            background: #fff;
+            height: 46px;
+            padding-inline-start: 14px;
+            padding-inline-end: 56px;
+        }
+
+        .addr-ui .search-input-wrap .search-btn {
+            position: absolute;
+            inset-inline-end: 6px;
+            top: 50%;
+            transform: translateY(-50%);
+            width: 44px;
+            height: 38px;
+            border-radius: 12px;
+            border: 0;
+            box-shadow: 0 12px 26px rgba(10,79,162,.22);
+        }
+
+    /* Suggestions list */
+    .addr-ui #suggestionList.autocomplete-suggestions {
+        position: absolute;
+        inset-inline-start: 0;
+        inset-inline-end: 0;
+        top: calc(100% + 6px);
+        z-index: 50;
+        background: #fff;
+        border: 1px solid rgba(15,23,42,.12);
+        border-radius: 14px;
+        box-shadow: 0 22px 50px rgba(2,17,37,.14);
+        overflow: hidden;
+    }
+
+    /* Fields container */
+    .addr-ui .addr-fields-card {
+        background: transparent;
+    }
+
+    /* Field item (clean block, no childish cards) */
+    .addr-ui .addr-item {
+        border: 1px solid rgba(15,23,42,.10);
+        border-radius: 16px;
+        background: #fff;
+        padding: 12px;
+    }
+
+    .addr-ui .addr-item-head {
+        display: flex;
+        align-items: center;
+        gap: 10px;
+        font-weight: 900;
+        color: var(--c-text);
+        margin-bottom: 10px;
+    }
+
+        .addr-ui .addr-item-head i {
+            width: 30px;
+            height: 30px;
+            border-radius: 12px;
+            background: rgba(10,79,162,.10);
+            color: var(--c-brand);
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+    .addr-ui .addr-item-body .form-control {
+        border-radius: 14px;
+        border: 1px solid rgba(15,23,42,.12);
+        background: #fff;
+        box-shadow: none;
+    }
+
+    /* Empty state */
+    .addr-ui .addr-empty {
+        border: 1px dashed rgba(220,38,38,.35);
+        border-radius: 16px;
+        padding: 14px;
+        background: #fff;
+        display: flex;
+        gap: 12px;
+        align-items: center;
+    }
+
+    .addr-ui .addr-empty-ic {
+        width: 44px;
+        height: 44px;
+        border-radius: 16px;
+        background: rgba(220,38,38,.10);
+        color: #dc2626;
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 20px;
+    }
+
+/* Responsive */
+@media (max-width: 991px) {
+    .addr-ui .addr-map {
+        min-height: 340px;
+    }
+
+    .addr-ui .addr-shell > .card-body {
+        padding: 14px;
+    }
+}
+
+@media (max-width: 575px) {
+    .addr-ui .addr-map {
+        min-height: 260px;
+    }
+
+    .addr-ui .head-text .t2 {
+        display: none;
+    }
+}
+#map {
+    width: 100% !important;
+    min-height: 100% !important;
+    height: 520px !important;
+    border-radius: 16px;
+    overflow: hidden;
+   
+}
+
+
+
+.license-section {
+    background: #ffffff;
+    border: 1px solid #e5e5e5;
+    border-radius: 1rem;
+    overflow: hidden;
+    box-shadow: 0 4px 20px rgba(0,0,0,0.05);
+}
+
+.license-header-wrapper {
+    border-radius: 1rem 1rem 0 0;
+    overflow: hidden;
+}
+
+.license-header {
+    background: linear-gradient(90deg, #145374 0%, #00334e 100%);
+    color: #fff;
+}
+
+.header-icon {
+    width: 48px;
+    height: 48px;
+    background-color: #ffffff;
+    color: #145374;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1.5rem;
+    box-shadow: 0 2px 6px rgba(0,0,0,0.1);
+}
+
+.notice-alert {
+    background-color: #fff5f5;
+    border-inline-start: 6px solid #e74c3c;
+    color: #6e0000;
+}
+
+.notice-icon {
+    font-size: 1.5rem;
+    color: #e74c3c;
+    flex-shrink: 0;
+}
+
+
+
+
+

@@ -2453,11 +2453,9 @@ namespace MOINFO_API.Controllers
         [Route("FetchWorkFlowVM")]
         public async Task<ActionResult<WorkFlowVM>> FetchWorkFlowVM(int? requestID)
         {
-            // Guard: missing requestID
             if (!requestID.HasValue)
                 return BadRequest("requestID is required.");
 
-            // 1) Get request
             var request = await _unitOfwork
                 .genericRepository<MoiEserviceLicensesRequest>()
                 .GetByCondition(r => r.RequestId == requestID.Value)
@@ -2466,7 +2464,6 @@ namespace MOINFO_API.Controllers
             if (request == null)
                 return NotFound("Request not found.");
 
-            // 2) Get workflow (guard against null request fields if needed)
             var workflow = await _unitOfwork
                 .genericRepository<WorkFlow>()
                 .GetByCondition(w =>
@@ -2474,16 +2471,22 @@ namespace MOINFO_API.Controllers
                     w.RequestTypeId == request.ReqtypeId)
                 .FirstOrDefaultAsync();
 
-            // If no workflow found, decide what you want:
-            // - return 404, or
-            // - return an empty VM.
             if (workflow == null)
                 return NotFound("Workflow not found.");
 
-            // 3) Map to VM (model must be defined outside if-block)
             var model = _mapper.Map<WorkFlow, WorkFlowVM>(workflow);
 
-            // 4) Extra logic for MOIT status
+            // ✅ Handle "current" for UI rules here (not on the entity)
+            if (request.RequestStatusId == (int)RequestStatusEnum.FinalLicenseIssued)
+            {
+                model.CurrentStatusId = 8;  // force for UI (license issued)
+            }
+            else
+            {
+                model.CurrentStatusId = request.RequestStatusId; // keep in sync (optional but safe)
+            }
+
+            // Extra logic for MOIT status
             if (request.RequestStatusId == (int)RequestStatusEnum.WaitingForMOIT)
             {
                 var company = await _unitOfwork
@@ -2491,20 +2494,13 @@ namespace MOINFO_API.Controllers
                     .GetByCondition(c => c.Id == request.CompanyId)
                     .FirstOrDefaultAsync();
 
-                // Fix: company can be null, and your OR should probably be AND/OR depending on intent.
-                // Current meaning: if either Name OR RecordNo exists => IsMOCIData = true
-                if (company != null && (!string.IsNullOrWhiteSpace(company.Name) || !string.IsNullOrWhiteSpace(company.RecordNo)))
-                {
-                    model.IsMOCIData = true;
-                }
-                else
-                {
-                    model.IsMOCIData = false;
-                }
+                model.IsMOCIData = (company != null &&
+                    (!string.IsNullOrWhiteSpace(company.Name) || !string.IsNullOrWhiteSpace(company.RecordNo)));
             }
 
             return Ok(model);
         }
+
 
 
 

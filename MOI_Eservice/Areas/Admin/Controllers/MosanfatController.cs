@@ -8,9 +8,11 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using MOINFO_API.Controllers;
 using Newtonsoft.Json;
+using System.Net;
 using System.Net.Http;
 using System.Net.Http.Headers;
 using System.Text.Json;
+using static System.Net.WebRequestMethods;
 
 
 namespace MOI_Eservice.Areas.Admin.Controllers
@@ -123,6 +125,12 @@ namespace MOI_Eservice.Areas.Admin.Controllers
                 };
             }
 
+
+
+
+
+
+
             try
             {
                 using (var client = new HttpClient())
@@ -171,6 +179,67 @@ namespace MOI_Eservice.Areas.Admin.Controllers
                 };
             }
         }
+
+
+
+
+
+
+
+
+        [HttpGet]
+        public async Task<IActionResult> LoadFlowVM(int requestId)
+        {
+            // Auth check
+            if (!User.Identity.IsAuthenticated)
+                return Unauthorized(new { success = false, message = "Unauthenticated" });
+
+            // Guard
+            if (requestId <= 0)
+                return BadRequest(new { success = false, message = "Invalid requestId" });
+
+            try
+            {
+                using (var client = new HttpClient())
+                {
+                    client.BaseAddress = new Uri(_baseUrl.TrimEnd('/') + "/");
+                    client.DefaultRequestHeaders.Accept.Clear();
+                    client.DefaultRequestHeaders.Accept.Add(
+                        new MediaTypeWithQualityHeaderValue("application/json"));
+
+                    // Call API
+                    var url = $"api/Mosanafat/FetchWorkFlowVM?requestID={requestId}";
+                    var response = await client.GetAsync(url);
+
+                    if (response.StatusCode == System.Net.HttpStatusCode.NotFound)
+                        return NotFound(new { success = false, message = "Workflow/Request not found" });
+
+                    if (response.StatusCode == System.Net.HttpStatusCode.BadRequest)
+                    {
+                        var badMsg = await response.Content.ReadAsStringAsync();
+                        return BadRequest(new { success = false, message = badMsg });
+                    }
+
+                    if (!response.IsSuccessStatusCode)
+                        return StatusCode((int)response.StatusCode,
+                            new { success = false, message = "API call failed" });
+
+                    var json = await response.Content.ReadAsStringAsync();
+                    var flowVm = Newtonsoft.Json.JsonConvert.DeserializeObject<WorkFlowVM>(json);
+
+                    return Ok(new { success = true, data = flowVm });
+                }
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(StatusCodes.Status500InternalServerError,
+                    new { success = false, message = "Exception occurred", detail = ex.Message });
+            }
+        }
+
+
+
+
 
         [HttpPost]
         public async Task<IActionResult> HandleRequestStatus(

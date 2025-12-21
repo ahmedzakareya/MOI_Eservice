@@ -19,7 +19,7 @@ namespace Business.ViewModel.Dynamic
         public string? RequestTypeName { get; set; }
         public int? RequestTypeId { get; set; }
         public string? CurrentStatusName { get; set; }
-        public int? CurrentStatusId { get; set; }
+        public int? CurrentStatusId   { get; set; }
         public string? NextStatusName { get; set; }
         public int? NextStatusId { get; set; }
         public string? Conditions { get; set; }
