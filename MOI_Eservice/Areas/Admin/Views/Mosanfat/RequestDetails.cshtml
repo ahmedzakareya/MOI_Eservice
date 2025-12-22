@@ -102,11 +102,11 @@
 
     /* ===================== Floating Preview Window (Metronic-like) ===================== */
     /*
-            - نافذة مستقلة لكل مرفق
-            - بدون Backdrop
-            - قابلة للتحريك (JS)
-            - قابلة لتغيير الحجم في كل الاتجاهات (resize: both)
-        */
+                - نافذة مستقلة لكل مرفق
+                - بدون Backdrop
+                - قابلة للتحريك (JS)
+                - قابلة لتغيير الحجم في كل الاتجاهات (resize: both)
+            */
 
     .attachment-preview-window {
         position: fixed;
@@ -186,13 +186,14 @@
     #kt_modal_stacked_1 .h-xl-100 {
         height: auto !important;
     }
-      #requestsCardsRow .request-card .card-header {
-        cursor: grab;      /* when hover: show grab hand */
+
+    #requestsCardsRow .request-card .card-header {
+        cursor: grab; /* when hover: show grab hand */
     }
 
-    #requestsCardsRow .request-card .card-header:active {
-        cursor: grabbing;  /* while dragging */
-    }
+        #requestsCardsRow .request-card .card-header:active {
+            cursor: grabbing; /* while dragging */
+        }
     /* Make dropzone look closer to the screenshot */
     .extra-dropzone {
         transition: background 0.2s ease, border-color 0.2s ease;
@@ -217,7 +218,150 @@
         text-overflow: ellipsis;
     }
 
+    /* ===================== MOI Floating Input (Metronic-friendly) ===================== */
+    /* (Edited فقط هنا: زدنا الارتفاع + حلّينا ظهور calendar indicator لتاريخ السجل) */
+    .moi-float {
+        position: relative;
+        border: 1px solid #d0d7e2;
+        border-radius: 14px;
+        overflow: hidden;
+        background: #fff;
+        /* ✅ زيادة بسيطة في الارتفاع */
+        min-height: 54px;
+    }
+
+        /* Left icon segment */
+        .moi-float .moi-ico {
+            position: absolute;
+            top: 0;
+            left: 0;
+            height: 100%;
+            width: 46px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border-left: 1px solid #e6ebf2;
+            background: #fff;
+            z-index: 3;
+            color: #4b5675;
+        }
+
+        .moi-float .form-control {
+            border: 0 !important;
+            box-shadow: none !important;
+            background: #fff !important;
+            /* ✅ نفس الارتفاع الجديد */
+            height: 54px;
+            line-height: 54px;
+            padding-left: 58px; /* icon width + spacing */
+            padding-right: 14px;
+            /* ✅ مساحة للفلوّت */
+            padding-top: 20px;
+            padding-bottom: 8px;
+        }
+
+        /* Floating label */
+        .moi-float label {
+            position: absolute;
+            /* ✅ ضبط مكان الليبل بحيث لا يدخل فوق الايقون */
+            left: 58px;
+            right: 14px;
+            top: 50%;
+            transform: translateY(-50%);
+            font-weight: 700; /* bold */
+            color: #6c757d;
+            background: #fff;
+            padding: 0 6px;
+            pointer-events: none;
+            transition: 0.15s ease;
+            z-index: 4;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
+
+        /* When focused or has value -> float up */
+        .moi-float .form-control:focus + label,
+        .moi-float .form-control:not(:placeholder-shown) + label,
+        .moi-float .form-control.has-value + label {
+            top: 10px;
+            transform: none;
+            font-size: 12px;
+            color: #0d6efd;
+        }
+
+        /* ✅ تاريخ السجل: نخلي مساحة للـ calendar icon + نخليه ظاهر وقابل للضغط */
+        .moi-float input[type="date"].form-control {
+            padding-right: 44px; /* مساحة للـ indicator */
+            line-height: normal; /* أفضل للـ date */
+        }
+
+        .moi-float input[type="date"]::-webkit-calendar-picker-indicator {
+            opacity: 0.9;
+            cursor: pointer;
+            margin-right: 8px;
+        }
+
+        /* Optional: focus border highlight */
+        .moi-float:has(.form-control:focus) {
+            border-color: #b7cffb;
+        }
+
+    /* ===================== Legacy helpers (بدون تغيير) ===================== */
+    .moci-ig {
+        border: 1px solid #d0d7e2;
+        border-radius: 14px;
+        overflow: hidden;
+        background: #fff;
+    }
+
+    .moci-ig-icon {
+        border: 0;
+        background: #fff;
+        min-width: 46px;
+        justify-content: center;
+        border-left: 1px solid #e6ebf2;
+    }
+
+    .moci-ig-input {
+        border: 0 !important;
+        box-shadow: none !important;
+        background: #fff !important;
+    }
+
+    /* Floating label: keep it away from the icon area */
+    .moci-float {
+        position: relative;
+    }
+
+    .moci-float-label {
+        padding-inline-start: 60px;
+    }
+
+    .moci-float .form-control:focus ~ .moci-float-label,
+    .moci-float .form-control:not(:placeholder-shown) ~ .moci-float-label {
+        opacity: .9;
+    }
+
+    .flatpickr-calendar {
+        z-index: 99999 !important;
+    }
+
+    .moi-float .form-control {
+        height: 60px;
+        line-height: 60px;
+        padding-top: 24px;
+        padding-bottom: 10px;
+    }
+
+    .moi-float {
+        min-height: 60px;
+    }
+
+
 </style>
+
+
 
 
 
@@ -1539,7 +1683,7 @@
                                                                         </div>
 
                                                                         @* كارت مرفقات الطلب *@
-                                                                        <div class="card h-xl-100 mt-6" id="requestAttachmentsCard">
+                                                                        <div class="card h-xl-100 mt-6 shadow-sm" id="requestAttachmentsCard">
                                                                             <div class="card-header border-0 pt-5">
                                                                                 <div class="card-title">
                                                                                     <div class="d-flex align-items-center">
@@ -1627,44 +1771,51 @@
                                                                                                 badgeClass = "badge-light-secondary";
                                                                                             }
 
-                                                                                            <div class="d-flex align-items-center justify-content-between border rounded p-3 mb-3 attachment-item cursor-pointer"
+                                                                                            <div class="card border border-gray-200 shadow-sm rounded-4 mb-4 attachment-item cursor-pointer"
                                                                                                  data-attach-name="@name"
                                                                                                  data-attach-url="@fileUrl"
                                                                                                  data-attach-key="@extRaw">
-                                                                                                <div class="d-flex align-items-center flex-grow-1 overflow-hidden">
-                                                                                                    <div class="symbol symbol-40px ms-3 flex-shrink-0">
-                                                                                                        <div class="symbol-label @bgClass">
-                                                                                                            <i class="@iconClass fs-2 @textClass"></i>
-                                                                                                        </div>
-                                                                                                    </div>
 
-                                                                                                    <div class="d-flex flex-column flex-grow-1 overflow-hidden">
-                                                                                                        <span class="fw-bold text-gray-900 text-hover-primary text-truncate"
-                                                                                                              style="max-width: 260px;"
-                                                                                                              title="@name">
-                                                                                                            @name
-                                                                                                        </span>
+                                                                                                <div class="card-body p-3 p-lg-4">
 
-                                                                                                        <div class="d-flex align-items-center gap-2 mt-1">
-                                                                                                            <span class="badge @badgeClass fw-semibold fs-8">
-                                                                                                                @fileTypeLabel
-                                                                                                            </span>
-                                                                                                            @if (!string.IsNullOrEmpty(ext))
-                                                                                                            {
-                                                                                                                <span class="text-muted fs-8">
-                                                                                                                    @(ext.ToUpper().Replace(".", ""))
+                                                                                                    @* Header: نوع الملف *@
+                                                                                                    <div class="d-flex align-items-center justify-content-between">
+                                                                                                        <div class="d-flex align-items-center">
+                                                                                                            <div class="symbol symbol-40px ms-3 flex-shrink-0">
+                                                                                                                <div class="symbol-label @bgClass">
+                                                                                                                    <i class="@iconClass fs-2 @textClass"></i>
+                                                                                                                </div>
+                                                                                                            </div>
+
+                                                                                                            <div class="d-flex flex-column">
+                                                                                                                <span class="badge @badgeClass fw-semibold fs-8">
+                                                                                                                    @fileTypeLabel
                                                                                                                 </span>
-                                                                                                            }
+                                                                                                                <span class="text-muted fs-9 mt-1">
+                                                                                                                    اضغط لفتح المرفق
+                                                                                                                </span>
+                                                                                                            </div>
+                                                                                                        </div>
+
+                                                                                                        @* زر الفتح (على اليسار) + بدون أيقونة عين *@
+                                                                                                        <div class="d-flex align-items-center flex-shrink-0">
+                                                                                                            <button type="button"
+                                                                                                                    class="btn btn-sm btn-icon btn-light-primary btn-active-primary rounded-circle"
+                                                                                                                    title="فتح المرفق">
+                                                                                                                <i class="ki-outline ki-book-open fs-4"></i>
+                                                                                                            </button>
                                                                                                         </div>
                                                                                                     </div>
-                                                                                                </div>
 
-                                                                                                <div class="d-flex align-items-center flex-shrink-0 ms-3">
-                                                                                                    <button type="button"
-                                                                                                            class="btn btn-sm btn-icon btn-light btn-active-light-primary rounded-circle"
-                                                                                                            title="فتح المرفق">
-                                                                                                        <i class="ki-outline ki-book-open fs-2"></i>
-                                                                                                    </button>
+                                                                                                    <div class="separator my-3"></div>
+
+                                                                                                    @* اسم الملف: يلف للسطر مهما كان طويل + لون أوضح + خط أصغر *@
+                                                                                                    <div class="fw-semibold fs-7 text-primary text-break"
+                                                                                                         title="@name">
+                                                                                                        @name
+                                                                                                    </div>
+
+                                                                                                    @* منع تكرار PDF مرتين: لا نعرض الامتداد هنا طالما النوع ظاهر في الشارة *@
                                                                                                 </div>
                                                                                             </div>
                                                                                         }
@@ -1679,6 +1830,8 @@
                                                                             </div>
                                                                         </div>
 
+
+
                                                                     </div>
 
                                                                     <!-- العمود الأيسر: محتوى التابات + ملاحظات -->
@@ -1686,37 +1839,236 @@
                                                                         <div class="row mt-10">
                                                                             <div class="col-lg-12">
                                                                                 <div class="tab-content rounded h-100 bg-light p-10">
+
                                                                                     <!-- قبول الطلب -->
                                                                                     <div class="tab-pane fade show active" id="kt_upgrade_plan_startup">
-                                                                                        <div class="pb-5">
-                                                                                            <h2 class="fw-bold text-gray-900">قبول الطلب</h2>
-                                                                                            <div class="text-muted fw-semibold">
-                                                                                                فضلا تأكد من بيانات الطلب ثم قم بالضغط علي تعديل بيانات الطلب
+                                                                                        <div id="acceptContentWrap">
+                                                                                            <div class="pb-5">
+                                                                                                <h2 class="fw-bold text-gray-900">قبول الطلب</h2>
+                                                                                                <div class="text-muted fw-semibold">
+                                                                                                    فضلا تأكد من بيانات الطلب ثم قم بالضغط علي تعديل بيانات الطلب
+                                                                                                </div>
+                                                                                            </div>
+
+                                                                                            <div class="pt-1">
+                                                                                                <div class="d-flex align-items-center mb-7">
+                                                                                                    <span class="fw-semibold fs-5 text-gray-700 flex-grow-1">
+                                                                                                        في حال كانت البيانات صحيحة قم بقبول الطلب
+                                                                                                    </span>
+                                                                                                    <i class="ki-outline ki-check-circle fs-1 text-success"></i>
+                                                                                                </div>
+
+                                                                                                <div class="d-flex align-items-center mb-7">
+                                                                                                    <span class="fw-semibold fs-5 text-muted flex-grow-1">
+                                                                                                        في حال عدم اكتمال البيانات يمكنك اعادتها للمراجع لاعادة تصحيح البيانات
+                                                                                                    </span>
+                                                                                                    <i class="ki-outline ki-cross-circle fs-1"></i>
+                                                                                                </div>
+
+                                                                                                <div class="d-flex align-items-center mb-7">
+                                                                                                    <span class="fw-semibold fs-5 text-danger flex-grow-1">
+                                                                                                        حال عدم مطابقة الشروط يمكنك رفض الطلب مع كتابة الملاحظات
+                                                                                                    </span>
+                                                                                                    <i class="ki-outline ki-cross-circle fs-1 text-danger"></i>
+                                                                                                </div>
                                                                                             </div>
                                                                                         </div>
 
-                                                                                        <div class="pt-1">
-                                                                                            <div class="d-flex align-items-center mb-7">
-                                                                                                <span class="fw-semibold fs-5 text-gray-700 flex-grow-1">
-                                                                                                    في حال كانت البيانات صحيحة قم بقبول الطلب
-                                                                                                </span>
-                                                                                                <i class="ki-outline ki-check-circle fs-1 text-success"></i>
-                                                                                            </div>
+                                                                                        <!-- MOCI Data Card (hidden by default) -->
+                                                                                      
 
-                                                                                            <div class="d-flex align-items-center mb-7">
-                                                                                                <span class="fw-semibold fs-5 text-muted flex-grow-1">
-                                                                                                    في حال عدم اكتمال البيانات يمكنك اعادتها للمراجع لاعادة تصحيح البيانات
-                                                                                                </span>
-                                                                                                <i class="ki-outline ki-cross-circle fs-1"></i>
-                                                                                            </div>
+                                                                                        <div id="licenseIssuedBox" class="d-none">
+                                                                                            <div class="card border-0 shadow-sm rounded-4">
+                                                                                                <div class="card-body text-center py-10 px-6 px-lg-10">
 
-                                                                                            <div class="d-flex align-items-center mb-7">
-                                                                                                <span class="fw-semibold fs-5 text-danger flex-grow-1">
-                                                                                                    حال عدم مطابقة الشروط يمكنك رفض الطلب مع كتابة الملاحظات
-                                                                                                </span>
-                                                                                                <i class="ki-outline ki-cross-circle fs-1 text-danger"></i>
+                                                                                                    <!-- Icon -->
+                                                                                                    <div class="d-inline-flex align-items-center justify-content-center rounded-circle bg-light-success mb-6"
+                                                                                                         style="width:84px;height:84px;">
+                                                                                                        <i class="ki-outline ki-check-circle fs-2hx text-success"></i>
+                                                                                                    </div>
+
+
+                                                                                                    <!-- Title -->
+                                                                                                    <h2 class="fw-bold text-gray-900 mb-3">
+                                                                                                        تم إصدار الترخيص بنجاح
+                                                                                                    </h2>
+
+                                                                                                    <!-- Subtitle -->
+                                                                                                    <div class="text-muted fw-semibold fs-6 mb-6">
+                                                                                                        تم إصدار الترخيص لهذا الطلب رقم
+                                                                                                    </div>
+
+                                                                                                    <!-- Request No Badge -->
+                                                                                                    <div class="d-flex justify-content-center">
+                                                                                                        <span class="badge badge-light-primary fw-bold fs-6 px-6 py-3 rounded-pill border border-primary border-dashed">
+                                                                                                            <i class="ki-outline ki-hash fs-4 text-primary ms-2"></i>
+                                                                                                            <span id="licenseIssuedReqNo">—</span>
+                                                                                                        </span>
+                                                                                                    </div>
+
+                                                                                                    <!-- Footer note (no alert) -->
+                                                                                                    <div class="mt-6 text-gray-600 fw-semibold fs-7">
+                                                                                                        لا يمكن تنفيذ إجراءات أخرى على هذا الطلب بعد إصدار الترخيص.
+                                                                                                    </div>
+
+                                                                                                </div>
                                                                                             </div>
                                                                                         </div>
+
+                                                                                        <!-- MOCI Data Card (hidden by default) -->
+                                                                                        <div id="mociDataCardWrap" class="d-none">
+
+                                                                                            <div class="card border border-dashed border-warning shadow-sm">
+                                                                                                <div class="card-body position-relative p-8">
+
+                                                                                                    <!-- Watermark -->
+                                                                                                    <div class="position-absolute top-0 start-0 w-100 h-100"
+                                                                                                         style="background-image:url('@Url.Content("~/assets/images/moci_logo.png")');
+                        background-repeat:no-repeat;
+                        background-position:center;
+                        background-size:360px;
+                        opacity:.06;
+                        pointer-events:none;">
+                                                                                                    </div>
+
+                                                                                                    <!-- Header -->
+                                                                                                    <div class="d-flex align-items-center justify-content-between position-relative mb-6"
+                                                                                                         style="padding-bottom:14px;border-bottom:1px solid rgba(255,193,7,.25);">
+
+                                                                                                        <div class="d-flex align-items-center gap-4">
+                                                                                                            <span class="rounded-circle d-inline-flex align-items-center justify-content-center"
+                                                                                                                  style="width:50px;height:50px;background:#fff3cd;border:1px solid rgba(255,193,7,.35);">
+                                                                                                                <img src="@Url.Content("~/assets/images/moci_logo.png")"
+                                                                                                                     alt="MOCI"
+                                                                                                                     style="width:30px;height:30px;object-fit:contain;" />
+                                                                                                            </span>
+
+                                                                                                            <div class="d-flex flex-column">
+                                                                                                                <div class="fw-bold fs-3 text-dark">بيانات وزارة التجارة</div>
+                                                                                                                <div class="text-muted fw-semibold" style="font-size:.85rem;">
+                                                                                                                    يرجى إدخال البيانات لاستكمال إجراء القبول.
+                                                                                                                </div>
+                                                                                                            </div>
+                                                                                                        </div>
+
+                                                                                                        
+
+                                                                                                    </div>
+
+                                                                                                    <div class="row g-5 position-relative">
+
+                                                                                                        <!-- Trade Name (FULL ROW first) -->
+                                                                                                        <div class="col-12">
+                                                                                                            <div class="moi-float">
+                                                                                                                <span class="moi-ico" aria-hidden="true">
+                                                                                                                    <svg width="20" height="20" viewBox="0 0 24 24">
+                                                                                                                        <path fill="currentColor" d="M4 6V4h16v2H13v14h-2V6H4Z" />
+                                                                                                                    </svg>
+                                                                                                                </span>
+
+                                                                                                                <input type="text"
+                                                                                                                       class="form-control"
+                                                                                                                       id="mociTradeName"
+                                                                                                                       placeholder=" "
+                                                                                                                       autocomplete="off" />
+
+                                                                                                                <label for="mociTradeName">الاسم التجاري للترخيص</label>
+                                                                                                            </div>
+                                                                                                        </div>
+
+                                                                                                        <!-- Civil ID -->
+                                                                                                        <div class="col-md-6">
+                                                                                                            <div class="moi-float">
+                                                                                                                <span class="moi-ico" aria-hidden="true">
+                                                                                                                    <svg width="20" height="20" viewBox="0 0 24 24">
+                                                                                                                        <path fill="currentColor" d="M12 12a4 4 0 1 0-4-4 4 4 0 0 0 4 4Zm0 2c-4.42 0-8 2-8 4.5V20h16v-1.5C20 16 16.42 14 12 14Z" />
+                                                                                                                    </svg>
+                                                                                                                </span>
+
+                                                                                                                <input type="text"
+                                                                                                                       class="form-control"
+                                                                                                                       id="mociCivilId"
+                                                                                                                       placeholder=" "
+                                                                                                                       autocomplete="off" />
+
+                                                                                                                <label for="mociCivilId">الرقم المدني للجهة</label>
+                                                                                                            </div>
+                                                                                                        </div>
+
+                                                                                                        <!-- Commercial License No -->
+                                                                                                        <div class="col-md-6">
+                                                                                                            <div class="moi-float">
+                                                                                                                <span class="moi-ico" aria-hidden="true">
+                                                                                                                    <svg width="20" height="20" viewBox="0 0 24 24">
+                                                                                                                        <path fill="currentColor" d="M6 2h9l5 5v15a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2Zm8 1.5V8h4.5L14 3.5ZM8 12h8v2H8v-2Zm0 4h8v2H8v-2Z" />
+                                                                                                                    </svg>
+                                                                                                                </span>
+
+                                                                                                                <input type="text"
+                                                                                                                       class="form-control"
+                                                                                                                       id="mociLicenseNo"
+                                                                                                                       placeholder=" "
+                                                                                                                       autocomplete="off" />
+
+                                                                                                                <label for="mociLicenseNo">رقم الترخيص التجاري</label>
+                                                                                                            </div>
+                                                                                                        </div>
+
+                                                                                                        <!-- Record No -->
+                                                                                                        <div class="col-md-6">
+                                                                                                            <div class="moi-float">
+                                                                                                                <span class="moi-ico" aria-hidden="true">
+                                                                                                                    <svg width="20" height="20" viewBox="0 0 24 24">
+                                                                                                                        <path fill="currentColor" d="M9 3h2l-.5 4H14l.5-4h2l-.5 4H20v2h-4.25l-.5 4H19v2h-4l-.5 4h-2l.5-4H10l-.5 4H7l.5-4H4v-2h3.75l.5-4H5v-2h3.5L9 3Zm3.25 10 .5-4H10.5l-.5 4h2.75Z" />
+                                                                                                                    </svg>
+                                                                                                                </span>
+
+                                                                                                                <input type="text"
+                                                                                                                       class="form-control"
+                                                                                                                       id="mociRecordNo"
+                                                                                                                       placeholder=" "
+                                                                                                                       autocomplete="off" />
+
+                                                                                                                <label for="mociRecordNo">رقم السجل</label>
+                                                                                                            </div>
+                                                                                                        </div>
+
+                                                                                                        <!-- Record Date (Metronic Datepicker + icon + floating label without overlapping the icon) -->
+                                                                                                        <!-- Record Date -->
+                                                                                                        <div class="col-md-6">
+                                                                                                            <div class="moi-float">
+                                                                                                                <span class="moi-ico" aria-hidden="true">
+                                                                                                                    <svg width="20" height="20" viewBox="0 0 24 24">
+                                                                                                                        <path fill="currentColor" d="M7 2h2v2h6V2h2v2h3a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2h3V2Zm15 8H2v10a1 1 0 0 0 1 1h18a1 1 0 0 0 1-1V10Z" />
+                                                                                                                    </svg>
+                                                                                                                </span>
+
+                                                                                                                <input type="text"
+                                                                                                                       class="form-control"
+                                                                                                                       id="mociRecordDate"
+                                                                                                                       placeholder=" "
+                                                                                                                       autocomplete="off"
+                                                                                                                       readonly />
+
+                                                                                                                <label for="mociRecordDate" >تاريخ السجل</label>
+                                                                                                            </div>
+                                                                                                        </div>
+
+
+
+                                                                                                    </div>
+
+
+                                                                                                </div>
+                                                                                            </div>
+
+                                                                                        </div>
+
+
+
+
+                                                                                        <!-- ✅ Wrap old accept content -->
+                                                                                      
                                                                                     </div>
 
                                                                                     <!-- استكمال المرفقات -->
@@ -1927,7 +2279,7 @@
                                                                             </div>
 
                                                                             <!-- كارت ملاحظات الطلب -->
-                                                                            <div class="col-lg-12 mt-10">
+                                                                            <div class="col-lg-12 mt-10" id="requestNotesWrap">
                                                                                 <div class="card card-bordered">
                                                                                     <div class="card-header">
                                                                                         <div class="card-title flex-column">
@@ -1950,27 +2302,28 @@
                                                                                     </div>
                                                                                 </div>
                                                                             </div>
+
                                                                         </div> @* row in right side *@
                                                                     </div>
                                                                 </div>
                                                             </div>
 
-                                                            <div class="d-flex flex-center flex-row-fluid pt-12">
+                                                            <div class="d-flex flex-center flex-row-fluid pt-12" id="modalActionsWrap">
                                                                 <button type="reset" class="btn btn-light me-3" data-bs-dismiss="modal">إلغاء</button>
-                                                               
 
                                                                 <button type="button"
                                                                         class="btn btn-primary"
                                                                         id="btnSaveRequestStatus">
                                                                     تعديل حالة الطلب
                                                                 </button>
-
-
                                                             </div>
+
                                                         </div>
                                                     </div>
                                                 </div>
                                             </div>
+
+
 
 
 
@@ -3613,37 +3966,7 @@
                                                    
                                                 </div>
 
-                                                    <!-- License Issued Message (hidden by default) -->
-                                                    <div id="licenseIssuedBox" class="d-none">
-                                                        <div class="card border-0 shadow-sm">
-                                                            <div class="card-body text-center py-12">
-                                                                <div class="symbol symbol-70px mb-4">
-                                                                    <div class="symbol-label bg-light-success">
-                                                                        <i class="ki-outline ki-verify fs-2x text-success"></i>
-                                                                    </div>
-                                                                </div>
-
-                                                                <h2 class="fw-bold text-gray-900 mb-2">تم إصدار الترخيص بنجاح</h2>
-                                                                <div class="text-muted fw-semibold fs-6">
-                                                                    لا توجد إجراءات مطلوبة حالياً، يمكنك مراجعة المرفقات أو طباعة الترخيص من صفحة الطلب.
-                                                                </div>
-
-                                                                <div class="separator my-7"></div>
-
-                                                                <div class="d-flex flex-center flex-wrap gap-3">
-                                                                    <span class="badge badge-light-success px-4 py-3 fs-7">الترخيص صادر</span>
-                                                                    <span class="badge badge-light-primary px-4 py-3 fs-7">رقم الطلب: <span id="licenseIssuedReqNo">—</span></span>
-                                                                </div>
-                                                            </div>
-                                                        </div>
-                                                    </div>
-
-                                                    <!-- Wrap existing accept content so we can hide it -->
-                                                    <div id="acceptContentWrap">
-                                                        <!-- 👇 خلي كل المحتوى الحالي داخل قبول الطلب هنا -->
-                                                        <!-- (الموجود عندك: العناوين + الفقرات + الايقونات...) -->
-                                                    </div>
-
+                                                   
 
                                                 <!--end::Body-->
                                             </div>
@@ -4471,6 +4794,7 @@
 
     });
 </script>
+
 <style>
     /* Force hide even if Bootstrap/Metronic sets display:flex */
     .tab-force-hide {
@@ -4481,6 +4805,7 @@
 <script>
     $(function () {
 
+        // ✅ Admin Area
         var flowUrl = '@Url.Action("LoadFlowVM", "Mosanfat", new { area = "Admin" })';
         var modalSelector = '#kt_modal_stacked_1';
 
@@ -4496,49 +4821,8 @@
             return document.querySelector(modalSelector + ' #' + tabId);
         }
 
-        function forceHide(el) {
-            if (!el) return;
-            el.classList.add('tab-force-hide');
-        }
-
-        function forceShow(el) {
-            if (!el) return;
-            el.classList.remove('tab-force-hide');
-        }
-
-        // ✅ Status 8: hide accept content and show "license issued" message
-        // NOTE: You must have:
-        // - #licenseIssuedBox (hidden by default)
-        // - #acceptContentWrap (wraps the normal accept tab content)
-        function showLicenseIssuedUI(show, reqNo) {
-            var box = document.getElementById('licenseIssuedBox');
-            var wrap = document.getElementById('acceptContentWrap');
-            var reqEl = document.getElementById('licenseIssuedReqNo');
-
-            if (reqEl) reqEl.textContent = (reqNo || '—');
-
-            if (show) {
-                if (wrap) wrap.style.display = 'none';
-                if (box) box.classList.remove('d-none');
-            } else {
-                if (wrap) wrap.style.display = '';
-                if (box) box.classList.add('d-none');
-            }
-        }
-
-        // ✅ Reset before each request so tabs don't stay hidden across requests
-        function resetTabs() {
-            [TAB_ACCEPT, TAB_ATTACH, TAB_REJECT, TAB_EXTRA].forEach(function (id) {
-                var label = getTabLabel(id);
-                var pane = getTabPane(id);
-
-                if (label) label.classList.remove('tab-force-hide', 'active');
-                if (pane) pane.classList.remove('tab-force-hide', 'show', 'active');
-            });
-
-            // reset accept tab message state
-            showLicenseIssuedUI(false, '');
-        }
+        function forceHide(el) { if (el) el.classList.add('tab-force-hide'); }
+        function forceShow(el) { if (el) el.classList.remove('tab-force-hide'); }
 
         function setTabVisible(tabId, visible) {
             var label = getTabLabel(tabId);
@@ -4548,10 +4832,8 @@
                 forceShow(label);
                 forceShow(pane);
             } else {
-                // Deactivate if currently active
                 if (label) label.classList.remove('active');
                 if (pane) pane.classList.remove('show', 'active');
-
                 forceHide(label);
                 forceHide(pane);
             }
@@ -4574,25 +4856,101 @@
             activateFirstVisibleTab();
         }
 
+        // ✅ Status 8 UI inside accept tab
+        function showLicenseIssuedUI(show, reqNo) {
+            var box = document.getElementById('licenseIssuedBox');
+            var wrap = document.getElementById('acceptContentWrap');
+            var reqEl = document.getElementById('licenseIssuedReqNo');
+
+            if (reqEl) reqEl.textContent = (reqNo || '—');
+
+            if (show) {
+                if (wrap) wrap.style.display = 'none';
+                if (box) box.classList.remove('d-none');
+            } else {
+                if (wrap) wrap.style.display = '';
+                if (box) box.classList.add('d-none');
+            }
+        }
+
+        // ✅ Notes card show/hide
+        function toggleNotesUI(show) {
+            var notesWrap = document.getElementById('requestNotesWrap');
+            if (!notesWrap) return;
+
+            if (show) {
+                notesWrap.classList.remove('tab-force-hide');
+                notesWrap.style.display = '';
+            } else {
+                notesWrap.classList.add('tab-force-hide');
+                notesWrap.style.display = 'none';
+            }
+        }
+
+        // ✅ Save button show/hide
+        function toggleSaveButtonUI(show) {
+            var btn = document.getElementById('btnSaveRequestStatus');
+            if (!btn) return;
+
+            if (show) {
+                btn.classList.remove('tab-force-hide');
+                btn.style.display = '';
+                btn.disabled = false;
+            } else {
+                btn.classList.add('tab-force-hide');
+                btn.style.display = 'none';
+                btn.disabled = true;
+            }
+        }
+
+        // ✅ MOCI Card show/hide + clear fields
+        function toggleMociCardUI(show) {
+            var wrap = document.getElementById('mociDataCardWrap');
+            if (!wrap) return;
+
+            if (show) {
+                wrap.classList.remove('d-none');
+            } else {
+                wrap.classList.add('d-none');
+
+                // clear inputs when hidden (avoid sticky values between requests)
+                var ids = ['mociCivilId', 'mociTradeName', 'mociLicenseNo', 'mociRecordNo', 'mociRecordDate'];
+                ids.forEach(function (id) {
+                    var el = document.getElementById(id);
+                    if (el) el.value = '';
+                });
+            }
+        }
+
+        // ✅ reset everything before each open
+        function resetModalUI() {
+            [TAB_ACCEPT, TAB_ATTACH, TAB_REJECT, TAB_EXTRA].forEach(function (id) {
+                var label = getTabLabel(id);
+                var pane = getTabPane(id);
+
+                if (label) label.classList.remove('tab-force-hide', 'active');
+                if (pane) pane.classList.remove('tab-force-hide', 'show', 'active');
+            });
+
+            showLicenseIssuedUI(false, '');
+            toggleNotesUI(true);
+            toggleSaveButtonUI(true);
+            toggleMociCardUI(false);
+        }
+
         // ✅ Rules:
         // 2 => all
         // 3 => Accept + Extra
         // 5 or 6 => Accept only
-        // 8 => Accept only + show license issued message inside accept
+        // 8 => Accept only
         function applyTabsByStatus(currentStatusId) {
             var st = parseInt(currentStatusId, 10);
 
             if (st === 2) { showTabs(true, true, true, true); return; }
             if (st === 3) { showTabs(true, false, false, true); return; }
             if (st === 5 || st === 6) { showTabs(true, false, false, false); return; }
+            if (st === 8) { showTabs(true, false, false, false); return; }
 
-            if (st === 8) {
-                // ✅ hide even reject tab, show only accept
-                showTabs(true, false, false, false);
-                return;
-            }
-
-            // fallback
             showTabs(true, false, true, false);
         }
 
@@ -4602,65 +4960,105 @@
         }
 
         // ✅ prevent duplicate handlers
-        $(document).off('click', '.change-status-btn').on('click', '.change-status-btn', function (e) {
-            e.preventDefault();
-            e.stopImmediatePropagation();
+        $(document)
+            .off('click', '.change-status-btn')
+            .on('click', '.change-status-btn', function (e) {
 
-            var $btn = $(this);
+                e.preventDefault();
+                e.stopImmediatePropagation();
 
-            var requestType = $btn.data('request-type') || '';
-            var requestNo = $btn.data('request-no') || '';
-            var requestId = $btn.data('request-id') || '';
+                var $btn = $(this);
 
-            // Fill modal header
-            $('#modalRequestTypeText').text(requestType);
-            $('#modalRequestNoText').text(requestNo);
+                var requestType = $btn.data('request-type') || '';
+                var requestNo = $btn.data('request-no') || '';
+                var requestId = $btn.data('request-id') || '';
 
-            // Fill modal hidden fields
-            $('#modalRequestId').val(requestId);
-            $('#modalRequestType').val(requestType);
-            $('#modalRequestNo').val(requestNo);
+                $('#modalRequestTypeText').text(requestType);
+                $('#modalRequestNoText').text(requestNo);
 
-            if (!requestId) return;
+                $('#modalRequestId').val(requestId);
+                $('#modalRequestType').val(requestType);
+                $('#modalRequestNo').val(requestNo);
 
-            resetTabs();
+                if (!requestId) return;
 
-            $.ajax({
-                url: flowUrl,
-                type: 'GET',
-                data: { requestId: requestId },
-                success: function (res) {
+                resetModalUI();
 
-                    resetTabs();
+                $.ajax({
+                    url: flowUrl,
+                    type: 'GET',
+                    data: { requestId: requestId },
+                    success: function (res) {
 
-                    if (!res || res.success !== true || !res.data) {
+                        resetModalUI();
+
+                        if (!res || res.success !== true || !res.data) {
+                            showTabs(true, false, true, false);
+                            openModal();
+                            return;
+                        }
+
+                        var wf = res.data;
+
+                        var currentStatusId = (wf.CurrentStatusId != null) ? wf.CurrentStatusId : wf.currentStatusId;
+                        var isMociData = (wf.IsMOCIData != null) ? wf.IsMOCIData : wf.isMOCIData;
+
+                        // TEMP DEBUG
+                        alert('CurrentStatusId = ' + currentStatusId + ' | IsMOCIData = ' + isMociData);
+
+                        var st = parseInt(currentStatusId, 10);
+                        var reqNoText = $('#modalRequestNo').val() || $('#modalRequestNoText').text() || '';
+
+                        // Status 8 behavior
+                        showLicenseIssuedUI(st === 8, reqNoText);
+                        toggleNotesUI(st !== 8);
+                        toggleSaveButtonUI(st !== 8);
+
+                        // ✅ Status 3 + IsMOCIData=false => show MOCI card in Accept tab
+                        // (If IsMOCIData=true, hide it)
+                        if (st === 3 && (isMociData === false || isMociData === "false" || isMociData === 0)) {
+                            toggleMociCardUI(true);
+                        } else {
+                            toggleMociCardUI(false);
+                        }
+
+                        applyTabsByStatus(currentStatusId);
+
+                        openModal();
+                    },
+                    error: function () {
+                        resetModalUI();
                         showTabs(true, false, true, false);
                         openModal();
-                        return;
                     }
-
-                    var wf = res.data;
-                    var currentStatusId = (wf.CurrentStatusId != null) ? wf.CurrentStatusId : wf.currentStatusId;
-
-                    // TEMP DEBUG
-                    alert('CurrentStatusId = ' + currentStatusId);
-
-                    // ✅ show "license issued" message only when st=8
-                    var st = parseInt(currentStatusId, 10);
-                    var reqNoText = $('#modalRequestNo').val() || $('#modalRequestNoText').text() || '';
-                    showLicenseIssuedUI(st === 8, reqNoText);
-
-                    applyTabsByStatus(currentStatusId);
-
-                    openModal();
-                },
-                error: function () {
-                    resetTabs();
-                    showTabs(true, false, true, false);
-                    openModal();
-                }
+                });
             });
-        });
 
     });
 </script>
+
+
+<script>
+    document.addEventListener("DOMContentLoaded", function () {
+
+        // If flatpickr is available (Metronic usually includes it in plugins.bundle.js)
+        if (typeof flatpickr !== "undefined") {
+            flatpickr("#mociRecordDate", {
+                dateFormat: "Y-m-d",
+                allowInput: true,
+                disableMobile: true
+            });
+            return;
+        }
+
+        // Fallback: if your build uses KTFlatpickr wrapper (some Metronic setups)
+        if (typeof KTFlatpickr !== "undefined") {
+            KTFlatpickr.createInstance("#mociRecordDate", {
+                dateFormat: "Y-m-d",
+                allowInput: true,
+                disableMobile: true
+            });
+        }
+    });
+</script>
+
