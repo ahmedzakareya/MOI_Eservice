@@ -2447,7 +2447,6 @@ namespace MOINFO_API.Controllers
 
 
 
-
         [HttpGet]
         [Route("FetchWorkFlowVM")]
         public async Task<ActionResult<WorkFlowVM>> FetchWorkFlowVM(int? requestID)
@@ -2464,22 +2463,18 @@ namespace MOINFO_API.Controllers
             if (request == null)
                 return NotFound("Request not found.");
 
-            // ✅ If final license issued => don't query workflow, just return current=8
-            if (request.RequestStatusId == (int)RequestStatusEnum.FinalLicenseIssued)
+            // 2) Short-circuit statuses (no workflow query)
+            if (request.RequestStatusId is
+                (int)RequestStatusEnum.FinalLicenseIssued or
+                (int)RequestStatusEnum.RequestDeclined or (int)RequestStatusEnum.RequestRevokedToCompleteData)  
             {
-                var vm = new WorkFlowVM
+                return Ok(new WorkFlowVM
                 {
-                    CurrentStatusId = 8
-                    // Optional: fill anything else your JS expects
-                    // RequestTypeId = request.ReqtypeId,
-                    // TransactionTypeId = ...,
-                    // NextStatusId = null
-                };
-
-                return Ok(vm);
+                    CurrentStatusId = request.RequestStatusId
+                });
             }
 
-            // 2) Query workflow normally for other statuses
+            // 3) Query workflow normally for other statuses
             var workflow = await _unitOfwork
                 .genericRepository<WorkFlow>()
                 .GetByCondition(w =>
@@ -2490,13 +2485,13 @@ namespace MOINFO_API.Controllers
             if (workflow == null)
                 return NotFound("Workflow not found.");
 
-            // 3) Map to VM
+            // 4) Map to VM
             var model = _mapper.Map<WorkFlow, WorkFlowVM>(workflow);
 
-            // (Optional but recommended) keep current aligned with request
+            // Keep current aligned with request
             model.CurrentStatusId = request.RequestStatusId;
 
-            // 4) Extra logic for MOIT status
+            // 5) Extra logic for MOIT status
             if (request.RequestStatusId == (int)RequestStatusEnum.WaitingForMOIT)
             {
                 var company = await _unitOfwork
@@ -2504,13 +2499,13 @@ namespace MOINFO_API.Controllers
                     .GetByCondition(c => c.Id == request.CompanyId)
                     .FirstOrDefaultAsync();
 
-                model.IsMOCIData = (company != null &&
-                    (!string.IsNullOrWhiteSpace(company.Name) || !string.IsNullOrWhiteSpace(company.RecordNo)));
+                model.IsMOCIData = company != null &&
+                    (!string.IsNullOrWhiteSpace(company.Name) ||
+                     !string.IsNullOrWhiteSpace(company.RecordNo));
             }
 
             return Ok(model);
         }
-
 
 
 
