@@ -49,6 +49,7 @@ namespace Business.ViewModel.Tourism
         public List< RequestTransactionVM>? TransactionVM { get; set; }
 
         public RequestVM? requestForRenew { get; set; }
+        public MoiEserviceLicensesRequest? PartnerRequest { get; set; }
     }
 
 

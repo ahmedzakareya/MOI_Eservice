@@ -20,6 +20,7 @@ using AutoMapper.QueryableExtensions;
 using TransactionEntity = Domain.Entities.Transaction;
 using Microsoft.AspNetCore.Mvc.Filters;
 using System.Transactions;
+using Azure.Core;
 
 namespace MOINFO_API.Controllers
 {
@@ -597,7 +598,7 @@ namespace MOINFO_API.Controllers
                                 OldPartner = item.OldPartner,
                                 RequestId = requestEntities.RequestId,
                                 LicencesId = licence.LicId,
-                                PartnerIsActive = item.IsActive
+                                PartnerIsActive = item.PartnerIsActive
                             };
                             await _unitOfwork
                                 .genericRepository<PartnerOldChangeTransaction>()
@@ -1423,6 +1424,8 @@ namespace MOINFO_API.Controllers
                     renew = await _unitOfwork.genericRepository<LicenseRenew>()
                             .GetByCondition(x => x.ReqTransId == RenewTransaction.Id).FirstOrDefaultAsync();
 
+
+
                     
                 }
 
@@ -1499,6 +1502,22 @@ namespace MOINFO_API.Controllers
                         .GetByCondition(x => x.RequestId == item.RequestId)
                         .FirstOrDefaultAsync();
 
+                        }
+                        // دخول  وخروج شركاء 
+                        if (itemTransaction.TransTypeId == 3)
+                        {
+                            partnerNewChangeTransaction = await _unitOfwork.genericRepository<PartnerNewChangeTransaction>()
+                                .GetByCondition(x => x.RequestId == itemTransaction.RequestId)
+                                .ToListAsync();
+
+                            partnerOldChangeTransaction  = await _unitOfwork.genericRepository<PartnerOldChangeTransaction>()
+                                .GetByCondition(x => x.RequestId == itemTransaction.RequestId)
+                                .ToListAsync();
+
+                            requestForChangePartners = await _unitOfwork
+                        .genericRepository<MoiEserviceLicensesRequest>()
+                        .GetByCondition(x => x.RequestId == item.RequestId)
+                        .FirstOrDefaultAsync();
                         }
 
                     }
@@ -1647,6 +1666,8 @@ namespace MOINFO_API.Controllers
                     _mapper.Map<MoiEserviceLicensesRequest, RequestVM>(requestForChangeActivityName);
             }
 
+
+
             // ===============================================================================
 
 
@@ -1674,9 +1695,41 @@ namespace MOINFO_API.Controllers
                 ActivityChangeTransVM = ActivityChangeVM ,
                 ChangeManagerTransVM = TchangeManagerVM , 
                 ChangeNewPartnerTransVM = ChangeNewPartnerTransVM ,
-                ChangeOldPartnerTransVM = ChangeOldPartnerTransVM ,
+                ChangeOldPartnerTransVM = ChangeOldPartnerTransVM ,PartnerRequest = requestForChangePartners
             };
         }
+
+        [HttpGet]
+        [Route("GetCompleteLookup")]
+        public async Task<List<CompleteLookup>> GetCompleteLookup(int reqID)
+        {
+            // 1) Get request (use your real entity, not VM, if applicable)
+            var request = await _unitOfwork
+                .genericRepository<MoiEserviceLicensesRequest>() // ✅ change to your actual Request entity
+                .GetByCondition(r => r.RequestId == reqID)
+                .FirstOrDefaultAsync();
+
+            if (request == null)
+                return new List<CompleteLookup>();
+
+            // 2) Base query (always required)
+            var query = _unitOfwork
+                .genericRepository<CompleteLookup>()
+                .GetByCondition(x => x.RequestTypeID == request.ReqtypeId);
+
+
+            // 3) LicenseTypeID can be null
+            if (request.LicTypeId.HasValue)
+                query = query.Where(x => x.LicenseTypeID == request.LicTypeId.Value);
+            else
+                query = query.Where(x => x.LicenseTypeID == null);
+
+            
+          
+
+            return await query.ToListAsync();
+        }
+
 
 
 
@@ -2372,6 +2425,10 @@ namespace MOINFO_API.Controllers
             var attachments = await _unitOfwork.genericRepository<MoiEserviceRequestsAttach>().GetTableWithSpec(spec);
             return _mapper.Map<IEnumerable<MoiEserviceRequestsAttach>, IEnumerable<AttachVM>>(attachments);
         }
+
+
+
+
 
         private async Task<List<TransactionVM>> FetchTransactionsAsync(long requestId, int serviceId)
         {

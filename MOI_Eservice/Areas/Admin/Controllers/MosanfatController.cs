@@ -238,6 +238,70 @@ namespace MOI_Eservice.Areas.Admin.Controllers
         }
 
 
+        [HttpGet]
+        public async Task<IActionResult> LoadCompleteLookup(int requestId)
+        {
+            // Auth check
+            if (!User.Identity.IsAuthenticated)
+                return Unauthorized(new { success = false, message = "Unauthenticated" });
+
+            // Guard
+            if (requestId <= 0)
+                return BadRequest(new { success = false, message = "Invalid requestId" });
+
+            try
+            {
+                using (var client = new HttpClient())
+                {
+                    client.BaseAddress = new Uri(_baseUrl.TrimEnd('/') + "/");
+                    client.DefaultRequestHeaders.Accept.Clear();
+                    client.DefaultRequestHeaders.Accept.Add(
+                        new System.Net.Http.Headers.MediaTypeWithQualityHeaderValue("application/json"));
+
+                    // ✅ API Endpoint
+                    // API expects: GetCompleteLookup(int reqID)
+                    var url = $"api/Mosanafat/GetCompleteLookup?reqID={requestId}";
+                    var response = await client.GetAsync(url);
+
+                    // Handle common errors
+                    if (response.StatusCode == System.Net.HttpStatusCode.NotFound)
+                        return NotFound(new { success = false, message = "Not found" });
+
+                    if (response.StatusCode == System.Net.HttpStatusCode.BadRequest)
+                    {
+                        var badMsg = await response.Content.ReadAsStringAsync();
+                        return BadRequest(new { success = false, message = badMsg });
+                    }
+
+                    if (!response.IsSuccessStatusCode)
+                        return StatusCode((int)response.StatusCode, new { success = false, message = "API call failed" });
+
+                    var json = await response.Content.ReadAsStringAsync();
+
+                    var rows = Newtonsoft.Json.JsonConvert.DeserializeObject<List<CompleteLookup>>(json)
+                               ?? new List<CompleteLookup>();
+
+                    // ✅ رجّع FieldValue فقط للعرض + FieldType لتحديد "مرفق" في الكارد
+                    var result = rows
+                        .Where(x => !string.IsNullOrWhiteSpace(x.FieldValue))
+                        .Select(x => new
+                        {
+                            id = x.ID,                         // unique for dataset/id
+                            text = x.FieldValue,               // ✅ ده اللي هيتعرض كعنوان
+                            fieldType = x.FieldType            // ✅ UI will show "مرفق" + icon if Attachment
+                        })
+                        .ToList();
+
+                    return Json(new { success = true, data = result });
+                }
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, new { success = false, message = "Exception occurred", detail = ex.Message });
+            }
+        }
+
+
 
 
 

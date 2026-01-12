@@ -23,7 +23,7 @@ namespace Business.ViewModel
         public int? PartId { get; set; }
 
         public int? RequestId { get; set; }
-        public bool? IsActive { get; set; }
+        public bool? PartnerIsActive { get; set; }
         public RequestDetailsVM? RequestDetailsVM { get; set; }
 
     }

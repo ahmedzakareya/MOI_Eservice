@@ -16964,3 +16964,1243 @@ html[dir="rtl"] .select2-container--bootstrap-5 .select2-results__option::before
 
 
 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+/* ===================== FOOTER (UI ONLY) - ULTRA MODERN ===================== */
+.lb-footer--ui {
+    position: relative;
+    padding: 14px 14px 14px;
+    background: linear-gradient(180deg, rgba(248,250,252,.92), rgba(255,255,255,1));
+    border-top: 1px solid rgba(15,23,42,.06);
+    overflow: hidden;
+}
+
+    /* soft modern pattern (very subtle) */
+    .lb-footer--ui::after {
+        content: "";
+        position: absolute;
+        inset: 0;
+        background: radial-gradient(900px 260px at 15% 0%, rgba(37,127,166,.10), transparent 55%), radial-gradient(900px 260px at 85% 0%, rgba(77,182,172,.10), transparent 55%);
+        pointer-events: none;
+        opacity: .9;
+    }
+
+/* top accent line (clean + premium) */
+.lb-footer--current-ui::before,
+.lb-footer--new-ui::before {
+    content: "";
+    position: absolute;
+    top: 0;
+    inset-inline-start: 14px;
+    width: 86px;
+    height: 3px;
+    border-radius: 999px;
+    opacity: .98;
+    box-shadow: 0 10px 18px rgba(15,23,42,.08);
+}
+
+.lb-footer--current-ui::before {
+    background: linear-gradient(90deg, rgba(37,127,166,1), rgba(37,127,166,.35));
+}
+
+.lb-footer--new-ui::before {
+    background: linear-gradient(90deg, rgba(77,182,172,1), rgba(77,182,172,.35));
+}
+
+.lb-footer__content {
+    position: relative;
+    z-index: 1;
+    display: flex;
+    gap: 10px;
+    flex-wrap: wrap;
+    align-items: center;
+}
+
+/* modern chips */
+.lb-footer__badge {
+    position: relative;
+    display: inline-flex;
+    align-items: center;
+    gap: 9px;
+    padding: 9px 12px;
+    border-radius: 999px;
+    font-weight: 900;
+    font-size: 12px;
+    letter-spacing: .15px;
+    /* modern glass */
+    background: rgba(255,255,255,.72);
+    border: 1px solid rgba(15,23,42,.10);
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
+    color: var(--text-700);
+    box-shadow: 0 10px 18px rgba(15,23,42,.06), inset 0 1px 0 rgba(255,255,255,.75);
+    transition: transform .18s ease, box-shadow .18s ease, border-color .18s ease;
+}
+
+    .lb-footer__badge i {
+        width: 26px;
+        height: 26px;
+        border-radius: 999px;
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 14px;
+        background: rgba(15,23,42,.04);
+        border: 1px solid rgba(15,23,42,.06);
+        opacity: .95;
+    }
+
+/* subtle “lift” on hover */
+/*.lb-card:hover .lb-footer__badge {
+    transform: translateY(-1px);
+    box-shadow: 0 14px 24px rgba(15,23,42,.08), inset 0 1px 0 rgba(255,255,255,.78);
+}*/
+
+/* tones (modern + calm, not loud) */
+/*.lb-footer__badge--ok {
+    border-color: rgba(34,197,94,.20);
+    color: #166534;
+}
+
+    .lb-footer__badge--ok i {
+        background: rgba(34,197,94,.12);
+        border-color: rgba(34,197,94,.18);
+        color: #15803d;
+    }
+
+.lb-footer__badge--warn {
+    border-color: rgba(245,158,11,.22);
+    color: #92400e;
+}
+
+    .lb-footer__badge--warn i {
+        background: rgba(245,158,11,.14);
+        border-color: rgba(245,158,11,.18);
+        color: #b45309;
+    }
+
+.lb-footer__badge--in {
+    border-color: rgba(77,182,172,.24);
+    color: #0f766e;
+}
+
+    .lb-footer__badge--in i {
+        background: rgba(77,182,172,.16);
+        border-color: rgba(77,182,172,.18);
+        color: #0f766e;
+    }*/
+
+/* optional helper text style (if used) */
+/*.lb-footer__hint {
+    position: relative;
+    z-index: 1;
+    font-size: 12px;
+    font-weight: 800;
+    color: var(--text-500);
+    opacity: .95;
+    padding-inline-start: 2px;
+}*/
+
+/* Responsive */
+/*@media (max-width: 768px) {
+    .lb-footer--ui {
+        padding: 12px 12px;
+    }
+
+    .lb-footer__badge {
+        padding: 9px 11px;
+    }
+
+    .lb-footer__hint {
+        width: 100%;
+    }
+}*/
+
+
+
+
+/* ===================== FORCE SOFT TEXT (no dark black anywhere) ===================== */
+
+/* 1) Footer: force ALL text inside footer badges to be soft */
+/*.lb-footer__badge,
+.lb-footer__badge * {
+    color: var(--text-500) !important;*/ /* soft, never black */
+/*}*/
+
+    /* 2) Footer icons: keep them soft too */
+    /*.lb-footer__badge i {
+        color: var(--text-500) !important;
+        opacity: .92 !important;
+    }*/
+
+/* 3) The partner names inside the list: soften them (this is usually what looks “black”) */
+/*.lb-name {
+    color: var(--text-600) !important;*/ /* was text-700 (darker) */
+/*}*/
+
+/* 4) List header labels ("الشريك" / "الحالة") */
+/*.lb-list__headerTitle,
+.lb-list__headerStatus {
+    color: var(--text-500) !important;
+}*/
+
+/* 5) (Optional) If any badge/label gets bolded elsewhere, prevent it from going black */
+/*.lb-footer b, .lb-footer strong,
+.lb-body b, .lb-body strong {
+    color: inherit !important;
+}*/
+/* ===================== AVATAR (sequence) - modern upgrade (no HTML/Razor changes) ===================== */
+
+/* Base: turn the number into a modern "chip" with depth */
+/*.lb-avatar {
+    width: 46px;
+    height: 46px;
+    border-radius: 14px;*/ /* was circle -> modern rounded-square */
+    /*background: linear-gradient(180deg, rgba(248,250,252,1), rgba(255,255,255,1));
+    border: 1px solid rgba(15,23,42,.10);
+    box-shadow: 0 10px 18px rgba(15,23,42,.06), inset 0 1px 0 rgba(255,255,255,.9);
+    position: relative;
+    overflow: hidden;
+}*/
+
+    /* subtle top highlight */
+    /*.lb-avatar::before {
+        content: "";
+        position: absolute;
+        inset: 0;
+        background: radial-gradient(120px 60px at 30% 10%, rgba(255,255,255,.75), transparent 55%);
+        pointer-events: none;
+    }*/
+
+    /* Accent stripe (gives “old/new” identity without being loud) */
+    /*.lb-avatar::after {
+        content: "";
+        position: absolute;
+        inset-inline-start: 0;
+        top: 0;
+        bottom: 0;
+        width: 4px;
+        opacity: .95;
+    }*/
+
+/* Current vs New stripe colors */
+/*.lb-avatar--current::after {
+    background: rgba(37,127,166,.95);
+}
+
+.lb-avatar--new::after {
+    background: rgba(77,182,172,.95);
+}*/
+
+/* Number styling (never black, modern) */
+/*.lb-avatar__in {
+    position: relative;
+    z-index: 1;
+    font-weight: 900;
+    font-size: 14px;
+    color: var(--text-500) !important;*/ /* soft text */
+    /*letter-spacing: .2px;
+}*/
+
+/* Hover: modern “lift” */
+/*.lb-row:hover .lb-avatar {
+    transform: translateY(-1px);
+    transition: transform .18s ease, box-shadow .18s ease;
+    box-shadow: 0 14px 24px rgba(15,23,42,.08), inset 0 1px 0 rgba(255,255,255,.92);
+}*/
+
+/* Optional: slightly smaller on mobile */
+/*@media (max-width: 768px) {
+    .lb-avatar {
+        width: 42px;
+        height: 42px;
+        border-radius: 13px;
+    }
+
+    .lb-avatar__in {
+        font-size: 13px;
+    }
+}*/
+/* ===================== MAKE "CURRENT ACTIVE" BADGE LOOK LIKE "NEW" BADGE ===================== */
+/* This makes .lb-score--active use the same style vibe as .lb-score--new (teal), without touching Razor/HTML */
+
+/*.lb-score--active {
+    background: rgba(77,182,172,.16) !important;*/ /* same family as new */
+    /*color: #0f766e !important;
+    border-color: rgba(77,182,172,.28) !important;
+}*/
+
+/* keep hover consistent */
+/*.lb-row:hover .lb-score--active {
+    box-shadow: 0 10px 18px rgba(15,23,42,.08);
+}*/
+/* ===================== PAPER EFFECT (clear + modern, no HTML/Razor changes) ===================== */
+/*.lb-card {
+    position: relative;*/ /* needed for overlays */
+    /*isolation: isolate;*/ /* keeps overlays clean */
+    /*background: #fff;
+}*/
+
+    /* Paper texture + subtle fibers */
+    /*.lb-card::before {
+        content: "";
+        position: absolute;
+        inset: 0;
+        border-radius: inherit;
+        pointer-events: none;
+        z-index: 0;*/
+        /* paper grain + soft lighting */
+        /*background: radial-gradient(900px 420px at 12% 0%, rgba(37,127,166,.10), transparent 60%), radial-gradient(900px 420px at 88% 0%, rgba(77,182,172,.10), transparent 60%), repeating-linear-gradient( 135deg, rgba(15,23,42,.020) 0px, rgba(15,23,42,.020) 2px, rgba(255,255,255,0) 6px, rgba(255,255,255,0) 10px );
+        opacity: .95;
+    }*/
+
+    /* Paper fold corner (very visible) */
+    /*.lb-card::after {
+        content: "";
+        position: absolute;
+        top: 0;
+        inset-inline-end: 0;*/ /* RTL/LTR safe */
+        /*width: 64px;
+        height: 64px;
+        border-top-right-radius: 18px;
+        pointer-events: none;
+        z-index: 2;*/
+        /* folded corner triangle with shadow */
+        /*background: linear-gradient(135deg, rgba(255,255,255,0) 0%, rgba(255,255,255,0) 49%, rgba(255,255,255,.92) 50%, rgba(248,250,252,1) 100%);
+        box-shadow: -10px 10px 18px rgba(15,23,42,.10);*/ /* fold shadow */
+    /*}*/
+
+    /* Make sure real content stays above the paper overlays */
+    /*.lb-card > * {
+        position: relative;
+        z-index: 3;
+    }*/
+
+    /* Optional: slight lift on hover for a “paper sheet” feeling */
+    /*.lb-card:hover {
+        transform: translateY(-2px) rotate(-.1deg);
+    }*/
+
+
+
+
+
+/* ===================== COMPACT DESIGN WITH PAPER EFFECT ===================== */
+:root {
+    /* Colors - Smaller and more elegant */
+    --c-current: #2c7aa3;
+    --c-current-light: rgba(44, 122, 163, 0.08);
+    --c-current-border: rgba(44, 122, 163, 0.2);
+    --c-current-hover: rgba(44, 122, 163, 0.12);
+    --c-new: #0d9488;
+    --c-new-light: rgba(13, 148, 136, 0.08);
+    --c-new-border: rgba(13, 148, 136, 0.2);
+    --c-new-hover: rgba(13, 148, 136, 0.12);
+    /* Exit color changed to #f0889d */
+    --c-exit: #b51636;
+    --c-exit-light: rgba(240, 136, 157, 0.08);
+    --c-exit-border: rgba(240, 136, 157, 0.2);
+    --c-exit-hover: rgba(240, 136, 157, 0.12);
+    /* Active color */
+    --c-active: #0d9488;
+    --c-active-light: rgba(16, 185, 129, 0.08);
+    --c-active-border: rgba(16, 185, 129, 0.2);
+    /* Text Colors - Smaller */
+    --text-900: #1e293b;
+    --text-700: #334155;
+    --text-600: #475569;
+    --text-500: #64748b;
+    /* UI Colors */
+    --line: rgba(30, 41, 59, 0.06);
+    --soft: rgba(30, 41, 59, 0.04);
+    --bg: #ffffff;
+    --bg2: #f8fafc;
+    /* Paper effect colors */
+    --paper-bg: #fefefe;
+    --paper-shadow: 0 2px 8px rgba(0, 0, 0, 0.04);
+}
+
+/* ===================== PAPER EFFECT ===================== */
+.lb-card {
+    background: var(--paper-bg);
+    border-radius: 14px;
+    overflow: hidden;
+    border: 1px solid var(--line);
+    box-shadow: var(--paper-shadow);
+    transition: all 0.2s ease;
+    position: relative;
+    padding: 0;
+    margin: 0;
+}
+
+/* Paper texture overlay */
+.lb-paper-effect {
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-image: linear-gradient(90deg, transparent 79px, rgba(255, 255, 255, 0.2) 79px, rgba(255, 255, 255, 0.2) 81px, transparent 81px), linear-gradient(var(--line) 1px, transparent 1px);
+    background-size: 100% 1.5em;
+    background-position: 0 1.2em;
+    pointer-events: none;
+    opacity: 0.15;
+    z-index: 0;
+    border-radius: 14px;
+}
+
+/* Current Card */
+.lb-card--current {
+    border-left: 3px solid var(--c-current);
+    background: linear-gradient(135deg, var(--paper-bg) 0%, rgba(44, 122, 163, 0.02) 100%);
+}
+
+/* New Card */
+.lb-card--new {
+    border-left: 3px solid var(--c-new);
+    background: linear-gradient(135deg, var(--paper-bg) 0%, rgba(13, 148, 136, 0.02) 100%);
+}
+
+.lb-card:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 4px 16px rgba(0, 0, 0, 0.08), inset 0 0 0 1px rgba(255, 255, 255, 0.8);
+}
+
+/* ===================== SMALLER HEADER ===================== */
+.lb-head {
+    padding: 14px 16px 12px;
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    position: relative;
+    border-bottom: 1px solid var(--line);
+    background: rgba(255, 255, 255, 0.7);
+    backdrop-filter: blur(4px);
+    z-index: 1;
+}
+
+/* Current Header */
+.lb-card--current .lb-head {
+    background: linear-gradient(90deg, rgba(44, 122, 163, 0.04), rgba(255, 255, 255, 0.9));
+}
+
+/* New Header */
+.lb-card--new .lb-head {
+    background: linear-gradient(90deg, rgba(13, 148, 136, 0.04), rgba(255, 255, 255, 0.9));
+}
+
+/* Smaller Icon */
+.lb-head__icon {
+    width: 40px;
+    height: 40px;
+    border-radius: 10px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: #fff;
+    flex: 0 0 auto;
+    border: 1px solid rgba(255, 255, 255, 0.4);
+    font-size: 0.85rem;
+    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
+}
+
+/* Current Icon */
+.lb-card--current .lb-head__icon {
+    background: linear-gradient(135deg, var(--c-current) 0%, #3a8bb8 100%);
+}
+
+/* New Icon */
+.lb-card--new .lb-head__icon {
+    background: linear-gradient(135deg, var(--c-new) 0%, #14b8a6 100%);
+}
+
+.lb-head__icon i {
+    font-size: 18px;
+    opacity: 0.95;
+}
+
+/* Smaller Titles */
+.lb-head__title {
+    color: var(--text-900);
+    min-width: 0;
+    flex: 1;
+}
+
+.lb-head__titleTop {
+    font-size: 10px;
+    font-weight: 700;
+    opacity: 0.7;
+    letter-spacing: 0.1px;
+    margin-bottom: 2px;
+    color: var(--text-600);
+    text-transform: uppercase;
+}
+
+.lb-head__titleMain {
+    font-size: 15px;
+    font-weight: 800;
+    opacity: 0.98;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    line-height: 1.2;
+}
+
+.lb-head__titleMain--current {
+    color: var(--c-current);
+}
+
+.lb-head__titleMain--new {
+    color: var(--c-new);
+}
+
+/* Smaller Counter */
+.lb-head__counter {
+    font-size: 20px;
+    font-weight: 900;
+    line-height: 1;
+    padding: 6px 12px;
+    border-radius: 8px;
+    min-width: 45px;
+    text-align: center;
+    box-shadow: inset 0 0 0 1px rgba(0,0,0,0.05);
+    background: rgba(255, 255, 255, 0.9);
+}
+
+.lb-head__counter--current {
+    border: 1px solid var(--c-current-border);
+    color: var(--c-current);
+    background: rgba(44, 122, 163, 0.08);
+}
+
+.lb-head__counter--new {
+    border: 1px solid var(--c-new-border);
+    color: var(--c-new);
+    background: rgba(13, 148, 136, 0.08);
+}
+
+/* ===================== SMALLER BODY ===================== */
+.lb-body {
+    padding: 14px 16px;
+    background: transparent;
+    position: relative;
+    z-index: 1;
+}
+
+/* List Header - Smaller */
+.lb-list__header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 0 6px 8px;
+    margin-bottom: 8px;
+    border-bottom: 1px solid var(--line);
+}
+
+.lb-list__headerTitle,
+.lb-list__headerStatus {
+    font-weight: 700;
+    color: var(--text-600);
+    font-size: 11px;
+    text-transform: uppercase;
+    letter-spacing: 0.2px;
+}
+
+/* List - Smaller spacing */
+.lb-list {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    display: grid;
+    gap: 8px;
+}
+
+/* ===================== SMALLER ROWS ===================== */
+.lb-row {
+    background: rgba(255, 255, 255, 0.7);
+    border-radius: 10px;
+    padding: 10px 12px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 10px;
+    transition: all 0.2s ease;
+    position: relative;
+    overflow: hidden;
+    border: 1px solid var(--line);
+    backdrop-filter: blur(2px);
+}
+
+    /* Paper texture for rows */
+    .lb-row::before {
+        content: '';
+        position: absolute;
+        top: 0;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        background: linear-gradient(90deg, transparent 90%, rgba(255, 255, 255, 0.3) 100%);
+        pointer-events: none;
+        z-index: 0;
+        border-radius: 10px;
+    }
+
+/* Current Row */
+.lb-row--current {
+    border-left: 2px solid var(--c-current);
+    background: linear-gradient(90deg, rgba(44, 122, 163, 0.04) 0%, rgba(255, 255, 255, 0.7) 100%);
+}
+
+/* Exit Row - Using #f0889d */
+.lb-row--exit {
+    border-left: 2px solid var(--c-exit);
+    background: linear-gradient(90deg, rgba(240, 136, 157, 0.06) 0%, rgba(255, 255, 255, 0.6) 100%);
+    opacity: 0.9;
+}
+
+    .lb-row--exit .lb-name {
+        text-decoration: line-through;
+        opacity: 0.8;
+    }
+
+/* New Row */
+.lb-row--new {
+    border-left: 2px solid var(--c-new);
+    background: linear-gradient(90deg, rgba(13, 148, 136, 0.04) 0%, rgba(255, 255, 255, 0.7) 100%);
+}
+
+.lb-row:hover {
+    transform: translateX(-1px);
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.06), inset 0 0 0 1px rgba(255, 255, 255, 0.9);
+    border-color: rgba(0, 0, 0, 0.1);
+}
+
+/* ===================== SMALLER AVATAR ===================== */
+.lb-avatar {
+    width: 36px;
+    height: 36px;
+    border-radius: 8px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex: 0 0 auto;
+    border: 1px solid rgba(0,0,0,0.08);
+    background: rgba(255, 255, 255, 0.9);
+    font-weight: 700;
+    color: var(--text-700);
+    font-size: 13px;
+    position: relative;
+    box-shadow: inset 0 1px 2px rgba(0,0,0,0.05);
+}
+
+/* Current Avatar */
+.lb-avatar--current {
+    background: linear-gradient(135deg, rgba(44, 122, 163, 0.1), rgba(255, 255, 255, 0.9));
+    border-color: var(--c-current-border);
+    color: var(--c-current);
+}
+
+/* Exit Avatar */
+.lb-row--exit .lb-avatar--current {
+    background: linear-gradient(135deg, rgba(240, 136, 157, 0.1), rgba(255, 255, 255, 0.9));
+    border-color: var(--c-exit-border);
+    color: var(--c-exit);
+}
+
+/* New Avatar */
+.lb-avatar--new {
+    background: linear-gradient(135deg, rgba(13, 148, 136, 0.1), rgba(255, 255, 255, 0.9));
+    border-color: var(--c-new-border);
+    color: var(--c-new);
+}
+
+/* Smaller Avatar Badge */
+.lb-avatar__badge {
+    position: absolute;
+    bottom: -3px;
+    right: -3px;
+    width: 16px;
+    height: 16px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 8px;
+    border: 2px solid white;
+    color: white;
+    box-shadow: 0 1px 3px rgba(0,0,0,0.2);
+}
+
+.lb-avatar__badge--active {
+    background: var(--c-active);
+}
+
+.lb-avatar__badge--new {
+    background: var(--c-new);
+}
+
+/* ===================== SMALLER INFO ===================== */
+.lb-row__content {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    min-width: 0;
+    flex: 1 1 auto;
+    position: relative;
+    z-index: 1;
+}
+
+.lb-info {
+    min-width: 0;
+    flex: 1;
+}
+
+/* Smaller Name */
+.lb-name {
+    display: block;
+    font-weight: 700;
+    font-size: 13px;
+    margin-bottom: 2px;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    line-height: 1.3;
+}
+
+/* Current Name */
+.lb-row--current:not(.lb-row--exit) .lb-name {
+    color: var(--c-current);
+}
+
+/* Exit Name - Using #f0889d */
+.lb-row--exit .lb-name {
+    color: var(--c-exit);
+}
+
+/* New Name */
+.lb-name--new {
+    color: var(--c-new);
+}
+
+/* Smaller Tag */
+.lb-tag {
+    display: inline-flex;
+    align-items: center;
+    gap: 3px;
+    padding: 2px 6px;
+    border-radius: 6px;
+    font-size: 9px;
+    font-weight: 700;
+    border: 1px solid transparent;
+    background: rgba(255, 255, 255, 0.8);
+}
+
+.lb-tag--exit {
+    background: rgba(240, 136, 157, 0.1);
+    color: var(--c-exit);
+    border-color: rgba(240, 136, 157, 0.2);
+}
+
+.lb-tag--new {
+    background: rgba(13, 148, 136, 0.1);
+    color: var(--c-new);
+    border-color: rgba(13, 148, 136, 0.2);
+}
+
+/* ===================== SMALLER STATUS ===================== */
+.lb-status {
+    flex: 0 0 auto;
+}
+
+.lb-score {
+    display: inline-flex;
+    align-items: center;
+    gap: 5px;
+    padding: 6px 10px;
+    border-radius: 8px;
+    font-weight: 700;
+    font-size: 11px;
+    border: 1px solid transparent;
+    white-space: nowrap;
+    transition: all 0.2s ease;
+    background: rgba(255, 255, 255, 0.9);
+    box-shadow: 0 1px 3px rgba(0,0,0,0.05);
+}
+
+    .lb-score i {
+        font-size: 12px;
+        opacity: 0.9;
+    }
+
+/* Current Active */
+.lb-score--active {
+    background: rgba(16, 185, 129, 0.1);
+    color: var(--c-active);
+    border-color: var(--c-active-border);
+}
+
+/* Current Exit - Using #f0889d */
+.lb-score--exit {
+    background: rgba(240, 136, 157, 0.1);
+    color: var(--c-exit);
+    border-color: var(--c-exit-border);
+}
+
+/* New */
+.lb-score--new {
+    background: rgba(13, 148, 136, 0.1);
+    color: var(--c-new);
+    border-color: var(--c-new-border);
+}
+
+.lb-score:hover {
+    transform: translateY(-1px);
+    box-shadow: 0 2px 6px rgba(0,0,0,0.08);
+}
+
+/* ===================== SMALLER FOOTER ===================== */
+.lb-footer--ui {
+    position: relative;
+    padding: 12px 16px;
+    background: linear-gradient(180deg, rgba(248,250,252,0.9), rgba(255,255,255,1));
+    border-top: 1px solid var(--line);
+    overflow: hidden;
+    backdrop-filter: blur(2px);
+}
+
+    /* Paper effect for footer */
+    .lb-footer--ui::before {
+        content: '';
+        position: absolute;
+        top: 0;
+        left: 0;
+        right: 0;
+        height: 1px;
+        background: linear-gradient(90deg, transparent, rgba(0,0,0,0.05), transparent);
+    }
+
+/* Current Footer */
+.lb-footer--current-ui {
+    background: linear-gradient(180deg, rgba(44, 122, 163, 0.02), rgba(255,255,255,1));
+}
+
+/* New Footer */
+.lb-footer--new-ui {
+    background: linear-gradient(180deg, rgba(13, 148, 136, 0.02), rgba(255,255,255,1));
+}
+
+.lb-footer__content {
+    display: flex;
+    gap: 8px;
+    flex-wrap: wrap;
+    align-items: center;
+    position: relative;
+    z-index: 1;
+}
+
+/* Smaller Badges */
+.lb-footer__badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 5px;
+    padding: 5px 10px;
+    border-radius: 8px;
+    font-weight: 700;
+    font-size: 11px;
+    border: 1px solid rgba(0,0,0,0.08);
+    background: rgba(255, 255, 255, 0.9);
+    color: var(--text-600);
+    box-shadow: 0 1px 3px rgba(0,0,0,0.04);
+    transition: all 0.2s ease;
+    backdrop-filter: blur(4px);
+}
+
+    .lb-footer__badge i {
+        font-size: 12px;
+        opacity: 0.8;
+    }
+
+/* Current Badges */
+.lb-footer__badge--current {
+    border-color: var(--c-current-border);
+    color: var(--c-current);
+    background: rgba(44, 122, 163, 0.08);
+}
+
+.lb-footer__badge--current-active {
+    border-color: var(--c-active-border);
+    color: var(--c-active);
+    background: rgba(16, 185, 129, 0.08);
+}
+
+.lb-footer__badge--current-exit {
+    border-color: var(--c-exit-border);
+    color: var(--c-exit);
+    background: rgba(240, 136, 157, 0.08);
+}
+
+/* New Badges */
+.lb-footer__badge--new {
+    border-color: var(--c-new-border);
+    color: var(--c-new);
+    background: rgba(13, 148, 136, 0.08);
+}
+
+.lb-footer__badge--new-entry {
+    border-color: var(--c-new-border);
+    color: var(--c-new);
+    background: rgba(13, 148, 136, 0.08);
+}
+
+.lb-footer__badge:hover {
+    transform: translateY(-1px);
+    box-shadow: 0 2px 6px rgba(0,0,0,0.08);
+}
+
+/* ===================== SMALLER EMPTY STATES ===================== */
+.lb-empty {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    padding: 24px 16px;
+    color: var(--text-500);
+}
+
+.lb-empty__icon {
+    width: 40px;
+    height: 40px;
+    border-radius: 10px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border: 1px solid rgba(0,0,0,0.08);
+    background: rgba(255, 255, 255, 0.9);
+    color: var(--text-500);
+    margin-bottom: 4px;
+}
+
+.lb-card--current .lb-empty__icon {
+    border-color: var(--c-current-border);
+    background: rgba(44, 122, 163, 0.08);
+    color: var(--c-current);
+}
+
+.lb-card--new .lb-empty__icon {
+    border-color: var(--c-new-border);
+    background: rgba(13, 148, 136, 0.08);
+    color: var(--c-new);
+}
+
+.lb-empty__icon i {
+    font-size: 18px;
+}
+
+.lb-empty__text {
+    font-weight: 700;
+    font-size: 13px;
+    text-align: center;
+}
+
+/* ===================== RESPONSIVE ===================== */
+@media (max-width: 768px) {
+    .lb-head {
+        padding: 12px 14px 10px;
+        gap: 10px;
+    }
+
+    .lb-head__icon {
+        width: 36px;
+        height: 36px;
+    }
+
+        .lb-head__icon i {
+            font-size: 16px;
+        }
+
+    .lb-head__titleMain {
+        font-size: 14px;
+    }
+
+    .lb-head__counter {
+        font-size: 18px;
+        padding: 5px 10px;
+        min-width: 40px;
+    }
+
+    .lb-body {
+        padding: 12px 14px;
+    }
+
+    .lb-row {
+        padding: 8px 10px;
+        gap: 8px;
+    }
+
+    .lb-avatar {
+        width: 32px;
+        height: 32px;
+        font-size: 12px;
+    }
+
+    .lb-name {
+        font-size: 12px;
+    }
+
+    .lb-footer--ui {
+        padding: 10px 14px;
+    }
+
+    .lb-footer__badge {
+        padding: 4px 8px;
+        font-size: 10px;
+    }
+}
+
+
+
+
+/* ===================== MOBILE RESPONSIVE PATCH (KEEP DESIGN) ===================== */
+
+/* Make cards behave nicely inside Bootstrap columns */
+.lb-card{
+    height: 100%;
+}
+
+/* Prevent any long partner names / badges from breaking layout */
+.lb-name,
+.lb-head__titleMain,
+.lb-head__titleTop{
+    min-width: 0;
+}
+
+/* --- Small screens (phones) --- */
+@media (max-width: 576px){
+
+    /* Header: allow wrapping without changing style */
+    .lb-head{
+        flex-wrap: wrap;
+        align-items: center;
+        gap: 10px;
+    }
+
+    /* Title takes full width under icon when needed */
+    .lb-head__title{
+        flex: 1 1 100%;
+        order: 2;
+    }
+
+    .lb-head__icon{
+        order: 1;
+    }
+
+    /* Counter sticks top-right but can move down if space is tight */
+    .lb-head__counter{
+        order: 3;
+        margin-inline-start: auto; /* RTL/LTR safe */
+    }
+
+    /* List header stays readable */
+    .lb-list__header{
+        padding: 0 4px 8px;
+        gap: 10px;
+    }
+
+    /* Rows: stack content + status vertically */
+    .lb-row{
+        flex-wrap: wrap;
+        align-items: flex-start;
+        gap: 8px;
+    }
+
+    .lb-row__content{
+        flex: 1 1 100%;
+    }
+
+    .lb-status{
+        flex: 1 1 100%;
+        display: flex;
+        justify-content: flex-start; /* keeps RTL natural */
+    }
+
+    /* Score becomes full-width pill (looks the same but fits) */
+    .lb-score{
+        width: 100%;
+        justify-content: center;
+        text-align: center;
+    }
+
+    /* Allow tags to wrap under name */
+    .lb-info{
+        display: flex;
+        flex-direction: column;
+        gap: 6px;
+    }
+
+    /* Prevent super long names from overflowing */
+    .lb-name{
+        max-width: 100%;
+    }
+
+    /* Footer badges: wrap into 2 lines nicely */
+    .lb-footer__content{
+        gap: 6px;
+    }
+
+    .lb-footer__badge{
+        flex: 1 1 auto;
+        max-width: 100%;
+        white-space: nowrap;
+    }
+}
+
+/* --- Medium phones / small tablets: keep row horizontal but allow shrink --- */
+@media (min-width: 577px) and (max-width: 768px){
+
+    .lb-row{
+        gap: 8px;
+    }
+
+    /* Let name area shrink before pushing overflow */
+    .lb-row__content{
+        min-width: 0;
+    }
+
+    .lb-name{
+        max-width: 100%;
+    }
+
+    /* Status pill can shrink */
+    .lb-score{
+        max-width: 100%;
+    }
+}
+
+/* Optional: ensure the two columns don't get weird spacing on mobile */
+@media (max-width: 991.98px){
+    .row.g-3.mt-2{
+        margin-top: .75rem !important;
+    }
+}
+
+/* ===================== RESPONSIVE FIX (FOOTER ALWAYS BOTTOM) ===================== */
+/* Cancel the last patch idea and rebuild properly */
+
+/* 1) Make the card a real vertical layout: head -> body -> footer */
+.lb-card {
+    display: flex;
+    flex-direction: column;
+}
+
+/* Ensure layers still render above paper effect */
+.lb-head,
+.lb-body,
+.lb-footer {
+    position: relative;
+    z-index: 1;
+}
+
+/* Body takes remaining height so footer never jumps up */
+.lb-body {
+    flex: 1 1 auto;
+    min-height: 0;
+}
+
+/* Footer sticks to bottom ALWAYS */
+.lb-footer {
+    margin-top: auto;
+}
+
+/* 2) Prevent overflow issues */
+.lb-head__title,
+.lb-row__content,
+.lb-info {
+    min-width: 0;
+}
+
+/* ===================== MOBILE (ONLY STACK ROW CONTENT + STATUS) ===================== */
+@media (max-width: 576px) {
+
+    /* Header wraps nicely */
+    .lb-head {
+        flex-wrap: wrap;
+        gap: 10px;
+    }
+
+    .lb-head__icon {
+        order: 1;
+    }
+
+    .lb-head__counter {
+        order: 2;
+        margin-inline-start: auto;
+    }
+
+    .lb-head__title {
+        order: 3;
+        flex: 1 1 100%;
+    }
+
+    /* Rows: content top, status below */
+    .lb-row {
+        flex-wrap: wrap;
+        align-items: flex-start;
+        gap: 8px;
+    }
+
+    .lb-row__content {
+        flex: 1 1 100%;
+    }
+
+    .lb-status {
+        flex: 1 1 100%;
+        display: flex;
+    }
+
+    .lb-score {
+        width: 100%;
+        justify-content: center;
+    }
+
+    /* Footer badges wrap normally */
+    .lb-footer__content {
+        flex-wrap: wrap;
+        gap: 6px;
+    }
+
+    .lb-footer__badge {
+        flex: 1 1 auto;
+        max-width: 100%;
+        white-space: nowrap;
+    }
+}
+
+/* ===================== SMALL TABLETS ===================== */
+@media (min-width: 577px) and (max-width: 768px) {
+    .lb-row__content {
+        min-width: 0;
+    }
+
+    .lb-name {
+        max-width: 100%;
+    }
+}
+
+
+

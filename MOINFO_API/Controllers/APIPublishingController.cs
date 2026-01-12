@@ -625,7 +625,7 @@ namespace MOINFO_API.Controllers
                                 OldPartner = item.OldPartner,
                                 RequestId = requestEntities.RequestId,
                                 LicencesId = licence.LicId,
-                                PartnerIsActive = item.IsActive
+                                PartnerIsActive = item.PartnerIsActive
                             };
                             await _unitOfwork
                                 .genericRepository<PartnerOldChangeTransaction>()

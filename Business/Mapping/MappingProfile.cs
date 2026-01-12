@@ -206,6 +206,7 @@ namespace Business.Mapping
             CreateMap<LicenceTypesLookup, LicenceTypesLookupVM>();
             CreateMap<ScheduleReleaseTypes, ScheduleReleaseTypesVM>
                 ();
+            CreateMap<CompleteLookup, CompleteLookupVM>().ReverseMap();
 
         }
     }

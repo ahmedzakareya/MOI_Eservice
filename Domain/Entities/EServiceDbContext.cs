@@ -216,6 +216,7 @@ public partial class EServiceDbContext : IdentityDbContext<AspNetUser>
     public DbSet<LicencesNameChangeTransaction> LicencesNameChangeTransactions { get; set; }
     public DbSet<WorkFlowActionButton> WorkFlowActionButton { get; set; }
     public DbSet<WorkFlowButtonRoleAdmin> WorkFlowButtonRoleAdmin { get; set; }
+    public DbSet<CompleteLookup> completeLookup { get; set; }
 
     //    protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
     //#warning To protect potentially sensitive information in your connection string, you should move it out of source code. You can avoid scaffolding the connection string by using the Name= syntax to read it from configuration - see https://go.microsoft.com/fwlink/?linkid=2131148. For more guidance on storing connection strings, see https://go.microsoft.com/fwlink/?LinkId=723263.
@@ -223,7 +224,7 @@ public partial class EServiceDbContext : IdentityDbContext<AspNetUser>
     protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
     //#warning To protect potentially sensitive information in your connection string, you should move it out of source code. You can avoid scaffolding the connection string by using the Name= syntax to read it from configuration - see https://go.microsoft.com/fwlink/?linkid=2131148. For more guidance on storing connection strings, see https://go.microsoft.com/fwlink/?LinkId=723263.
     //=> optionsBuilder.UseSqlServer("Server=.;Database=MOIInfo_EService4;Trusted_Connection=True;TrustServerCertificate=True;").EnableSensitiveDataLogging();
-    => optionsBuilder.UseSqlServer("Server=.\\SQLEXPRESS;Database=MOIInfo_EService43;Trusted_Connection=True;TrustServerCertificate=True;").EnableSensitiveDataLogging().LogTo(Console.WriteLine, LogLevel.Information);
+    => optionsBuilder.UseSqlServer("Server=MOI-11-0070\\SQLEXPRESS;Database=MOIInfo_EService43;Trusted_Connection=True;TrustServerCertificate=True;").EnableSensitiveDataLogging().LogTo(Console.WriteLine, LogLevel.Information);
     //=> optionsBuilder.UseSqlServer("Server=MOI-11-0040;Database=MOIInfo_EService4;Trusted_Connection=True;TrustServerCertificate=True;").EnableSensitiveDataLogging();
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {

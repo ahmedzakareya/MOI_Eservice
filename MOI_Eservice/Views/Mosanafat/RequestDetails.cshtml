@@ -206,7 +206,7 @@
                                                             <div class="info-label">حالة الطلب</div>
                                                             <div class="info-value">
                                                                 <span class="status-badge @statusClass">
-                                                                    @(!string.IsNullOrWhiteSpace(Model?.RenewRequest?.RequestDetailsVM?.RequestDVM?.ReqStatusName) ? Model?.RenewRequest?.RequestDetailsVM?.RequestDVM?.ReqStatusName : "—")
+                                                                    @(!string.IsNullOrWhiteSpace(Model?.requestForRenew?.ReqStatusName) ? Model?.requestForRenew?.ReqStatusName : "—")
                                                                 </span>
                                                             </div>
                                                         </div>
@@ -739,6 +739,262 @@
     </div>
   </section>
 </div>
+
+
+                                        }
+                                        @if (Model?.ChangeNewPartnerTransVM != null)
+                                        {
+                                           <div class="col-12 mt-3">
+    <section class="dt-card dt-card--separated" dir="rtl" aria-labelledby="partnersSheetTitle">
+
+        <div class="dt-card__head">
+            <i class="ri-group-line info-request-icon" aria-hidden="true"></i>
+            <span class="dt-card__title" id="partnersSheetTitle">طلب دخول وخروج شركاء</span>
+        </div>
+
+        <div class="info-rows">
+
+            @* ✅ FULL-WIDTH WRAPPER (so it spans the 2-column info-rows grid) *@
+            <div class="info-item--full">
+                <div class="row g-3 mt-2">
+
+                    @{
+                        var newPartners = Model.ChangeNewPartnerTransVM;
+                        var currentPartners = Model.ChangeOldPartnerTransVM;
+                    }
+
+                    <!-- ===== CURRENT PARTNERS ===== -->
+                    <div class="col-12 col-lg-6">
+                        <div class="lb-card lb-card--current">
+                            <div class="lb-paper-effect"></div>
+                            <div class="lb-head">
+                                <div class="lb-head__icon">
+                                    <i class="ri-team-line"></i>
+                                </div>
+                                <div class="lb-head__title">
+                                    <div class="lb-head__titleTop">قائمة الشركاء</div>
+                                    <div class="lb-head__titleMain lb-head__titleMain--current">الشركاء الحاليين</div>
+                                </div>
+                                <div class="lb-head__counter lb-head__counter--current">
+                                    @(currentPartners?.Count() ?? 0)
+                                </div>
+                            </div>
+
+                            <div class="lb-body">
+                                @if (currentPartners == null || !currentPartners.Any())
+                                {
+                                    <div class="lb-empty">
+                                        <div class="lb-empty__icon"><i class="ri-user-search-line"></i></div>
+                                        <div class="lb-empty__text">لا توجد بيانات</div>
+                                    </div>
+                                }
+                                else
+                                {
+                                    <div class="lb-list__header">
+                                        <span class="lb-list__headerTitle">الشريك</span>
+                                        <span class="lb-list__headerStatus">الحالة</span>
+                                    </div>
+
+                                    <ul class="lb-list">
+                                        @{
+                                            var i = 1;
+                                        }
+                                        @foreach (var p in currentPartners)
+                                        {
+                                            bool isExit = (p?.PartnerIsActive == false);
+
+                                            <li class="lb-row lb-row--current @(isExit ? "lb-row--exit" : "")">
+                                                <div class="lb-row__content">
+                                                    <span class="lb-avatar lb-avatar--current">
+                                                        <span class="lb-avatar__in">@i</span>
+                                                        @if (!isExit)
+                                                        {
+                                                            <span class="lb-avatar__badge lb-avatar__badge--active"><i class="ri-check-line"></i></span>
+                                                        }
+                                                    </span>
+                                                    <div class="lb-info">
+                                                        <span class="lb-name">@p?.OldPartner</span>
+                                                        @if (isExit)
+                                                        {
+                                                            <span class="lb-tag lb-tag--exit"><i class="ri-logout-circle-r-line"></i> خروج</span>
+                                                        }
+                                                    </div>
+                                                </div>
+                                                <div class="lb-status">
+                                                    <span class="lb-score @(isExit ? "lb-score--exit" : "lb-score--active")">
+                                                        @if (isExit)
+                                                        {
+                                                            <i class="ri-logout-circle-r-line"></i>
+                                                        }
+                                                        else
+                                                        {
+                                                            <i class="ri-checkbox-circle-line"></i>
+                                                        }
+                                                        @(isExit ? "خروج" : "شريك حالي")
+                                                    </span>
+                                                </div>
+                                            </li>
+
+                                            i++;
+                                        }
+                                    </ul>
+                                }
+                            </div>
+
+                            <!-- ✅ FOOTER (UI ONLY - NO LOGIC) -->
+                            <div class="lb-footer lb-footer--ui lb-footer--current-ui">
+                                <div class="lb-footer__content">
+                                    <span class="lb-footer__badge lb-footer__badge--current">
+                                        <i class="ri-stack-line"></i>
+                                        الإجمالي: @(currentPartners?.Count() ?? 0)
+                                    </span>
+                                    <span class="lb-footer__badge lb-footer__badge--current-active">
+                                        <i class="ri-checkbox-circle-line"></i>
+                                        شريك حالي
+                                    </span>
+                                    <span class="lb-footer__badge lb-footer__badge--current-exit">
+                                        <i class="ri-logout-circle-r-line"></i>
+                                        خروج
+                                    </span>
+                                </div>
+                            </div>
+
+                        </div>
+                    </div>
+
+                    <!-- ===== NEW PARTNERS ===== -->
+                    <div class="col-12 col-lg-6">
+                        <div class="lb-card lb-card--new">
+                            <div class="lb-paper-effect"></div>
+                            <div class="lb-head">
+                                <div class="lb-head__icon">
+                                    <i class="ri-user-add-line"></i>
+                                </div>
+                                <div class="lb-head__title">
+                                    <div class="lb-head__titleTop">قائمة الشركاء</div>
+                                    <div class="lb-head__titleMain lb-head__titleMain--new">الشركاء الجدد</div>
+                                </div>
+                                <div class="lb-head__counter lb-head__counter--new">
+                                    @(newPartners?.Count() ?? 0)
+                                </div>
+                            </div>
+
+                            <div class="lb-body">
+                                @if (newPartners == null || !newPartners.Any())
+                                {
+                                    <div class="lb-empty">
+                                        <div class="lb-empty__icon"><i class="ri-user-add-line"></i></div>
+                                        <div class="lb-empty__text">لا توجد بيانات</div>
+                                    </div>
+                                }
+                                else
+                                {
+                                    <div class="lb-list__header">
+                                        <span class="lb-list__headerTitle">الشريك</span>
+                                        <span class="lb-list__headerStatus">الحالة</span>
+                                    </div>
+
+                                    <ul class="lb-list">
+                                        @{
+                                            var j = 1;
+                                        }
+                                        @foreach (var p in newPartners)
+                                        {
+                                            <li class="lb-row lb-row--new">
+                                                <div class="lb-row__content">
+                                                    <span class="lb-avatar lb-avatar--new">
+                                                        <span class="lb-avatar__in">@j</span>
+                                                        <span class="lb-avatar__badge lb-avatar__badge--new"><i class="ri-add-line"></i></span>
+                                                    </span>
+                                                    <div class="lb-info">
+                                                        <span class="lb-name lb-name--new">@p?.NewPartner</span>
+                                                        <span class="lb-tag lb-tag--new"><i class="ri-login-circle-line"></i> جديد</span>
+                                                    </div>
+                                                </div>
+                                                <div class="lb-status">
+                                                    <span class="lb-score lb-score--new">
+                                                        <i class="ri-login-circle-line"></i>
+                                                        دخول
+                                                    </span>
+                                                </div>
+                                            </li>
+
+                                            j++;
+                                        }
+                                    </ul>
+                                }
+                            </div>
+
+                            <!-- ✅ FOOTER (UI ONLY - NO LOGIC) -->
+                            <div class="lb-footer lb-footer--ui lb-footer--new-ui">
+                                <div class="lb-footer__content">
+                                    <span class="lb-footer__badge lb-footer__badge--new">
+                                        <i class="ri-stack-line"></i>
+                                        الإجمالي: @(newPartners?.Count() ?? 0)
+                                    </span>
+                                    <span class="lb-footer__badge lb-footer__badge--new-entry">
+                                        <i class="ri-login-circle-line"></i>
+                                        دخول
+                                    </span>
+                                </div>
+                            </div>
+
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+
+            <!-- باقي الطلب كما هو -->
+            <div class="info-kv info-kv--full">
+                <div class="info-label">الملاحظات</div>
+                                <div class="info-notes">
+                                                                @(@Model?.PartnerRequest?.RequestNote ?? "— لا توجد ملاحظات —")
+                </div>
+            </div>
+
+            <div class="info-kv">
+                <div class="info-label">حالة الدفع</div>
+                <div class="info-value">
+                                                                <span class="pill @(Model?.PartnerRequest?.Licpaystatus == "1" ? "pill--success" : "pill--danger")">
+                        @(Model?.PartnerRequest?.Licpaystatus == "1" ? "تم الدفع" : "لم يتم الدفع")
+                    </span>
+                </div>
+            </div>
+
+            <div class="info-kv">
+                <div class="info-label">حالة الطلب</div>
+                <div class="info-value">
+                    <span class="status-badge">
+@*                                                                     @Model?.PartnerRequest?.RequestDVM?.ReqStatusName
+ *@                    </span>
+                </div>
+            </div>
+
+        </div>
+    </section>
+</div>
+
+
+
+<script>
+// إضافة تأثيرات تفاعلية بسيطة
+document.addEventListener('DOMContentLoaded', function() {
+    // تأثيرات عند التمرير
+    const cards = document.querySelectorAll('.lb-card');
+
+    cards.forEach(card => {
+        card.addEventListener('mouseenter', function() {
+            this.style.zIndex = '10';
+        });
+
+        card.addEventListener('mouseleave', function() {
+            this.style.zIndex = '1';
+        });
+    });
+});
+</script>
+
 
 
                                         }
